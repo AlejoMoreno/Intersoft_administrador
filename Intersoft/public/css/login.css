@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
+@import url('https://fonts.googleapis.com/css?family=Dosis');
+
+p,*{
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.logo{
+    width: 150px;
+    position: absolute;
+}
+
+center{
+    padding-top:15%;
+    padding-left: 15%;
+    padding-right: 15%;
+}
+
+center form{
+    background: white;
+    padding: 30px;
+    border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    border: 0px solid #000000;
+}
+
+/*Nombre de la empresa*/
+#empresaConfig{
+    color:#a1a1a1;
+    font-size: 30px;
+    font-family: 'Open Sans Condensed', sans-serif;
+}
+
+.entrar{
+    width: 200px;
+    animation: myfirst 20s infinite;
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 20px;
+}
+
+#resultado{
+    padding: 10px;
+    color:red;
+    font-size: 30px;
+}
+
+.olvido{
+    padding-top: 25px;
+}
+
+input{
+    font-family: 'Dosis', sans-serif;
+}
+
+body{
+    -webkit-animation: myfirst 20s infinite; /* Safari 4.0 - 8.0 */
+    -webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+    animation: myfirst 20s infinite;
+    animation-direction: alternate;
+  }
+  /* Safari 4.0 - 8.0 */
+  @-webkit-keyframes myfirst {
+      0%   {background: white;}
+      25%  {background: #207ce5;}
+      50%  {background: #20e337;}
+      75%  {background: #207ce5;}
+      100% {background: white;}
+  }
+  
+  @keyframes myfirst {
+      0%   {background: white;}
+      25%  {background: #207ce5;}
+      50%  {background: #20e337;}
+      75%  {background: #207ce5;}
+      100% {background: white;}
+  }
