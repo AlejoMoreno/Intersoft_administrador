@@ -324,7 +324,7 @@ $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '1')->g
                   </div>
                   <div class="col-sm-12" style="height: 20px;"></div>
                   <div class="col-sm-12">
-                    <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
+                    <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('EGRESO');" style="background-color: #28a745;color:white;">GUARDAR</div>
                     <div id="imprimirPOST" onclick="carteras.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
                     <div id="imprimirDOC" onclick="carteras.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
                   </div>

@@ -32,6 +32,9 @@ Route::get('/layout', function(){
     return view('layout');
 });
 
+//ruta para cerrar sesion
+Route::get('/cerrar', 'UsuariosController@cerrar');
+
 //menucontrolador
 Route::get('/administrador/index', function(){
     return view('administrador.index');
@@ -297,8 +300,6 @@ Route::post('/inventario/documentos/update', 'DocumentosController@update');
 */
 Route::get('/cartera/egresos', 'CarterasController@egresos');
 Route::get('/cartera/egresos/submenu', 'CarterasController@menuegresos');
-Route::get('/cartera/egresos/causar', 'CarterasController@causaregreso');
-Route::get('/cartera/ingresos/causar', 'CarterasController@causaringreso');
 Route::get('/cartera/ingresos/submenu', 'CarterasController@menuingresos');
 Route::get('/cartera/ingresos', 'CarterasController@ingresos');
 Route::get('/cartera/allDocumentos/{id}', 'CarterasController@allDocumentos');
@@ -306,6 +307,30 @@ Route::post('/cartera/egresos/guardar', 'CarterasController@save');
 Route::post('/cartera/kardex/guardar', 'KardexCarterasController@save');
 Route::get('/cartera/imprimir/{id}', 'CarterasController@imprimir');
 
+Route::get('/cartera/causar', 'CarterasController@causar'); //pendiente 
+Route::post('/cartera/causar/guardar', 'CarterasController@saveCausar'); //pendiente
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes CONTABILIDAD
+|--------------------------------------------------------------------------
+|
+| Registros y servicios del modulo de contabilidad
+|
+*/
+Route::get('/contabilidad/index', function(){
+    return view('contabilidad.index');
+});
+
+//cuentas
+Route::get('/contabilidad/cuentas', 'CuentasController@index');
+Route::get('/contabilidad/cuentas/all', 'CuentasController@all');
+Route::get('/contabilidad/cuentas/{id}', 'CuentasController@formcreate');
+Route::get('/contabilidad/cuentas/delete/{id}', 'CuentasController@delete');
+Route::get('/contabilidad/cuentas/update/{id}', 'CuentasController@showupdate');
+Route::post('/contabilidad/cuentas/create', 'CuentasController@create');
+Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 
 
 /*

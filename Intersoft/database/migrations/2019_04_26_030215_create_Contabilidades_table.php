@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateContabilidadesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('Contabilidades', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('id_cuenta');
+            $table->double('debito');
+            $table->double('credito');
+            $table->string('tipo_documento'); //si es cartera, factura, etc
+            $table->integer('id_documento');
+            $table->integer('id_sucursal');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('Contabilidades');
+    }
+}

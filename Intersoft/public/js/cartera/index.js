@@ -18,7 +18,7 @@ function Carteras(){
         };
         $.ajax({
         	data:  parametros,
-			url:   '/cartera/allDocumentos/1/',
+			url:   '/cartera/allDocumentos/' + $('#cedula_tercero').val() + '/',
 			type:  'get',
 			beforeSend: function () {
 				$('#tabla_facturas').html('<p>Espere porfavor</p>');
@@ -74,6 +74,69 @@ function Carteras(){
 			}
         });
 	}
+
+    this.allDocumentos_ingreso = function(){
+        parametros = {
+            "tipo" : "ingreso"
+        };
+        $.ajax({
+            data:  parametros,
+            url:   '/cartera/allDocumentos/' + $('#cedula_tercero').val() + '/',
+            type:  'get',
+            beforeSend: function () {
+                $('#tabla_facturas').html('<p>Espere porfavor</p>');
+            },
+            success:  function (response) {
+                //console.log(response);
+                $('#tabla_facturas').html('');
+                console.log(response.body);
+                $('#tabla_facturas').append('<table class="table table-hover table-striped" id="tabla_fac" >'+
+                      '<thead>'+
+                          '<tr>'+
+                            '<th># ID</th>'+
+                            '<th>Prefijo</th>'+
+                            '<th>Factura</th>'+
+                            '<th>Fecha</th>'+
+                            '<th>Fecha Venc</th>'+
+                            '<th>Valor</th>'+
+                            '<th>Saldo</th>'+
+                            '<th></th>'+
+                          '</tr>'+
+                      '</thead><tbody>');
+                $.each( response.body, function( key, value ) {
+                    var id = value.id;
+                    var prefijo = value.prefijo;
+                    var numero = value.numero;
+                    var fecha = value.fecha;
+                    var fecha_vencimiento = value.fecha_vencimiento;
+                    var total = value.total;
+                    var saldo = value.saldo;
+                    $('#tabla_fac').append('<tr >'+
+                        '<td>'+value.id+'</td>'+
+                        '<td>'+value.prefijo+'</td>'+
+                        '<td>'+value.numero+'</td>'+
+                        '<td>'+value.fecha+'</td>'+
+                        '<td>'+value.fecha_vencimiento+'</td>'+
+                        '<td>'+value.total+'</td>'+
+                        '<td>'+value.saldo+'</td>'+
+                        '<td><div class="btn btn-success" id="pagarbtn" onclick="carteras.getDocumento('+
+                            id+',`'+
+                            prefijo+'`,`'+
+                            numero+'`,`'+
+                            fecha+'`,`'+
+                            fecha_vencimiento+'`,`'+
+                            total+'`,`'+
+                            saldo+'`'+
+                        ')" >Pagar</div></td>'+
+                      '</tr>');
+                });
+                $('#tabla_fac').append('</tbody></table>');
+            },
+            error: function(error){
+                $('#tabla_facturas').html('No existen resultados');
+            }
+        });
+    }
 
 	this.getDocumento = function(id,prefijo,numero,fecha,fecha_vencimiento,total,saldo){
 		//console.log(id);
@@ -245,13 +308,13 @@ function Carteras(){
 
 
 
-    this.save_documento = function(){
+    this.save_documento = function(tipo){
         if(carteras.verificar() == true){
             if( (parseInt($('#total').val()) - parseInt($('#total_forma_pago').val())) != 0 ){
                 alert("El total no coincide con la forma de pago");
             }
             else{ //coincide
-                carteras.guardar();
+                carteras.guardar(tipo);
             }
         }
     }
@@ -273,7 +336,7 @@ function Carteras(){
 
     }
 
-    this.guardar = function(){
+    this.guardar = function(tipo){
         var prefijo = '';
         if($('#prefijo').val()=='')             { prefijo = '_'; }                          else { prefijo = $('#prefijo').val(); }
         var parametros = {
@@ -290,7 +353,7 @@ function Carteras(){
             'id_cliente' : $('#cedula_tercero').val(), //es el id
             'id_vendedor' : $('#id_modificado').val(),
             'fecha' : $('#fecha').val(),
-            'tipoCartera' : "EGRESO",
+            'tipoCartera' : tipo,
             'subtotal' :  $('#total_forma_pago').val(),
             'total' : $('#total').val(),
             'id_modificado' : localStorage.getItem('Id_usuario'),

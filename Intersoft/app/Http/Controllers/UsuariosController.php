@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Usuarios;
 use App\Contrato_laborals;
 use App\Sessions;
+use App\Http\Controllers\SessionsController;
 
 class UsuariosController extends Controller
 {
@@ -35,6 +36,7 @@ class UsuariosController extends Controller
                 $sessions->user_agent = encrypt($sessions->user_id.$sessions->ip."Ingreso Al sistema");
                 $sessions->last_activity = "Ingreso Al sistema";
                 $sessions->save();
+                SessionsController::storeSession($sessions,$usuario); // save session in server
                 return array(
                     "result"=>"success",
                     "body"=>$usuario,
@@ -152,5 +154,10 @@ class UsuariosController extends Controller
             'usuarios'=>$usuarios,
             'contratos'=>$contratos
         ));
+    }
+
+    public function cerrar(){
+        SessionsController::deleteSession();
+        return redirect('/');
     }
 }

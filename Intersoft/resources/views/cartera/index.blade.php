@@ -5,9 +5,11 @@
 <?php 
 
 use App\Documentos;
+
 $documentos = Documentos::where('ubicacion','=','SALIDA')->get();
 
-
+$egresos = DB::select("SELECT sum(total) as total FROM intersoft.Carteras where tipoCartera like 'EGRESO';");
+$ingresos = DB::select("SELECT sum(total) as total FROM intersoft.Carteras where tipoCartera like 'INGRESO';");
 ?>
 
 <div class="container-fluid">
@@ -15,7 +17,13 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->get();
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
-                    <center><h4 class="title">Cartera</h4><br><label>Total: $ 108980</label></center>
+                    <center><h4 class="title">Cartera</h4><br>
+                        @if( ($ingresos[0]->total - $egresos[0]->total) > 0 )
+                            <label style="color:green">Total: $ {{ $ingresos[0]->total - $egresos[0]->total }}</label>
+                        @else
+                            <label style="color:red">Total: $ {{ $ingresos[0]->total - $egresos[0]->total }}</label>
+                        @endif
+                    </center>
                 </div>
             </div>
         </div>
@@ -38,7 +46,7 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->get();
                         		<td><a href="/cartera/egresos">Hacer Egreso</a></td>
                         	</tr>
                         	<tr>
-                        		<td><a>Causar Facturas Externas</a></td>
+                        		<td><a href="/cartera/causar">Causar Facturas Externas</a></td>
                         	</tr>
                         	<tr>
                         		<td><a>Reportes</a></td>
@@ -52,7 +60,7 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->get();
                             <i class="fa fa-circle text-warning"></i>
                         </div>
                         <hr>
-                        <label>Total $ 10000</label><br>
+                        <label>Total $ {{ $egresos[0]->total }}</label><br>
                         <div class="stats">
                             <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/layout');"> ir atras.</a>
                         </div>
@@ -76,10 +84,10 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->get();
                         </thead>
                         <tbody>
                         	<tr>
-                        		<td><a>Hacer Ingreso</a></td>
+                        		<td><a href="/cartera/ingresos">Hacer Ingreso</a></td>
                         	</tr>
                         	<tr>
-                        		<td><a>Causar Facturas Externas</a></td>
+                        		<td><a href="/cartera/causar">Causar Facturas Externas</a></td>
                         	</tr>
                         	<tr>
                         		<td><a>Reportes</a></td>
@@ -93,7 +101,7 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->get();
                             <i class="fa fa-circle text-warning"></i>
                         </div>
                         <hr>
-                        <label>Total $ 10000</label><br>
+                        <label>Total $ {{ $ingresos[0]->total }}</label><br>
                         <div class="stats">
                             <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/layout');"> ir atras.</a>
                         </div>

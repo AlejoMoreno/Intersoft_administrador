@@ -72,6 +72,14 @@ class CarterasController extends Controller
 		return view('cartera.egresos');
 	}
 
+	public function ingresos(){
+		return view('cartera.ingresos');
+	}
+
+	public function causar(){
+		return view('cartera.causar');
+	}
+
 	public function allDocumentos($id,Request $request){
 		if($request->tipo == "egreso"){
 			$facturas = Facturas::where('id_cliente',$id)->where('signo','=','+')->where('saldo','>','0')->orderBy('fecha_vencimiento', 'asc')->get();
@@ -89,7 +97,6 @@ class CarterasController extends Controller
             "body"=>$facturas
 		);
 	}
-
 	
 
 }

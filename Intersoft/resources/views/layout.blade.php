@@ -148,21 +148,44 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="#">
-                                <p id="cerrarSesion">Cerrar Sesión</p>
-                            </a>
+                            <div style="margin-left: 10px;font-size: 12px;margin-top: 8px;">
+                                <small>{{ Session::get('nombre') }}</small><br>
+                                <small>{{ Session::get('cargo') }}</small> |
+                                <small>{{ Session::get('estado') }}</small>
+                                <a href="/cerrar">
+                                    <p id="cerrarSesion">Cerrar Sesión</p>
+                                </a>
+                            </div>
                         </li>
-						<li class="separator hidden-lg hidden-md"></li>
                     </ul>
                 </div>
             </div>
         </nav>
 
+        @if(Session::has('user_id'))
         <!-- CONTENT ENTER-->
         <div class="content">
             @yield('content')
         </div>
         <!-- CONTENT FIN-->
+        @else
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="header">
+                                <h4 class="title">Error de sesión, vuelve a ingresar</h4>
+                                <p class="category"><a href="/">Por favor ingresa Aqui</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        
 
         <!-- FORTER ENTER-->
         <footer class="footer">
