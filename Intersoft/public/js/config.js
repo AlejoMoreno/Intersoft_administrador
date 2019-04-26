@@ -30,6 +30,12 @@ function Config(){
 	var Id_ciudad;
 	var Id_regimen;
 	var obj;
+	var clave_administrador;
+
+	this.getClave = function(){
+		this.clave_administrador = "administrador";
+		return this.clave_administrador;
+	};
 
 	//funcion para tomar todos los datos de la base
 	this.GetAllInformation = function(){
@@ -90,7 +96,7 @@ function Config(){
 	};
 
 	//guardar informacion del login en dos partes como variable y como data del navegador
-	this.saveLogin = function(obj){
+	this.saveLogin = function(obj,user_agent){
 		console.log("saveLogin : "+obj.nombre+" "+obj.correo);
 
 		//localStorage.getItem("correo");
@@ -104,6 +110,7 @@ function Config(){
 		localStorage.setItem("Correo", obj.correo);
 		localStorage.setItem("Estado", obj.estado);
 		localStorage.setItem("Token", obj.token);
+		localStorage.setItem("user_agent", user_agent);
 		alert("Hola "+obj.nombre+" "+obj.apellido+" Estamos preparando el entono para que hagas uso de Intersof.");
 		
 	};
@@ -154,7 +161,7 @@ function Config(){
 				}
 			}
 		});
-	}
+	};
 
 	this.doSearch = function()
 	{
@@ -188,7 +195,74 @@ function Config(){
 				tableReg.rows[i].style.display = 'none';
 			}
 		}
+	};
+
+	//funcion para enviar por post
+	this.send_post = function( _formulario, _url, _redirect )
+	{
+		var parametros = $(_formulario).serialize();
+		console.log(parametros);
+        $.ajax({
+			data:  parametros,
+			url:   _url,
+			type:  'post',
+			beforeSend: function () {
+				$('#resultado').html('<p>Espere porfavor</p>');
+			},
+			success:  function (response) {
+                console.log(response);
+                config.Redirect(_redirect);
+			}
+        });
+	};
+
+	//function para eliminar por post
+	this.delete_get = function( _url, _obj, _redirect ){
+		_obj = JSON.parse(_obj);
+		console.log(_obj.id);
+		var statusConfirm = confirm("¿Desea eliminar este registro?");
+		if (statusConfirm == true)
+		{
+			$.ajax({
+				url:   _url + _obj.id,
+				type:  'get',
+				beforeSend: function () {
+					$('#resultado').html('<p>Espere porfavor</p>');
+				},
+				success:  function (response) {
+	                console.log(response);
+	                config.Redirect(_redirect);
+				}
+	        });
+		}
+		else
+		{
+			console.log("NO VALIDADO");
+		}
+		
+	};
+
+
+	this.zfill = function(number, width) {
+	    var numberOutput = Math.abs(number); /* Valor absoluto del número */
+	    var length = number.toString().length; /* Largo del número */ 
+	    var zero = "0"; /* String de cero */  
+	    
+	    if (width <= length) {
+	        if (number < 0) {
+	             return ("-" + numberOutput.toString()); 
+	        } else {
+	             return numberOutput.toString(); 
+	        }
+	    } else {
+	        if (number < 0) {
+	            return ("-" + (zero.repeat(width - length)) + numberOutput.toString()); 
+	        } else {
+	            return ((zero.repeat(width - length)) + numberOutput.toString()); 
+	        }
+	    }
 	}
+
 
 }
 

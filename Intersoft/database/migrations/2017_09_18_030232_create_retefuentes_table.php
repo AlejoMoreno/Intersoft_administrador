@@ -20,6 +20,8 @@ class CreateRetefuentesTable extends Migration
             $table->string('descripcion');
             $table->timestamps();
         });
+
+        
     }
 
     /**

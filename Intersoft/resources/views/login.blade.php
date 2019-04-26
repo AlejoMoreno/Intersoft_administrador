@@ -20,10 +20,12 @@
 </head>
 
 <body>
-	<img class="logo" src="images/logo.png">
+	
 	<center>
-		<form>
-			<p id="empresaConfig"></p>
+		<form style="width: 300px;">
+			<img class="logo" src="http://famc.net.co/intersoft/pages/images/logo.png">
+
+			<p id="empresaConfig">Intersoft</p>
 			<div class="input-group">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 				<input id="cedula" type="text" class="form-control has-success" name="cedula" placeholder="Cédula" >
@@ -32,13 +34,13 @@
 				<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 				<input id="password" type="password" class="form-control" name="password" placeholder="Password" >
 			</div>
-			<div class="input-group"><br>
-				<button type="button" id="boton" onclick="login.loguearse();" class="btn btn-success entrar">Entrar</button>
-			</div>
-			<div class="olvido" onclick="config.Redirect('olvidoPassword.html');"><a href="#"> Olvido de Contraseña</a></div>
+			<div  id="boton" onclick="login.loguearse();" class="olvido2">Entrar</div>
+			<div class="olvido" onclick="config.Redirect('olvido');"><a href="#" style="color:white"> Olvido de Contraseña</a></div>
+			<div class="olvido1" onclick="config.Redirect('registro');"><a href="#" style="color:white"> Date de alta como usuario</a></div>
 			<!--ENTER Resultado -->
-			<div id="resultado">...</div>
+			<div id="resultado"></div>
 			<!--FIN Resultado -->
+			<br><p style="text-align: right;">Creado por Wakusoft</p>
 		</form>
 	</center>
 	<!--ENTER cargando gif -->

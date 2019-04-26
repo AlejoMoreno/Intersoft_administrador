@@ -25,6 +25,21 @@ class CreateSucursalesTable extends Migration
             $table->integer('id_empresa');
             $table->timestamps();
         });
+
+        // Insert some stuff
+        DB::table('sucursales')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'FAMC CENTRAL',
+                'codigo'    => 1,
+                'direccion' => 'CL 38 A 50 A 71 SUR',
+                'encargado' => 'ALEJANDRO MORENO',
+                'telefono'  => '3219045297',
+                'correo'    => 'fredymoreno@uan.edu.co',
+                'ciudad'    => 1,
+                'id_empresa' => 1,
+            )
+        );
     }
 
     /**

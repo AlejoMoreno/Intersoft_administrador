@@ -34,7 +34,34 @@ class CreateUsuariosTable extends Migration
             $table->string('telefono_referencia');
             $table->timestamps();
         });
+
+
+        // Insert some stuff
+        DB::table('usuarios')->insert(
+            array(
+                'id'            => NULL,
+                'ncedula'       => '1030570356',
+                'nombre'        => 'FREDY ALEJANDRO',
+                'apellido'      => 'MORENO CASTRO',
+                'cargo'         => 'ADMINISTRADOR',
+                'telefono'      => '3219045297',
+                'password'      => '1234',
+                'correo'        => 'FREDYMORENO@UAN.EDU.CO',
+                'estado'        => 'ACTIVO',
+                'token'         => '64836274832',
+                'arl'           => 'POSITIVA',
+                'eps'           => 'SANITAS',
+                'cesantias'     => 'PORVENIR',
+                'pension'       => 'PROVENIR',
+                'caja_compensacion' => 'COLSUBSIDIO',
+                'id_contrato'   => 1,
+                'referencia_personal' => 'SOLEDAD CASTRO',
+                'telefono_referencia' => '2644163'
+            )
+        );
     }
+
+    
 
     /**
      * Reverse the migrations.

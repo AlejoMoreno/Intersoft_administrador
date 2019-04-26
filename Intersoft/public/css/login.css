@@ -7,11 +7,11 @@ p,*{
 
 .logo{
     width: 150px;
-    position: absolute;
+    position: relative;
 }
 
 center{
-    padding-top:15%;
+    padding-top:5%;
     padding-left: 15%;
     padding-right: 15%;
 }
@@ -19,11 +19,13 @@ center{
 center form{
     background: white;
     padding: 30px;
-    border-radius: 10px 10px 10px 10px;
-    -moz-border-radius: 10px 10px 10px 10px;
-    -webkit-border-radius: 10px 10px 10px 10px;
+    border-radius: 3px 3px 3px 3px;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
     border: 0px solid #000000;
 }
+
+
 
 /*Nombre de la empresa*/
 #empresaConfig{
@@ -46,7 +48,33 @@ center form{
 }
 
 .olvido{
-    padding-top: 25px;
+    top:20px;
+    padding: 20px;
+    position: relative;
+    left: -30px;
+    width: 125%;
+    color:white;
+    background: #2e9eac;
+}
+
+.olvido1{
+    top:20px;
+    padding: 20px;
+    position: relative;
+    left: -30px;
+    width: 125%;
+    color:white;
+    background: #3dc067;
+}
+
+.olvido2{
+    top:20px;
+    padding: 20px;
+    position: relative;
+    left: -30px;
+    width: 125%;
+    color:white;
+    background: #006ed8;
 }
 
 input{

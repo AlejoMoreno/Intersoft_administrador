@@ -19,6 +19,14 @@ Route::get('/laravel', function () {
 Route::get('/', function(){
     return view('login');
 });
+//registro
+Route::get('/registro', function(){
+    return view('registro');
+});
+//olvido
+Route::get('/olvido', function(){
+    return view('olvido');
+});
 Route::post('/login', 'UsuariosController@login');
 Route::get('/layout', function(){
     return view('layout');
@@ -31,8 +39,14 @@ Route::get('/administrador/index', function(){
 Route::get('/inventario/index', function(){
     return view('inventario.index');
 });
+Route::get('/salida/index', function(){
+    return view('salida.index');
+});
 Route::get('/documentos/documentos', function(){
     return view('documentos.documentos');
+});
+Route::get('/cartera/index', function(){
+    return view('cartera.index');
 });
 
 //install
@@ -46,6 +60,17 @@ Route::get('/ciudades/all', 'CiudadesController@all');
 Route::get('/ciudades', function(){
     return view('ciudades');
 });
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes ADMINISTRADOR
+|--------------------------------------------------------------------------
+|
+| Registros y servicios del modulo de administrador
+|
+*/
+
 
 //Departamentos
 Route::get('/departamentos/all', 'DepartamentosController@all');
@@ -90,6 +115,7 @@ Route::get('/administrador/usuarios/delete/{id}', 'UsuariosController@delete');
 Route::get('/administrador/usuarios/update/{id}', 'UsuariosController@showupdate');
 Route::post('/administrador/usuarios/create', 'UsuariosController@create');
 Route::post('/administrador/usuarios/update', 'UsuariosController@update');
+Route::post('/registrarse', 'UsuariosController@registrar');
 
 //sucursales
 Route::get('/administrador/sucursales', 'SucursalesController@index');
@@ -151,11 +177,12 @@ Route::post('/administrador/directorio_tipos/update', 'Directorio_tiposControlle
 //directorios
 Route::get('/administrador/directorios', 'DirectoriosController@index');
 Route::get('/administrador/directorios/all', 'DirectoriosController@all');
-Route::get('/administrador/directorios/{id}', 'DirectoriosController@departamento');
+Route::get('/administrador/directorios/{id}', 'DirectoriosController@showone');
 Route::get('/administrador/directorios/delete/{id}', 'DirectoriosController@delete');
 Route::get('/administrador/directorios/update/{id}', 'DirectoriosController@showupdate');
 Route::post('/administrador/directorios/create', 'DirectoriosController@create');
 Route::post('/administrador/directorios/update', 'DirectoriosController@update');
+Route::post('/administrador/diretorios/search/search', 'DirectoriosController@search');
 
 //calendarios
 Route::get('/calendario', 'CalendariosController@index');
@@ -174,6 +201,129 @@ Route::get('/invitados/delete/{id}', 'InvitadosController@delete');
 Route::get('/invitados/update/{id}', 'InvitadosController@showupdate');
 Route::post('/invitados/create', 'InvitadosController@create');
 Route::post('/invitados/update', 'InvitadosController@update');
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes ENTRADAS
+|--------------------------------------------------------------------------
+|
+| Registros y servicios del modulo de entradas
+|
+*/
+
+//marcas
+Route::get('/inventario/marcas', 'MarcasController@index');
+Route::get('/inventario/marcas/all', 'MarcasController@all');
+Route::get('/inventario/marcas/{id}', 'MarcasController@formcreate');
+Route::get('/inventario/marcas/delete/{id}', 'MarcasController@delete');
+Route::get('/inventario/marcas/update/{id}', 'MarcasController@showupdate');
+Route::post('/inventario/marcas/create', 'MarcasController@create');
+Route::post('/inventario/marcas/update', 'MarcasController@update');
+
+//lineas
+Route::get('/inventario/lineas', 'LineasController@index');
+Route::get('/inventario/lineas/all', 'LineasController@all');
+Route::get('/inventario/lineas/{id}', 'LineasController@formcreate');
+Route::get('/inventario/lineas/delete/{id}', 'LineasController@delete');
+Route::get('/inventario/lineas/update/{id}', 'LineasController@showupdate');
+Route::post('/inventario/lineas/create', 'LineasController@create');
+Route::post('/inventario/lineas/update', 'LineasController@update');
+
+//tipo_presentaciones
+Route::get('/inventario/tipo_presentaciones', 'Tipo_presentacionesController@index');
+Route::get('/inventario/tipo_presentaciones/all', 'Tipo_presentacionesController@all');
+Route::get('/inventario/tipo_presentaciones/{id}', 'Tipo_presentacionesController@formcreate');
+Route::get('/inventario/tipo_presentaciones/delete/{id}', 'Tipo_presentacionesController@delete');
+Route::get('/inventario/tipo_presentaciones/update/{id}', 'Tipo_presentacionesController@showupdate');
+Route::post('/inventario/tipo_presentaciones/create', 'Tipo_presentacionesController@create');
+Route::post('/inventario/tipo_presentaciones/update', 'Tipo_presentacionesController@update');
+
+//clasificaciones
+Route::get('/inventario/clasificaciones', 'ClasificacionesController@index');
+Route::get('/inventario/clasificaciones/all', 'ClasificacionesController@all');
+Route::get('/inventario/clasificaciones/{id}', 'ClasificacionesController@formcreate');
+Route::get('/inventario/clasificaciones/delete/{id}', 'ClasificacionesController@delete');
+Route::get('/inventario/clasificaciones/update/{id}', 'ClasificacionesController@showupdate');
+Route::post('/inventario/clasificaciones/create', 'ClasificacionesController@create');
+Route::post('/inventario/clasificaciones/update', 'ClasificacionesController@update');
+
+//referencias
+Route::get('/inventario/referencias', 'ReferenciasController@index');
+Route::get('/inventario/referencias/all', 'ReferenciasController@all');
+Route::get('/inventario/referencias/{id}', 'ReferenciasController@formcreate');
+Route::get('/inventario/referencias/delete/{id}', 'ReferenciasController@delete');
+Route::get('/inventario/referencias/update/{id}', 'ReferenciasController@showupdate');
+Route::post('/inventario/referencias/create', 'ReferenciasController@create');
+Route::post('/inventario/referencias/update', 'ReferenciasController@update');
+
+//lotes
+Route::get('/inventario/lotes', 'LotesController@index');
+Route::get('/inventario/lotes/all', 'LotesController@all');
+Route::get('/inventario/lotes/{id}', 'LotesController@formcreate');
+Route::get('/inventario/lotes/delete/{id}', 'LotesController@delete');
+Route::get('/inventario/lotes/update/{id}', 'LotesController@showupdate');
+Route::post('/inventario/lotes/create', 'LotesController@create');
+Route::post('/inventario/lotes/update', 'LotesController@update');
+
+//Documentos
+Route::get('/inventario/documentos', 'DocumentosController@index');
+Route::get('/inventario/documentos/all', 'DocumentosController@all');
+Route::get('/inventario/documentos/{id}', 'DocumentosController@formcreate');
+Route::get('/inventario/documentos/delete/{id}', 'DocumentosController@delete');
+Route::get('/inventario/documentos/update/{id}', 'DocumentosController@showupdate');
+Route::post('/inventario/documentos/create', 'DocumentosController@create');
+Route::post('/inventario/documentos/update', 'DocumentosController@update');
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes SALIDAS
+|--------------------------------------------------------------------------
+|
+| Registros y servicios del modulo de entradas
+|
+*/
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes CARTERAS
+|--------------------------------------------------------------------------
+|
+| Carteras
+|
+*/
+Route::get('/cartera/egresos', 'CarterasController@egresos');
+Route::get('/cartera/egresos/submenu', 'CarterasController@menuegresos');
+Route::get('/cartera/egresos/causar', 'CarterasController@causaregreso');
+Route::get('/cartera/ingresos/causar', 'CarterasController@causaringreso');
+Route::get('/cartera/ingresos/submenu', 'CarterasController@menuingresos');
+Route::get('/cartera/ingresos', 'CarterasController@ingresos');
+Route::get('/cartera/allDocumentos/{id}', 'CarterasController@allDocumentos');
+Route::post('/cartera/egresos/guardar', 'CarterasController@save');
+Route::post('/cartera/kardex/guardar', 'KardexCarterasController@save');
+Route::get('/cartera/imprimir/{id}', 'CarterasController@imprimir');
+
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes GESTION DOCUMENTAL
+|--------------------------------------------------------------------------
+|
+| Registros y servicios del modulo de entradas
+|
+*/
+Route::get('/documentos/documento', function(){
+    return view('documentos.documentos');
+});
+Route::get('/documentos/imprimir/{id}', 'FacturasController@imprimir');
+Route::get('/documentos/imprimirpost/{id}', 'FacturasController@imprimirpost');
+
+Route::post('/kardex/saveDocument', 'KardexController@saveDocument');
+Route::post('/factura/saveDocument', 'FacturasController@saveDocument');
 
 
 //DESCARGAR EN EXCEL

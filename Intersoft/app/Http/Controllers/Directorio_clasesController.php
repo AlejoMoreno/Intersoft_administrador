@@ -14,7 +14,7 @@ class Directorio_clasesController extends Controller
         $directorio_clases->descripcion= $request->descripcion;
         $directorio_clases->save();
         $directorio_clases = Directorio_clases::all();
-        return view('administrador.directorio_clases', ['directorio_clases' => $directorio_clases]);
+        return redirect('/administrador/directorio_clases');
     }
 
     public function update(Request $request){
@@ -42,7 +42,7 @@ class Directorio_clasesController extends Controller
         $directorio_clases = Directorio_clases::find($id);
         $directorio_clases->delete();
         $directorio_clases = Directorio_clases::all();
-        return view('administrador.directorio_clases', ['directorio_clases' => $directorio_clases]);
+        return redirect('/administrador/directorio_clases');
     }
 
     public function all(){

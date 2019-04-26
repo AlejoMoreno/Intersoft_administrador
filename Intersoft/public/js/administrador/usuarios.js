@@ -1,22 +1,36 @@
 var usuarios = new Usuarios();
+
 function Usuarios(){
 
+    this.initial = function(){
+        $('#actualizar').hide();
+    };
+
     this.update = function( data ){
+        $('#actualizar').show();
         console.log('Daatos Sucurusal-update:');
         var data = JSON.parse(data);
         console.log(data);
         $('#row'+data.id).css('opacity','0.4');
         //ubicar informacion en el formulario
         $('#id').val(data.id);
-        $('#nombre').val(data.nombre);
-        $('#codigo').val(data.codigo);
-        $('#direccion').val(data.direccion);
-        $('#encargado').val(data.encargado);
-        $('#telefono').val(data.telefono);
-        $('#correo').val(data.correo);
-        $('#ciudad').val(data.ciudad.id);
-        //$('#ciudad[value='+data.ciudad.id+']').attr('selected','selected');
-        $('#id_empresa').val(data.id_empresa);
+        $('#ncedula').val(data.ncedula);
+		$('#nombre').val(data.nombre);
+		$('#apellido').val(data.apellido);
+		$('#cargo').val(data.cargo);
+		$('#telefono').val(data.telefono);
+		$('#password').val(data.password);
+		$('#correo').val(data.correo);
+		$('#estado').val(data.estado);
+		$('#token').val(data.token);
+		$('#arl').val(data.arl);
+		$('#eps').val(data.eps);
+		$('#cesantias').val(data.cesantias);
+		$('#pension').val(data.pension);
+		$('#caja_compensacion').val(data.caja_compensacion);
+		$('#id_contrato').val(data.id_contrato.id);
+		$('#referencia_personal').val(data.referencia_personal);
+		$('#telefono_referencia').val(data.telefono_referencia);
         $('input[type="submit"]').attr('disabled','disabled');
     };
 
@@ -41,7 +55,7 @@ function Usuarios(){
 			},
 			success:  function (response) {
                 console.log(response);
-                config.Redirect('/administrador/sucursales');
+                config.Redirect('/administrador/usuarios');
 			}
         });
     }

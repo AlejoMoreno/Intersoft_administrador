@@ -2,6 +2,42 @@
 
 @section('content')
 
+<?php 
+
+use App\Usuarios;
+$usuarios = Usuarios::all();
+use App\Directorios;
+$directorios = Directorios::all();
+use App\Departamentos;
+$departamentos = Departamentos::all();
+use App\Ciudades;
+$ciudades = Ciudades::all();
+use App\Contrato_laborals;
+$contratos = Contrato_laborals::all();
+use App\Retefuentes;
+$retefuentes = Retefuentes::all();
+use App\Regimenes;
+$regimenes = Regimenes::all();
+use App\Directorio_clases;
+$directorio_clases = Directorio_clases::all();
+use App\Directorio_tipos;
+$directorio_tipos = Directorio_tipos::all();
+use App\Directorio_tipo_terceros;
+$directorio_tipo_terceros = Directorio_tipo_terceros::all();
+use App\Sucursales;
+$sucursales = Sucursales::all();
+use App\Lineas;
+$lineas = Lineas::all();
+use App\Marcas;
+$marcas = Marcas::all();
+use App\Clasificaciones;
+$clasificaciones = Clasificaciones::all();
+use App\Tipo_presentaciones;
+$tipo_presentaciones = Tipo_presentaciones::all();
+use App\Documentos;
+$documentos = Documentos::all();?>
+
+
 
 <div class="container-fluid">
     <div class="row">
@@ -48,77 +84,112 @@
                                         <tr onclick="config.Redirect('/administrador/usuarios');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/201/201570.svg"></td>
                                             <td>Usuarios</td>
-                                            <td>100</td></a>
+                                            <td><?php echo sizeof($usuarios); ?></td>
                                             <td><img width="20" onclick="config.Intoredirect('administrador/usuarios.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/directorios');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/png/512/265/265675.png"></td>
                                             <td>Directorio</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($directorios); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/departamentos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/185/185277.svg"></td>
                                             <td>Departamentos</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($departamentos); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/ciudades');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/189/189060.svg"></td>
                                             <td>Ciudades</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($ciudades); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/contratos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/png/512/148/148971.png"></td>
                                             <td>Contratos</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($contratos); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/retefuentes');">
                                             <td><img width="30" src="https://pbs.twimg.com/profile_images/728257432313532416/ATp81uTy.jpg"></td>
                                             <td>Rete-Fuentes</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($retefuentes); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/regimenes');">
                                             <td><img width="30" src="https://pbs.twimg.com/profile_images/728257432313532416/ATp81uTy.jpg"></td>
                                             <td>Regímenes</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($regimenes); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/directorio_clases');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/png/512/485/485280.png"></td>
                                             <td>Directorio Clases</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($directorio_clases); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/directorio_tipos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/png/512/485/485482.png"></td>
                                             <td>Directorio tipos</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($directorio_tipos); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/directorio_tipo_terceros');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/png/512/148/148971.png"></td>
                                             <td>Directorio Tipo Terceros</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($directorio_tipo_terceros); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/sucursales');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/149/149060.svg"></td>
                                             <td>Sucursales</td>
-                                            <td>20</td>
+                                            <td><?php echo sizeof($sucursales); ?></td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/marcas');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/265/265706.svg"></td>
+                                            <td>Marcas</td>
+                                            <td><?php echo sizeof($marcas); ?></td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/lineas');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/149/149023.svg"></td>
+                                            <td>Líneas</td>
+                                            <td><?php echo sizeof($lineas); ?></td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/clasificaciones');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/272/272480.png"></td>
+                                            <td>Clasificaciones de los productos</td>
+                                            <td><?php echo sizeof($clasificaciones); ?></td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/tipo_presentaciones');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/340/340077.svg"></td>
+                                            <td>Tipo Presentaciones</td>
+                                            <td><?php echo sizeof($tipo_presentaciones); ?></td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/documentos');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
+                                            <td>Administración de Documentos</td>
+                                            <td><?php echo sizeof($documentos); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>

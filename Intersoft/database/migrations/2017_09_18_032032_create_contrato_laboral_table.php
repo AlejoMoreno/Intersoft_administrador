@@ -22,6 +22,18 @@ class CreateContratoLaboralTable extends Migration
             $table->date('fecha_final');
             $table->timestamps();
         });
+
+        // Insert some stuff
+        DB::table('contrato_laborals')->insert(
+            array(
+                'id'        => NULL,
+                'tipo_contrato' => 'CONTRATO NUMERO 1',
+                'descripcion' => 'CONTRATO NUMERO 1',
+                'consecutivo' => 1,
+                'fecha_inicial' => '2018-01-01',
+                'fecha_final' => '2018-01-01',
+            )
+        );
     }
 
     /**

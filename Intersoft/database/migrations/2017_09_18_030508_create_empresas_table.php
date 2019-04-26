@@ -28,6 +28,24 @@ class CreateEmpresasTable extends Migration
             $table->integer('id_regimen');
             $table->timestamps();
         });
+
+        // Insert some stuff
+        DB::table('empresas')->insert(
+            array(
+                'id'        => NULL,
+                'razon_social' => 'WAKUSOFT',
+                'direccion' => 'CL 38 A 50 A 71',
+                'actividad' => '9002',
+                'dian_nit' => '1030570356',
+                'nit_empresa' => '1030570356',
+                'nombre' => 'WAKUSOFT',
+                'telefono' => '77777',
+                'telefono1' => '777777',
+                'telefono2' => '777777',
+                'ciudad' => 1,
+                'id_regimen' => 1,
+            )
+        );
     }
 
     /**

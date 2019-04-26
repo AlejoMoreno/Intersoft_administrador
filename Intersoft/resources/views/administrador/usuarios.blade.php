@@ -5,31 +5,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">Administrador</h4>
-                    <p class="category">Nota: Las imagenes que se muestran a continuación representan un link a donde podrás viajar por intersoft.</p>
-                </div>
-                <div class="content">
-                    
 
-                    <div class="footer">
-                        <div class="legend">
-                            <i class="fa fa-circle text-info"></i> 
-                            <i class="fa fa-circle text-danger"></i> 
-                            <i class="fa fa-circle text-warning"></i> 
-                        </div>
-                        <hr>
-                        <div class="stats">
-                            <i class="fa fa-clock-o"></i> Ir a la sección del manual
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="header">
                     <h4 class="title">Usuarios</h4>
@@ -37,7 +14,7 @@
                 </div>
                 <div class="content">
                     <div style="width:100%;overflow-x:scroll;">
-                    <table class="table table-hover table-striped" id="tableusuarios">
+                    <table class="table table-hover table-striped" id="tableusuarios" id="datos">
                         <thead>
                             <tr>
                                 <th>ID</th> 
@@ -83,8 +60,8 @@
                                     <td>Contrato No.{{ $usuario['id_contrato']['id'] }}</td>
                                     <td>{{ $usuario['referencia_personal'] }}</td>
                                     <td>{{ $usuario['telefono_referencia'] }}</td>
-                                    <td><a href="/administrador/usuarios/update/{{  $usuario['id'] }}"><button class="btn btn-warning">></button></a></td>
-                                    <td><a href="/administrador/usuarios/delete/{{  $usuario['id'] }}"><button class="btn btn-danger">x</button></a></td>
+                                    <td><a href="javascript:;" onclick="usuarios.update('{{ $usuario }}');"><button class="btn btn-warning">></button></a></td>
+                                        <td><a onclick="config.delete_get('/administrador/usuarios/delete/', '{{ $usuario }}',  '/administrador/usuarios');" href="#"><button class="btn btn-danger">x</button></a></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -96,7 +73,8 @@
                     </div>
                     <div style="width:100%;overflow-x:scroll;">
                     <table class="table table-hover table-striped" id="tableusuarios">
-                    <form action='/administrador/usuarios/create' method="POST">
+                    <form action='/administrador/usuarios/create' method="POST" name="formulario" id="formulario">
+                        <input type="hidden" name="id" id="id">
                         <thead>
                             <tr>
                                 <th>ncedula</th>
@@ -166,7 +144,7 @@
                                 <td><input type="text" class="form-control" name="referencia_personal" id="referencia_personal"></td>
                                 <td><input type="text" class="form-control" name="telefono_referencia" id="telefono_referencia"></td>
                                 <td><input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control"></td>
-                                <td><button id="actualizar" onclick="sucursal.sendUpdate();" class="btn btn-warning form-control">Actualizar</button></td>
+                                <td><div id="actualizar" onclick="config.send_post('#formulario', '/administrador/usuarios/update', '/administrador/usuarios');" class="btn btn-warning form-control">Actualizar</div></td>
                             </tr>                            
                         </tbody>
                     </form>

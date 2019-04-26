@@ -5,31 +5,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">Administrador</h4>
-                    <p class="category">Nota: Las imagenes que se muestran a continuación representan un link a donde podrás viajar por intersoft.</p>
-                </div>
-                <div class="content">
-                    
 
-                    <div class="footer">
-                        <div class="legend">
-                            <i class="fa fa-circle text-info"></i> 
-                            <i class="fa fa-circle text-danger"></i> 
-                            <i class="fa fa-circle text-warning"></i> 
-                        </div>
-                        <hr>
-                        <div class="stats">
-                            <i class="fa fa-clock-o"></i> Ir a la sección del manual
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="header">
                     <h4 class="title">Sucursales</h4>
@@ -67,7 +44,7 @@
                                         <td>{{ $sucursal['correo'] }}</td>
                                         <td>{{ $sucursal['ciudad']['nombre'] }}</td>
                                         <td><a href="javascript:;" onclick="sucursal.update('{{ $sucursal }}');"><button class="btn btn-warning">></button></a></td>
-                                        <td><a href="/administrador/sucursales/delete/{{  $sucursal['id'] }}"><button class="btn btn-danger">x</button></a></td>
+                                        <td><a onclick="config.delete_get('/administrador/sucursales/delete/', '{{ $sucursal }}',  '/administrador/sucursales');" href="#"><button class="btn btn-danger">x</button></a></td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -89,7 +66,8 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <form action='/administrador/sucursales/create' method="POST">
+                                <form action='/administrador/sucursales/create' method="POST" name="formulario" id="formulario">
+                                    <input type="hidden" name="id" id="id">
                                 <td><input type="text" name="nombre" class="form-control"  onkeyup="config.UperCase('nombre');" id="nombre" placeholder="Nombre" required></td>
                                 <td><input type="text" name="codigo" class="form-control"  onkeyup="config.UperCase('codigo');" id="codigo" placeholder="Código" required></td>
                                 <td><input type="text" name="direccion" class="form-control"  onkeyup="config.UperCase('direccion');" id="direccion" placeholder="Dirección" required></td>
@@ -104,7 +82,7 @@
                                 </select></td>
                                 <td><input type="hidden" name="id_empresa" class="form-control" value="{{ $empresas['id'] }}"  onkeyup="config.UperCase('id_empresa');" id="id_empresa" placeholder="id_empresa"></td>
                                 <td><input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control"></td>
-                                <td><button id="actualizar" onclick="sucursal.sendUpdate();" class="btn btn-warning form-control">Actualizar</button></td>
+                                <td><div id="actualizar" onclick="config.send_post('#formulario', '/administrador/sucursales/update', '/administrador/sucursales');" class="btn btn-warning form-control">Actualizar</div></td>
                                 </form>
                             </tr>
                         </tbody>
@@ -132,5 +110,9 @@ a img{
     margin:20px;
 }
 </style>
+
+<script type="text/javascript">
+    sucursal.initial();
+</script>
 
 @endsection()

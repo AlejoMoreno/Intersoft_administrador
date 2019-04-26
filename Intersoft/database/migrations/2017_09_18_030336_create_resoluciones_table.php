@@ -21,6 +21,17 @@ class CreateResolucionesTable extends Migration
             $table->integer('id_empresa');
             $table->timestamps();
         });
+
+        // Insert some stuff
+        DB::table('resoluciones')->insert(
+            array(
+                'id'        => NULL,
+                'fecha' => '2018-01-02',
+                'numero' => '12321',
+                'rango' => '900-930',
+                'id_empresa' => 1
+            )
+        );
     }
 
     /**

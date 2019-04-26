@@ -64,12 +64,12 @@ function Login(){
 			url:   HOST+'/login',
 			type:  'post',
 			beforeSend: function () {
-				$('#resultado').html('<center><div id="cargando" style="position: absolute;width: 100%;height: 100%;background: black;top: 0px;left: 0px;opacity: 0.8;z-index:100"><img src="images/cargando.gif" style="margin-top: 20%;"></div></center>');
+				$('#resultado').html('<center><div id="cargando" style="position: absolute;width: 100%;height: 100%;background: black;top: 0px;left: 0px;opacity: 0.8;z-index:100"><img src="assets/img/loading-13.gif" style="margin-top: 20%;"></div></center>');
 			},
 			success:  function (response) {
 				console.log(response);
 				if(response.result=='success'){
-					config.saveLogin(response.body[0]);
+					config.saveLogin(response.body,response.sessions);
 					$('#resultado').html('');		
 					config.Redirect('/layout');			
 				}

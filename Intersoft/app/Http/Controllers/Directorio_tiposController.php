@@ -13,7 +13,7 @@ class Directorio_tiposController extends Controller
         $directorio_tipos->descripcion= $request->descripcion;
         $directorio_tipos->save();
         $directorio_tipos = Directorio_tipos::all();
-        return view('administrador.directorio_tipos', ['directorio_tipos' => $directorio_tipos]);
+        return redirect('/administrador/directorio_tipos');
     }
 
     public function update(Request $request){
@@ -41,7 +41,7 @@ class Directorio_tiposController extends Controller
         $directorio_tipos = Directorio_tipos::find($id);
         $directorio_tipos->delete();
         $directorio_tipos = Directorio_tipos::all();
-        return view('administrador.directorio_tipos', ['directorio_tipos' => $directorio_tipos]);
+        return redirect('/administrador/directorio_tipos');
     }
 
     public function all(){

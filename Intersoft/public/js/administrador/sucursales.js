@@ -1,7 +1,13 @@
 var sucursal = new Sucursal();
+
 function Sucursal(){
 
+    this.initial = function(){
+        $('#actualizar').hide();
+    };
+
     this.update = function( data ){
+        $('#actualizar').show();
         console.log('Daatos Sucurusal-update:');
         var data = JSON.parse(data);
         console.log(data);

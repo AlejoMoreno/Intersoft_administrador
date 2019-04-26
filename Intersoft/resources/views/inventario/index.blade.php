@@ -2,6 +2,19 @@
 
 @section('content')
 
+<?php 
+
+use App\Documentos;
+$documentos = Documentos::where('ubicacion','=','ENTRADA')->get();
+
+use App\Referencias;
+$referencias = Referencias::all();
+
+use App\Lotes;
+$lotes = Lotes::all();
+
+?>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
@@ -44,82 +57,54 @@
                                         <th></th>
                                     </tr></thead>
                                     <tbody>
-                                        <tr onclick="config.Redirect('/inventario/productos');">
+                                        <tr onclick="config.Redirect('/inventario/referencias');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138226.svg"></td>
-                                            <td>Productos</td>
-                                            <td>100</td></a>
+                                            <td>Referencias</td>
+                                            <td><?php  echo sizeof($referencias); ?></td></a>
                                             <td><img width="20" onclick="config.Redirect('inventarios/searchProductos.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/inventario/marcas');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/265/265706.svg"></td>
-                                            <td>Marcas</td>
-                                            <td>20</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/lineas');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/149/149023.svg"></td>
-                                            <td>Líneas</td>
-                                            <td>5</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/documentos/documento');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/272/272480.png"></td>
-                                            <td>Factura Compra</td>
-                                            <td>500</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/documentos/documento');">
+                                        <tr onclick="config.Redirect('/inventario/lotes');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/272/272429.svg"></td>
-                                            <td>Remisión Compra</td>
-                                            <td>200</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/kits');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/340/340077.svg"></td>
-                                            <td>Kits</td>
-                                            <td>50</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/documentos/documento');">
-                                            <td><img width="30" src="https://www.flaticon.com/premium-icon/icons/svg/507/507887.svg"></td>
-                                            <td>Pedido Compra</td>
-                                            <td>30</td>
+                                            <td>Lotes</td>
+                                            <td><?php  echo sizeof($lotes); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/cierreInventario');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138213.svg"></td>
                                             <td>Cierre de Inventario</td>
-                                            <td>50</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/ajustes');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Ajustes de Entrada y Salida</td>
-                                            <td>100</td>
+                                            <td>?</td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/catalogo');">
                                             <td><img width="30" src="https://www.flaticon.com/premium-icon/icons/svg/296/296383.svg"></td>
                                             <td>Catálogo</td>
-                                            <td>1</td>
+                                            <td>?</td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/inventario/otros');">
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/424/424067.svg"></td>
-                                            <td>Otros Documentos</td>
-                                            <td>30</td>
-                                            <td></td>
-                                        </tr>
+                                        @foreach ($documentos as $obj)
+                                            <?php 
+                                            if($obj["signo"]=='+'){
+                                                $signo = "mas";
+                                            }
+                                            elseif($obj["signo"]=='-'){
+                                                $signo = "menos";
+                                            }
+                                            else{
+                                                $signo = "igual";
+                                            }
+                                            $url = '/documentos/documento?signo='.$signo.'&nombre='.$obj['nombre'].'&id='.$obj['id'].'&prefijo='.$obj['prefijo'].'&numero='.$obj['num_presente'];?> 
+                                            <tr>
+                                                <td><a href="{{ $url }}" target="_blank"><img width="30" src="https://image.flaticon.com/icons/svg/138/138212.svg"></a></td>
+                                                <td><a href="{{ $url }}">{{ $obj['nombre'] }}</a></td>
+                                                <td></td>
+                                                <td><a href="{{ $url }}"><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg"></a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>

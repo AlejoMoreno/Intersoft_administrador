@@ -13,7 +13,7 @@ class RegimenesController extends Controller
         $regimenes->descripcion= $request->descripcion;
         $regimenes->save();
         $regimenes = Regimenes::all();
-        return view('administrador.regimenes', ['regimenes' => $regimenes]);
+        return redirect('/administrador/regimenes');
     }
 
     public function update(Request $request){
@@ -41,7 +41,7 @@ class RegimenesController extends Controller
         $regimenes = Regimenes::find($id);
         $regimenes->delete();
         $regimenes = Regimenes::all();
-        return view('administrador.regimenes', ['regimenes' => $regimenes]);
+        return redirect('/administrador/regimenes');
     }
 
     public function all(){

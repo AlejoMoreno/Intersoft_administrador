@@ -15,13 +15,7 @@ class CiudadesController extends Controller
         $ciudad->nombre         = $request->nombre;
         $ciudad->id_departamento= $request->id_departamento;
         $ciudad->save();
-        //retornar las ciudades
-        $ciudades = Ciudades::all();
-        foreach ($ciudades as $ciudad){
-            $id_departamento = Departamentos::where('id', $ciudad->id_departamento)->first();
-            $ciudad->id_departamento = $id_departamento;
-        }
-        return view('administrador.ciudades', ['ciudades' => $ciudades]);
+        return redirect('/administrador/ciudades');
     }
 
     public function update(Request $request){
@@ -47,13 +41,7 @@ class CiudadesController extends Controller
     public function delete($id){
         $ciudad = Ciudades::where('id',$id)->first();
         $ciudad->delete();
-        //retornar las ciudades
-        $ciudades = Ciudades::all();
-        foreach ($ciudades as $ciudad){
-            $id_departamento = Departamentos::where('id', $ciudad->id_departamento)->first();
-            $ciudad->id_departamento = $id_departamento;
-        }
-        return view('administrador.ciudades', ['ciudades' => $ciudades]);
+        return redirect('/administrador/ciudades');
     }
 
     public function all(){

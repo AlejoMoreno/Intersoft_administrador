@@ -19,6 +19,31 @@ class CreateRegimenesTable extends Migration
             $table->string('descripcion');
             $table->timestamps();
         });
+
+        // Insert some stuff
+        DB::table('regimenes')->insert(
+            array(
+                'id'        => NULL,
+                'nombre' => 'Régimen Único Simplificado',
+                'descripcion' => 'Régimen Único Simplificado'
+            ),
+            array(
+                'id'        => NULL,
+                'nombre' => 'Régimen Especial de Impuesto a la Renta',
+                'descripcion' => 'Régimen Especial de Impuesto a la Renta'
+            ),
+            array(
+                'id'        => NULL,
+                'nombre' => 'Régimen MYPE Tributario',
+                'descripcion' => 'Régimen MYPE Tributario'
+            ),
+            array(
+                'id'        => NULL,
+                'nombre' => 'Régimen General ',
+                'descripcion' => 'Régimen General '
+            )
+
+        );
     }
 
     /**

@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="header">
                     <h4 class="title">Administrador</h4>
-                    <p class="category">Nota: Las imagenes que se muestran a continuación representan un link a donde podrás viajar por intersoft.</p>
+                    <p class="category">Nota: si deseas subir un csv con la información de la ciudad, debes tener la misma estructura (ID,ID_DEPARTAMENTO,NOMBRE,CODIGO). aquí! <form><input type="file" name="" class="form-control"><br><input type="submit" name="guardar" value="Subir" class="btn btn-success" ></form></p>
                 </div>
                 <div class="content">
                     
@@ -44,7 +44,6 @@
                                 <th>Nombre</th>                                 
                                 <th>Código</th> 
                                 <th></th> 
-                                <th></th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -54,8 +53,7 @@
                                     <td>{{ $ciudad['id_departamento']['nombre'] }}</td>
                                     <td>{{ $ciudad['nombre'] }}</td>                                    
                                     <td>{{ $ciudad['codigo'] }}</td>
-                                    <td><a href="/administrador/ciudades/update/{{  $ciudad['id'] }}"><button class="btn btn-warning">></button></a></td>
-                                    <td><a href="/administrador/ciudades/delete/{{  $ciudad['id'] }}"><button class="btn btn-danger">x</button></a></td>
+                                    <td><a onclick="config.delete_get('/administrador/ciudades/delete/', '{{  $ciudad }}',  '/administrador/ciudades');" href="#"><button class="btn btn-danger">x</button></a></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -76,7 +74,7 @@
                                 <td><select name="id_departamento" class="form-control" id="id_departamento"><option value="">Seleccione Departamento</option></select></td>
                                 <td><input type="text" name="nombre" class="form-control"  onkeyup="config.UperCase('nombre');" id="nombre" placeholder="Nombre"></td>                                
                                 <td><input type="number" name="codigo" class="form-control"  onkeyup="config.UperCase('codigo');" id="codigo" placeholder="Código"></td>
-                                <td><input type="image" width="30" src="https://image.flaticon.com/icons/svg/148/148764.svg"></td>
+                                <td><input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control"></td>
                                 </form>
                             </tr>
                         </tbody>

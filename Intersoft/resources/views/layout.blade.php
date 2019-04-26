@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<link rel="icon" type="image/png" href="http://localhost:8000/assets/img/favicon.ico">
+	<link rel="icon" type="image/png" href="/assets/img/favicon.ico">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<title>Light Bootstrap Dashboard by Creative Tim</title>
+	<title>Intersoft</title>
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
     <!-- Bootstrap core CSS     -->
-    <link href="http://localhost:8000/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Animation library for notifications   -->
-    <link href="http://localhost:8000/assets/css/animate.min.css" rel="stylesheet"/>
+    <link href="/assets/css/animate.min.css" rel="stylesheet"/>
     <!--  Light Bootstrap Table core CSS    -->
-    <link href="http://localhost:8000/assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
+    <link href="/assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
     <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="http://localhost:8000/assets/css/demo.css" rel="stylesheet" />
+    <link href="/assets/css/demo.css" rel="stylesheet" />
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
@@ -22,24 +22,40 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <!-- CSS FAMC -->
-    <link rel="stylesheet" href="http://localhost:8000/css/menu.css">
-    <!-- SCRIPTS FAMC -->
-    <script src="http://localhost:8000/js/config.js"></script>
-    <script src="http://localhost:8000/js/DB/sesion.js"></script>
-    <script src="http://localhost:8000/js/perfil.js"></script>
-    <script src="http://localhost:8000/js/marcas.js"></script>
-    <script src="http://localhost:8000/js/lineas.js"></script>
-    <script src="http://localhost:8000/js/usuarios.js"></script>
-    <script src="http://localhost:8000/js/productos.js"></script>
-    <script src="http://localhost:8000/js/ciudades.js"></script>
+    <!-- TEXT EDTIT -->
+    <link rel="stylesheet" href="https://imperavi.com/assets/redactor/redactor.min.css" />
+    <!--script src="https://imperavi.com/assets/redactor/redactor.js?v"></script>-->
 
-    <script src="http://localhost:8000/js/administrador/sucursales.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <!-- CSS FAMC -->
+    <link rel="stylesheet" href="/css/menu.css">
+    <!-- SCRIPTS FAMC -->
+    <script src="/js/config.js"></script>
+    <script src="/js/DB/sesion.js"></script>
+    <script src="/js/perfil.js"></script>
+    <script src="/js/marcas.js"></script>
+    <script src="/js/lineas.js"></script>
+    <script src="/js/usuarios.js"></script>
+    <script src="/js/productos.js"></script>
+    <script src="/js/ciudades.js"></script>
+
+    <script src="/js/administrador/directorios.js"></script>
+    <script src="/js/administrador/sucursales.js"></script>
+    <script src="/js/administrador/usuarios.js"></script>
+
+    <script src="/js/inventario/clasificaciones.js"></script>
+    <script src="/js/inventario/tipo_presentacion.js"></script>
+    <script src="/js/inventario/lineas.js"></script>
+    <script src="/js/inventario/marcas.js"></script>
+    <script src="/js/inventario/referencias.js"></script>
+    <script src="/js/inventario/documentos.js"></script>
+    <script src="/js/inventario/lotes.js"></script>
 </head>
 <body>
 
 <div class="wrapper">
-    <div class="sidebar" data-color="blue" data-image="http://localhost:8000/assets/img/sidebar-1.jpg">
+    <div class="sidebar" data-color="blue" data-image="/assets/img/sidebar-1.jpg">
 
     	<div class="sidebar-wrapper">
             <div class="logo">
@@ -50,7 +66,7 @@
 
             <ul class="nav">
                 <li class="active" id="inicio">
-                    <a href="#" onclick="config.Redirect('/inicio/index');">
+                    <a href="#" onclick="config.Redirect('/layout');">
                         <i class="pe-7s-graph"></i>
                         <p>Inicio</p>
                     </a>
@@ -103,10 +119,10 @@
                         <p>Reportes</p>
                     </a>
                 </li>
-				<li class="active-pro">
-                    <a href="#" onclick="config.Redirect('/update/index');">
-                        <i class="pe-7s-rocket"></i>
-                        <p>Actualizar Intersoft</p>
+                <li>
+                   <a href="#" onclick="config.Intoredirect('perfil.html?user='+localStorage.getItem('id'));" >
+                       <i class="pe-7s-rocket"></i>
+                       <p id="perfil"></p>
                     </a>
                 </li>
             </ul>
@@ -131,11 +147,6 @@
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <li>
-                           <a href="#" onclick="config.Intoredirect('perfil.html?user='+localStorage.getItem('id'));" >
-                               <p id="perfil"></p>
-                            </a>
-                        </li>
                         <li>
                             <a href="#">
                                 <p id="cerrarSesion">Cerrar Sesión</p>
@@ -173,22 +184,40 @@
                                 Portafolio
                             </a>
                         </li>
-                        <li>
-                            <a href="#">
-                               Blog
-                            </a>
-                        </li>
                     </ul>
                 </nav>
                 <p class="copyright pull-right">
-                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.creative-tim.com">famc.net.co</a>, derechos reservados
+                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://famc.net.co">famc.net.co</a>, derechos reservados
                 </p>
             </div>
         </footer>
         <!-- FORTER FIN-->
 
+        <script type="text/javascript">
+            $('#perfil').html("<small>" + localStorage.getItem("Nombre") + " " + localStorage.getItem("Apellido") + " || " + localStorage.getItem("Cargo") + "</small>");
+        </script>
+
     </div>
 </div>
+
+<style type="text/css">
+.sidebar-wrapper::-webkit-scrollbar-track,.main-panel::-webkit-scrollbar-track
+{
+    background-color: #F5F5F5;
+}
+
+.sidebar-wrapper::-webkit-scrollbar, .main-panel::-webkit-scrollbar
+{
+    width: 5px;
+    background-color: #F5F5F5;
+}
+
+.sidebar-wrapper::-webkit-scrollbar-thumb, .main-panel::-webkit-scrollbar-thumb
+{
+    background-color: #176dca;  
+}
+
+</style>
 
 
 </body>

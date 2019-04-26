@@ -5,82 +5,70 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
+
+        <div class="col-md-12">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Inventario</h4>
-                    <p class="category">Nota: Las imagenes que se muestran a continuación representan un link a donde podrás viajar por intersoft.</p>
+                    <h4 class="title">Lineas</h4>
+                    <p class="category">Diferentes lineas</p><br>
                 </div>
                 <div class="content">
-                    
-
-                    <div class="footer">
-                        <div class="legend">
-                            <i class="fa fa-circle text-info"></i> 
-                            <i class="fa fa-circle text-danger"></i> 
-                            <i class="fa fa-circle text-warning"></i> 
-                        </div>
-                        <hr>
-                        <div class="stats">
-                            <i class="fa fa-clock-o"></i> Ir a la sección del manual
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">Ciudades</h4>
-                    <p class="category">Diferentes Ciudades de Colombia</p>
-                </div>
-                <div class="content">
-                    <table class="table table-hover table-striped" id="tabledepartamentos">
-                        <thead>
-                            <tr>
-                                <th>ID</th> 
-                                <th>Departamento</th>
-                                <th>Nombre</th>                                 
-                                <th>Código</th> 
-                                <th></th> 
-                                <th></th> 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($lineas as $linea)
+                    <div style="overflow-x:scroll;overflow-y:scroll;height:500px;">
+                        <table class="table table-hover table-striped" id="datos">
+                            <thead>
                                 <tr>
-                                    <td>{{ $linea['id'] }}</td>
-                                    <td>{{ $linea['id_departamento']['nombre'] }}</td>
-                                    <td>{{ $linea['nombre'] }}</td>                                    
-                                    <td>{{ $linea['codigo'] }}</td>
-                                    <td><a href="/inventario/lineas/update/{{  $linea['id'] }}"><button class="btn btn-warning">></button></a></td>
-                                    <td><a href="/inventario/lineas/delete/{{  $linea['id'] }}"><button class="btn btn-danger">x</button></a></td>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Código interno</th>
+                                    <th>Código alterno</th>
+                                    <th></th> 
+                                    <th></th> 
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <h4>Crear Ciudad</h4>
-                    <table class="table table-hover table-striped" id="tableciudades">
-                        <thead>
-                            <tr>
-                                <th>Departamento</th>
-                                <th>Nombre</th>                                 
-                                <th>Código</th> 
-                                <th></th> 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <form action='/inventario/lineas    º/create' method="POST">
-                                <td><select name="id_departamento" class="form-control" id="id_departamento"><option value="">Seleccione Departamento</option></select></td>
-                                <td><input type="text" name="nombre" class="form-control"  onkeyup="config.UperCase('nombre');" id="nombre" placeholder="Nombre"></td>                                
-                                <td><input type="number" name="codigo" class="form-control"  onkeyup="config.UperCase('codigo');" id="codigo" placeholder="Código"></td>
-                                <td><input type="image" width="30" src="https://image.flaticon.com/icons/svg/148/148764.svg"></td>
-                                </form>
-                            </tr>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($lineas as $obj)
+                                    <tr id="row{{ $obj['id'] }}">
+                                        <td>{{ $obj['id'] }}</td>
+                                        <td>{{ $obj['nombre'] }}</td>
+                                        <td>{{ $obj['descripcion'] }}</td>
+                                        <td>{{ $obj['codigo_interno'] }}</td>
+                                        <td>{{ $obj['codigo_alterno'] }}</td>
+                                        <td><a href="javascript:;" onclick="lineas.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
+                                        <td><a onclick="config.delete_get('/inventario/lineas/delete/', '{{ $obj }}',  '/inventario/lineas');" href="#"><button class="btn btn-danger">x</button></a></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>Crear lineas</h4>
+                    
+                        <form action='/inventario/lineas/create' method="POST" name="formulario" id="formulario">
+                            <input type="hidden" name="id" id="id">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label>Nombre</label><br>
+                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Escribe el nombre" required="" onkeyup="config.UperCase('nombre');">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Descripción</label><br>
+                                    <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Escribe el descripcion" required="" onkeyup="config.UperCase('descripcion');">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Código interno</label><br>
+                                    <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno " required="" onkeyup="config.UperCase('codigo_interno');">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Código alterno</label><br>
+                                    <input type="text" class="form-control" name="codigo_alterno" id="codigo_alterno" placeholder="Escribe el codigo_alterno " required="" onkeyup="config.UperCase('codigo_alterno');">
+                                </div>
+                            </div>
+
+
+                        <input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control">
+                        <div id="actualizar" onclick="config.send_post('#formulario', '/inventario/lineas/update', '/inventario/lineas');" class="btn btn-warning form-control">Actualizar</div>
+                        </form>
+                    <div id="resultado"></div>
                     <div class="footer">
                         <div class="legend">
                             <i class="fa fa-circle text-info"></i> 
@@ -98,5 +86,10 @@
     </div>
 </div>
 
+<style>
+a img{
+    margin:20px;
+}
+</style>
 
 @endsection()

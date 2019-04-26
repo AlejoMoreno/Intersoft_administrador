@@ -14,7 +14,7 @@ class Directorio_tipo_tercerosController extends Controller
         $directorio_tipo_terceros->descripcion= $request->descripcion;
         $directorio_tipo_terceros->save();
         $directorio_tipo_terceros = Directorio_tipo_terceros::all();
-        return view('administrador.directorio_tipo_terceros', ['directorio_tipo_terceros' => $directorio_tipo_terceros]);
+        return redirect('/administrador/directorio_tipo_terceros');
     }
 
     public function update(Request $request){
@@ -42,7 +42,7 @@ class Directorio_tipo_tercerosController extends Controller
         $directorio_tipo_terceros = Directorio_tipo_terceros::find($id);
         $directorio_tipo_terceros->delete();
         $directorio_tipo_terceros = Directorio_tipo_terceros::all();
-        return view('administrador.directorio_tipo_terceros', ['directorio_tipo_terceros' => $directorio_tipo_terceros]);
+        return redirect('/administrador/directorio_tipo_terceros');
     }
 
     public function all(){

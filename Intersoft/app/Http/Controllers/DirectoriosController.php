@@ -44,8 +44,7 @@ class DirectoriosController extends Controller
         $directorios->id_directorio_clase= $request->id_directorio_clase;
         $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
         $directorios->save();
-        //regresar a la vista
-        return DirectoriosController::index();
+        return redirect('/administrador/directorios');
     }
 
     public function update(Request $request){
@@ -78,7 +77,7 @@ class DirectoriosController extends Controller
         $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
         $directorios->save();
         //regresar a la vista
-        return DirectoriosController::index();
+        return $directorios;
     }
 
     public function showupdate($id){
@@ -96,8 +95,7 @@ class DirectoriosController extends Controller
     public function delete($id){
         $directorios = Directorios::find($id);
         $directorios->delete();
-        //regresar a la vista
-        return DirectoriosController::index();
+        return redirect('/administrador/directorios');
     }
 
     public function all(){
@@ -108,17 +106,6 @@ class DirectoriosController extends Controller
     }
 
     public function index(){
-        $directorios = Directorios::all();
-        foreach ($directorios as $directorio) {
-            $directorio->id_retefuente = Retefuentes::find($directorio->id_retefuente);
-            $directorio->id_ciudad = Ciudades::find($directorio->id_ciudad);
-            $directorio->id_regimen = Regimenes::find($directorio->id_regimen);
-            $directorio->id_usuario = Usuarios::find($directorio->id_usuario);
-            $directorio->id_directorio_tipo = Directorio_tipos::find($directorio->id_directorio_tipo);
-            $directorio->id_directorio_clase = Directorio_clases::find($directorio->id_directorio_clase);
-            $directorio->id_directorio_tipo_tercero = Directorio_tipo_terceros::find($directorio->id_directorio_tipo_tercero);
-            $directorio->calificacion = DirectoriosController::calificacion($directorio->calificacion);
-        }
         $retefuentes = Retefuentes::all();
         $ciudades = Ciudades::all();
         $regimenes = Regimenes::all();
@@ -127,7 +114,7 @@ class DirectoriosController extends Controller
         $directorio_clases = Directorio_clases::all();
         $directorio_tipo_terceros = Directorio_tipo_terceros::all();
         return view('administrador.directorios', [
-            'directorios' => $directorios,
+            //'directorios' => $directorios,
             'retefuentes' => $retefuentes,
             'ciudades' => $ciudades,
             'regimenes' => $regimenes,
@@ -147,5 +134,67 @@ class DirectoriosController extends Controller
         if($calificacion==2){
             return 'BUENO';
         }
+    }
+    //buscar por cualquier input y retornar las listas de ellos
+    public function search(Request $request){
+        if($request->nit != ''){
+            $directorios = Directorios::where('nit','=',$request->nit)
+            ->get();
+        }
+        else if($request->razon_social != ''){
+            $directorios = Directorios::where('razon_social','LIKE','%'.$request->razon_social.'%')
+            ->get();
+        }
+        else if($request->correo != ''){
+            $directorios = Directorios::where('correo','LIKE','%'.$request->correo.'%')
+            ->get();
+        }
+        else{
+            $directorios = Directorios::where('nit','>','0')
+            ->get();
+        }
+        foreach ($directorios as $directorio) {
+            $directorio->id_regimen = Regimenes::find($directorio->id_regimen);
+            $directorio->id_directorio_tipo_tercero = Directorio_tipo_terceros::find($directorio->id_directorio_tipo_tercero);
+        }
+        return  array(
+            "result"=>"success",
+            "body"=>$directorios);
+    }
+
+    public function addTercero(Request $request){
+        $directorios = new Directorios();
+        $directorios->nit       = $request->nit;
+        $directorios->id_ciudad = $request->id_ciudad;
+        $directorios->razon_social= $request->razon_social;
+        $directorios->direccion = $request->direccion;
+        $directorios->correo    = $request->correo;
+        $directorios->telefono  = $request->telefono;
+        $directorios->telefono1 = $request->telefono;
+        $directorios->telefono2 = $request->telefono;
+        $directorios->digito    = "0";
+        $directorios->financiacion= "0";
+        $directorios->descuento = "0";
+        $directorios->cupo_financiero= "0";
+        $directorios->rete_ica  = "0";
+        $directorios->porcentaje_rete_iva= "0";
+        $directorios->actividad_economica= "0";
+        $directorios->calificacion= "2";
+        $directorios->nivel     = "NACIONAL";
+        $directorios->zona_venta= "0";
+        $directorios->transporte= "NO";
+        $directorios->estado    = "1";
+        $directorios->id_retefuente= "1";
+        $directorios->id_regimen= "1";
+        $directorios->id_usuario= "1";
+        $directorios->id_directorio_tipo= "1";
+        $directorios->id_directorio_clase= "1";
+        $directorios->id_directorio_tipo_tercero= "3";
+        $directorios->save();
+
+        return array(
+            "result"=>"success",
+            "body"=>$directorios;
+        );
     }
 }

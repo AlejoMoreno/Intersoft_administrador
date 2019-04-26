@@ -27,7 +27,7 @@ class SucursalesController extends Controller
     }
 
     public function update(Request $request){
-        $sucursal = Sucursales::find(8);
+        $sucursal = Sucursales::where('id',$request->id)->first();
         $sucursal->nombre     = $request->nombre;
         $sucursal->codigo     = $request->codigo;
         $sucursal->direccion  = $request->direccion;
