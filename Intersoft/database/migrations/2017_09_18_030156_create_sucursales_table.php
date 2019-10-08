@@ -30,7 +30,20 @@ class CreateSucursalesTable extends Migration
         DB::table('sucursales')->insert(
             array(
                 'id'        => NULL,
-                'nombre'    => 'FAMC CENTRAL',
+                'nombre'    => 'WAKUSOFT CENTRAL',
+                'codigo'    => 1,
+                'direccion' => 'CL 38 A 50 A 71 SUR',
+                'encargado' => 'ALEJANDRO MORENO',
+                'telefono'  => '3219045297',
+                'correo'    => 'fredymoreno@uan.edu.co',
+                'ciudad'    => 1,
+                'id_empresa' => 1,
+            )
+        );
+        DB::table('sucursales')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'WAKUSOFT BODEGA1',
                 'codigo'    => 1,
                 'direccion' => 'CL 38 A 50 A 71 SUR',
                 'encargado' => 'ALEJANDRO MORENO',

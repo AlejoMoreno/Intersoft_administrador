@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\KardexCarteras;
 use App\Facturas;
 
+use Session;
+
 class KardexCarterasController extends Controller
 {
     public function save(Request $request){
@@ -24,6 +26,7 @@ class KardexCarterasController extends Controller
 		$obj->efectivo 		= $request->efectivo;
 		$obj->reteiva 		= $request->reteiva;
 		$obj->reteica 		= $request->reteica;
+		$obj->id_empresa	= Session::get('id_empresa');
 		$obj->total	 		= $request->total;
 
 		$obj->save();

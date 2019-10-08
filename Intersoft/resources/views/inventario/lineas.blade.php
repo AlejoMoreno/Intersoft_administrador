@@ -23,7 +23,6 @@
                                     <th>Código interno</th>
                                     <th>Código alterno</th>
                                     <th></th> 
-                                    <th></th> 
                                 </tr>
                             </thead>
                             <tbody>
@@ -35,7 +34,7 @@
                                         <td>{{ $obj['codigo_interno'] }}</td>
                                         <td>{{ $obj['codigo_alterno'] }}</td>
                                         <td><a href="javascript:;" onclick="lineas.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
-                                        <td><a onclick="config.delete_get('/inventario/lineas/delete/', '{{ $obj }}',  '/inventario/lineas');" href="#"><button class="btn btn-danger">x</button></a></td>
+                                        <!--td><a onclick="config.delete_get('/inventario/lineas/delete/', '{{ $obj }}',  '/inventario/lineas');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
                                 @endforeach
                             </tbody>

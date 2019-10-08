@@ -21,6 +21,24 @@ class CreateRetefuentesTable extends Migration
             $table->timestamps();
         });
 
+        DB::table('retefuentes')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'SOBRE TODO',
+                'valor'     => 0,
+                'descripcion' => 'Se realiza la retención sobre todo'
+            )
+        );
+        DB::table('retefuentes')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'SOBRE LA BASE MENSUAL',
+                'valor'     => 0,
+                'descripcion' => 'Se realiza la base del mes en la venta'
+            )
+        );
+        
+
         
     }
 

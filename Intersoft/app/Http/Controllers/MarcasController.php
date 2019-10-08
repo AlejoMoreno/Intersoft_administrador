@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Marcas;
 
+use Session;
 
 class MarcasController extends Controller
 {
@@ -16,6 +17,7 @@ class MarcasController extends Controller
         $obj->logo  		= $request->logo;
         $obj->codigo_interno= $request->codigo_interno;
         $obj->codigo_alterno= $request->codigo_alterno;
+        $obj->id_empresa    = Session::get('id_empresa');
         $obj->save();
         return redirect('/inventario/marcas');
     }
@@ -27,6 +29,7 @@ class MarcasController extends Controller
         $obj->logo  		= $request->logo;
         $obj->codigo_interno= $request->codigo_interno;
         $obj->codigo_alterno= $request->codigo_alterno;
+        $obj->id_empresa    = Session::get('id_empresa');
         $obj->save();
         return $obj;
     }

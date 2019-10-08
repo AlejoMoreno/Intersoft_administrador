@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use App\Kardex;
 use App\Referencias;
 use App\Lotes;
+use App\Documentos;
+use App\Facturas;
+use App\Sucursales;
+
+use Session;
 
 class KardexController extends Controller
 {
@@ -47,6 +52,7 @@ class KardexController extends Controller
 		$obj->observaciones = strval($request->observaciones);
 		$obj->id_modificado = $request->id_modificado;
 		$obj->kardex_anterior = $request->kardex_anterior; //id factura
+		$obj->id_empresa	= Session::get('id_empresa');
 		$obj->estado 		= strval($request->estado);
 		$obj->save();
 
@@ -54,42 +60,30 @@ class KardexController extends Controller
 		//buscar la referencia 
 		$referencia = Referencias::where('id','=',$obj->id_referencia)->get()[0];
 		$lote = Lotes::where('id_referencia','=',$obj->id_referencia)->
-						where('numero_lote','=',$obj->lote)->get();
+						where('numero_lote','=',$obj->lote)->
+						where('sucursal','=',Session::get('sucursal'))->get();
 
 		//guardado de lotes y saldos por lotes	(si no existe es porque es entrada el documento)			
 		if(sizeof($lote) == 0 ){         
 			$lote = new Lotes();
 			$lote->id_referencia     	= $obj->id_referencia;
 	        $lote->numero_lote   		= $obj->lote;
+	        $lote->sucursal 			= Session::get('sucursal');
 	        $lote->fecha_vence_lote  	= $obj->fecha_vencimiento;
 	        $lote->ubicacion   			= 'NINGUNA';
 	        $lote->serial            	= $obj->serial;
-	        $lote->cantidad          	= $obj->cantidad;
-	        $lote->save();
+			$lote->cantidad          	= $obj->cantidad;
+			$lote->id_empresa	= Session::get('id_empresa');
+	        
 		}
 		else{
 			if($obj->signo == '+'){
 				//se suma las cantidades
-				$lote[0]->cantidad = $lote[0]->cantidad + $obj->cantidad;
-				if($referencia->costo == "0"){
-					$referencia->costo_promedio = 	$obj->costo;
-					$referencia->costo 		 = 	$obj->costo;
-				}
-				else{
-					$referencia->costo_promedio = 	($referencia->costo_promedio+$obj->costo)/($referencia->saldo+$obj->cantidad);
-					$referencia->costo 		 = 	$obj->costo;	
-				}
-				 
+				$lote[0]->cantidad = $lote[0]->cantidad + $obj->cantidad;				 
 			}
 			else if($obj->signo == '-'){
 				//las cantidades se restan 
 				$lote[0]->cantidad = $lote[0]->cantidad - $obj->cantidad;
-				if($referencia->precio4 == "0"){
-					$referencia->precio4 = 	$obj->precio;
-				}
-				else{
-					$referencia->precio4 = 	($referencia->precio4+$obj->precio)/($referencia->saldo-$obj->cantidad);
-				}
 			}
 			else{
 				//no se hace nada con el saldo
@@ -101,12 +95,28 @@ class KardexController extends Controller
 		
         //reasignar el saldo del inventario
 		if($obj->signo == '+'){
+			$lote->save();
 			//se suma las cantidades
 			$referencia->saldo = $referencia->saldo + $obj->cantidad;
+			//costo
+			if($referencia->costo == "0"){
+				$referencia->costo_promedio = 	$obj->costo;
+				$referencia->costo 		 = 	$obj->costo;
+			}
+			else{
+				$referencia->costo_promedio = 	( ($referencia->costo_promedio * $referencia->saldo) + ($obj->costo * $obj->cantidad) )/($referencia->saldo+$obj->cantidad);
+				$referencia->costo 		 = 	$obj->costo;	
+			}
 		}
 		else if($obj->signo == '-'){
 			//las cantidades se restan 
 			$referencia->saldo = $referencia->saldo - $obj->cantidad;
+			if($referencia->precio4 == "0"){
+				$referencia->precio4 = 	$obj->precio;
+			}
+			else{
+				$referencia->precio4 = 	( ($referencia->precio4 * $referencia->saldo) - ( $obj->precio * $obj->cantidad) )/($referencia->saldo-$obj->cantidad);
+			}
 		}
 		else{
 			//no se hace nada con el saldo
@@ -126,4 +136,20 @@ class KardexController extends Controller
             	$lote)
         );
     }
+
+    public function showid($id){
+
+    	$kardex = Kardex::where('id_referencia','=',$id)->orderBy('created_at')->get();
+    	foreach ($kardex as $value) {
+    		$value->cabecera = Facturas::where('numero','=',$value->numero)->where('id_documento','=',$value->id_documento)->get();
+    		$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->get();
+    		$value->id_documento = Documentos::where('id','=',$value->id_documento)->get();
+    		$value->id_sucursal = Sucursales::where('id','=',$value->id_sucursal)->get();    		
+    	}
+    	//dd($kardex);
+    	return view('inventario.kardex',[
+    		'kardex'=>$kardex
+    	]);
+    }
+
 }

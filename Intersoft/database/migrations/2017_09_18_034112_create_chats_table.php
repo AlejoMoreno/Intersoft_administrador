@@ -15,6 +15,7 @@ class CreateChatsTable extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
     }

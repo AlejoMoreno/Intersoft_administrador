@@ -22,12 +22,8 @@
 									<th>signo</th>
                                     <th>ubicacion</th>
                                     <th>prefijo</th>
-                                    <th>num_max</th>
-                                    <th>num_min</th>
-                                    <th>num_presente</th>
 									<th>cta contable partida</th>
 									<th>cta contable ontrapartida</th>
-                                    <th></th> 
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -39,13 +35,10 @@
 										<td>{{ $obj['signo'] }}</td>
                                         <td>{{ $obj['ubicacion'] }}</td>
                                         <td>{{ $obj['prefijo'] }}</td>
-                                        <td>{{ $obj['num_max'] }}</td>
-                                        <td>{{ $obj['num_min'] }}</td>
-                                        <td>{{ $obj['num_presente'] }}</td>
 										<td>{{ $obj['cuenta_contable_partida'] }}</td>
 										<td>{{ $obj['cuenta_contable_contrapartida'] }}</td>
                                         <td><a href="javascript:;" onclick="documentos.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
-                                        <td><a onclick="config.delete_get('/inventario/documentos/delete/', '{{ $obj }}',  '/inventario/documentos');" href="#"><button class="btn btn-danger">x</button></a></td>
+                                        <!--td><a onclick="config.delete_get('/inventario/documentos/delete/', '{{ $obj }}',  '/inventario/documentos');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -82,12 +75,12 @@
                                     <input type="text" class="form-control" name="prefijo" id="prefijo" required="">
                                 </div>
                                 <div class="col-md-3">
-                                    <label>Numeración Hasta</label>
-                                    <input type="number" class="form-control" name="num_max" id="num_max" required="">
-                                </div>
-                                <div class="col-md-3">
                                     <label>Numeración Desde</label>
                                     <input type="number" class="form-control" name="num_min" id="num_min" required="">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Numeración Hasta</label>
+                                    <input type="number" class="form-control" name="num_max" id="num_max" required="">
                                 </div>
                                 <div class="col-md-3">
                                     <label>num_presente</label>

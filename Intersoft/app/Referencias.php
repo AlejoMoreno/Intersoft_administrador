@@ -66,5 +66,7 @@ usuario_creador
 'costo',
 'costo_promedio',
 'saldo',
-'usuario_creador'];
+'usuario_creador',
+'cuentaDB',
+'cuentaCR'];
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Documentos;
+use Session;
 
 class DocumentosController extends Controller
 {
@@ -25,6 +26,7 @@ cuenta_contable_contrapartida
         $obj->num_presente  = $request->num_presente;
         $obj->cuenta_contable_partida  		= $request->cuenta_contable_partida;
         $obj->cuenta_contable_contrapartida= $request->cuenta_contable_contrapartida;
+        $obj->id_empresa  = Session::get('id_empresa');
         $obj->save();
         return redirect('/inventario/documentos');
     }
@@ -40,6 +42,7 @@ cuenta_contable_contrapartida
         $obj->num_presente  = $request->num_presente;
         $obj->cuenta_contable_partida  		= $request->cuenta_contable_partida;
         $obj->cuenta_contable_contrapartida= $request->cuenta_contable_contrapartida;
+        $obj->id_empresa  = Session::get('id_empresa');
         $obj->save();
         return $obj;
     }

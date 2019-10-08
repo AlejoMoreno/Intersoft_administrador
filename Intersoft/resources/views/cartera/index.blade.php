@@ -8,8 +8,8 @@ use App\Documentos;
 
 $documentos = Documentos::where('ubicacion','=','SALIDA')->get();
 
-$egresos = DB::select("SELECT sum(total) as total FROM intersoft.Carteras where tipoCartera like 'EGRESO';");
-$ingresos = DB::select("SELECT sum(total) as total FROM intersoft.Carteras where tipoCartera like 'INGRESO';");
+$egresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCartera like 'EGRESO';");
+$ingresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCartera like 'INGRESO';");
 ?>
 
 <div class="container-fluid">
@@ -103,7 +103,7 @@ $ingresos = DB::select("SELECT sum(total) as total FROM intersoft.Carteras where
                         <hr>
                         <label>Total $ {{ $ingresos[0]->total }}</label><br>
                         <div class="stats">
-                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/layout');"> ir atras.</a>
+                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/index');"> ir atras.</a>
                         </div>
                     </div>
                 </div>

@@ -21,7 +21,6 @@
                                     <th>Nombre
                                     <th>Descripcion</th>
                                     <th></th> 
-                                    <th></th> 
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,8 +29,9 @@
                                         <td>{{ $obj['id'] }}</td>
                                         <td>{{ $obj['nombre'] }}</td>
                                         <td>{{ $obj['descripcion'] }}</td>
+                                        <td>{{ $obj['id_empresa'] }}</td>
                                         <td><a href="javascript:;" onclick="tipo_presentacion.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
-                                        <td><a onclick="config.delete_get('/inventario/tipo_presentaciones/delete/', '{{ $obj }}',  '/inventario/tipo_presentaciones');" href="#"><button class="btn btn-danger">x</button></a></td>
+                                        <!--td><a onclick="config.delete_get('/inventario/tipo_presentaciones/delete/', '{{ $obj }}',  '/inventario/tipo_presentaciones');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
                                 @endforeach
                             </tbody>

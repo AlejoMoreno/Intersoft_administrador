@@ -204,7 +204,7 @@ $documentos = Documentos::all();?>
                         </div>
                         <hr>
                         <div class="stats">
-                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Intoredirect('dashboard.html');"> ir atras.</a>
+                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/index');"> ir atras.</a>
                         </div>
                     </div>
                 </div>

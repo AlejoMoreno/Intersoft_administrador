@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Usuarios;
 use App\Contrato_laborals;
 use App\Sessions;
+use App\Sucursales;
 use App\Http\Controllers\SessionsController;
+use Session;
 
 class UsuariosController extends Controller
 {
@@ -35,8 +37,12 @@ class UsuariosController extends Controller
                 $sessions->ip = $request->ip();
                 $sessions->user_agent = encrypt($sessions->user_id.$sessions->ip."Ingreso Al sistema");
                 $sessions->last_activity = "Ingreso Al sistema";
+                $sessions->id_empresa = 1;
                 $sessions->save();
-                SessionsController::storeSession($sessions,$usuario); // save session in server
+                //buscar sucursal
+                $sucursal = Sucursales::where('id','=',$request->sucursal)->first();
+
+                SessionsController::storeSession($sessions,$usuario,$request->sucursal); // save session in server
                 return array(
                     "result"=>"success",
                     "body"=>$usuario,
@@ -45,6 +51,48 @@ class UsuariosController extends Controller
             }
             
         }
+    }
+
+    public function addlogin(Request $request){
+        $cuenta = Usuarios::where('ncedula',$request->cedula)->where('password',$request->password)->get()->count();
+
+        if($cuenta==0){
+            return view('login', array(
+                "result"=>"error",
+                "body"=>"No coinciden resultados"
+            ));
+        }
+        else{
+            $usuario = Usuarios::where('ncedula',$request->cedula)->where('password',$request->password)->get()[0];
+            $sesion_valida = Sessions::where('user_agent','like',encrypt($usuario->id.$request->ip()."Ingreso Al sistema"))->get()->count();
+            if($sesion_valida != 0){ //validar session >0 hay alguien en el sistema 0=no hay nadie mas
+                return view('login', array(
+                    "result"=>"error",
+                    "body"=>"Hay alguien usando tu usuario"
+                ));       
+            }
+            else{
+                //Crear sesiones para este usuario
+                $sessions = new Sessions();
+                $sessions->user_id = $usuario->id;
+                $sessions->ip = $request->ip();
+                $sessions->user_agent = encrypt($sessions->user_id.$sessions->ip."Ingreso Al sistema");
+                $sessions->last_activity = "Ingreso Al sistema";
+                $sessions->id_empresa = 1;
+                $sessions->save();
+
+                //ver la sucursal
+                $sucursal = Sucursales::where('id','=',$request->sucursal)->first();
+
+                SessionsController::storeSession($sessions,$usuario,$sucursal); // save session in server
+                return view('login', array(
+                    "result"=>"success",
+                    "body"=>$usuario,
+                    "sessions"=>$sessions->user_agent
+                ));
+            }
+            
+        }   
     }
 
     public function create(Request $request){
@@ -66,6 +114,7 @@ class UsuariosController extends Controller
         $usuario->id_contrato         = $request->id_contrato;
         $usuario->referencia_personal = $request->referencia_personal;
         $usuario->telefono_referencia = $request->telefono_referencia;
+        $usuario->id_empresa  = Session::get('id_empresa');
         $usuario->save();
         return redirect('/administrador/usuarios');
     }
@@ -94,6 +143,7 @@ class UsuariosController extends Controller
             $usuario->id_contrato         = '1';
             $usuario->referencia_personal = 'N/A';
             $usuario->telefono_referencia = 'N/A';
+            $usuario->id_empresa  = Session::get('id_empresa');
             $usuario->save();
             //return $request->razon_social;
             $usuarios = Usuarios::all();
@@ -124,6 +174,7 @@ class UsuariosController extends Controller
         $usuario->id_contrato         = $request->id_contrato;
         $usuario->referencia_personal = $request->referencia_personal;
         $usuario->telefono_referencia = $request->telefono_referencia;
+        $usuario->id_empresa  = Session::get('id_empresa');
         $usuario->save();
         return $usuario;
     }

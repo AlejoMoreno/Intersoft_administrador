@@ -44,6 +44,7 @@ class CreateReferenciasTable extends Migration
             $table->double('costo_promedio');
             $table->double('saldo');
             $table->integer('usuario_creador');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
     }

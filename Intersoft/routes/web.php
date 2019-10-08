@@ -28,8 +28,12 @@ Route::get('/olvido', function(){
     return view('olvido');
 });
 Route::post('/login', 'UsuariosController@login');
+Route::post('/loguin', 'UsuariosController@addlogin');
 Route::get('/layout', function(){
     return view('layout');
+});
+Route::get('/index', function(){
+    return view('index');
 });
 
 //ruta para cerrar sesion
@@ -61,7 +65,10 @@ Route::post('/install', 'EmpresasController@create');
 //ciudades
 Route::get('/ciudades/all', 'CiudadesController@all');
 Route::get('/ciudades', function(){
-    return view('ciudades');
+    $departamentos = App\Departamentos::all();
+    return view('ciudades',[
+        "departamentos"=>$departamentos
+    ]);
 });
 
 
@@ -259,6 +266,7 @@ Route::get('/inventario/referencias/delete/{id}', 'ReferenciasController@delete'
 Route::get('/inventario/referencias/update/{id}', 'ReferenciasController@showupdate');
 Route::post('/inventario/referencias/create', 'ReferenciasController@create');
 Route::post('/inventario/referencias/update', 'ReferenciasController@update');
+Route::post('/inventario/referencias/search', 'ReferenciasController@search' );
 
 //lotes
 Route::get('/inventario/lotes', 'LotesController@index');
@@ -277,6 +285,10 @@ Route::get('/inventario/documentos/delete/{id}', 'DocumentosController@delete');
 Route::get('/inventario/documentos/update/{id}', 'DocumentosController@showupdate');
 Route::post('/inventario/documentos/create', 'DocumentosController@create');
 Route::post('/inventario/documentos/update', 'DocumentosController@update');
+
+//Catalogo
+Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
+
 
 
 /*
@@ -332,6 +344,8 @@ Route::get('/contabilidad/cuentas/update/{id}', 'CuentasController@showupdate');
 Route::post('/contabilidad/cuentas/create', 'CuentasController@create');
 Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 
+Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -349,7 +363,10 @@ Route::get('/documentos/imprimirpost/{id}', 'FacturasController@imprimirpost');
 
 Route::post('/kardex/saveDocument', 'KardexController@saveDocument');
 Route::post('/factura/saveDocument', 'FacturasController@saveDocument');
+Route::get('/kardex/show/{id}', 'KardexController@showid');
 
+//consultar documentos
+Route::get('/documentos/consultar/{documento}', 'FacturasController@consultar_documento');
 
 //DESCARGAR EN EXCEL
 Route::get('/download/excel/sucursales', 'SucursalesController@excel_all');
@@ -357,3 +374,4 @@ Route::get('/download/excel/sucursales', 'SucursalesController@excel_all');
 //DESCARGAR EN PDF
 Route::get('/download/pdf/sucursales', 'SucursalesController@pdf_all');
 Route::post('/send', 'EmailController@send');
+

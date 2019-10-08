@@ -42,7 +42,6 @@
                                 <th>ID</th> 
                                 <th>Nombre</th> 
                                 <th>descripción</th> 
-                                <th></th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -51,7 +50,7 @@
                                     <td>{{ $regimen['id'] }}</td>
                                     <td>{{ $regimen['nombre'] }}</td>
                                     <td>{{ $regimen['descripcion'] }}</td>
-                                    <td class="formulario_"><a href="/administrador/regimenes/delete/{{  $regimen['id'] }}"><button class="btn btn-danger">x</button></a></td>
+                                    <!--td class="formulario_"><a href="/administrador/regimenes/delete/{{  $regimen['id'] }}"><button class="btn btn-danger">x</button></a></td-->
                                 </tr>
                             @endforeach
                         </tbody>

@@ -32,6 +32,7 @@ class CreateUsuariosTable extends Migration
             $table->integer('id_contrato');
             $table->string('referencia_personal');
             $table->string('telefono_referencia');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
 
@@ -56,7 +57,31 @@ class CreateUsuariosTable extends Migration
                 'caja_compensacion' => 'COLSUBSIDIO',
                 'id_contrato'   => 1,
                 'referencia_personal' => 'SOLEDAD CASTRO',
-                'telefono_referencia' => '2644163'
+                'telefono_referencia' => '2644163',
+                'id_empresa'    => 1
+            )
+        );
+        DB::table('usuarios')->insert(
+            array(
+                'id'            => NULL,
+                'ncedula'       => '123',
+                'nombre'        => 'FREDY1 ALEJANDRO1',
+                'apellido'      => 'MORENO1 CASTRO1',
+                'cargo'         => 'INVENTARIO', //ADMINISTRADOR INVENTARIO CARTERA CONTABILIDAD
+                'telefono'      => '3219045297',
+                'password'      => '1234',
+                'correo'        => '123@123.com',
+                'estado'        => 'ACTIVO',
+                'token'         => '64836274832',
+                'arl'           => 'POSITIVA',
+                'eps'           => 'SANITAS',
+                'cesantias'     => 'PORVENIR',
+                'pension'       => 'PROVENIR',
+                'caja_compensacion' => 'COLSUBSIDIO',
+                'id_contrato'   => 1,
+                'referencia_personal' => 'SOLEDAD CASTRO',
+                'telefono_referencia' => '2644163',
+                'id_empresa'    => 1
             )
         );
     }

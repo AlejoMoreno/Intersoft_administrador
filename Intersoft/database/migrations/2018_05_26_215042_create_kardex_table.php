@@ -44,6 +44,7 @@ class CreateKardexTable extends Migration
             $table->integer('id_modificado'); //directorios
             $table->integer('kardex_anterior'); //para realizar copia de documentos
             $table->string('estado'); //anulado, efectivo, credito, prestamo, comision,  
+            $table->integer('id_empresa');
             $table->timestamps();
         });
     }

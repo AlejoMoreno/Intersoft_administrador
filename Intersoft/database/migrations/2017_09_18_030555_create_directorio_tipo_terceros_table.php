@@ -19,6 +19,28 @@ class CreateDirectorioTipoTercerosTable extends Migration
             $table->string('descripcion');
             $table->timestamps();
         });
+
+        DB::table('directorio_tipo_terceros')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'PROVEEDOR',
+                'descripcion' => 'TIPO PROVEEDOR'
+            )
+        );
+        DB::table('directorio_tipo_terceros')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'CLIENTE',
+                'descripcion' => 'TIPO CLIENTE'
+            )
+        );
+        DB::table('directorio_tipo_terceros')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'TERCEROS',
+                'descripcion' => 'TIPO TERCEROS'
+            )
+        );
     }
 
     /**

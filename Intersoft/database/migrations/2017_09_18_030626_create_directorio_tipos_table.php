@@ -19,6 +19,21 @@ class CreateDirectorioTiposTable extends Migration
             $table->string('descripcion');
             $table->timestamps();
         });
+
+        DB::table('directorio_tipos')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'NACIONAL',
+                'descripcion' => 'ESTE ES NACIONAL'
+            )
+        );
+        DB::table('directorio_tipos')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'INTERNACIONAL',
+                'descripcion' => 'ESTE ES INTERNACIONAL'
+            )
+        );
     }
 
     /**

@@ -43,7 +43,6 @@
                                 <th>Nombre</th> 
                                 <th>Valor</th> 
                                 <th>descripción</th> 
-                                <th></th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -53,7 +52,7 @@
                                     <td>{{ $retefuente['nombre'] }}</td>
                                     <td>{{ $retefuente['valor'] }}</td>
                                     <td>{{ $retefuente['descripcion'] }}</td>
-                                    <td class="formulario_"><a href="/administrador/retefuentes/delete/{{  $retefuente['id'] }}"><button class="btn btn-danger">x</button></a></td>
+                                    <!--td class="formulario_"><a href="/administrador/retefuentes/delete/{{  $retefuente['id'] }}"><button class="btn btn-danger">x</button></a></td-->
                                 </tr>
                             @endforeach
                         </tbody>

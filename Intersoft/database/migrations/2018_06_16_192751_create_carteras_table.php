@@ -16,6 +16,7 @@ class CreateCarterasTable extends Migration
         Schema::create('Carteras', function (Blueprint $table) {
 
             $table->increments('id');
+            $table->integer('id_empresa');
             $table->double('reteiva');
             $table->double('reteica');
             $table->double('efectivo');

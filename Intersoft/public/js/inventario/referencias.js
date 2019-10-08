@@ -4,7 +4,46 @@ function Referencias(){
 
     this.initial = function(){
         $('#actualizar').hide();
+        $('#crear').hide();
+        $('#tabla').show();
+        $('#tabla').addClass('bounceIn');
     };
+
+    this.crear = function(){
+    	$('#tabla').hide();
+    	$('#crear').show();
+    	$('#crear').addClass('bounceIn');
+    };
+
+    //function para eliminar por post
+	this.delete_get = function( _url, _obj, _redirect ){
+		_obj = JSON.parse(_obj);
+		console.log(_obj.id);
+		if(_obj.saldo > 0){
+			alert("no puedes eliminar este producto, ya que tiene saldo");
+		}
+		else{
+			var statusConfirm = confirm("¿Desea eliminar este registro?");
+			if (statusConfirm == true)
+			{
+				$.ajax({
+					url:   _url + _obj.id,
+					type:  'get',
+					beforeSend: function () {
+						$('#resultado').html('<p>Espere porfavor</p>');
+					},
+					success:  function (response) {
+		                console.log(response);
+		                config.Redirect(_redirect);
+					}
+		        });
+			}
+			else
+			{
+				console.log("NO VALIDADO");
+			}
+		}
+	};
 
     this.update = function( data ){
         $('#actualizar').show();
@@ -43,7 +82,10 @@ function Referencias(){
 		$('#costo_promedio').val(data.costo_promedio);
 		$('#saldo').val(data.saldo);
 		$('#usuario_creador').val(data.usuario_creador[0].id);
+		$('#cuentaDB').val(data.cuentaDB[0].id);
+		$('#cuentaCR').val(data.cuentaCR[0].id);
 		$('input[type="submit"]').attr('disabled','disabled');
+		referencias.crear();
     };
 
     this.sendUpdate = function(){
@@ -77,6 +119,8 @@ function Referencias(){
 			"costo" 			: $('#costo').val(),
 			"costo_promedio" 	: $('#costo_promedio').val(),
 			"saldo" 			: $('#saldo').val(),
+			"cuentaDB" 			: $('#cuentaDB').val(),
+			"cuentaCR" 			: $('#cuentaCR').val(),
 			"usuario_creador" 	: $('#usuario_creador').val()
         };
         $.ajax({
@@ -92,5 +136,7 @@ function Referencias(){
 			}
         });
     }
+
+
 
 }

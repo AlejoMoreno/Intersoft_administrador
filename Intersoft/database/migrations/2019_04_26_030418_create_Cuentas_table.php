@@ -15,15 +15,15 @@ class CreateCuentasTable extends Migration
     {
         Schema::create('Cuentas', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('clase');
+            $table->string('clase');
             $table->string('nombreClase');
-            $table->integer('grupo');
+            $table->string('grupo');
             $table->string('nombreGrupo');
-            $table->integer('cuenta');
+            $table->string('cuenta');
             $table->string('nombreCuenta');
-            $table->integer('subcuenta');
+            $table->string('subcuenta');
             $table->string('nombreSubcuenta');
-            $table->integer('auxiliar');
+            $table->string('auxiliar');
             $table->string('nombreAuxiliar');
             $table->string('homologo');
             $table->string('homologo_1');

@@ -101,8 +101,8 @@ $lotes = Lotes::all();
                                                 <td><a href="{{ $url }}" target="_blank"><img width="30" src="https://image.flaticon.com/icons/svg/138/138212.svg"></a></td>
                                                 <td><a href="{{ $url }}">{{ $obj['nombre'] }}</a></td>
                                                 <td></td>
-                                                <td><a href="{{ $url }}"><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg"></a>
-                                                </td>
+                                                <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                                <td><a href="{{ $urlconsulta }}" class="btn btn-default">Consultar</a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -116,7 +116,7 @@ $lotes = Lotes::all();
                         </div>
                         <hr>
                         <div class="stats">
-                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/layout');"> ir atras.</a>
+                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/index');"> ir atras.</a>
                         </div>
                     </div>
                 </div>

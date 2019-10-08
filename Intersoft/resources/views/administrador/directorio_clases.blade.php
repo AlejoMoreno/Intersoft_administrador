@@ -42,7 +42,6 @@
                                 <th>ID</th> 
                                 <th>Nombre</th> 
                                 <th>descripción</th> 
-                                <th></th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -51,7 +50,7 @@
                                     <td>{{ $directorio_clase['id'] }}</td>
                                     <td>{{ $directorio_clase['nombre'] }}</td>
                                     <td>{{ $directorio_clase['descripcion'] }}</td>
-                                    <td class="formulario_"><a href="/administrador/directorio_clases/delete/{{  $directorio_clase['id'] }}"><button class="btn btn-danger">x</button></a></td>
+                                    <!--td class="formulario_"><a href="/administrador/directorio_clases/delete/{{  $directorio_clase['id'] }}"><button class="btn btn-danger">x</button></a></td-->
                                 </tr>
                             @endforeach
                         </tbody>

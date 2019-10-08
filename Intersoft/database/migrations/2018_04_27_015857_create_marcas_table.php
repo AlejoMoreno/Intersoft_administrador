@@ -20,6 +20,7 @@ class CreateMarcasTable extends Migration
             $table->text('logo');
             $table->string('codigo_interno');
             $table->string('codigo_alterno');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
     }

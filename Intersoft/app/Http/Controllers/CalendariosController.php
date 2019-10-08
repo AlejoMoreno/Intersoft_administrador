@@ -21,6 +21,7 @@ class CalendariosController extends Controller
         $calendarios->notificacion = $request->notificacion;
         $calendarios->valor        = $request->valor;
         $calendarios->periodicidad = $request->periodicidad;
+        $calendarios->id_empresa	 	= Session::get('id_empresa');
         $calendarios->save();
         $calendario = Calendarios::find($calendarios->id);
         return view('invitadosform', ['calendario' => $calendario]);
@@ -39,6 +40,7 @@ class CalendariosController extends Controller
         $calendarios->notificacion = $request->notificacion;
         $calendarios->valor        = $request->valor;
         $calendarios->periodicidad = $request->periodicidad;
+        $calendarios->id_empresa	 	= Session::get('id_empresa');
         $calendarios->save();
         $calendarios = Calendarios::all();
         return view('calendarios', ['calendarios' => $calendarios]);

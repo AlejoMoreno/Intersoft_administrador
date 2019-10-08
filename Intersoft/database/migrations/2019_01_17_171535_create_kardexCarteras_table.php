@@ -15,6 +15,7 @@ class CreateKardexCarterasTable extends Migration
     {
         Schema::create('kardex_Carteras', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_empresa');
             $table->integer('id_cartera');
             $table->integer('id_factura');
             $table->string('fechaFactura');

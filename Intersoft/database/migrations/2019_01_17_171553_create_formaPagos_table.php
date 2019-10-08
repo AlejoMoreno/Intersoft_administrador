@@ -15,6 +15,7 @@ class CreateFormaPagosTable extends Migration
     {
         Schema::create('formaPagos', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_empresa');
             $table->string('formaPago');
             $table->integer('id_cartera');
             $table->double('valor');

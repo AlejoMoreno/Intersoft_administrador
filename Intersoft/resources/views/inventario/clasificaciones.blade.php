@@ -22,7 +22,6 @@
                                     <th>Descripcion
                                     <th>Codigo Interno
                                     <th></th> 
-                                    <th></th> 
                                 </tr>
                             </thead>
                             <tbody>
@@ -33,7 +32,7 @@
                                         <td>{{ $obj['descripcion'] }}</td>
                                         <td>{{ $obj['codigo_interno'] }}</td>
                                         <td><a href="javascript:;" onclick="clasificaciones.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
-                                        <td><a onclick="config.delete_get('/inventario/clasificaciones/delete/', '{{ $obj }}',  '/inventario/clasificaciones');" href="#"><button class="btn btn-danger">x</button></a></td>
+                                        <!--td><a onclick="config.delete_get('/inventario/clasificaciones/delete/', '{{ $obj }}',  '/inventario/clasificaciones');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
                                 @endforeach
                             </tbody>

@@ -120,26 +120,127 @@ function Documentos(){
         document.getElementById('fecha').focus();
     }
 
-    this.searchReferencia = function(e){
-        var input, filter, ul, li, a, i;
-        input = document.getElementById("search_referencia");
+    this.searchReferencia = function(indice,id){
+        var input, filter, table, li, a, i;
+        input = document.getElementById(id);
         filter = input.value.toUpperCase();
-        ul = document.getElementById("lista_referencias");
-        if(input.value != ""){
-            ul.style.display = "inline";
+        table = document.getElementById("lista_referencias");
+        tr = table.getElementsByTagName("tr");
+        /*if(input.value != ""){
+            table.style.display = "inline";
         }
         else{
-            ul.style.display = "none";
-        }
-        li = ul.getElementsByTagName("li");
-        for (i = 0; i < li.length; i++) {
-            a = li[i].getElementsByTagName("a")[0];
-            if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                li[i].style.display = "";
-            } else {
-                li[i].style.display = "none";
+            table.style.display = "none";
+        }*/
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[indice];
+            if(td){
+              txtValue = td.textContent || td.innerText;
+              if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                tr[i].style.display = "";
+              } else {
+                tr[i].style.display = "none";
+              }
             }
         }   
+    }
+
+    this.searchReferencia_online = function(){
+        var input = document.getElementById("search_referencia");
+        $("#tbody_productos").html("<thead>"+
+              "<tr>"+
+                "<th>Ref</th>"+
+                "<th>Descripción</th>"+
+                 "<th>Código Barras</th>"+
+                 "<th>Costo</th>"+
+                 "<th>Precio</th>"+
+                 "<th>Saldo</th>"+
+                 "<th>IVA</th>"+
+              "</tr>"+
+            "</thead>"+
+            "<tbody>"+
+            "</tbody>");
+        var parametros = {
+            'search'     : input.value.toUpperCase(),
+            'token'      : 'wakusoft2019'
+        };
+        //console.log(parametros);
+        $.ajax({
+            data:  parametros,
+            url:   HOST+'/inventario/referencias/search',
+            type:  'post',
+            beforeSend: function () {
+                $('#resultado_inventario').html('<center><div id="cargando" style="position: absolute;width: 100%;height: 100%;background: black;top: 0px;left: 0px;opacity: 0.8;z-index:100"><img src="http://pa1.narvii.com/6598/aa4c454ca15cbd104315d00a5590246f8b8dbbda_00.gif" style="margin-top: 20%;"></div></center>');
+            },
+            success:  function (response) {
+                $('#resultado_inventario').hide();
+                console.log(response);
+                //si la respuesta es correcta 
+                try{
+                    var tabla = document.getElementById("tbody_productos");
+                    $("#tbody_productos").html("<thead>"+
+                      "<tr>"+
+                        "<th>Ref</th>"+
+                        "<th>Descripción</th>"+
+                         "<th>Código Barras</th>"+
+                         "<th>Costo</th>"+
+                         "<th>Precio</th>"+
+                         "<th>Saldo</th>"+
+                         "<th>IVA</th>"+
+                      "</tr>"+
+                    "</thead>");
+                    for(var i; i > response.body.length; i++){
+                        console.log(i);
+                        $("#tbody_productos").append("<tr>"+
+                        "<td>Ref</td>"+
+                        "<td>Descripción</td>"+
+                         "<td>Código Barras</td>"+
+                         "<td>Costo</td>"+
+                         "<td>Precio</td>"+
+                         "<td>Saldo</td>"+
+                         "<td>IVA</td>"+
+                      "</tr>");
+                    }
+                    $("#tbody_productos").append("<tbody>"+
+                    "</tbody>");
+                    
+                    /*cel0.innerHTML = '<div onclick="documentos.seleccionReferencia('+response.body[0]+')" >'+response.body[0].codigo_linea+response.body[0].codigo_letras+response.body[0].codigo_consecutivo+'</div>';
+                    cel1.innerHTML = '<div onclick="documentos.seleccionReferencia('+response.body[0]+')" >'+response.body[0].descripcion+'</div>';
+                    cel2.innerHTML = '<div onclick="documentos.seleccionReferencia('+response.body[0]+')" >'+response.body[0].codigo_barras+'</div>';
+                    cel3.innerHTML = '<div onclick="documentos.seleccionReferencia('+response.body[0]+')" >'+response.body[0].costo+'</div>';
+                    cel4.innerHTML = '<div onclick="documentos.seleccionReferencia('+response.body[0]+')" >'+response.body[0].precio1+'|'+response.body[0].precio2+'|'+response.body[0].precio3+'</div>';
+                    cel5.innerHTML = '<div onclick="documentos.seleccionReferencia('+response.body[0]+')" >'+response.body[0].saldo+'</div>';
+                    cel6.innerHTML = '<div onclick="documentos.seleccionReferencia('+response.body[0]+')" >'+response.body[0].iva+'</div>';
+                */}
+                catch(e){
+                    console.log("no existe producto");
+                    $("#tbody_productos").html("<thead>"+
+                      "<tr>"+
+                        "<th>Ref</th>"+
+                        "<th>Descripción</th>"+
+                         "<th>Código Barras</th>"+
+                         "<th>Costo</th>"+
+                         "<th>Precio</th>"+
+                         "<th>Saldo</th>"+
+                         "<th>IVA</th>"+
+                      "</tr>"+
+                    "</thead>"+
+                    "<tbody>"+
+                    "</tbody>");
+                }
+
+            },
+            error: function (request, status, error) {
+                $('#resultado_inventario').hide();
+                console.log(request.responseText);
+                swal({
+                  title: "Algo anda mal",
+                  text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
+                  icon: "error",
+                  button: "Aceptar",
+                });
+            }
+        });
     }
 
     this.searchCodigoBarras = function(e){
@@ -193,9 +294,6 @@ function Documentos(){
         document.getElementById("search_referencia").value = obj.codigo_interno;
         document.getElementById("search_codigobarras").value = obj.codigo_barras;
         document.getElementById("search_descrpcion").value = obj.descripcion;
-        document.getElementById("lista_referencias").style.display = "none";
-        document.getElementById("lista_descripcion").style.display = "none";
-        document.getElementById("lista_codigobarras").style.display = "none";
         //temporal producto
         producto_seleccionado = obj;
         //console.log(producto_seleccionado);
@@ -325,10 +423,9 @@ function Documentos(){
             serial = "<input type='hidden' class='form-control' value='0' id='"+lista_productos_seleccionados.length+"_serial' >";
             fechavencimiento = "<input type='hidden' class='form-control' id='"+lista_productos_seleccionados.length+"_fecha_vence' >";
             valor = "<select onchange='documentos.calcular("+lista_productos_seleccionados.length+")' class='form-control' id='"+lista_productos_seleccionados.length+"_valor' >"+
-                    "<option value="+producto_seleccionado.precio1+">1 Precio: "+producto_seleccionado.precio1+"</option>"+
-                    "<option value="+producto_seleccionado.precio2+">2 Precio: "+producto_seleccionado.precio2+"</option>"+
-                    "<option value="+producto_seleccionado.precio3+">3 Precio: "+producto_seleccionado.precio3+"</option>"+
-                    "<option value="+producto_seleccionado.precio4+">4 Precio: "+producto_seleccionado.precio4+"</option>"+
+                    "<option value="+producto_seleccionado.precio1+"> "+producto_seleccionado.precio1+"</option>"+
+                    "<option value="+producto_seleccionado.precio2+"> "+producto_seleccionado.precio2+"</option>"+
+                    "<option value="+producto_seleccionado.precio3+"> "+producto_seleccionado.precio3+"</option>"+
                     "</select>";
             cantidad = "<input type='number' onkeyup='documentos.calcular("+lista_productos_seleccionados.length+")' class='form-control' value='0' placeholder='Ej.(1)' id='"+lista_productos_seleccionados.length+"_cantidad' onchange='documentos.cantidad("+lista_productos_seleccionados.length+");'><div id='"+lista_productos_seleccionados.length+"error' class='error'></div><div id='"+lista_productos_seleccionados.length+"peligro' class='peligro'></div>";
         }
@@ -531,7 +628,8 @@ function Documentos(){
             'id_modificado' : localStorage.getItem('Id_usuario'),
             'observaciones' : $('#observaciones').val(),
             'estado' : 'ACTIVO',
-            'saldo'  : $('#total').val()
+            'saldo'  : $('#total').val(),
+            'tipo_pago' : $('#tipo_pago').val()
         };
         $.ajax({
             data:  parametros,

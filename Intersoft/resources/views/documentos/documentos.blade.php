@@ -135,6 +135,8 @@
 <?php
 
 
+use Illuminate\Support\Facades\DB;
+
 
 if(isset($_GET['signo'])){
 	
@@ -196,21 +198,15 @@ if(isset($_GET['signo'])){
                 <h3>{{ $nombre_directorio }}:</h3>
                 <div>
                   <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
-                  <label>Cédula: <a target="_blank" href="/administrador/directorios"><img title="crear nuevo {{ $nombre_directorio }}" style="width: 20px;" src="https://image.flaticon.com/icons/svg/148/148764.svg"></a></label>
-                  <input type="text" name="cedula_tercero" onkeyup="documentos.searchDirectorio(event);" id="cedula_tercero" class="form-control">
-                  <ul id="listDirectorio">
+                  <label>Cédula / Nombre: <a target="_blank" href="/administrador/directorios"><img title="crear nuevo {{ $nombre_directorio }}" style="width: 20px;" src="https://image.flaticon.com/icons/svg/148/148764.svg"></a></label>
+                  <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" class="form-control">
+                  <datalist id="listDirectorio">
                     @foreach ($directorios as $obj)
-                    <li><a href="javascript:;" onclick="documentos.seleccionDirectorio({{ $obj }})">{{ $obj['nit'] }}</a></li>
+                    <option value="{{ $obj['nit'] }}" >{{ $obj['nit'] }} _ {{ $obj['razon_social'] }}</option>
                     @endforeach
-                  </ul>
+                  </datalist>
                   
-                  <label>Nombre:</label>
-                  <input type="text" name="nombre_tercero" onkeyup="documentos.searchDirectorio2(event);" id="nombre_tercero" class="form-control">
-                  <ul id="listDirectorio2">
-                    @foreach ($directorios as $obj)
-                    <li><a href="javascript:;" onclick="documentos.seleccionDirectorio({{ $obj }})">{{ $obj['razon_social'] }}</a></li>
-                    @endforeach
-                  </ul>
+                  
                 </div>
               </div>
               <div class="col-sm-6">
@@ -233,42 +229,42 @@ if(isset($_GET['signo'])){
                 </div>
                 <div style="width: 100%;height: 20px;"></div>
               </div>
+              <div class="col-sm-2"> <select id="tipo_pago" name="tipo_pago" class="form-control"><option value="efectivo">EFECTIVO</option><option value="credito">CREDITO</option><option value="na">NA</option></select></div>
             </div>
 
             <div class="row">
               <div class="col-sm-12">
                 <div class="row" style="overflow-x: scroll;overflow-y: scroll;height: 500px;">
-                  <div class="col-sm-12" style="height: 30px;"></div>
-                  <p style="margin-left: 20px;">BUSCAR PRODUCTO POR: </p>
-                  <table class="table table-bordered" style="width: 96%;margin-left: 2%;">
-                      <thead>
+                  <div style="position: fixed;width: 100%;left: 0px;bottom: -10px; height: 150px;background: white;z-index: 200;overflow: scroll;">
+                      <table class="table" id="lista_referencias" >
                         <tr>
-                          <th>
-                            <input type="text" id="search_referencia" onkeyup="documentos.searchReferencia();" name="" class="form-control" placeholder="REFERNCIA">
-                            <ul class="lista" id="lista_referencias" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                              @foreach ($referencias as $obj)
-                              <li><a href="javascript:;" onclick="documentos.seleccionReferencia({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }} </a><li>
-                              @endforeach
-                            </ul>
-                          </th>
-                          <th><input type="text" name="" id="search_codigobarras" onkeyup="documentos.searchCodigoBarras();" class="form-control" placeholder="CÓDIGO DE BARRAS">
-                            <ul class="lista" id="lista_codigobarras" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                              @foreach ($referencias as $obj)
-                              <li><a href="javascript:;" onclick="documentos.seleccionCodigoBarras({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }}</a><li>
-                              @endforeach
-                            </ul>
-                          </th>
-                          <th><input type="text" name="" id="search_descrpcion" onkeyup="documentos.searchDescripcion();" class="form-control" placeholder="DESCIPCION">
-                          <ul class="lista" id="lista_descripcion" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                              @foreach ($referencias as $obj)
-                              <li><a href="javascript:;" onclick="documentos.seleccionDescripcion({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }}</a><li>
-                              @endforeach
-                            </ul>
-                          </th>
-                          <th><div class="btn btn-success form-control" onclick="documentos.addProducto();">+</div></th>
+                          <th>Añadir</th>
+                          <th><input type="text" id="search_referencia" onkeyup="documentos.searchReferencia(1,'search_referencia');" name="" class="form-control" style="width: 100px;" placeholder="REFERNCIA"></th>
+                          <th><input type="text" id="search_codigobarras" onkeyup="documentos.searchReferencia(2,'search_codigobarras');" name="" class="form-control" style="width: 100px;" placeholder="CODIGO BARRAS"></th>
+                          <th><input type="text" id="search_descrpcion" onkeyup="documentos.searchReferencia(3,'search_descrpcion');" name="" class="form-control" style="width: 100px;" placeholder="DESCRIPCION"></th>
+                          <th>Stock_min.</th>
+                          <th>Stock_max.</th>
+                          <th>iva.</th>
+                          <th>Costo.</th>
+                          <th>Saldo.</th>
+                          <th>Añadir</th>
                         </tr>
-                      </thead>
-                    </table>
+                        @foreach ($referencias as $obj)
+                        <tr>
+                          <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                          <td>{{ $obj['codigo_interno'] }}</td>
+                          <td>{{ $obj['codigo_barras'] }}</td>
+                          <td>{{ $obj['descripcion'] }}</td>
+                          <td>{{ $obj['stok_minimo'] }}</td>
+                          <td>{{ $obj['stok_maximo'] }}</td>
+                          <td>{{ $obj['iva'] }}</td>
+                          <td>{{ $obj['costo_promedio'] }}</td>
+                          <td>{{ $obj['saldo'] }}</td>
+                          <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                        </tr>
+                        @endforeach
+                      </table>
+                    </div>
                   <div class="col-sm-12" style="height: 30px;"></div>
                     <p style="margin-left: 20px;"><br><br>Tabla que indica los productos que serán incorporados en el documento:</p> 
                     <table id="tabla_productos" class="table table-bordered" style="width: 96%;margin-left: 2%;">
@@ -410,10 +406,12 @@ SIGNO MENOS
     $usuarios = App\Usuarios::all();
 
     //traer las referencias dependiendo el tipo de entrada
+   // $referencias =  DB::SELECT("SELECT * FROM `referencias` WHERE id IN (SELECT id_referencia FROM `lotes` where sucursal = ".Session::get('sucursal').") AND saldo > 0");
     $referencias = App\Referencias::where('saldo','>','0')->get();
 
+
     foreach ($referencias as $referencia) {
-      $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->get();
+      $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->where('sucursal','=',Session::get('sucursal'))->get();
     }
     
 
@@ -503,42 +501,42 @@ SIGNO MENOS
             </div>
             <div style="width: 100%;height: 20px;"></div>
           </div>
+          <div class="col-sm-2"> <select id="tipo_pago" name="tipo_pago" class="form-control"><option value="efectivo">EFECTIVO</option><option value="credito">CREDITO</option><option value="na">NA</option></select></div>
         </div>
 
         <div class="row">
           <div class="col-sm-12">
             <div class="row" style="overflow-x: scroll;overflow-y: scroll;height: 500px;">
-              <div class="col-sm-12" style="height: 30px;"></div>
-              <p style="margin-left: 20px;">BUSCAR PRODUCTO POR: </p>
-              <table class="table table-bordered" style="width: 96%;margin-left: 2%;">
-                  <thead>
-                    <tr>
-                      <th>
-                        <input type="text" id="search_referencia" onkeyup="documentos.searchReferencia();" name="" class="form-control" placeholder="REFERNCIA">
-                        <ul class="lista" id="lista_referencias" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                          @foreach ($referencias as $obj)
-                          <li><a href="javascript:;" onclick="documentos.seleccionReferencia({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }} </a><li>
-                          @endforeach
-                        </ul>
-                      </th>
-                      <th><input type="text" name="" id="search_codigobarras" onkeyup="documentos.searchCodigoBarras();" class="form-control" placeholder="CÓDIGO DE BARRAS">
-                        <ul class="lista" id="lista_codigobarras" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                          @foreach ($referencias as $obj)
-                          <li><a href="javascript:;" onclick="documentos.seleccionCodigoBarras({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }}</a><li>
-                          @endforeach
-                        </ul>
-                      </th>
-                      <th><input type="text" name="" id="search_descrpcion" onkeyup="documentos.searchDescripcion();" class="form-control" placeholder="DESCIPCION">
-                      <ul class="lista" id="lista_descripcion" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                          @foreach ($referencias as $obj)
-                          <li><a href="javascript:;" onclick="documentos.seleccionDescripcion({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }}</a><li>
-                          @endforeach
-                        </ul>
-                      </th>
-                      <th><div class="btn btn-success form-control" onclick="documentos.addProducto();">+</div></th>
-                    </tr>
-                  </thead>
+              <div style="position: fixed;width: 100%;left: 0px;bottom: -10px; height: 150px;background: white;z-index: 200;overflow: scroll;">
+                <table class="table" id="lista_referencias" >
+                  <tr>
+                    <th>Añadir</th>
+                    <th><input type="text" id="search_referencia" onkeyup="documentos.searchReferencia(1,'search_referencia');" name="" class="form-control" style="width: 100px;" placeholder="REFERNCIA"></th>
+                    <th><input type="text" id="search_codigobarras" onkeyup="documentos.searchReferencia(2,'search_codigobarras');" name="" class="form-control" style="width: 100px;" placeholder="CODIGO BARRAS"></th>
+                    <th><input type="text" id="search_descrpcion" onkeyup="documentos.searchReferencia(3,'search_descrpcion');" name="" class="form-control" style="width: 100px;" placeholder="DESCRIPCION"></th>
+                    <th>Stock_min.</th>
+                    <th>Stock_max.</th>
+                    <th>iva.</th>
+                    <th>Costo.</th>
+                    <th>Saldo.</th>
+                    <th>Añadir</th>
+                  </tr>
+                  @foreach ($referencias as $obj)
+                  <tr>
+                    <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                    <td>{{ $obj['codigo_interno'] }}</td>
+                    <td>{{ $obj['codigo_barras'] }}</td>
+                    <td>{{ $obj['descripcion'] }}</td>
+                    <td>{{ $obj['stok_minimo'] }}</td>
+                    <td>{{ $obj['stok_maximo'] }}</td>
+                    <td>{{ $obj['iva'] }}</td>
+                    <td>{{ $obj['costo_promedio'] }}</td>
+                    <td>{{ $obj['saldo'] }}</td>
+                    <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                  </tr>
+                  @endforeach
                 </table>
+              </div>
               <div class="col-sm-12" style="height: 30px;"></div>
                 <p style="margin-left: 20px;"><br><br>Tabla que indica los productos que serán incorporados en el documento:</p> 
                 <table id="tabla_productos" class="table table-bordered" style="width: 96%;margin-left: 2%;">
@@ -828,42 +826,42 @@ SIGNO MENOS
             </div>
             <div style="width: 100%;height: 20px;"></div>
           </div>
+          <div class="col-sm-2"> <select id="tipo_pago" name="tipo_pago" class="form-control"><option value="na">NA</option></select></div>
         </div>
 
         <div class="row">
           <div class="col-sm-12">
             <div class="row" style="overflow-x: scroll;overflow-y: scroll;height: 500px;">
-              <div class="col-sm-12" style="height: 30px;"></div>
-              <p style="margin-left: 20px;">BUSCAR PRODUCTO POR: </p>
-              <table class="table table-bordered" style="width: 96%;margin-left: 2%;">
-                  <thead>
-                    <tr>
-                      <th>
-                        <input type="text" id="search_referencia" onkeyup="documentos.searchReferencia();" name="" class="form-control" placeholder="REFERNCIA">
-                        <ul class="lista" id="lista_referencias" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                          @foreach ($referencias as $obj)
-                          <li><a href="javascript:;" onclick="documentos.seleccionReferencia({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }} </a><li>
-                          @endforeach
-                        </ul>
-                      </th>
-                      <th><input type="text" name="" id="search_codigobarras" onkeyup="documentos.searchCodigoBarras();" class="form-control" placeholder="CÓDIGO DE BARRAS">
-                        <ul class="lista" id="lista_codigobarras" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                          @foreach ($referencias as $obj)
-                          <li><a href="javascript:;" onclick="documentos.seleccionCodigoBarras({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }}</a><li>
-                          @endforeach
-                        </ul>
-                      </th>
-                      <th><input type="text" name="" id="search_descrpcion" onkeyup="documentos.searchDescripcion();" class="form-control" placeholder="DESCIPCION">
-                      <ul class="lista" id="lista_descripcion" style="position: absolute;width: 82%;left: 2%;height: 100px;">
-                          @foreach ($referencias as $obj)
-                          <li><a href="javascript:;" onclick="documentos.seleccionDescripcion({{ $obj }})" ><small>Ref.</small>{{ $obj['codigo_interno'] }} <small>Cod.</small>{{ $obj['codigo_barras'] }} <small>Des.</small>{{ $obj['descripcion'] }} <small>Stok_min.</small>{{ $obj['stok_minimo'] }} <small>Stok.max.</small>{{ $obj['stok_maximo'] }} <small>Iva.</small>{{ $obj['iva'] }} <small>Costo.</small>{{ $obj['costo_promedio'] }} <small>Saldo.</small>{{ $obj['saldo'] }}</a><li>
-                          @endforeach
-                        </ul>
-                      </th>
-                      <th><div class="btn btn-success form-control" onclick="documentos.addProducto();">+</div></th>
-                    </tr>
-                  </thead>
+              <div style="position: fixed;width: 100%;left: 0px;bottom: -10px; height: 150px;background: white;z-index: 200;overflow: scroll;">
+                <table class="table" id="lista_referencias" >
+                  <tr>
+                    <th>Añadir</th>
+                    <th><input type="text" id="search_referencia" onkeyup="documentos.searchReferencia(1,'search_referencia');" name="" class="form-control" style="width: 100px;" placeholder="REFERNCIA"></th>
+                    <th><input type="text" id="search_codigobarras" onkeyup="documentos.searchReferencia(2,'search_codigobarras');" name="" class="form-control" style="width: 100px;" placeholder="CODIGO BARRAS"></th>
+                    <th><input type="text" id="search_descrpcion" onkeyup="documentos.searchReferencia(3,'search_descrpcion');" name="" class="form-control" style="width: 100px;" placeholder="DESCRIPCION"></th>
+                    <th>Stock_min.</th>
+                    <th>Stock_max.</th>
+                    <th>iva.</th>
+                    <th>Costo.</th>
+                    <th>Saldo.</th>
+                    <th>Añadir</th>
+                  </tr>
+                  @foreach ($referencias as $obj)
+                  <tr>
+                    <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                    <td>{{ $obj['codigo_interno'] }}</td>
+                    <td>{{ $obj['codigo_barras'] }}</td>
+                    <td>{{ $obj['descripcion'] }}</td>
+                    <td>{{ $obj['stok_minimo'] }}</td>
+                    <td>{{ $obj['stok_maximo'] }}</td>
+                    <td>{{ $obj['iva'] }}</td>
+                    <td>{{ $obj['costo_promedio'] }}</td>
+                    <td>{{ $obj['saldo'] }}</td>
+                    <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                  </tr>
+                  @endforeach
                 </table>
+              </div>
               <div class="col-sm-12" style="height: 30px;"></div>
                 <p style="margin-left: 20px;"><br><br>Tabla que indica los productos que serán incorporados en el documento:</p> 
                 <table id="tabla_productos" class="table table-bordered" style="width: 96%;margin-left: 2%;">
@@ -984,7 +982,7 @@ SIGNO MENOS
 }
 ?>
 
-
+<div style="width: 100%;height: 200px;"></div>
 
 <div id="resultado"></div>
 

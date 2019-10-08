@@ -26,6 +26,7 @@ class CreateCalendariosTable extends Migration
             $table->string('notificacion'); //si no
             $table->float('valor');
             $table->integer('periodicidad');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
     }

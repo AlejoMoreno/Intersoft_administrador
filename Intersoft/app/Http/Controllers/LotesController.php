@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Lotes;
 
+use Session;
+
 class LotesController extends Controller
 {
     //
@@ -17,6 +19,8 @@ class LotesController extends Controller
         $obj->ubicacion   		= $request->ubicacion;
         $obj->serial            = $request->serial;
         $obj->cantidad          = $request->cantidad;
+        $obj->sucursal          = Session::get('sucursal');
+        $obj->id_empresa	= Session::get('id_empresa');
         $obj->save();
         return redirect('/inventario/lotes');
     }
@@ -29,6 +33,8 @@ class LotesController extends Controller
         $obj->ubicacion   		= $request->ubicacion;
         $obj->serial            = $request->serial;
         $obj->cantidad          = $request->cantidad;
+        $obj->sucursal          = Session::get('sucursal');
+        $obj->id_empresa	= Session::get('id_empresa');
         $obj->save();
         return $obj;
     }

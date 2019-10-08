@@ -24,6 +24,7 @@ class CreateDocumentosTable extends Migration
             $table->string('num_presente');
             $table->string('cuenta_contable_partida');
             $table->string('cuenta_contable_contrapartida');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
 
@@ -34,60 +35,65 @@ class CreateDocumentosTable extends Migration
                 'nombre' => 'FACTURA',
                 'signo' => '-',
                 'ubicacion' => 'SALIDA',
-                'prefijo' => NULL,
+                'prefijo' => '',
                 'num_max' => '100',
                 'num_min' => '0',
                 'num_presente' => '0',
                 'cuenta_contable_partida' => '897867879',
                 'cuenta_contable_contrapartida' => '789472843',
+                'id_empresa' => 1
             ),
             array(
                 'id'        => NULL,
                 'nombre' => 'FACTURA VENTA',
                 'signo' => '-',
                 'ubicacion' => 'SALIDA',
-                'prefijo' => NULL,
+                'prefijo' => '',
                 'num_max' => '100',
                 'num_min' => '0',
                 'num_presente' => '0',
                 'cuenta_contable_partida' => '897867879',
                 'cuenta_contable_contrapartida' => '789472843',
+                'id_empresa' => 1
             ),
             array(
                 'id'        => NULL,
                 'nombre' => 'FACTURA COMPRA',
                 'signo' => '+',
                 'ubicacion' => 'ENTRADA',
-                'prefijo' => NULL,
+                'prefijo' => '',
                 'num_max' => '100',
                 'num_min' => '0',
                 'num_presente' => '0',
                 'cuenta_contable_partida' => '897867879',
                 'cuenta_contable_contrapartida' => '789472843',
+                'id_empresa' => 1
             ),
             array(
                 'id'        => NULL,
                 'nombre' => 'ORDEN DE PEDIDO',
                 'signo' => '=',
                 'ubicacion' => 'ENTRADA',
-                'prefijo' => NULL,
+                'prefijo' => '',
                 'num_max' => '100',
                 'num_min' => '0',
                 'num_presente' => '0',
                 'cuenta_contable_partida' => '897867879',
                 'cuenta_contable_contrapartida' => '789472843',
+                'id_empresa' => 1
             ),
             array(
                 'id'        => NULL,
                 'nombre' => 'COTIZACION',
                 'signo' => '=',
                 'ubicacion' => 'SALIDA',
-                'prefijo' => NULL,
+                'prefijo' => '',
                 'num_max' => '100',
                 'num_min' => '0',
                 'num_presente' => '0',
                 'cuenta_contable_partida' => '897867879',
                 'cuenta_contable_contrapartida' => '789472843',
+                'id_empresa' => 1
             )
         );
     }

@@ -29,7 +29,6 @@
                                     <th>correo</th>
                                     <th>ciudad</th> 
                                     <th></th> 
-                                    <th></th> 
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,7 +43,7 @@
                                         <td>{{ $sucursal['correo'] }}</td>
                                         <td>{{ $sucursal['ciudad']['nombre'] }}</td>
                                         <td><a href="javascript:;" onclick="sucursal.update('{{ $sucursal }}');"><button class="btn btn-warning">></button></a></td>
-                                        <td><a onclick="config.delete_get('/administrador/sucursales/delete/', '{{ $sucursal }}',  '/administrador/sucursales');" href="#"><button class="btn btn-danger">x</button></a></td>
+                                        <!--td><a onclick="config.delete_get('/administrador/sucursales/delete/', '{{ $sucursal }}',  '/administrador/sucursales');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
                                 @endforeach
                             </tbody>

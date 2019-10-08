@@ -29,7 +29,6 @@ $referencias = App\Referencias::all();
                                     <th>Ubicación</th>
                                     <th>Serie</th>
                                     <th>Cantidad</th>
-                                    <th></th>
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -44,7 +43,7 @@ $referencias = App\Referencias::all();
                                         <th>{{ $obj['serie'] }}</th>
                                         <th>{{ $obj['cantidad'] }}</th>
                                         <td><a href="javascript:;" onclick="lotes.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
-                                        <td><a onclick="config.delete_get('/inventario/lotes/delete/', '{{ $obj }}',  '/inventario/lotes');" href="#"><button class="btn btn-danger">x</button></a></td>
+                                        <!--td><a onclick="config.delete_get('/inventario/lotes/delete/', '{{ $obj }}',  '/inventario/lotes');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
                                 @endforeach
                             </tbody>

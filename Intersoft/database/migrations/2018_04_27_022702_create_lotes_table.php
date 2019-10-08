@@ -21,6 +21,7 @@ class CreateLotesTable extends Migration
             $table->string('ubicacion');
             $table->string('serial');
             $table->integer('cantidad');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
     }

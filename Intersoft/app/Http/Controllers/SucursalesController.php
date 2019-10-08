@@ -10,9 +10,12 @@ use App\Ciudades;
 use Excel;
 use PDF;
 
+use Session;
+
 class SucursalesController extends Controller
 {
     public function create(Request $request){
+        
         $sucursales = new Sucursales();
         $sucursales->nombre     = $request->nombre;
         $sucursales->codigo     = $request->codigo;
@@ -21,8 +24,25 @@ class SucursalesController extends Controller
         $sucursales->telefono   = $request->telefono;
         $sucursales->correo     = $request->correo;
         $sucursales->ciudad     = $request->ciudad;
-        $sucursales->id_empresa = $request->id_empresa;
+        $sucursales->id_empresa = Session::get('id_empresa');
         $sucursales->save();
+
+        //crear la cuenta correspondiente
+        $cuenta = new Cuentas();
+        $cuenta->clase          = '1';
+        $cuenta->nombreClase    = 'ACTIVO';
+        $cuenta->grupo          = '11';
+        $cuenta->nombreGrupo    = 'DISPONIBLE';
+        $cuenta->cuenta         = '05';
+        $cuenta->nombreCuenta   = 'CAJA';
+        $cuenta->subcuenta      = '05';
+        $cuenta->nombreSubcuenta = 'CAJA GENERAL';
+        $cuenta->auxiliar       = $Sucursales->id;
+        $cuenta->nombreAuxiliar = $sucursales->nombre;
+        $cuenta->homologo       = '0';
+        $cuenta->homologo_1     = '0';
+        $cuenta->save();
+
         return redirect('/administrador/sucursales');
     }
 
@@ -35,7 +55,7 @@ class SucursalesController extends Controller
         $sucursal->telefono   = $request->telefono;
         $sucursal->correo     = $request->correo;
         $sucursal->ciudad     = $request->ciudad;
-        $sucursal->id_empresa = $request->id_empresa;
+        $sucursal->id_empresa = Session::get('id_empresa');
         $sucursal->save();
         return $sucursal;
     }

@@ -6,26 +6,53 @@
 	<html lang="en">
 	<title>Login</title>
 	<meta charset="utf-8">
+	<link rel="icon" type="image/png" href="http://wakusoft.com/img/works/thumbs/1.png">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/intersoft.css">
 	<link rel="stylesheet" href="css/login.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script  type="text/javascript" src="js/index.js"></script>
 	<script src="js/config.js"></script>
 	<script src="js/DB/sesion.js"></script>
   	<script src="js/login.js"></script>
-</head>
 
+  	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<?php if(isset($result)==false){ $result = "";} ?>
 <body>
 	
 	<center>
-		<form style="width: 300px;">
-			<img class="logo" src="http://famc.net.co/intersoft/pages/images/logo.png">
+		@if( $result == "error" )
 
-			<p id="empresaConfig">Intersoft</p>
+		<script>
+			$( document ).ready(function() {
+			    config.saveErrorLogin(<?php echo json_encode( $body ) ?>);	
+			    //config.Redirect('/');	
+			});
+		</script>
+
+		@endif
+
+		@if( $result == "success" )
+
+		<script>
+			$( document ).ready(function() {
+			    config.saveLogin(<?php echo json_encode( $body ) ?>, <?php echo json_encode( $sessions ) ?>);	
+				config.Redirect('/index');	
+			});
+		</script>
+		
+		@endif
+
+		<?php  use App\Sucursales; ?>
+		<form action="/loguin" method="POST" style="width: 300px;" >
+			<img class="logo" src="http://wakusoft.com/img/works/thumbs/1.png">
+
+			<p id="empresaConfig"></p>
 			<div class="input-group">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 				<input id="cedula" type="text" class="form-control has-success" name="cedula" placeholder="Cédula" >
@@ -34,9 +61,18 @@
 				<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 				<input id="password" type="password" class="form-control" name="password" placeholder="Password" >
 			</div>
-			<div  id="boton" onclick="login.loguearse();" class="olvido2">Entrar</div>
+			<div class="input-group">
+				<label>A que Sucursal</label>
+	            <select name="sucursal" class="form-control" id="sucursal">
+	                @foreach ( Sucursales::all() as $value)
+	                <option value="{{ $value['id'] }}">{{ $value['nombre'] }}</option>
+	                @endforeach
+	            </select>	
+			</div>
+			<!--div  id="boton" onclick="login.loguearse();" class="olvido2">Entrar</div-->
+			<input  id="boton" type="submit" name="boton" class="olvido2" style="border: 0px;" value="Entrar">
 			<div class="olvido" onclick="config.Redirect('olvido');"><a href="#" style="color:white"> Olvido de Contraseña</a></div>
-			<div class="olvido1" onclick="config.Redirect('registro');"><a href="#" style="color:white"> Date de alta como usuario</a></div>
+			<!--<div class="olvido1" onclick="config.Redirect('registro');"><a href="#" style="color:white"> Date de alta como usuario</a></div>-->
 			<!--ENTER Resultado -->
 			<div id="resultado"></div>
 			<!--FIN Resultado -->
@@ -59,4 +95,5 @@ $(document).ready(function(){
     login.FocusForm('password','boton','no');
     login.FocusForm('boton','boton','si');
 });
+
 </script>

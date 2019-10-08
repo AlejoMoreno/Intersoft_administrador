@@ -7,7 +7,7 @@ use Session;
 
 class SessionsController extends Controller
 {
-    static function storeSession($session,$usuario){
+    static function storeSession($session,$usuario,$sucursal){
     	Session::put('user_id',$session->user_id);
 		Session::put('ip',$session->ip);
 		Session::put('user_agent',$session->user_agent);
@@ -15,7 +15,10 @@ class SessionsController extends Controller
 		Session::put('ncedula',$usuario->ncedula);
 		Session::put('nombre',$usuario->nombre . ' ' . $usuario->apellido);
 		Session::put('cargo',$usuario->cargo);
+		Session::put('id_empresa',$usuario->id_empresa);
 		Session::put('estado',$usuario->estado);
+		Session::put('sucursal',$sucursal->id);
+		Session::put('sucursalNombre',$sucursal->nombre);
     }
 
     static function deleteSession(){
@@ -27,6 +30,9 @@ class SessionsController extends Controller
 		Session::forget('nombre',"");
 		Session::forget('cargo',"");
 		Session::forget('estado',"");
+		Session::forget('id_empresa',"");
+		Session::forget('sucursal',"");
+		Session::forget('sucursalNombre',"");
     }
 
 

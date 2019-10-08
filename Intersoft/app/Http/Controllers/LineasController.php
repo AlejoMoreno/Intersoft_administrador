@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Lineas;
 
+use Session;
+
 class LineasController extends Controller
 {
     //
@@ -15,6 +17,7 @@ class LineasController extends Controller
         $obj->descripcion   = $request->descripcion;
         $obj->codigo_interno= $request->codigo_interno;
         $obj->codigo_alterno= $request->codigo_alterno;
+        $obj->id_empresa    = Session::get('id_empresa');
         $obj->save();
         return redirect('/inventario/lineas');
     }
@@ -25,6 +28,7 @@ class LineasController extends Controller
         $obj->descripcion   = $request->descripcion;
         $obj->codigo_interno= $request->codigo_interno;
         $obj->codigo_alterno= $request->codigo_alterno;
+        $obj->id_empresa    = Session::get('id_empresa');
         $obj->save();
         return $obj;
     }

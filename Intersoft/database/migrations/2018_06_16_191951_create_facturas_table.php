@@ -16,6 +16,7 @@ class CreateFacturasTable extends Migration
         Schema::create('Facturas', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('id_sucursal');
+            $table->integer('id_empresa');
             $table->integer('numero');
             $table->string('prefijo');
             $table->integer('id_cliente'); //directorios
@@ -35,7 +36,7 @@ class CreateFacturasTable extends Migration
             $table->double('retefuente');
             $table->double('total');
             $table->integer('id_modificado'); //directorios
-            $table->integer('observaciones'); 
+            $table->string('observaciones'); 
             $table->string('estado'); //anulado, efectivo, credito, prestamo, comision,  
             $table->double('saldo');
             $table->timestamps();

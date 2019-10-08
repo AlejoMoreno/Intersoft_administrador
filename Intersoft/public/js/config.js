@@ -46,7 +46,7 @@ function Config(){
 			};
 		 $.ajax({
 	        data:  paramentros,
-	        url:   HOST+'api/Empresa/controller.php',
+	        url:   HOST+'/api/Empresa/controller.php',
 	        type:  'post',
 	        beforeSend: function () {
 	            //alert('espere');
@@ -111,15 +111,21 @@ function Config(){
 		localStorage.setItem("Estado", obj.estado);
 		localStorage.setItem("Token", obj.token);
 		localStorage.setItem("user_agent", user_agent);
-		alert("Hola "+obj.nombre+" "+obj.apellido+" Estamos preparando el entono para que hagas uso de Intersof.");
+		swal("Hola "+obj.nombre+" "+obj.apellido+" Estamos preparando el entono para que hagas uso de Intersof.");
 		
 	};
+
+	this.saveErrorLogin = function(obj,){
+		swal("Error", obj, "warning", {
+				  button: "Aceptar",
+				});
+	}
 
 	//cerrar sesion
 	this.deleteLogin = function(){
 		console.log("deleteLogin");
 		//localStorage.getItem("correo");
-		alert("Adios "+localStorage.setItem("Nombre", "")+" "+localStorage.setItem("Apellido", "")+" Esperamos que Intersoft halla solucionado tus problemas.");
+		swal("Adios "+localStorage.setItem("Nombre", "")+" "+localStorage.setItem("Apellido", "")+" Esperamos que Intersoft halla solucionado tus problemas.");
 		localStorage.setItem("Id_usuario", "");
 		localStorage.setItem("ncedula", "");
 		localStorage.setItem("Nombre", "");
@@ -261,7 +267,26 @@ function Config(){
 	            return ((zero.repeat(width - length)) + numberOutput.toString()); 
 	        }
 	    }
-	}
+	};
+
+	this.printDiv = function (nombreDiv) {
+	     var divToPrint=document.getElementById(nombreDiv);
+
+		  var newWin=window.open('','Print-Window');
+
+		  newWin.document.open();
+
+		  newWin.document.write('<html><body onload="window.print()">'+divToPrint.innerHTML+'</body></html>');
+
+		  newWin.document.close();
+
+		  setTimeout(function(){newWin.close();},10);
+	};
+
+
+	this.passFocus = function(_hasta){
+		$('#'+_hasta).focus();
+	};
 
 
 }

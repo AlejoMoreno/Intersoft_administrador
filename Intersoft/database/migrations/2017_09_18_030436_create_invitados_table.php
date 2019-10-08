@@ -19,6 +19,7 @@ class CreateInvitadosTable extends Migration
             $table->string('nombre');
             $table->integer('id_calendario');
             $table->integer('id_directorio');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
     }

@@ -8,6 +8,8 @@ use App\Contrato_laborals;
 use Excel;
 use PDF;
 
+use Session;
+
 class Contrato_laboralController extends Controller
 {
     public function create(Request $request){
@@ -17,6 +19,7 @@ class Contrato_laboralController extends Controller
         $contrato_laborales->consecutivo    = $request->consecutivo;
         $contrato_laborales->fecha_inicial  = $request->fecha_inicial;
         $contrato_laborales->fecha_final    = $request->fecha_final;
+        $contrato_laborales->id_empresa    = Session::get('id_empresa');
         $contrato_laborales->save();
         return redirect('/administrador/contratos');
     }
@@ -28,6 +31,7 @@ class Contrato_laboralController extends Controller
         $contrato_laborales->consecutivo    = $request->consecutivo;
         $contrato_laborales->fecha_inicial  = $request->fecha_inicial;
         $contrato_laborales->fecha_final    = $request->fecha_final;
+        $contrato_laborales->id_empresa    = Session::get('id_empresa');
         $contrato_laborales->save();
         return $contrato_laborales;
     }

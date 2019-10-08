@@ -41,8 +41,106 @@ class CreateDirectoriosTable extends Migration
             $table->integer('id_directorio_tipo');
             $table->integer('id_directorio_clase');
             $table->integer('id_directorio_tipo_tercero');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
+
+        DB::table('directorios')->insert(
+            array(
+                'id'        => NULL,
+                'nit'       => '222222222',
+                'digito'    => '0',
+                'razon_social'=> 'MENORES CUANTIAS',
+                'direccion' => 'XXX XXXX XXXX',
+                'correo'    => 'XXXX@XXX.COM',
+                'telefono'  => 'XXX XXXX XX',
+                'telefono1' => 'XXX XXXX XX',
+                'telefono2' => 'XXX XXXX XX',
+                'financiacion'=> 0,
+                'descuento' => 0,
+                'cupo_financiero'=> 0,
+                'rete_ica'  => 0,
+                'porcentaje_rete_iva'=> 0,
+                'actividad_economica'=> '0000',
+                'calificacion'=> 3,
+                'nivel'     => 'NACIONAL',
+                'zona_venta'=> 'XXX XXX XXX',
+                'transporte'=> 'NO',
+                'estado'    => 'ACTIVO',
+                'id_retefuente'=> 1,
+                'id_ciudad' => 1,
+                'id_regimen'=> 1,
+                'id_usuario'=> 1,
+                'id_directorio_tipo'=> 1,
+                'id_directorio_clase'=> 3,
+                'id_directorio_tipo_tercero'=> 1,
+                'id_empresa'=> 1
+            )
+        );
+        DB::table('directorios')->insert(
+            array(
+                'id'        => NULL,
+                'nit'       => '222222222',
+                'digito'    => '0',
+                'razon_social'=> 'MENORES CUANTIAS',
+                'direccion' => 'XXX XXXX XXXX',
+                'correo'    => 'XXXX@XXX.COM',
+                'telefono'  => 'XXX XXXX XX',
+                'telefono1' => 'XXX XXXX XX',
+                'telefono2' => 'XXX XXXX XX',
+                'financiacion'=> 0,
+                'descuento' => 0,
+                'cupo_financiero'=> 0,
+                'rete_ica'  => 0,
+                'porcentaje_rete_iva'=> 0,
+                'actividad_economica'=> '0000',
+                'calificacion'=> 3,
+                'nivel'     => 'NACIONAL',
+                'zona_venta'=> 'XXX XXX XXX',
+                'transporte'=> 'NO',
+                'estado'    => 'ACTIVO',
+                'id_retefuente'=> 1,
+                'id_ciudad' => 1,
+                'id_regimen'=> 1,
+                'id_usuario'=> 1,
+                'id_directorio_tipo'=> 2,
+                'id_directorio_clase'=> 3,
+                'id_directorio_tipo_tercero'=> 1,
+                'id_empresa'=> 1
+            )
+        );
+        DB::table('directorios')->insert(
+            array(
+                'id'        => NULL,
+                'nit'       => '222222222',
+                'digito'    => '0',
+                'razon_social'=> 'MENORES CUANTIAS',
+                'direccion' => 'XXX XXXX XXXX',
+                'correo'    => 'XXXX@XXX.COM',
+                'telefono'  => 'XXX XXXX XX',
+                'telefono1' => 'XXX XXXX XX',
+                'telefono2' => 'XXX XXXX XX',
+                'financiacion'=> 0,
+                'descuento' => 0,
+                'cupo_financiero'=> 0,
+                'rete_ica'  => 0,
+                'porcentaje_rete_iva'=> 0,
+                'actividad_economica'=> '0000',
+                'calificacion'=> 3,
+                'nivel'     => 'NACIONAL',
+                'zona_venta'=> 'XXX XXX XXX',
+                'transporte'=> 'NO',
+                'estado'    => 'ACTIVO',
+                'id_retefuente'=> 1,
+                'id_ciudad' => 1,
+                'id_regimen'=> 1,
+                'id_usuario'=> 1,
+                'id_directorio_tipo'=> 3,
+                'id_directorio_clase'=> 3,
+                'id_directorio_tipo_tercero'=> 1,
+                'id_empresa'=> 1
+            )
+        );
     }
 
     /**

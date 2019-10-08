@@ -42,7 +42,6 @@
                                 <th>ID</th> 
                                 <th>Nombre</th> 
                                 <th>Código</th> 
-                                <th></th> 
                             </tr>
                         </thead>
                         <tbody>
@@ -51,7 +50,7 @@
                                     <td>{{ $departamento['id'] }}</td>
                                     <td>{{ $departamento['nombre'] }}</td>
                                     <td>{{ $departamento['codigo'] }}</td>
-                                    <td><a onclick="config.delete_get('/administrador/departamentos/delete/', '{{  $departamento }}',  '/administrador/departamentos');" href="#"><button class="btn btn-danger">x</button></a></td>
+                                    <!--td><a onclick="config.delete_get('/administrador/departamentos/delete/', '{{  $departamento }}',  '/administrador/departamentos');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                 </tr>
                             @endforeach
                         </tbody>

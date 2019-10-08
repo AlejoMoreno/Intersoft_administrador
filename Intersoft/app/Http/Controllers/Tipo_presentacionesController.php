@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Tipo_presentaciones;
 
+
+use Session;
+
 class Tipo_presentacionesController extends Controller
 {
     //
@@ -13,6 +16,7 @@ class Tipo_presentacionesController extends Controller
         $obj = new Tipo_presentaciones();
         $obj->nombre     	= $request->nombre;
         $obj->descripcion   = $request->descripcion;
+        $obj->id_empresa   = Session::get('id_empresa');
         $obj->save();
         return redirect('/inventario/tipo_presentaciones');
     }
@@ -21,6 +25,7 @@ class Tipo_presentacionesController extends Controller
         $obj = Tipo_presentaciones::where('id',$request->id)->first();
         $obj->nombre     	= $request->nombre;
         $obj->descripcion   = $request->descripcion;
+        $obj->id_empresa   = Session::get('id_empresa');
         $obj->save();
         return $obj;
     }

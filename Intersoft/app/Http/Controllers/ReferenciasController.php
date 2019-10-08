@@ -11,15 +11,22 @@ use App\Tipo_presentaciones;
 use App\Marcas;
 use App\Clasificaciones;
 use App\Usuarios;
+use App\Cuentas;
+
+use DB;
+
+use Session;
 
 class ReferenciasController extends Controller
 {
     //
     public function create(Request $request){
+    	$cont = Referencias::where('codigo_linea','=',$request->codigo_linea)->
+    						 where('codigo_letras','=',substr($request->descripcion,0,3))->get();
         $obj = new Referencias();
         $obj->codigo_linea     	= $request->codigo_linea;
-        $obj->codigo_letras   	= $request->codigo_letras;
-        $obj->codigo_consecutivo= $request->codigo_consecutivo;
+        $obj->codigo_letras   	= substr($request->descripcion,0,3);
+        $obj->codigo_consecutivo= sizeof($cont)+1;
         $obj->descripcion 		= $request->descripcion;
 		$obj->codigo_barras 	= $request->codigo_barras;
 		$obj->codigo_interno 	= $request->codigo_interno;
@@ -42,10 +49,13 @@ class ReferenciasController extends Controller
 		$obj->precio4 			= $request->precio4;
 		$obj->estado 			= $request->estado;
 		$obj->hommologo 		= $request->hommologo;
-		$obj->costo 			= $request->costo;
-		$obj->costo_promedio 	= $request->costo_promedio;
-		$obj->saldo 			= $request->saldo;
+		$obj->costo 			= "0";
+		$obj->costo_promedio 	= "0";
+		$obj->saldo 			= "0";
 		$obj->usuario_creador 	= $request->usuario_creador;
+		$obj->cuentaDB 			= $request->cuentaDB;
+		$obj->cuentaCR 			= $request->cuentaCR;
+		$obj->id_empresa	 	= Session::get('id_empresa');
         $obj->save();
         return redirect('/inventario/referencias');
     }
@@ -77,10 +87,10 @@ class ReferenciasController extends Controller
 		$obj->precio4 			= $request->precio4;
 		$obj->estado 			= $request->estado;
 		$obj->hommologo 		= $request->hommologo;
-		$obj->costo 			= $request->costo;
-		$obj->costo_promedio 	= $request->costo_promedio;
-		$obj->saldo 			= $request->saldo;
 		$obj->usuario_creador 	= $request->usuario_creador;
+		$obj->cuentaDB 			= $request->cuentaDB;
+		$obj->cuentaCR 			= $request->cuentaCR;
+		$obj->id_empresa	 	= Session::get('id_empresa');
         $obj->save();
         return $obj;
     }
@@ -112,6 +122,8 @@ class ReferenciasController extends Controller
 		$marcas = Marcas::all();
 		$clasificaciones = Clasificaciones::all();
 		$usuarios = Usuarios::all();
+		$cuentaDB = Cuentas::where('clase','=','1')->where('grupo','=','4')->get();
+		$cuentaCR = Cuentas::where('clase','=','1')->where('grupo','=','4')->get();//cambiar por la otra cuenta 
         foreach ($objs as $value) {
         	$value->codigo_linea = Lineas::where('id', $value->codigo_linea)->get();
 			$value->id_presentacion = Tipo_presentaciones::where('id', $value->id_presentacion)->get();
@@ -125,6 +137,30 @@ class ReferenciasController extends Controller
         	'presentaciones' => $presentaciones,
     		'marcas' => $marcas,
 			'clasificaciones' => $clasificaciones,
-			'usuarios' => $usuarios]);
+			'usuarios' => $usuarios,
+			'cuentaDB' => $cuentaDB,
+			'cuentaCR' => $cuentaCR]);
+    }
+
+    public function catalogo(){
+    	$obj = Referencias::all();
+    	foreach ($obj as $value) {
+        	$value->codigo_linea = Lineas::where('id', $value->codigo_linea)->get();
+			$value->id_presentacion = Tipo_presentaciones::where('id', $value->id_presentacion)->get();
+			$value->id_marca = Marcas::where('id', $value->id_marca)->get();
+			$value->id_clasificacion = Clasificaciones::where('id', $value->id_clasificacion)->get();
+			$value->usuario_creador = Usuarios::where('id', $value->usuario_creador)->get();
+        }
+    	return view('inventario.catalogo', [
+    		'referencias' => $obj
+    	]);
+    }
+
+    public function search(Request $request){
+    	$obj = DB::select("SELECT * from referencias where descripcion like '%".$request->search."%' OR codigo_letras like '%".$request->search."%' OR codigo_barras like '%".$request->search."%'  ");
+    	//dd($obj);
+        return  array(
+            "result"=>"success",
+            "body"=>$obj);
     }
 }

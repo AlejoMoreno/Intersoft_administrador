@@ -20,6 +20,7 @@ class CreateContratoLaboralTable extends Migration
             $table->integer('consecutivo');
             $table->date('fecha_inicial');
             $table->date('fecha_final');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
 
@@ -32,6 +33,7 @@ class CreateContratoLaboralTable extends Migration
                 'consecutivo' => 1,
                 'fecha_inicial' => '2018-01-01',
                 'fecha_final' => '2018-01-01',
+                'id_empresa' => 1
             )
         );
     }

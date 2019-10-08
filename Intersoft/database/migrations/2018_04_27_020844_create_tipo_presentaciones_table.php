@@ -17,6 +17,7 @@ class CreateTipoPresentacionesTable extends Migration
             $table->increments('id');
             $table->string('nombre');
             $table->string('descripcion');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
 
@@ -25,7 +26,8 @@ class CreateTipoPresentacionesTable extends Migration
             array(
                 'id'        => NULL,
                 'nombre' => 'UND',
-                'descripcion' => 'UND'
+                'descripcion' => 'UND',
+                'id_empresa' => 1
             )
         );
     }

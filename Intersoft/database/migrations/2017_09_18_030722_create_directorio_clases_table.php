@@ -19,6 +19,28 @@ class CreateDirectorioClasesTable extends Migration
             $table->string('descripcion');
             $table->timestamps();
         });
+
+        DB::table('directorio_clases')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'TIPO (A)',
+                'descripcion' => 'Este tiene el mejor rendimiento'
+            )
+        );
+        DB::table('directorio_clases')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'TIPO (B)',
+                'descripcion' => 'Este tiene mediano rendimiento'
+            )
+        );
+        DB::table('directorio_clases')->insert(
+            array(
+                'id'        => NULL,
+                'nombre'    => 'TIPO (C)',
+                'descripcion' => 'Este tiene malo rendimiento'
+            )
+        );
     }
 
     /**

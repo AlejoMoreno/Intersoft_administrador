@@ -13,6 +13,8 @@ use App\Directorio_tipos;
 use App\Directorio_clases;
 use App\Directorio_tipo_terceros;
 
+use Session;
+
 class DirectoriosController extends Controller
 {
     public function create(Request $request){
@@ -43,6 +45,7 @@ class DirectoriosController extends Controller
         $directorios->id_directorio_tipo= $request->id_directorio_tipo;
         $directorios->id_directorio_clase= $request->id_directorio_clase;
         $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
+        $directorios->id_empresa	 	= Session::get('id_empresa');
         $directorios->save();
         return redirect('/administrador/directorios');
     }
@@ -75,6 +78,7 @@ class DirectoriosController extends Controller
         $directorios->id_directorio_tipo= $request->id_directorio_tipo;
         $directorios->id_directorio_clase= $request->id_directorio_clase;
         $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
+        $directorios->id_empresa	 	= Session::get('id_empresa');
         $directorios->save();
         //regresar a la vista
         return $directorios;
@@ -190,11 +194,12 @@ class DirectoriosController extends Controller
         $directorios->id_directorio_tipo= "1";
         $directorios->id_directorio_clase= "1";
         $directorios->id_directorio_tipo_tercero= "3";
+        $directorios->id_empresa	 	= Session::get('id_empresa');
         $directorios->save();
 
         return array(
             "result"=>"success",
-            "body"=>$directorios;
+            "body"=>$directorios
         );
     }
 }

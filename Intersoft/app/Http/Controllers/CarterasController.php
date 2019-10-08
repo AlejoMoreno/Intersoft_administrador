@@ -13,6 +13,8 @@ use App\Documentos;
 use App\Usuarios;
 use App\Ciudades;
 
+use Session;
+
 class CarterasController extends Controller
 {
     
@@ -26,7 +28,7 @@ class CarterasController extends Controller
 		$obj->descuento 	= $request->descuento;
 		$obj->retefuente 	= $request->retefuente;
 		$obj->otros 		= $request->otros;
-		$obj->id_sucursal 	= $request->id_sucursal;
+		$obj->id_sucursal 	= Session::get('sucursal');
 		$obj->numero 		= $request->numero;
 		$obj->prefijo 		= $request->prefijo;
 		$obj->id_cliente 	= $request->id_cliente;
@@ -37,6 +39,7 @@ class CarterasController extends Controller
 		$obj->total 		= $request->total;
 		$obj->id_modificado = $request->id_modificado;
 		$obj->observaciones = $request->observaciones;
+		$obj->id_empresa = Session::get('id_empresa');
 		$obj->estado 		= $request->estado;
 		$obj->save();
 
