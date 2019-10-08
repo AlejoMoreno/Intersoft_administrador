@@ -6,13 +6,13 @@ function Referencias(){
         $('#actualizar').hide();
         $('#crear').hide();
         $('#tabla').show();
-        $('#tabla').addClass('bounceIn');
+        $('#tabla').addClass('fadeIn');
     };
 
     this.crear = function(){
     	$('#tabla').hide();
     	$('#crear').show();
-    	$('#crear').addClass('bounceIn');
+    	$('#crear').addClass('fadeIn');
     };
 
     //function para eliminar por post

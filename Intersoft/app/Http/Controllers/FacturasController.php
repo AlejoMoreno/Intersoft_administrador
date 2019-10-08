@@ -192,6 +192,27 @@ class FacturasController extends Controller
             'kardex' => $kardex]);
     }
 
+    public function getUpdate($id){
+        $factura = Facturas::where('id',$id)->get()[0];
+        $kardex = Kardex::where('id_factura',$id)->get();
+        $factura->id_sucursal = Sucursales::where('id',$factura->id_sucursal)->get();
+        foreach ($factura->id_sucursal as $sucursal) {
+            $sucursal->id_empresa = Empresas::where('id',$sucursal->id_empresa)->get()[0];
+        }
+        $factura->id_documento = Documentos::where('id',$factura->id_documento)->get()[0];
+        $factura->id_vendedor = Usuarios::where('id',$factura->id_vendedor)->get()[0];
+        $factura->id_cliente = Directorios::where('id',$factura->id_cliente)->get();
+        foreach($factura->id_cliente as $cliente){
+            $cliente->id_ciudad = Ciudades::where('id',$cliente->id_ciudad)->get()[0];
+        }
+        foreach ($kardex as $obj) {
+            $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->get()[0];
+        }
+        return view('documentos.update', [
+            'factura' => $factura,
+            'kardex' => $kardex]);   
+    }
+
     public function consultar_documento($documento){
         $factura = Facturas::where('id_documento','=',$documento)->get();
         foreach ($factura as $obj) {

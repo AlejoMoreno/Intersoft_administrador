@@ -21,12 +21,11 @@
     <!--     Fonts and icons     -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
-    <link href="https://localhost:8000/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    <link href="/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <!-- TEXT EDTIT -->
-    <link rel="stylesheet" href="https://imperavi.com/assets/redactor/redactor.min.css" />
     <!--script src="https://imperavi.com/assets/redactor/redactor.js?v"></script>-->
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -131,38 +130,6 @@
     	</div>
     </div>
     <div class="main-panel">
-        <nav class="navbar navbar-default navbar-fixed">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <br><button type="button" id="ocultar" style="margin-left:-20px;margin-top:-100px;background:#2b74c5;color:white;font-size:8px;" onclick="toogle()" >
-                        <label><-</label>
-                    </button>
-                    <br><button type="button" id="mostrar" style="margin-left:-20px;margin-top:-100px;background:#2b74c5;color:white;font-size:8px;" onclick="toogle1()" >
-                        <label>-></label>
-                    </button>
-                </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav navbar-left">
-                        <li>
-                            <input id="searchTerm" type="text" onkeyup="config.doSearch()" style="width:500px;" class="btn btn-warning" placeholder="Busqueda ràpida" />
-                        </li>
-                    </ul>
-
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <div style="margin-left: 10px;font-size: 12px;margin-top: 8px;">
-                                <small>{{ Session::get('nombre') }}</small><br>
-                                <small>{{ Session::get('cargo') }}</small> |
-                                <small>{{ Session::get('sucursalNombre') }}</small>
-                                <a href="/cerrar">
-                                    <p id="cerrarSesion">Cerrar Sesión</p>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
 
         <script>
         //$("#mostrar").hide();
@@ -227,6 +194,11 @@
                             <a href="#">
                                 Portafolio
                             </a>
+                        </li>
+                        <li>
+                            <small>{{ Session::get('nombre') }}</small> |
+                            <small>{{ Session::get('cargo') }}</small> |
+                            <small>{{ Session::get('sucursalNombre') }}</small>
                         </li>
                     </ul>
                 </nav>

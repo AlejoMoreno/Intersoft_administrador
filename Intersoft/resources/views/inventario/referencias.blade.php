@@ -9,11 +9,18 @@
         <div class="col-md-12" id="tabla">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Referencias</h4>
-                    <p class="category">Diferentes referencias</p><br>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <h4 class="title">Referencias</h4>
+                            <p class="category">Diferentes referencias</p>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="btn btn-success" style="background: white;" onclick="referencias.crear()">+ Nueva Referencia</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="content">
-                    <div class="btn btn-success" onclick="referencias.crear()">Nueva Referencia</div>
+                    
                     <div style="overflow-x:scroll;overflow-y:scroll;height:300px;">
                         <table class="table table-bordered table-striped" id="datos">
                             <thead>
@@ -46,14 +53,14 @@
                                         <td>{{ $obj['id_presentacion'][0]['nombre'] }}</td>
                                         <td>{{ $obj['id_marca'][0]['nombre'] }}</td>
                                         <td>{{ $obj['peso'] }}</td>
-                                        <td>{{ $obj['precio1'] }}</td>
-                                        <td>{{ $obj['precio2'] }}</td>
-                                        <td>{{ $obj['precio3'] }}</td>
-                                        <td>{{ $obj['precio4'] }}</td>
+                                        <td>{{ number_format($obj['precio1'], 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj['precio2'], 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj['precio3'], 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj['precio4'], 0, ",", ".") }}</td>
                                         <td>{{ $obj['estado'] }}</td>
-                                        <td>{{ $obj['costo'] }}</td>
-                                        <td>{{ $obj['costo_promedio'] }}</td>
-                                        <td>{{ $obj['saldo'] }}</td>
+                                        <td>{{ number_format($obj['costo'], 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj['costo_promedio'], 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj['saldo'], 0, ",", ".") }}</td>
                                         <td><a href="javascript:;" onclick="referencias.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
                                         <!--td><a onclick="referencias.delete_get('/inventario/referencias/delete/', '{{ $obj }}',  '/inventario/referencias');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
@@ -71,7 +78,7 @@
                         </div>
                         <hr>
                         <div class="stats">
-                            <i class="pe-7s-angle-left-circle"></i> <a href="javascript:history.back(1)"> ir atras.</a>
+                            <a href="javascript:history.back(1)"> ir atras.</a>
                         </div>
                     </div>
                 </div>
@@ -81,14 +88,27 @@
         <div class="col-md-12" id="crear">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Crear Referencias</h4>
-                    <p class="category">Diferentes referencias</p><br>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h4 class="title">Crear Referencias</h4>
+                            <p class="category">Diferentes referencias</p>
+                        </div>
+                        <div class="col-md-5" >
+                            <div class="card" style="box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);background: white;">
+                                <div class="content">
+                                    <div class="btn btn-success" onclick="referencias.initial()">Regresar</div>
+                                    <div id="actualizar" onclick="config.send_post('#formulario', '/inventario/referencias/update', '/inventario/referencias');" class="btn btn-warning">Actualizar</div>
+                                    <div class="btn btn-danger" onclick="config.printDiv('crear');">Imprimir Ficha</div>
+                                    <div class="btn btn-default">Subir Imagen</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
                 <div class="content">
                     <form action='/inventario/referencias/create' method="POST" name="formulario" id="formulario">
                         <input type="hidden" name="id" id="id">
-                        <div class="btn btn-success" onclick="referencias.initial()">Regresar</div>
                         <div class="row">
 
                             <div class="col-md-4" >
@@ -250,33 +270,11 @@
                                         @endforeach
                                         </select>
 
-                                        <label>Cuenta Contable DB</label><br>
-                                        <select class="form-control" name="cuentaDB" id="cuentaDB">
-                                        @foreach ($cuentaDB as $obj)
-                                            <option value="{{ $obj['id'] }}">{{ $obj['nombreCuenta']}}</option>
-                                        @endforeach
-                                        </select>
+                                        <input  class="form-control" name="cuentaDB" id="cuentaDB" value="0" type="hidden">
+                                        
+                                        <input class="form-control" name="cuentaCR" id="cuentaCR" value="0" type="hidden"><br>
 
-                                        <label>Cuenta Contable CR</label><br>
-                                        <select class="form-control" name="cuentaCR" id="cuentaCR">
-                                        @foreach ($cuentaCR as $obj)
-                                            <option value="{{ $obj['id'] }}">{{ $obj['nombreCuenta']}}</option>
-                                        @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6" >
-                                <div class="card" style="box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);background: white;">
-                                    <div class="header">
-                                        <h6 class="title">Acciones/botónes</h6>
-                                    </div>
-                                    <div class="content">
                                         <input type="submit" value="Guardar" id="btnguardar" class="btn btn-success">
-                                        <div id="actualizar" onclick="config.send_post('#formulario', '/inventario/referencias/update', '/inventario/referencias');" class="btn btn-warning">Actualizar</div>
-                                        <div class="btn btn-danger" onclick="config.printDiv('crear');">Imprimir Ficha</div>
-                                        <div class="btn btn-default">Subir Imagen</div>
                                     </div>
                                 </div>
                             </div>
@@ -293,7 +291,7 @@
 
 <style>
 a img{
-    margin:20px;
+    
 }
 </style>
 

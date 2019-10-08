@@ -41,6 +41,7 @@
                                 <th>Estado</th>
                                 <th>Fecha creado</th>
                                 <th>Fecha Actualizado</th>
+                                <th></th>
                             </tr></thead>
                             <tbody>
                                 @foreach($factura as $obj)
@@ -64,6 +65,7 @@
                                 <td>{{ $obj->estado }}</td>
                                 <td>{{ $obj->created_at }}</td>
                                 <td>{{ $obj->updated_at }}</td>
+                                <td><a href="/documentos/update/{{ $obj->id }}" class="btn btn-warning">> Editar</a></td>
                                 @endforeach                                
                             </tbody>
                         </table>
