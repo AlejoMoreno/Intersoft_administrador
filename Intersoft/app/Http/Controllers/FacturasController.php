@@ -230,4 +230,77 @@ class FacturasController extends Controller
             'factura' => $factura
         ]);
     }
+
+    public function anular($id){ 
+        $factura = Facturas::where('id', '=', $id)->first();
+        if($factura->saldo != $factura->total){
+            return array(
+                "result" => "Alerta",
+                "mensaje" => "No se puede realizar la anulación ya que tiene un abono, se debe anhular el abono para ejecutar la anulacion del documento"
+            );
+        }
+        else{
+            $factura->estado = "ANULADO";
+            $factura->id_modificado = Session::get('user_id');
+            $factura->numero = $factura->numero + " ANULADO";
+            $factura->prefijo = $factura->prefijo + " ANULADO";
+            $kardex = Kardex::where('id_factura',$factura->id)->get();
+            foreach ($kardex as $obj) {
+                $referencia = Referencias::where('id', '=', $obj->id_referencia)->first();
+                if($factura->signo == '-'){
+                    $referencia->saldo = $referencia->saldo + $obj->cantidad;
+                }
+                else if($factura->signo == '+'){
+                    $referencia->saldo = $referencia->saldo - $obj->cantidad;
+                }
+                $referencia->save();
+                $obj->estado = "ANULADO";
+                //guardar datos
+                $obj->save();             
+            }
+            $factura->save();
+
+            return array(
+                "result" => "Correcto",
+                "mensaje" => "El documento fue anulado en su totalidad"
+            );
+        }
+    }
+
+    public function eliminar($id){ 
+        $factura = Facturas::where('id', '=', $id)->first();
+        if($factura->saldo != $factura->total){
+            return array(
+                "result" => "Alerta",
+                "mensaje" => "No se puede realizar la eliminación ya que tiene un abono, se debe anhular el abono para ejecutar la anulacion del documento"
+            );
+        }
+        else{
+            $factura->estado = "ELIMINADO";
+            $factura->id_modificado = Session::get('user_id');
+            $factura->numero = $factura->numero + " ELIMINADO";
+            $factura->prefijo = $factura->prefijo + " ELIMINADO";
+            $kardex = Kardex::where('id_factura',$factura->id)->get();
+            foreach ($kardex as $obj) {
+                $referencias = Referencias::where('id', '=', $obj->id_referencia)->get();
+                $referencia = Referencias::where('id', '=', $obj->id_referencia)->first();
+                if($factura->signo == '-'){
+                    $referencia->saldo = $referencia->saldo + $obj->cantidad;
+                }
+                else if($factura->signo == '+'){
+                    $referencia->saldo = $referencia->saldo - $obj->cantidad;
+                }
+                $referencia->save();
+                $obj->estado = "ELIMINADO";
+                //guardar datos
+                $obj->save();
+            }
+            $factura->save();
+
+            return array(
+                "result" => "Correcto",
+                "mensaje" => "El documento fue ELIMINADO en su totalidad"
+            );
+        }
+    }
 }

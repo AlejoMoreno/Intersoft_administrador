@@ -289,5 +289,64 @@ function Config(){
 	};
 
 
+	this.anular = function(_tipo,_data){
+		var data = JSON.parse(_data);
+		if(_tipo == 'factura'){
+			var url = '/documentos/anular/'+data.id;
+		}
+		var statusConfirm = confirm("¿Desea anular este registro?");
+		if (statusConfirm == true)
+		{
+			$.ajax({
+				url:   url,
+				type:  'get',
+				beforeSend: function () {
+					$('#resultado').html('<p>Espere porfavor</p>');
+				},
+				success:  function (response) {
+	                console.log(response);
+	                swal(response.result, response.mensaje, "success");
+	                //history.back();
+				}
+	        });
+		}
+		else
+		{
+			swal("Alerta!", "no se realizo anulación", "danger");
+			//history.back();
+		}
+
+	}
+
+
+	this.eliminar = function(_tipo,_data){
+		var data = JSON.parse(_data);
+		if(_tipo == 'factura'){
+			var url = '/documentos/eliminar/'+data.id;
+		}
+		var statusConfirm = confirm("¿Desea eliminar este registro?");
+		if (statusConfirm == true)
+		{
+			$.ajax({
+				url:   url,
+				type:  'get',
+				beforeSend: function () {
+					$('#resultado').html('<p>Espere porfavor</p>');
+				},
+				success:  function (response) {
+	                console.log(response);
+	                swal(response.result, response.mensaje, "success");
+	                //history.back();
+				}
+	        });
+		}
+		else
+		{
+			swal("Alerta!", "no se realizo Eliminación", "danger");
+			//history.back();
+		}
+
+	}
+
 }
 

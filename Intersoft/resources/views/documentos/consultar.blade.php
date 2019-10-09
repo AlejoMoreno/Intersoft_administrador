@@ -42,30 +42,34 @@
                                 <th>Fecha creado</th>
                                 <th>Fecha Actualizado</th>
                                 <th></th>
+                                <th></th>
                             </tr></thead>
                             <tbody>
                                 @foreach($factura as $obj)
-                                <td>{{ $obj->id_documento[0]->nombre }} {{ $obj->prefijo }}</td>
-                                <td>{{ $obj->id_sucursal[0]->nombre }}</td>
-                                <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj->id }}')" class="btn btn-success">{{ $obj->numero }}</a></td>
-                                <td>{{ $obj->id_tercero }}</td>
-                                <td>{{ $obj->id_cliente[0]->razon_social }}</td>
-                                <td>{{ $obj->fecha }}</td>
-                                <td>{{ $obj->fecha_vencimiento }}</td>
-                                <td>{{ number_format($obj->subtotal) }}</td>
-                                <td>{{ number_format($obj->iva) }}</td>
-                                <td>{{ number_format($obj->impoconsumo) }}</td>
-                                <td>{{ number_format($obj->otro_impuesto) }}</td>
-                                <td>{{ number_format($obj->otro_impuesto_1) }}</td>
-                                <td>{{ number_format($obj->descuento) }}</td>
-                                <td>{{ number_format($obj->fletes) }}</td>
-                                <td>{{ number_format($obj->retefuente) }}</td>
-                                <td>{{ number_format($obj->total) }}</td>
-                                <td>{{ number_format($obj->saldo) }}</td>
-                                <td>{{ $obj->estado }}</td>
-                                <td>{{ $obj->created_at }}</td>
-                                <td>{{ $obj->updated_at }}</td>
-                                <td><a href="/documentos/update/{{ $obj->id }}" class="btn btn-warning">> Editar</a></td>
+                                <tr>
+                                    <td>{{ $obj->id_documento[0]->nombre }} {{ $obj->prefijo }}</td>
+                                    <td>{{ $obj->id_sucursal[0]->nombre }}</td>
+                                    <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj->id }}')" class="btn btn-success">{{ $obj->numero }}</a></td>
+                                    <td>{{ $obj->id_tercero }}</td>
+                                    <td>{{ $obj->id_cliente[0]->razon_social }}</td>
+                                    <td>{{ $obj->fecha }}</td>
+                                    <td>{{ $obj->fecha_vencimiento }}</td>
+                                    <td>{{ number_format($obj->subtotal) }}</td>
+                                    <td>{{ number_format($obj->iva) }}</td>
+                                    <td>{{ number_format($obj->impoconsumo) }}</td>
+                                    <td>{{ number_format($obj->otro_impuesto) }}</td>
+                                    <td>{{ number_format($obj->otro_impuesto_1) }}</td>
+                                    <td>{{ number_format($obj->descuento) }}</td>
+                                    <td>{{ number_format($obj->fletes) }}</td>
+                                    <td>{{ number_format($obj->retefuente) }}</td>
+                                    <td>{{ number_format($obj->total) }}</td>
+                                    <td>{{ number_format($obj->saldo) }}</td>
+                                    <td>{{ $obj->estado }}</td>
+                                    <td>{{ $obj->created_at }}</td>
+                                    <td>{{ $obj->updated_at }}</td>
+                                    <td><div onclick="config.anular('factura','{{ $obj }}')" href="/documentos/anular/{{ $obj->id }}" class="btn btn-warning">> Anular</div></td>
+                                    <td><div onclick="config.eliminar('factura','{{ $obj }}')" href="/documentos/eliminar/{{ $obj->id }}" class="btn btn-danger">X Eliminar</div></td>
+                                </tr>
                                 @endforeach                                
                             </tbody>
                         </table>

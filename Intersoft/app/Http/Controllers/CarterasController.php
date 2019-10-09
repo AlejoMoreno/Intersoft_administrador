@@ -85,10 +85,10 @@ class CarterasController extends Controller
 
 	public function allDocumentos($id,Request $request){
 		if($request->tipo == "egreso"){
-			$facturas = Facturas::where('id_cliente',$id)->where('signo','=','+')->where('saldo','>','0')->orderBy('fecha_vencimiento', 'asc')->get();
+			$facturas = Facturas::where('id_cliente',$id)->where('signo','=','+')->where('saldo','>','0')->where('estado','!=','ANULADO')->where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
 		}
 		else{
-			$facturas = Facturas::where('id_cliente',$id)->where('signo','=','-')->where('saldo','>','0')->orderBy('fecha_vencimiento', 'asc')->get();
+			$facturas = Facturas::where('id_cliente',$id)->where('signo','=','-')->where('saldo','>','0')->where('estado','!=','ANULADO')->where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
 		}
 
 		/*foreach ($facturas as $factura) {

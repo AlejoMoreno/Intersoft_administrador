@@ -361,7 +361,9 @@ Route::get('/documentos/documento', function(){
 Route::get('/documentos/imprimir/{id}', 'FacturasController@imprimir');
 Route::get('/documentos/imprimirpost/{id}', 'FacturasController@imprimirpost');
 
-Route::get('/documentos/update/{id}', 'FacturasController@getUpdate');
+//procesos con documentos 
+Route::get('/documentos/anular/{id}', 'FacturasController@anular');
+Route::get('/documentos/eliminar/{id}', 'FacturasController@eliminar');
 
 Route::post('/kardex/saveDocument', 'KardexController@saveDocument');
 Route::post('/factura/saveDocument', 'FacturasController@saveDocument');
