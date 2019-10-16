@@ -294,6 +294,9 @@ function Config(){
 		if(_tipo == 'factura'){
 			var url = '/documentos/anular/'+data.id;
 		}
+		if(_tipo == 'cartera'){
+			var url = '/cartera/anular/'+data.id;
+		}
 		var statusConfirm = confirm("¿Desea anular este registro?");
 		if (statusConfirm == true)
 		{
@@ -323,6 +326,9 @@ function Config(){
 		var data = JSON.parse(_data);
 		if(_tipo == 'factura'){
 			var url = '/documentos/eliminar/'+data.id;
+		}
+		if(_tipo == 'cartera'){
+			var url = '/cartera/eliminar/'+data.id;
 		}
 		var statusConfirm = confirm("¿Desea eliminar este registro?");
 		if (statusConfirm == true)

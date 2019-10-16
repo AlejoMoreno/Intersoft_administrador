@@ -95,7 +95,6 @@ class KardexController extends Controller
 		
         //reasignar el saldo del inventario
 		if($obj->signo == '+'){
-			$lote->save();
 			//se suma las cantidades
 			$referencia->saldo = $referencia->saldo + $obj->cantidad;
 			//costo

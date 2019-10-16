@@ -49,7 +49,7 @@ $ingresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCarte
                         		<td><a href="/cartera/causar">Causar Facturas Externas</a></td>
                         	</tr>
                         	<tr>
-                        		<td><a>Reportes</a></td>
+                        		<td><a href="/cartera/consultar_documentos?tipo=EGRESO">Reportes</a></td>
                         	</tr>
                         </tbody>
                     </table>
@@ -90,7 +90,7 @@ $ingresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCarte
                         		<td><a href="/cartera/causar">Causar Facturas Externas</a></td>
                         	</tr>
                         	<tr>
-                        		<td><a>Reportes</a></td>
+                        		<td><a href="/cartera/consultar_documentos?tipo=INGRESO">Reportes</a></td>
                         	</tr>
                         </tbody>
                     </table>

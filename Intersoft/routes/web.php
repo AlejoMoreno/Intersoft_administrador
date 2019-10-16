@@ -318,6 +318,10 @@ Route::get('/cartera/allDocumentos/{id}', 'CarterasController@allDocumentos');
 Route::post('/cartera/egresos/guardar', 'CarterasController@save');
 Route::post('/cartera/kardex/guardar', 'KardexCarterasController@save');
 Route::get('/cartera/imprimir/{id}', 'CarterasController@imprimir');
+Route::get('/cartera/consultar_documentos', 'CarterasController@consultar_documentos');
+
+Route::get('/cartera/anular/{id}', 'CarterasController@anular');
+Route::get('/cartera/eliminar/{id}', 'CarterasController@eliminar');
 
 Route::get('/cartera/causar', 'CarterasController@causar'); //pendiente 
 Route::post('/cartera/causar/guardar', 'CarterasController@saveCausar'); //pendiente

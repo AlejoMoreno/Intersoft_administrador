@@ -71,6 +71,54 @@ class CarterasController extends Controller
 		]);
 	}
 
+	public function consultar_documentos(Request $request){
+		$carteras = Carteras::where('tipoCartera', '=', $request->tipo)->get();
+		return view('cartera.consultar_documentos', [
+			"carteras"=>$carteras
+		]);
+	}
+
+	public function anular($id){ 
+		$cartera = Carteras::where('id', '=', $id)->first();
+		$cartera->estado = "ANULADO";
+        $cartera->id_modificado = Session::get('user_id');
+        $kardex = KardexCarteras::where('id_cartera',$cartera->id)->get();
+        foreach ($kardex as $obj) {
+            $factura = Facturas::where('id', '=', $obj->id_factura)->first();
+            if($cartera->tipoCartera == 'INGRESO'){
+                $factura->saldo = $factura->saldo - $obj->total;
+            }
+            else if($cartera->tipoCartera == 'EGRESO'){
+                $factura->saldo = $factura->saldo + $obj->total;
+            }
+            $factura->save();
+            $obj->delete();           
+        }
+        $cartera->save();
+        return array(
+            "result" => "Correcto",
+            "mensaje" => "El documento fue anulado en su totalidad"
+        );
+	}
+
+	public function eliminar($id){ 
+		$cartera = Carteras::where('id', '=', $id)->first();
+		if($cartera->estado != "ANULADO"){
+			return array(
+	            "result" => "Correcto",
+	            "mensaje" => "El documento No fue eliminado, ya que debe estar anulado"
+	        );
+		}
+		else{
+			$cartera->delete();
+			return array(
+	            "result" => "Correcto",
+	            "mensaje" => "El documento fue eliminado"
+	        );
+		}	
+        
+	}
+
 	public function egresos(){
 		return view('cartera.egresos');
 	}
