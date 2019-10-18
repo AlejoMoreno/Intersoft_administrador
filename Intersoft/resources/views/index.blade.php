@@ -24,21 +24,29 @@
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/204/204366.svg"></td>
                                 <td colspan="2">Inicio</td> 
                             </tr>
+                            <tr onclick="config.Redirect('/calendario/index');">
+                                <td><img width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg"></td>
+                                <td colspan="2">Directorio</td>
+                            </tr>
                             <tr onclick="config.Redirect('/inventario/index');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/1924/1924873.svg"></td>
-                                <td colspan="2">Entrada Inventario</td>
+                                <td colspan="2">Inventario</td>
                             </tr>
                             <tr onclick="config.Redirect('/salida/index');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138360.svg"></td>
-                                <td colspan="2">Salida Inventario</td>
+                                <td colspan="2">Facturación</td>
                             </tr>
                             <tr onclick="config.Redirect('/cartera/index');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/31/31368.svg"></td>
-                                <td colspan="2">Cartera</td>
+                                <td colspan="2">Tesorería</td>
                             </tr>
                             <tr onclick="config.Redirect('/contabilidad/index');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/313/313062.svg"></td>
                                 <td colspan="2">Contabilidad</td>
+                            </tr>
+                            <tr onclick="config.Redirect('/calendario/index');">
+                                <td><img width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg"></td>
+                                <td colspan="2">Producción</td>
                             </tr>
                             <tr onclick="config.Redirect('/calendario/index');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg"></td>
