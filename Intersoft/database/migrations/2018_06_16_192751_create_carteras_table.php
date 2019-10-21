@@ -14,7 +14,7 @@ class CreateCarterasTable extends Migration
     public function up()
     {
         Schema::create('Carteras', function (Blueprint $table) {
-
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('id_empresa');
             $table->double('reteiva');

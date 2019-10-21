@@ -14,6 +14,7 @@ class CreateFacturasTable extends Migration
     public function up()
     {
         Schema::create('Facturas', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('id_sucursal');
             $table->integer('id_empresa');

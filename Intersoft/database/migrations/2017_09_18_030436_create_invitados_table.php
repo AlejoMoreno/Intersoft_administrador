@@ -14,6 +14,7 @@ class CreateInvitadosTable extends Migration
     public function up()
     {
         Schema::create('invitados', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('correo');
             $table->string('nombre');

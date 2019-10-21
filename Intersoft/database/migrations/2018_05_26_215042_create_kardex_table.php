@@ -14,6 +14,7 @@ class CreateKardexTable extends Migration
     public function up()
     {
         Schema::create('kardex', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('id_sucursal');
             $table->integer('numero');

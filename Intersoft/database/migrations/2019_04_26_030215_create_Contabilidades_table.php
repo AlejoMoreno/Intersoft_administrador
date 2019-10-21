@@ -14,13 +14,15 @@ class CreateContabilidadesTable extends Migration
     public function up()
     {
         Schema::create('Contabilidades', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->integer('id_cuenta');
+            $table->integer('id_auxiliar');
             $table->double('debito');
             $table->double('credito');
             $table->string('tipo_documento'); //si es cartera, factura, etc
             $table->integer('id_documento');
             $table->integer('id_sucursal');
+            $table->integer('id_empresa');
             $table->timestamps();
         });
     }

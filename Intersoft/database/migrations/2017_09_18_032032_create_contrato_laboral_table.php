@@ -14,6 +14,7 @@ class CreateContratoLaboralTable extends Migration
     public function up()
     {
         Schema::create('contrato_laborals', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('tipo_contrato');
             $table->text('descripcion');

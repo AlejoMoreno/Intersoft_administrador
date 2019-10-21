@@ -14,6 +14,7 @@ class CreateLineasTable extends Migration
     public function up()
     {
         Schema::create('lineas', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('nombre');
             $table->string('descripcion');

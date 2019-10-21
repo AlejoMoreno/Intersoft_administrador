@@ -14,6 +14,7 @@ class CreateCalendariosTable extends Migration
     public function up()
     {
         Schema::create('calendarios', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('titulo');
             $table->string('fecha_inicio');

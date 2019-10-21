@@ -26,4 +26,22 @@ class EmpresasController extends Controller
        return view('/login');
 
     }
+
+    public function search(Request $request){
+        $empresa = Empresas::where('nit_empresa','=',$request->nit)->get();
+        try{
+            $variable = $empresa[0]->nit_empresa;
+            $sucursales = Sucursales::where('id_empresa','=',$empresa[0]->id)->get();
+            return  array(
+                "result"=>"Success",
+                "body"=>$empresa,
+                "sucursales"=>$sucursales);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
+        
+    }
 }

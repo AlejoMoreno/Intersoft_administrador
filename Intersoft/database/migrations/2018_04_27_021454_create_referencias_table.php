@@ -14,6 +14,7 @@ class CreateReferenciasTable extends Migration
     public function up()
     {
         Schema::create('referencias', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('codigo_linea');
             $table->string('codigo_letras');

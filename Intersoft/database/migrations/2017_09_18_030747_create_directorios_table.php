@@ -14,6 +14,7 @@ class CreateDirectoriosTable extends Migration
     public function up()
     {
         Schema::create('directorios', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('nit');
             $table->string('digito');

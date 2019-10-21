@@ -14,6 +14,7 @@ class CreateResolucionesTable extends Migration
     public function up()
     {
         Schema::create('resoluciones', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('fecha');
             $table->integer('numero');

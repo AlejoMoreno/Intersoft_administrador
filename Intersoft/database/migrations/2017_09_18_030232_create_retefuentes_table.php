@@ -14,6 +14,7 @@ class CreateRetefuentesTable extends Migration
     public function up()
     {
         Schema::create('retefuentes', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('nombre');
             $table->float('valor');

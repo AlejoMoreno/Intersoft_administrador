@@ -14,6 +14,7 @@ class CreateDirectorioTiposTable extends Migration
     public function up()
     {
         Schema::create('directorio_tipos', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->increments('id');
             $table->string('nombre');
             $table->string('descripcion');

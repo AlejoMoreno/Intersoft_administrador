@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMarcasTable extends Migration
+class PUCClases extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,11 @@ class CreateMarcasTable extends Migration
      */
     public function up()
     {
-        Schema::create('marcas', function (Blueprint $table) {
+        Schema::create('pucclases', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
-            $table->string('nombre');
+            $table->string('codigo');
             $table->string('descripcion');
-            $table->text('logo');
-            $table->string('codigo_interno');
-            $table->string('codigo_alterno');
-            $table->integer('id_empresa');
             $table->timestamps();
         });
     }
@@ -33,6 +29,6 @@ class CreateMarcasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('marcas');
+        Schema::dropIfExists('pucclases');
     }
 }

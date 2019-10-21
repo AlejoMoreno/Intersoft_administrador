@@ -49,30 +49,43 @@
 		@endif
 
 		<?php  use App\Sucursales; ?>
+
+		
+
 		<form action="/loguin" method="POST" style="width: 300px;" >
 			<img class="logo" src="http://wakusoft.com/img/works/thumbs/1.png">
-
-			<p id="empresaConfig"></p>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-				<input id="cedula" type="text" class="form-control has-success" name="cedula" placeholder="Cédula" >
+			<p></p>
+			<div class="panel panel-success" id="empresa">
+				<div class="panel-heading">Escribe Nit de la empresa</div>
+				<div class="panel-body">
+					<input type="text" id="nit_empresa" class="form-control" autocomplete="off" >
+					<a href="registro">Registra la empresa</a>
+				</div>
 			</div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-				<input id="password" type="password" class="form-control" name="password" placeholder="Password" >
+			
+			<div id="login">
+				<p id="empresaConfig"></p>
+				<div class="input-group">
+					<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+					<input id="cedula" type="text" class="form-control has-success" name="cedula" placeholder="Cédula" >
+				</div>
+				<div class="input-group">
+					<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+					<input id="password" type="password" class="form-control" name="password" placeholder="Password" >
+				</div>
+				<div class="input-group">
+					<label>A que Sucursal</label>
+					<select name="sucursal" class="form-control" id="sucursal">
+						@foreach ( Sucursales::all() as $value)
+						<option value="{{ $value['id'] }}">{{ $value['nombre'] }}</option>
+						@endforeach
+					</select>	
+				</div>
+				<!--div  id="boton" onclick="login.loguearse();" class="olvido2">Entrar</div-->
+				<input  id="boton" type="submit" name="boton" class="olvido2" style="border: 0px;" value="Entrar">
+				<div class="olvido" onclick="config.Redirect('olvido');"><a href="#" style="color:white"> Olvido de Contraseña</a></div>
+				<!--<div class="olvido1" onclick="config.Redirect('registro');"><a href="#" style="color:white"> Date de alta como usuario</a></div>-->
 			</div>
-			<div class="input-group">
-				<label>A que Sucursal</label>
-	            <select name="sucursal" class="form-control" id="sucursal">
-	                @foreach ( Sucursales::all() as $value)
-	                <option value="{{ $value['id'] }}">{{ $value['nombre'] }}</option>
-	                @endforeach
-	            </select>	
-			</div>
-			<!--div  id="boton" onclick="login.loguearse();" class="olvido2">Entrar</div-->
-			<input  id="boton" type="submit" name="boton" class="olvido2" style="border: 0px;" value="Entrar">
-			<div class="olvido" onclick="config.Redirect('olvido');"><a href="#" style="color:white"> Olvido de Contraseña</a></div>
-			<!--<div class="olvido1" onclick="config.Redirect('registro');"><a href="#" style="color:white"> Date de alta como usuario</a></div>-->
 			<!--ENTER Resultado -->
 			<div id="resultado"></div>
 			<!--FIN Resultado -->
@@ -88,12 +101,45 @@
 </html>
 <script>
 $(document).ready(function(){
+
+	$('#login').hide();
+
+	$('#nit_empresa').change(function (){
+		parametros = {
+			"nit" : $('#nit_empresa').val()
+		};
+
+		$.ajax({			
+			data:  parametros,
+			url:   HOST+'/empresas/search',
+			type:  'get',
+			beforeSend: function () {
+				$('#resultado').html('<p style="color:green">Buscando Resultados</p>');
+			},
+			success:  function (response) {
+				console.log(response);
+				$('#resultado').html('');
+				if(response.result == 'Success'){
+					$('#login').show();
+					$('#empresa').hide();
+				}
+				else{
+					$('#login').hide();
+					$('#empresa').show();
+					$('#resultado').html('<p style="color:red">No se encontro Empresa</p>');
+				}
+			}
+		});		
+	});
+
 	config.GetAllInformation();
 	$('#cedula').focus();
     //login.FocusForm(input,next,fin); asi funciona el login focus
     login.FocusForm('cedula','password','no');
     login.FocusForm('password','boton','no');
     login.FocusForm('boton','boton','si');
+
+
 });
 
 </script>

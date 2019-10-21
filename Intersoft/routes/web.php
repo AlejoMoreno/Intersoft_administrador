@@ -81,6 +81,9 @@ Route::get('/ciudades', function(){
 |
 */
 
+//Empresas
+Route::get('/empresas/search', 'EmpresasController@search');
+
 
 //Departamentos
 Route::get('/departamentos/all', 'DepartamentosController@all');
