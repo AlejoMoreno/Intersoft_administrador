@@ -59,7 +59,8 @@
 				<div class="panel-heading">Escribe Nit de la empresa</div>
 				<div class="panel-body">
 					<input type="text" id="nit_empresa" class="form-control" autocomplete="off" >
-					<a href="registro">Registra la empresa</a>
+					<div class="form-control btn btn-success" id="validar_empresa">Validar Empresa</div>
+					<a href="/registro">Registra la empresa</a>
 				</div>
 			</div>
 			
@@ -75,11 +76,7 @@
 				</div>
 				<div class="input-group">
 					<label>A que Sucursal</label>
-					<select name="sucursal" class="form-control" id="sucursal">
-						@foreach ( Sucursales::all() as $value)
-						<option value="{{ $value['id'] }}">{{ $value['nombre'] }}</option>
-						@endforeach
-					</select>	
+					<div id="sucursales"></div>
 				</div>
 				<!--div  id="boton" onclick="login.loguearse();" class="olvido2">Entrar</div-->
 				<input  id="boton" type="submit" name="boton" class="olvido2" style="border: 0px;" value="Entrar">
@@ -104,7 +101,7 @@ $(document).ready(function(){
 
 	$('#login').hide();
 
-	$('#nit_empresa').change(function (){
+	$('#validar_empresa').click(function (){
 		parametros = {
 			"nit" : $('#nit_empresa').val()
 		};
@@ -117,11 +114,19 @@ $(document).ready(function(){
 				$('#resultado').html('<p style="color:green">Buscando Resultados</p>');
 			},
 			success:  function (response) {
+				let sucursales = '';
 				console.log(response);
 				$('#resultado').html('');
 				if(response.result == 'Success'){
 					$('#login').show();
 					$('#empresa').hide();
+					//indicar las sucursales de la empresa escrita
+					sucursales = '<select name="sucursal" class="form-control" id="sucursal">';
+					response.sucursales.forEach(element => {
+						sucursales += '<option value="' + element.id + '">' + element.nombre + '</option>';
+					});						
+					sucursales += '</select>';
+					$('#sucursales').html(sucursales);
 				}
 				else{
 					$('#login').hide();

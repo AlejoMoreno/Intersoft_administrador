@@ -196,9 +196,11 @@
                             </a>
                         </li>
                         <li>
-                            <small>{{ Session::get('nombre') }}</small> |
-                            <small>{{ Session::get('cargo') }}</small> |
-                            <small>{{ Session::get('sucursalNombre') }}</small>
+                        <?php $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first(); ?>
+                            <small><strong>Nombre: </strong>{{ Session::get('nombre') }}</small> <br>
+                            <small><strong>Cargo: </strong>{{ Session::get('cargo') }}</small> <br>
+                            <small><strong>Empresa: </strong>{{ $empresa->razon_social }}</small> <br>
+                            <small><strong>Sucursal: </strong>{{ Session::get('sucursalNombre') }}</small>
                         </li>
                     </ul>
                 </nav>

@@ -19,57 +19,111 @@
 </head>
 
 <body>
-	
+	<?php
+	use App\Ciudades;
+	use App\Regimenes;
+	?>
 	<center>
-		<form style="width: 300px;" action="registrarse" method="POST">
-			<img class="logo" src="http://famc.net.co/intersoft/pages/images/logo.png">
+		<form class="row" action="/empresas/register" method="POST">
+			<img class="logo col-md-12" src="http://wakusoft.com/img/works/thumbs/1.png">
+			<p class="col-md-12"></p>
+			<div class="col-md-6">
+				<div class="panel panel-success " id="empresa">
+					<div class="panel-heading">Información de la empresa</div>
+					<div class="panel-body">
+						<input type="text" class="form-control" name="razon_social" placeholder="Escribir Razón Social">
+						<input type="text" class="form-control" name="direccion" placeholder="Escribir Dirección Principal">
+						<input type="text" class="form-control" name="actividad" placeholder="Escribir Código Actividad Económica">
+						<input type="text" class="form-control" name="correo" placeholder="Escribir correo">
+						<input type="text" class="form-control" name="nit_empresa" placeholder="Escribir Nit Empresa">
+						<input type="text" class="form-control" name="nombre" placeholder="Escribir Nombre Público">
+						<input type="text" class="form-control" name="telefono" placeholder="Escribir Teléfono">
+						<input type="text" class="form-control" name="telefono1" placeholder="Escribir Fax">
+						<input type="text" class="form-control" name="telefono2" placeholder="Escribir Celular">
+						<select name="ciudad_empresa" class="form-control" id="ciudad_empresa" placeholder="Ciudad" required>
+							<option value="">SELECCIONE CIUDAD</option>
+							@foreach( Ciudades::all() as $ciudad )
+							<option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }}</option>
+							@endforeach
+						</select>
+						<select name="id_regimen" class="form-control" id="id_regimen" placeholder="id_regimen" required>
+							<option value="">SELECCIONE REGIMEN</option>
+							@foreach( Regimenes::all() as $regimen )
+							<option value="{{ $regimen['id'] }}">{{ $regimen['nombre'] }}</option>
+							@endforeach
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-danger " id="empresa">
+					<div class="panel-heading">Información del Usuario Admin</div>
+					<div class="panel-body">
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="userncedula" type="text" class="form-control has-success" name="userncedula" placeholder="Cédula" >
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="usernombre" type="text" class="form-control has-success" name="usernombre" placeholder="Nombres" >
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="userapellido" type="text" class="form-control has-success" name="userapellido" placeholder="Apellidos" >
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="usercargo" type="text" class="form-control has-success" name="usercargo" placeholder="Cargo" >
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="usertelefono" type="text" class="form-control has-success" name="usertelefono" placeholder="Teléfono" >
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="userpassword" type="text" class="form-control has-success" name="userpassword" placeholder="password" >
+						</div>
+						<div class="input-group">
+							<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+							<input id="usercorreo" type="text" class="form-control has-success" name="usercorreo" placeholder="Correo" >
+						</div>
+					</div>
+				</div>
+			</div>
 
-			<p id="empresaConfig">Intersoft</p>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-				<input id="ncedula" type="text" class="form-control has-success" name="ncedula" placeholder="Cédula" >
+			<div class="col-md-6">
+				<div class="panel panel-warning ">
+					<div class="panel-heading">Información de Sucursal principal</div>
+					<div class="panel-body">
+					<input type="hidden" name="id" id="id">
+					<input type="text" name="sucnombre" class="form-control"  onkeyup="config.UperCase('nombre');" id="nombre" placeholder="Nombre" required>
+					<input type="text" name="succodigo" class="form-control"  onkeyup="config.UperCase('codigo');" id="codigo" placeholder="Código" required>
+					<input type="text" name="sucdireccion" class="form-control"  onkeyup="config.UperCase('direccion');" id="direccion" placeholder="Dirección" required>
+					<input type="text" name="sucencargado" class="form-control"  onkeyup="config.UperCase('encargado');" id="encargado" placeholder="Encargado" required>
+					<input type="number" name="suctelefono" class="form-control"  onkeyup="config.UperCase('telefono');" id="telefono" placeholder="Teléfono" required>
+					<input type="email" name="succorreo" class="form-control"  onkeyup="config.UperCase('correo');" id="correo" placeholder="Correo" required>
+					<select name="succiudad" class="form-control" id="ciudad" placeholder="Ciudad" required>
+						<option value="">SELECCIONE CIUDAD</option>
+						@foreach( Ciudades::all() as $ciudad )
+						<option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }}</option>
+						@endforeach
+					</select>
+					</div>
+				</div>
 			</div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-				<input id="nombre" type="text" class="form-control has-success" name="nombre" placeholder="Nombres" >
+			
+			
+			<p id="empresaConfig"></p>
+			<div class="col-md-6">
+				<div class="panel panel-info ">
+					<div class="panel-heading"></div>
+					<div class="panel-body">
+						<input type="submit" id="boton"  class="btn btn-success" value="Registrar">
+						<!--ENTER Resultado -->
+						<div id="resultado"></div>
+					</div>
+				</div>
 			</div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-				<input id="apellido" type="text" class="form-control has-success" name="apellido" placeholder="Apellidos" >
-			</div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-				<input id="cargo" type="text" class="form-control has-success" name="cargo" placeholder="Cargo" >
-			</div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-				<input id="telefono" type="text" class="form-control has-success" name="telefono" placeholder="Teléfono" >
-			</div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-				<input id="password" type="text" class="form-control has-success" name="password" placeholder="password" >
-			</div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-				<input id="correo" type="text" class="form-control has-success" name="correo" placeholder="Correo" >
-			</div>
-			<input id="estado" type="hidden" class="form-control has-success" name="estado" placeholder="Estado" value="1">
-			<input id="token" type="hidden" class="form-control has-success" name="token" placeholder="token" value="12" >
-			<input id="arl" type="hidden" class="form-control has-success" name="arl" placeholder="ARL" value="1">
-			<input id="eps" type="hidden" class="form-control has-success" name="eps" placeholder="EPS" value="1">
-			<input id="cesantias" type="hidden" class="form-control has-success" name="cesantias" placeholder="Cesantias" value="1">
-			<input id="pension" type="hidden" class="form-control has-success" name="pension" placeholder="Pensión" value="1">
-			<input id="caja_compensacion" type="hidden" class="form-control has-success" name="caja_compensacion" placeholder="Caja de Compensación" value="1">
-			<input id="id_contrato" type="hidden" class="form-control has-success" name="cedula" placeholder="id_contrato" value="1">
-			<input id="referencia_personal" type="hidden" class="form-control has-success" name="cedula" placeholder="referencia_personal" value="1">
-			<input id="telefono_referencia" type="hidden" class="form-control has-success" name="cedula" placeholder="telefono_referencia" value="1">
-
-
-			<input type="submit" id="boton"  class="olvido2" value="Registrar">
-			<div class="olvido" onclick="config.Redirect('olvido');"><a href="#" style="color:white"> Olvido de Contraseña</a></div>
-			<div class="olvido1" ><a href="/" style="color:white">Ingresa ahora!</a></div>
-			<!--ENTER Resultado -->
-			<div id="resultado"></div>
 			<!--FIN Resultado -->
 			<br><p style="text-align: right;">Creado por Wakusoft</p>
 		</form>

@@ -19,7 +19,7 @@ class CreateEmpresasTable extends Migration
             $table->string('razon_social');
             $table->string('direccion');
             $table->string('actividad');
-            $table->string('dian_nit');
+            $table->string('correo');
             $table->string('nit_empresa');
             $table->string('nombre');
             $table->string('telefono');

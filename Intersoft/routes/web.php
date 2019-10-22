@@ -83,6 +83,7 @@ Route::get('/ciudades', function(){
 
 //Empresas
 Route::get('/empresas/search', 'EmpresasController@search');
+Route::post('/empresas/register', 'EmpresasController@register');
 
 
 //Departamentos
