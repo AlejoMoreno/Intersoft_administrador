@@ -5,15 +5,15 @@
 <?php 
 
 use App\Usuarios;
-$usuarios = Usuarios::all();
+$usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
 use App\Directorios;
-$directorios = Directorios::all();
+$directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))->get();
 use App\Departamentos;
 $departamentos = Departamentos::all();
 use App\Ciudades;
 $ciudades = Ciudades::all();
 use App\Contrato_laborals;
-$contratos = Contrato_laborals::all();
+$contratos = Contrato_laborals::where('id_empresa','=',Session::get('id_empresa'))->get();
 use App\Retefuentes;
 $retefuentes = Retefuentes::all();
 use App\Regimenes;
@@ -25,17 +25,17 @@ $directorio_tipos = Directorio_tipos::all();
 use App\Directorio_tipo_terceros;
 $directorio_tipo_terceros = Directorio_tipo_terceros::all();
 use App\Sucursales;
-$sucursales = Sucursales::all();
+$sucursales = Sucursales::where('id_empresa','=',Session::get('id_empresa'))->get();
 use App\Lineas;
-$lineas = Lineas::all();
+$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
 use App\Marcas;
-$marcas = Marcas::all();
+$marcas = Marcas::where('id_empresa','=',Session::get('id_empresa'))->get();
 use App\Clasificaciones;
-$clasificaciones = Clasificaciones::all();
+$clasificaciones = Clasificaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
 use App\Tipo_presentaciones;
-$tipo_presentaciones = Tipo_presentaciones::all();
+$tipo_presentaciones = Tipo_presentaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
 use App\Documentos;
-$documentos = Documentos::all();?>
+$documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();?>
 
 
 

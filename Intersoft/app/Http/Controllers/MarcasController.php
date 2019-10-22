@@ -11,52 +11,96 @@ use Session;
 class MarcasController extends Controller
 {
     public function create(Request $request){
-        $obj = new Marcas();
-        $obj->nombre     	= $request->nombre;
-        $obj->descripcion   = $request->descripcion;
-        $obj->logo  		= $request->logo;
-        $obj->codigo_interno= $request->codigo_interno;
-        $obj->codigo_alterno= $request->codigo_alterno;
-        $obj->id_empresa    = Session::get('id_empresa');
-        $obj->save();
-        return redirect('/inventario/marcas');
+        try{
+            $obj = new Marcas();
+            $obj->nombre     	= $request->nombre;
+            $obj->descripcion   = $request->descripcion;
+            $obj->logo  		= $request->logo;
+            $obj->codigo_interno= $request->codigo_interno;
+            $obj->codigo_alterno= $request->codigo_alterno;
+            $obj->id_empresa    = Session::get('id_empresa');
+            $obj->save();
+            return redirect('/inventario/marcas');
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function update(Request $request){
-        $obj = Marcas::where('id',$request->id)->first();
-        $obj->nombre     	= $request->nombre;
-        $obj->descripcion   = $request->descripcion;
-        $obj->logo  		= $request->logo;
-        $obj->codigo_interno= $request->codigo_interno;
-        $obj->codigo_alterno= $request->codigo_alterno;
-        $obj->id_empresa    = Session::get('id_empresa');
-        $obj->save();
-        return $obj;
+        try{
+            $obj = Marcas::where('id',$request->id)->first();
+            $obj->nombre     	= $request->nombre;
+            $obj->descripcion   = $request->descripcion;
+            $obj->logo  		= $request->logo;
+            $obj->codigo_interno= $request->codigo_interno;
+            $obj->codigo_alterno= $request->codigo_alterno;
+            $obj->id_empresa    = Session::get('id_empresa');
+            $obj->save();
+            return $obj;
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
     
     public function showone($id){
-        $obj = Marcas::find($id);
-        return  array(
-            "result"=>"success",
-            "body"=>$obj);
+        try{
+            $obj = Marcas::where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('id','=',$id)->fisrt();
+            return  array(
+                "result"=>"success",
+                "body"=>$obj);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function delete($id){
-        $obj = Marcas::find($id);
-        $obj->delete();
-        return redirect('/inventario/marcas');
+        try{
+            $obj = Marcas::where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('id','=',$id)->fisrt();
+            $obj->delete();
+            return redirect('/inventario/marcas');
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function all(){
-        $obj = Marcas::all();
-        return  array(
-            "result"=>"success",
-            "body"=>$obj);
+        try{
+            $obj = Marcas::where('id_empresa','=',Session::get('id_empresa'))->get();
+            return  array(
+                "result"=>"success",
+                "body"=>$obj);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function index(){
-        $objs = Marcas::all();
-        return view('inventario.marcas', [
-            'marcas' => $objs]);
+        try{
+            $objs = Marcas::where('id_empresa','=',Session::get('id_empresa'))->get();
+            return view('inventario.marcas', [
+                'marcas' => $objs]);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 }

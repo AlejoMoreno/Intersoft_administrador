@@ -18,114 +18,165 @@ use Session;
 class DirectoriosController extends Controller
 {
     public function create(Request $request){
-        $directorios = new Directorios();
-        $directorios->nit       = $request->nit;
-        $directorios->digito    = $request->digito;
-        $directorios->razon_social= $request->razon_social;
-        $directorios->direccion = $request->direccion;
-        $directorios->correo    = $request->correo;
-        $directorios->telefono  = $request->telefono;
-        $directorios->telefono1 = $request->telefono1;
-        $directorios->telefono2 = $request->telefono2;
-        $directorios->financiacion= $request->financiacion;
-        $directorios->descuento = $request->descuento;
-        $directorios->cupo_financiero= $request->cupo_financiero;
-        $directorios->rete_ica  = $request->rete_ica;
-        $directorios->porcentaje_rete_iva= $request->porcentaje_rete_iva;
-        $directorios->actividad_economica= $request->actividad_economica;
-        $directorios->calificacion= $request->calificacion;
-        $directorios->nivel     = $request->nivel;
-        $directorios->zona_venta= $request->zona_venta;
-        $directorios->transporte= $request->transporte;
-        $directorios->estado    = $request->estado;
-        $directorios->id_retefuente= $request->id_retefuente;
-        $directorios->id_ciudad = $request->id_ciudad;
-        $directorios->id_regimen= $request->id_regimen;
-        $directorios->id_usuario= $request->id_usuario;
-        $directorios->id_directorio_tipo= $request->id_directorio_tipo;
-        $directorios->id_directorio_clase= $request->id_directorio_clase;
-        $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
-        $directorios->id_empresa	 	= Session::get('id_empresa');
-        $directorios->save();
-        return redirect('/administrador/directorios');
+        try{
+            $directorios = new Directorios();
+            $directorios->nit       = $request->nit;
+            $directorios->digito    = $request->digito;
+            $directorios->razon_social= $request->razon_social;
+            $directorios->direccion = $request->direccion;
+            $directorios->correo    = $request->correo;
+            $directorios->telefono  = $request->telefono;
+            $directorios->telefono1 = $request->telefono1;
+            $directorios->telefono2 = $request->telefono2;
+            $directorios->financiacion= $request->financiacion;
+            $directorios->descuento = $request->descuento;
+            $directorios->cupo_financiero= $request->cupo_financiero;
+            $directorios->rete_ica  = $request->rete_ica;
+            $directorios->porcentaje_rete_iva= $request->porcentaje_rete_iva;
+            $directorios->actividad_economica= $request->actividad_economica;
+            $directorios->calificacion= $request->calificacion;
+            $directorios->nivel     = $request->nivel;
+            $directorios->zona_venta= $request->zona_venta;
+            $directorios->transporte= $request->transporte;
+            $directorios->estado    = $request->estado;
+            $directorios->id_retefuente= $request->id_retefuente;
+            $directorios->id_ciudad = $request->id_ciudad;
+            $directorios->id_regimen= $request->id_regimen;
+            $directorios->id_usuario= $request->id_usuario;
+            $directorios->id_directorio_tipo= $request->id_directorio_tipo;
+            $directorios->id_directorio_clase= $request->id_directorio_clase;
+            $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
+            $directorios->id_empresa	 	= Session::get('id_empresa');
+            $directorios->save();
+            return redirect('/administrador/directorios');
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function update(Request $request){
-        $directorios = Directorios::where('id',$request->id)->first();
-        $directorios->nit       = $request->nit;
-        $directorios->digito    = $request->digito;
-        $directorios->razon_social= $request->razon_social;
-        $directorios->direccion = $request->direccion;
-        $directorios->correo    = $request->correo;
-        $directorios->telefono  = $request->telefono;
-        $directorios->telefono1 = $request->telefono1;
-        $directorios->telefono2 = $request->telefono2;
-        $directorios->financiacion= $request->financiacion;
-        $directorios->descuento = $request->descuento;
-        $directorios->cupo_financiero= $request->cupo_financiero;
-        $directorios->rete_ica  = $request->rete_ica;
-        $directorios->porcentaje_rete_iva= $request->porcentaje_rete_iva;
-        $directorios->actividad_economica= $request->actividad_economica;
-        $directorios->calificacion= $request->calificacion;
-        $directorios->nivel     = $request->nivel;
-        $directorios->zona_venta= $request->zona_venta;
-        $directorios->transporte= $request->transporte;
-        $directorios->estado    = $request->estado;
-        $directorios->id_retefuente= $request->id_retefuente;
-        $directorios->id_ciudad = $request->id_ciudad;
-        $directorios->id_regimen= $request->id_regimen;
-        $directorios->id_usuario= $request->id_usuario;
-        $directorios->id_directorio_tipo= $request->id_directorio_tipo;
-        $directorios->id_directorio_clase= $request->id_directorio_clase;
-        $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
-        $directorios->id_empresa	 	= Session::get('id_empresa');
-        $directorios->save();
-        //regresar a la vista
-        return $directorios;
+        try{
+            $directorios = Directorios::where('id',$request->id)->first();
+            $directorios->nit       = $request->nit;
+            $directorios->digito    = $request->digito;
+            $directorios->razon_social= $request->razon_social;
+            $directorios->direccion = $request->direccion;
+            $directorios->correo    = $request->correo;
+            $directorios->telefono  = $request->telefono;
+            $directorios->telefono1 = $request->telefono1;
+            $directorios->telefono2 = $request->telefono2;
+            $directorios->financiacion= $request->financiacion;
+            $directorios->descuento = $request->descuento;
+            $directorios->cupo_financiero= $request->cupo_financiero;
+            $directorios->rete_ica  = $request->rete_ica;
+            $directorios->porcentaje_rete_iva= $request->porcentaje_rete_iva;
+            $directorios->actividad_economica= $request->actividad_economica;
+            $directorios->calificacion= $request->calificacion;
+            $directorios->nivel     = $request->nivel;
+            $directorios->zona_venta= $request->zona_venta;
+            $directorios->transporte= $request->transporte;
+            $directorios->estado    = $request->estado;
+            $directorios->id_retefuente= $request->id_retefuente;
+            $directorios->id_ciudad = $request->id_ciudad;
+            $directorios->id_regimen= $request->id_regimen;
+            $directorios->id_usuario= $request->id_usuario;
+            $directorios->id_directorio_tipo= $request->id_directorio_tipo;
+            $directorios->id_directorio_clase= $request->id_directorio_clase;
+            $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
+            $directorios->id_empresa	 	= Session::get('id_empresa');
+            $directorios->save();
+            //regresar a la vista
+            return $directorios;
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function showupdate($id){
-        $directorios = Directorios::find($id);
-        return view('administrador.directorios-update', ['directorios' => $directorios]);
+        try{
+            $directorios = Directorios::find($id);
+            return view('administrador.directorios-update', ['directorios' => $directorios]);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function showone($id){
-        $directorios = Directorios::find($id);
-        return  array(
-            "result"=>"success",
-            "body"=>$directorios);
+        try{
+            $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                                    ->where('id','=',$id)->fisrt();
+            return  array(
+                "result"=>"success",
+                "body"=>$directorios);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function delete($id){
-        $directorios = Directorios::find($id);
-        $directorios->delete();
-        return redirect('/administrador/directorios');
+        try{
+            $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                                    ->where('id','=',$id)->fisrt();
+            $directorios->delete();
+            return redirect('/administrador/directorios');
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function all(){
-        $directorios = Directorios::all();
-        return  array(
-            "result"=>"success",
-            "body"=>$directorios);
+        try{
+            $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))->get();
+            return  array(
+                "result"=>"success",
+                "body"=>$directorios);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function index(){
-        $retefuentes = Retefuentes::all();
-        $ciudades = Ciudades::all();
-        $regimenes = Regimenes::all();
-        $usuarios = Usuarios::all();
-        $directorio_tipos = Directorio_tipos::all();
-        $directorio_clases = Directorio_clases::all();
-        $directorio_tipo_terceros = Directorio_tipo_terceros::all();
-        return view('administrador.directorios', [
-            //'directorios' => $directorios,
-            'retefuentes' => $retefuentes,
-            'ciudades' => $ciudades,
-            'regimenes' => $regimenes,
-            'usuarios' => $usuarios,
-            'directorio_tipos' => $directorio_tipos,
-            'directorio_clases' => $directorio_clases,
-            'directorio_tipo_terceros' => $directorio_tipo_terceros]);
+        try{
+            $retefuentes = Retefuentes::all();
+            $ciudades = Ciudades::all();
+            $regimenes = Regimenes::all();
+            $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+            $directorio_tipos = Directorio_tipos::all();
+            $directorio_clases = Directorio_clases::all();
+            $directorio_tipo_terceros = Directorio_tipo_terceros::all();
+            return view('administrador.directorios', [
+                //'directorios' => $directorios,
+                'retefuentes' => $retefuentes,
+                'ciudades' => $ciudades,
+                'regimenes' => $regimenes,
+                'usuarios' => $usuarios,
+                'directorio_tipos' => $directorio_tipos,
+                'directorio_clases' => $directorio_clases,
+                'directorio_tipo_terceros' => $directorio_tipo_terceros]);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function calificacion($calificacion){ //este es para castigar el cupo de endeudamiento
@@ -143,19 +194,23 @@ class DirectoriosController extends Controller
     public function search(Request $request){
         if($request->nit != ''){
             $directorios = Directorios::where('nit','=',$request->nit)
-            ->get();
+                                      ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->get();
         }
         else if($request->razon_social != ''){
             $directorios = Directorios::where('razon_social','LIKE','%'.$request->razon_social.'%')
-            ->get();
+                                      ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->get();
         }
         else if($request->correo != ''){
             $directorios = Directorios::where('correo','LIKE','%'.$request->correo.'%')
-            ->get();
+                                      ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->get();
         }
         else{
             $directorios = Directorios::where('nit','>','0')
-            ->get();
+                                      ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->get();
         }
         foreach ($directorios as $directorio) {
             $directorio->id_regimen = Regimenes::find($directorio->id_regimen);

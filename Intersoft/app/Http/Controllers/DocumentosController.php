@@ -16,61 +16,105 @@ cuenta_contable_partida
 cuenta_contable_contrapartida
     */
 	public function create(Request $request){
-        $obj = new Documentos();
-        $obj->nombre     	= $request->nombre;
-        $obj->signo   		= $request->signo;
-        $obj->ubicacion     = $request->ubicacion;
-        $obj->prefijo       = $request->prefijo;
-        $obj->num_max       = $request->num_max;
-        $obj->num_min       = $request->num_min;
-        $obj->num_presente  = $request->num_presente;
-        $obj->cuenta_contable_partida  		= $request->cuenta_contable_partida;
-        $obj->cuenta_contable_contrapartida= $request->cuenta_contable_contrapartida;
-        $obj->id_empresa  = Session::get('id_empresa');
-        $obj->save();
-        return redirect('/inventario/documentos');
+        try{
+            $obj = new Documentos();
+            $obj->nombre     	= $request->nombre;
+            $obj->signo   		= $request->signo;
+            $obj->ubicacion     = $request->ubicacion;
+            $obj->prefijo       = $request->prefijo;
+            $obj->num_max       = $request->num_max;
+            $obj->num_min       = $request->num_min;
+            $obj->num_presente  = $request->num_presente;
+            $obj->cuenta_contable_partida  		= $request->cuenta_contable_partida;
+            $obj->cuenta_contable_contrapartida= $request->cuenta_contable_contrapartida;
+            $obj->id_empresa  = Session::get('id_empresa');
+            $obj->save();
+            return redirect('/inventario/documentos');
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function update(Request $request){
-        $obj = Documentos::where('id',$request->id)->first();
-        $obj->nombre     	= $request->nombre;
-        $obj->signo   		= $request->signo;
-        $obj->ubicacion     = $request->ubicacion;
-        $obj->prefijo       = $request->prefijo;
-        $obj->num_max       = $request->num_max;
-        $obj->num_min       = $request->num_min;
-        $obj->num_presente  = $request->num_presente;
-        $obj->cuenta_contable_partida  		= $request->cuenta_contable_partida;
-        $obj->cuenta_contable_contrapartida= $request->cuenta_contable_contrapartida;
-        $obj->id_empresa  = Session::get('id_empresa');
-        $obj->save();
-        return $obj;
+        try{
+            $obj = Documentos::where('id',$request->id)->first();
+            $obj->nombre     	= $request->nombre;
+            $obj->signo   		= $request->signo;
+            $obj->ubicacion     = $request->ubicacion;
+            $obj->prefijo       = $request->prefijo;
+            $obj->num_max       = $request->num_max;
+            $obj->num_min       = $request->num_min;
+            $obj->num_presente  = $request->num_presente;
+            $obj->cuenta_contable_partida  		= $request->cuenta_contable_partida;
+            $obj->cuenta_contable_contrapartida= $request->cuenta_contable_contrapartida;
+            $obj->id_empresa  = Session::get('id_empresa');
+            $obj->save();
+            return $obj;
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
     
     public function showone($id){
-        $obj = Documentos::find($id);
-        return  array(
-            "result"=>"success",
-            "body"=>$obj);
+        try{
+            $obj = Documentos::where('id_empresa','=',Session::get('id_empresa'))
+                             ->where('id','=',$id)->first();
+            return  array(
+                "result"=>"success",
+                "body"=>$obj);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function delete($id){
-        $obj = Documentos::find($id);
-        $obj->delete();
-        return redirect('/inventario/documentos');
+        try{
+            $obj = Documentos::where('id_empresa','=',Session::get('id_empresa'))
+                             ->where('id','=',$id)->first();
+            $obj->delete();
+            return redirect('/inventario/documentos');
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function all(){
-        $obj = Documentos::all();
-        return  array(
-            "result"=>"success",
-            "body"=>$obj);
+        try{
+            $obj = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();
+            return  array(
+                "result"=>"success",
+                "body"=>$obj);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function index(){
-        $objs = Documentos::all();
-        return view('inventario.documentos', [
+        try{
+            $objs = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();
+            return view('inventario.documentos', [
             'documentos' => $objs]);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
 }

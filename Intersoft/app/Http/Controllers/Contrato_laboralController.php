@@ -13,52 +13,96 @@ use Session;
 class Contrato_laboralController extends Controller
 {
     public function create(Request $request){
-        $contrato_laborales = new Contrato_laborals();
-        $contrato_laborales->tipo_contrato  = $request->tipo_contrato;
-        $contrato_laborales->descripcion    = $request->descripcion;
-        $contrato_laborales->consecutivo    = $request->consecutivo;
-        $contrato_laborales->fecha_inicial  = $request->fecha_inicial;
-        $contrato_laborales->fecha_final    = $request->fecha_final;
-        $contrato_laborales->id_empresa    = Session::get('id_empresa');
-        $contrato_laborales->save();
-        return redirect('/administrador/contratos');
+        try{
+            $contrato_laborales = new Contrato_laborals();
+            $contrato_laborales->tipo_contrato  = $request->tipo_contrato;
+            $contrato_laborales->descripcion    = $request->descripcion;
+            $contrato_laborales->consecutivo    = $request->consecutivo;
+            $contrato_laborales->fecha_inicial  = $request->fecha_inicial;
+            $contrato_laborales->fecha_final    = $request->fecha_final;
+            $contrato_laborales->id_empresa    = Session::get('id_empresa');
+            $contrato_laborales->save();
+            return redirect('/administrador/contratos');
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function update(Request $request){
-        $contrato_laborales = Contrato_laborals::where('id',$request->id)->first();
-        $contrato_laborales->tipo_contrato  = $request->tipo_contrato;
-        $contrato_laborales->descripcion    = $request->descripcion;
-        $contrato_laborales->consecutivo    = $request->consecutivo;
-        $contrato_laborales->fecha_inicial  = $request->fecha_inicial;
-        $contrato_laborales->fecha_final    = $request->fecha_final;
-        $contrato_laborales->id_empresa    = Session::get('id_empresa');
-        $contrato_laborales->save();
-        return $contrato_laborales;
+        try{
+            $contrato_laborales = Contrato_laborals::where('id',$request->id)->first();
+            $contrato_laborales->tipo_contrato  = $request->tipo_contrato;
+            $contrato_laborales->descripcion    = $request->descripcion;
+            $contrato_laborales->consecutivo    = $request->consecutivo;
+            $contrato_laborales->fecha_inicial  = $request->fecha_inicial;
+            $contrato_laborales->fecha_final    = $request->fecha_final;
+            $contrato_laborales->id_empresa    = Session::get('id_empresa');
+            $contrato_laborales->save();
+            return $contrato_laborales;
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function showupdate($id){
-        $contrato_laborales = Contrato_laborals::find($id);
-        return  array(
-            "result"=>"success",
-            "body"=>$contrato_laborales);
+        try{
+            $contrato_laborales = Contrato_laborals::where('id_empresa','=',Session::get('id_empresa'))
+                                                ->where('id','=',$id)->fisrt();
+            return  array(
+                "result"=>"success",
+                "body"=>$contrato_laborales);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function delete($id){
-        $contrato_laborales = Contrato_laborals::where('id',$id)->first();
-        $contrato_laborales->delete();
-         return redirect('/administrador/contratos');
+        try{
+            $contrato_laborales = Contrato_laborals::where('id_empresa','=',Session::get('id_empresa'))
+                                                ->where('id','=',$id)->fisrt();
+            $contrato_laborales->delete();
+            return redirect('/administrador/contratos');
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function all(){
-        $contrato_laborales = Contrato_laborals::all();    
-        return  array(
-            "result"=>"success",
-            "body"=>$contrato_laborales);
+        try{
+            $contrato_laborales = Contrato_laborals::where('id_empresa','=',Session::get('id_empresa'))->get();   
+            return  array(
+                "result"=>"success",
+                "body"=>$contrato_laborales);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function index(){
-        $contrato_laborales = Contrato_laborals::all();
-        return view('administrador.contratos', ['contrato_laborales' => $contrato_laborales]);
+        try{
+            $contrato_laborales = Contrato_laborals::where('id_empresa','=',Session::get('id_empresa'))->get();
+            return view('administrador.contratos', ['contrato_laborales' => $contrato_laborales]);
+        }
+        catch (ModelNotFoundException $exception){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exception);
+        }
     }
 
     public function excel_all(){
