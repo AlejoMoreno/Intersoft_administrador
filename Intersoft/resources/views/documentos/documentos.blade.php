@@ -416,7 +416,6 @@ SIGNO MENOS
 
     foreach ($referencias as $referencia) {
       $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->
-                                      where('sucursal','=',Session::get('sucursal'))->
                                       where('id_empresa','=',Session::get('id_empresa'))->get();
     }
     

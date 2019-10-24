@@ -56,8 +56,6 @@ class ReferenciasController extends Controller
 			$obj->costo_promedio 	= "0";
 			$obj->saldo 			= "0";
 			$obj->usuario_creador 	= $request->usuario_creador;
-			$obj->cuentaDB 			= $request->cuentaDB;
-			$obj->cuentaCR 			= $request->cuentaCR;
 			$obj->id_empresa	 	= Session::get('id_empresa');
 			$obj->save();
 			return redirect('/inventario/referencias');
@@ -98,8 +96,6 @@ class ReferenciasController extends Controller
 			$obj->estado 			= $request->estado;
 			$obj->hommologo 		= $request->hommologo;
 			$obj->usuario_creador 	= $request->usuario_creador;
-			$obj->cuentaDB 			= $request->cuentaDB;
-			$obj->cuentaCR 			= $request->cuentaCR;
 			$obj->id_empresa	 	= Session::get('id_empresa');
 			$obj->save();
 			return $obj;

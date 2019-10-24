@@ -16,6 +16,7 @@ class ClasificacionesController extends Controller
             $obj->nombre     	= $request->nombre;
             $obj->descripcion   = $request->descripcion;
             $obj->codigo_interno= $request->codigo_interno;
+            $obj->id_empresa    = Session::get('id_empresa');
             $obj->save();
             return redirect('/inventario/clasificaciones');
         }

@@ -61,35 +61,35 @@ class KardexController extends Controller
 		$referencia = Referencias::where('id','=',$obj->id_referencia)->get()[0];
 		$lote = Lotes::where('id_referencia','=',$obj->id_referencia)->
 						where('numero_lote','=',$obj->lote)->
-						where('sucursal','=',Session::get('sucursal'))->get();
+						where('id_empresa','=',Session::get('id_empresa'))->first();
 
 		//guardado de lotes y saldos por lotes	(si no existe es porque es entrada el documento)			
 		if(sizeof($lote) == 0 ){         
-			$lote = new Lotes();
-			$lote->id_referencia     	= $obj->id_referencia;
-	        $lote->numero_lote   		= $obj->lote;
-	        $lote->sucursal 			= Session::get('sucursal');
-	        $lote->fecha_vence_lote  	= $obj->fecha_vencimiento;
-	        $lote->ubicacion   			= 'NINGUNA';
-	        $lote->serial            	= $obj->serial;
-			$lote->cantidad          	= $obj->cantidad;
-			$lote->id_empresa	= Session::get('id_empresa');
+			$lotes = new Lotes();
+			$lotes->id_referencia     	= $obj->id_referencia;
+	        $lotes->numero_lote   		= $obj->lote;
+	        $lotes->fecha_vence_lote  	= $obj->fecha_vencimiento;
+	        $lotes->ubicacion   		= 'NINGUNA';
+	        $lotes->serial            	= $obj->serial;
+			$lotes->cantidad          	= $obj->cantidad;
+			$lotes->id_empresa	= Session::get('id_empresa');
+			$lotes->save();
 	        
 		}
 		else{
 			if($obj->signo == '+'){
 				//se suma las cantidades
-				$lote[0]->cantidad = $lote[0]->cantidad + $obj->cantidad;				 
+				$lote->cantidad = $lote->cantidad + $obj->cantidad;				 
 			}
 			else if($obj->signo == '-'){
 				//las cantidades se restan 
-				$lote[0]->cantidad = $lote[0]->cantidad - $obj->cantidad;
+				$lote->cantidad = $lote->cantidad - $obj->cantidad;
 			}
 			else{
 				//no se hace nada con el saldo
-				$lote[0]->cantidad = $lote[0]->cantidad;
+				$lote->cantidad = $lote->cantidad;
 			}
-			$lote[0]->save();
+			$lote->save();
 
 		}
 		
@@ -103,7 +103,11 @@ class KardexController extends Controller
 				$referencia->costo 		 = 	$obj->costo;
 			}
 			else{
-				$referencia->costo_promedio = 	( ($referencia->costo_promedio * $referencia->saldo) + ($obj->costo * $obj->cantidad) )/($referencia->saldo+$obj->cantidad);
+				$valor = $referencia->saldo-$obj->cantidad;
+				if($valor == 0){
+					$valor = 0.01;
+				}
+				$referencia->costo_promedio = 	( ($referencia->costo_promedio * $referencia->saldo) + ($obj->costo * $obj->cantidad) )/($valor);
 				$referencia->costo 		 = 	$obj->costo;	
 			}
 		}
@@ -114,7 +118,11 @@ class KardexController extends Controller
 				$referencia->precio4 = 	$obj->precio;
 			}
 			else{
-				$referencia->precio4 = 	( ($referencia->precio4 * $referencia->saldo) - ( $obj->precio * $obj->cantidad) )/($referencia->saldo-$obj->cantidad);
+				$valor = $referencia->saldo-$obj->cantidad;
+				if($valor == 0){
+					$valor = 0.01;
+				}
+				$referencia->precio4 = 	( ($referencia->precio4 * $referencia->saldo) - ( $obj->precio * $obj->cantidad) )/($valor);
 			}
 		}
 		else{
@@ -138,12 +146,12 @@ class KardexController extends Controller
 
     public function showid($id){
 
-    	$kardex = Kardex::where('id_referencia','=',$id)->orderBy('created_at')->get();
+		$kardex = Kardex::where('id_referencia','=',$id)->orderBy('created_at')->get();
     	foreach ($kardex as $value) {
     		$value->cabecera = Facturas::where('numero','=',$value->numero)->where('id_documento','=',$value->id_documento)->get();
-    		$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->get();
-    		$value->id_documento = Documentos::where('id','=',$value->id_documento)->get();
-    		$value->id_sucursal = Sucursales::where('id','=',$value->id_sucursal)->get();    		
+    		$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->first();
+    		$value->id_documento = Documentos::where('id','=',$value->id_documento)->first();
+    		$value->id_sucursal = Sucursales::where('id','=',$value->cabecera[0]->id_sucursal)->first();    		
     	}
     	//dd($kardex);
     	return view('inventario.kardex',[

@@ -2,14 +2,20 @@
 
 @section('content')
 
+<?php 
+
+$referencia = App\Referencias::where('id','=',$kardex[0]->id_referencia->id)->first();
+
+?>
+
 <div class="container-fluid">
     <div class="row">
 
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Kardex <small style="color:white;">Código: </small> {{ $kardex[0]->id_referencia[0]->codigo_linea . $kardex[0]->id_referencia[0]->codigo_letras . $kardex[0]->id_referencia[0]->codigo_consecutivo}}</h4>
-                    <p class="category"> <br>{{ $kardex[0]->id_referencia[0]->descripcion }} // saldo: {{ $kardex[0]->id_referencia[0]->saldo }}</p>
+                    <h4 class="title">Kardex <small style="color:white;">Código: </small> {{ $referencia->codigo_linea . $referencia->codigo_letras . $referencia->codigo_consecutivo}}</h4>
+                    <p class="category"> <br>{{ $referencia->descripcion }} // saldo: {{ $referencia->saldo }}</p>
                 </div>
                 <div class="content">
                     <div style="overflow-x: scroll;"> 
@@ -45,9 +51,9 @@
 
                                        ?>
                                        <tr>
-	                                       <td>{{ $obj->id_documento[0]->nombre }} {{ ' Pref. '. $obj->prefijo }}
+                                       <td>{{ $obj->id_documento->nombre }} {{ ' Pref. '. $obj->prefijo }}
 	                                       </td>
-	                                       <td>{{ $obj->id_sucursal[0]->nombre }}</td>
+	                                       <td>{{ $obj->id_sucursal->nombre }}</td>
 	                                       <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj->cabecera[0]->id }}')" class="btn btn-success">{{ $obj->numero }}</a></td>
 	                                       <td>{{ $obj->cabecera[0]->id_tercero }}</td>
 	                                       <td>{{ number_format($obj->cantidad) }}</td>
