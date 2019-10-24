@@ -135,8 +135,9 @@
 <?php
 
 
-$usuarios = App\Usuarios::all();
-$directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '1')->get();
+$usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+$directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '1')->
+                                where('id_empresa','=',Session::get('id_empresa'))->get();
 
 ?>
 

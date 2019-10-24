@@ -5,13 +5,14 @@
 <?php 
 
 use App\Documentos;
-$documentos = Documentos::where('ubicacion','=','ENTRADA')->get();
+$documentos = Documentos::where('ubicacion','=','ENTRADA')
+                        ->where('id_empresa','=',Session::get('id_empresa'))->get();
 
 use App\Referencias;
-$referencias = Referencias::all();
+$referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
 
 use App\Lotes;
-$lotes = Lotes::all();
+$lotes = Lotes::where('id_empresa','=',Session::get('id_empresa'))->get();
 
 ?>
 

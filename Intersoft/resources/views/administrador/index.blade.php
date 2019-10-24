@@ -81,34 +81,6 @@ $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->ge
                                         <th></th>
                                     </tr></thead>
                                     <tbody>
-                                        <tr onclick="config.Redirect('/administrador/usuarios');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/201/201570.svg"></td>
-                                            <td>Usuarios</td>
-                                            <td><?php echo sizeof($usuarios); ?></td>
-                                            <td><img width="20" onclick="config.Intoredirect('administrador/usuarios.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/directorios');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/265/265675.png"></td>
-                                            <td>Directorio</td>
-                                            <td><?php echo sizeof($directorios); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/departamentos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/185/185277.svg"></td>
-                                            <td>Departamentos</td>
-                                            <td><?php echo sizeof($departamentos); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/ciudades');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/189/189060.svg"></td>
-                                            <td>Ciudades</td>
-                                            <td><?php echo sizeof($ciudades); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
                                         <tr onclick="config.Redirect('/administrador/contratos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/png/512/148/148971.png"></td>
                                             <td>Contratos</td>
@@ -130,59 +102,10 @@ $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->ge
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/directorio_clases');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/485/485280.png"></td>
-                                            <td>Directorio Clases</td>
-                                            <td><?php echo sizeof($directorio_clases); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/directorio_tipos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/485/485482.png"></td>
-                                            <td>Directorio tipos</td>
-                                            <td><?php echo sizeof($directorio_tipos); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/directorio_tipo_terceros');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/148/148971.png"></td>
-                                            <td>Directorio Tipo Terceros</td>
-                                            <td><?php echo sizeof($directorio_tipo_terceros); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
                                         <tr onclick="config.Redirect('/administrador/sucursales');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/149/149060.svg"></td>
                                             <td>Sucursales</td>
                                             <td><?php echo sizeof($sucursales); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/marcas');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/265/265706.svg"></td>
-                                            <td>Marcas</td>
-                                            <td><?php echo sizeof($marcas); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/lineas');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/149/149023.svg"></td>
-                                            <td>Líneas</td>
-                                            <td><?php echo sizeof($lineas); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/clasificaciones');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/272/272480.png"></td>
-                                            <td>Clasificaciones de los productos</td>
-                                            <td><?php echo sizeof($clasificaciones); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/tipo_presentaciones');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/340/340077.svg"></td>
-                                            <td>Tipo Presentaciones</td>
-                                            <td><?php echo sizeof($tipo_presentaciones); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>

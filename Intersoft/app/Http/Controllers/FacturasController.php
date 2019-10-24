@@ -28,6 +28,7 @@ class FacturasController extends Controller
                                       where('prefijo',$request->prefijo)->
                                       where('id_documento',$request->id_documento)->
                                       where('id_sucursal',$request->id_sucursal)->
+                                      where('id_empresa','=',Session::get('id_empresa'))->
                                       orderBy('numero', 'desc')->get();
         if(sizeof($busqueda_factura) != 0){ // es documento que ya existe
             if($request->signo == "-" || $request->signo == "="){ // se aumenta el numero en 1
@@ -37,11 +38,13 @@ class FacturasController extends Controller
     	//verificar que el total sea consecuente con el subtotal. 
     	if($request->signo == '+'){
     		$request->id_cliente = Directorios::where('nit',$request->id_cliente)->
-    											where('id_directorio_tipo_tercero','1')->get()[0]->id;	
+                                                where('id_directorio_tipo_tercero','1')->
+                                                where('id_empresa','=',Session::get('id_empresa'))->get()[0]->id;	
     	}
     	else{
     		$request->id_cliente = Directorios::where('nit',$request->id_cliente)->
-    											where('id_directorio_tipo_tercero','!=','1')->get()[0]->id;
+                                                where('id_directorio_tipo_tercero','!=','1')->
+                                                where('id_empresa','=',Session::get('id_empresa'))->get()[0]->id;
     	}
 
         //verificar si es en efectivo - credito o no aplica (como ajustes)
@@ -84,14 +87,18 @@ class FacturasController extends Controller
         $tipocartera = "";
         if($request->tipo_pago == 'efectivo'){
             if($request->signo == '+'){
-                $carteras = Carteras::where('tipoCartera','=','EGRESO')->orderBy('numero','DESC')->first();
+                $carteras = Carteras::where('tipoCartera','=','EGRESO')->
+                                      where('id_empresa','=',Session::get('id_empresa'))->
+                                      orderBy('numero','DESC')->first();
                 if($carteras){
                    $numero = $carteras->numero +1; 
                 }
                 $tipocartera = "EGRESO";
             }
             else{
-                $carteras = Carteras::where('tipoCartera','=','INGRESO')->orderBy('numero','DESC')->first();
+                $carteras = Carteras::where('tipoCartera','=','INGRESO')->
+                                      where('id_empresa','=',Session::get('id_empresa'))->
+                                      orderBy('numero','DESC')->first();
                 if($carteras){
                     $numero = $carteras->numero +1;
                 }
@@ -138,7 +145,8 @@ class FacturasController extends Controller
         }
 
         //actualizar el numero del documento
-        $documento = Documentos::where('id',$request->id_documento)->get()[0];
+        $documento = Documentos::where('id',$request->id_documento)->
+                                where('id_empresa','=',Session::get('id_empresa'))->get()[0];
         //dd($documento->num_presente);
         $documento->num_presente = $obj->numero;
         $documento->save();
@@ -150,8 +158,10 @@ class FacturasController extends Controller
 
     public function imprimir($id){
 
-    	$factura = Facturas::where('id',$id)->get()[0];
-    	$kardex = Kardex::where('id_factura',$id)->get();
+        $factura = Facturas::where('id',$id)->
+                            where('id_empresa','=',Session::get('id_empresa'))->get()[0];
+        $kardex = Kardex::where('id_factura',$id)->
+                          where('id_empresa','=',Session::get('id_empresa'))->get();
     	$factura->id_sucursal = Sucursales::where('id',$factura->id_sucursal)->get();
     	foreach ($factura->id_sucursal as $sucursal) {
     		$sucursal->id_empresa = Empresas::where('id',$sucursal->id_empresa)->get()[0];
@@ -163,7 +173,9 @@ class FacturasController extends Controller
     		$cliente->id_ciudad = Ciudades::where('id',$cliente->id_ciudad)->get()[0];
     	}
         foreach ($kardex as $obj) {
-            $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->get()[0];
+            $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->
+                                               where('id_empresa','=',Session::get('id_empresa'))->
+                                               get()[0];
         }
     	return view('documentos.impresionFactura', [
             'factura' => $factura,
@@ -172,8 +184,10 @@ class FacturasController extends Controller
 
     public function imprimirpost($id){
 
-        $factura = Facturas::where('id',$id)->get()[0];
-        $kardex = Kardex::where('id_factura',$id)->get();
+        $factura = Facturas::where('id',$id)->
+                             where('id_empresa','=',Session::get('id_empresa'))->get()[0];
+        $kardex = Kardex::where('id_factura',$id)->
+                          where('id_empresa','=',Session::get('id_empresa'))->get();
         $factura->id_sucursal = Sucursales::where('id',$factura->id_sucursal)->get();
         foreach ($factura->id_sucursal as $sucursal) {
             $sucursal->id_empresa = Empresas::where('id',$sucursal->id_empresa)->get()[0];
@@ -185,7 +199,9 @@ class FacturasController extends Controller
             $cliente->id_ciudad = Ciudades::where('id',$cliente->id_ciudad)->get()[0];
         }
         foreach ($kardex as $obj) {
-            $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->get()[0];
+            $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->
+                                               where('id_empresa','=',Session::get('id_empresa'))->
+                                               get()[0];
         }
         return view('documentos.impresionFacturaPos', [
             'factura' => $factura,
@@ -193,8 +209,10 @@ class FacturasController extends Controller
     }
 
     public function getUpdate($id){
-        $factura = Facturas::where('id',$id)->get()[0];
-        $kardex = Kardex::where('id_factura',$id)->get();
+        $factura = Facturas::where('id',$id)->
+                             where('id_empresa','=',Session::get('id_empresa'))->get()[0];
+        $kardex = Kardex::where('id_factura',$id)->
+                          where('id_empresa','=',Session::get('id_empresa'))->get();
         $factura->id_sucursal = Sucursales::where('id',$factura->id_sucursal)->get();
         foreach ($factura->id_sucursal as $sucursal) {
             $sucursal->id_empresa = Empresas::where('id',$sucursal->id_empresa)->get()[0];
@@ -206,7 +224,9 @@ class FacturasController extends Controller
             $cliente->id_ciudad = Ciudades::where('id',$cliente->id_ciudad)->get()[0];
         }
         foreach ($kardex as $obj) {
-            $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->get()[0];
+            $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->
+                                               where('id_empresa','=',Session::get('id_empresa'))->
+                                               get()[0];
         }
         return view('documentos.update', [
             'factura' => $factura,
@@ -214,7 +234,8 @@ class FacturasController extends Controller
     }
 
     public function consultar_documento($documento){
-        $factura = Facturas::where('id_documento','=',$documento)->get();
+        $factura = Facturas::where('id_documento','=',$documento)->
+                             where('id_empresa','=',Session::get('id_empresa'))->get();
         foreach ($factura as $obj) {
             $obj->id_sucursal = Sucursales::where('id','=',$obj->id_sucursal)->get();
             foreach ($obj->id_sucursal as $sucursal) {
@@ -232,7 +253,8 @@ class FacturasController extends Controller
     }
 
     public function anular($id){ 
-        $factura = Facturas::where('id', '=', $id)->first();
+        $factura = Facturas::where('id', '=', $id)->
+                             where('id_empresa','=',Session::get('id_empresa'))->first();
         if($factura->saldo != $factura->total){
             return array(
                 "result" => "Alerta",
@@ -242,9 +264,12 @@ class FacturasController extends Controller
         else{
             $factura->estado = "ANULADO";
             $factura->id_modificado = Session::get('user_id');
-            $kardex = Kardex::where('id_factura',$factura->id)->get();
+            $kardex = Kardex::where('id_factura',$factura->id)->
+                              where('id_empresa','=',Session::get('id_empresa'))->get();
             foreach ($kardex as $obj) {
-                $referencia = Referencias::where('id', '=', $obj->id_referencia)->first();
+                $referencia = Referencias::where('id', '=', $obj->id_referencia)->
+                                           where('id_empresa','=',Session::get('id_empresa'))->
+                                           first();
                 if($factura->signo == '-'){
                     $referencia->saldo = $referencia->saldo + $obj->cantidad;
                 }
@@ -264,7 +289,8 @@ class FacturasController extends Controller
     }
 
     public function eliminar($id){ 
-        $factura = Facturas::where('id', '=', $id)->first();
+        $factura = Facturas::where('id', '=', $id)->
+                             where('id_empresa','=',Session::get('id_empresa'))->first();
         if($factura->saldo != $factura->total || $factura->estado != "ANULADO"){
             return array(
                 "result" => "Alerta",

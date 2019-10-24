@@ -13,7 +13,7 @@ class PUCCAuxiliar extends Migration
      */
     public function up()
     {
-        Schema::create('pucauxiliar', function (Blueprint $table) {
+        Schema::create('pucauxiliars', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('id_pucsubcuentas');

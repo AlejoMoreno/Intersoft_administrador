@@ -24,41 +24,37 @@
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/204/204366.svg"></td>
                                 <td colspan="2">Inicio</td> 
                             </tr>
-                            <tr onclick="config.Redirect('/calendario/index');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg"></td>
+                            <tr onclick="config.Redirect('/submenu/directorio');">
+                                <td><img width="30" src="https://image.flaticon.com/icons/svg/2245/2245320.svg"></td>
                                 <td colspan="2">Directorio</td>
                             </tr>
-                            <tr onclick="config.Redirect('/inventario/index');">
+                            <tr onclick="config.Redirect('/submenu/inventario');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/1924/1924873.svg"></td>
                                 <td colspan="2">Inventario</td>
                             </tr>
-                            <tr onclick="config.Redirect('/salida/index');">
+                            <tr onclick="config.Redirect('/submenu/produccion');">
+                                <td><img width="30" src="https://image.flaticon.com/icons/svg/2166/2166907.svg"></td>
+                                <td colspan="2">Producción</td>
+                            </tr>
+                            <tr onclick="config.Redirect('/submenu/facturacion');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138360.svg"></td>
                                 <td colspan="2">Facturación</td>
                             </tr>
-                            <tr onclick="config.Redirect('/cartera/index');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/31/31368.svg"></td>
+                            <tr onclick="config.Redirect('/submenu/tesoreria');">
+                                <td><img width="30" src="https://image.flaticon.com/icons/svg/1162/1162498.svg"></td>
                                 <td colspan="2">Tesorería</td>
                             </tr>
-                            <tr onclick="config.Redirect('/contabilidad/index');">
+                            <tr onclick="config.Redirect('/submenu/contabilidad');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/313/313062.svg"></td>
                                 <td colspan="2">Contabilidad</td>
                             </tr>
-                            <tr onclick="config.Redirect('/calendario/index');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg"></td>
-                                <td colspan="2">Producción</td>
-                            </tr>
-                            <tr onclick="config.Redirect('/calendario/index');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg"></td>
-                                <td colspan="2">Calendario</td>
-                            </tr>
                             <tr onclick="config.Redirect('/administrador/index');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                <td colspan="2">Administrador</td>
+                                <td colspan="2">Parámetros</td>
                             </tr>
-                            <tr onclick="config.Redirect('/reportes/index');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/1055/1055644.svg"></td>
-                                <td colspan="2">Reportes</td>
+                            <tr onclick="config.Redirect('/cerrar');">
+                                <td><img width="30" src="https://image.flaticon.com/icons/svg/529/529873.svg"></td>
+                                <td colspan="2">Salida</td>
                             </tr>
                         </tbody>
                     </table>

@@ -145,15 +145,17 @@ if(isset($_GET['signo'])){
     //variables importantes para la vista
 
     $nombre_directorio = "Proveedor";
-    $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '1')->get();
-    $usuarios = App\Usuarios::all();
+    $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '1')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->get();
+    $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
 
-    $referencias = App\Referencias::all();
+    $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
 
     //buscar el mayor numero del documento que existe
     $factura = App\Facturas::where('numero',$_GET['numero'])->
                             where('prefijo',$_GET['prefijo'])->
                             where('id_documento',$_GET['id'])->
+                            where('id_empresa','=',Session::get('id_empresa'))->
                             orderBy('numero', 'desc')->get();
     if(sizeof($factura) == 0){
       $factura->numero = $_GET['numero'];
@@ -402,16 +404,20 @@ SIGNO MENOS
 
     $nombre_directorio = "Clientes";
     $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '2')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->
                                     orWhere('id_directorio_tipo_tercero', '=', '3')->get();
-    $usuarios = App\Usuarios::all();
+    $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
 
     //traer las referencias dependiendo el tipo de entrada
    // $referencias =  DB::SELECT("SELECT * FROM `referencias` WHERE id IN (SELECT id_referencia FROM `lotes` where sucursal = ".Session::get('sucursal').") AND saldo > 0");
-    $referencias = App\Referencias::where('saldo','>','0')->get();
+    $referencias = App\Referencias::where('saldo','>','0')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->get();
 
 
     foreach ($referencias as $referencia) {
-      $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->where('sucursal','=',Session::get('sucursal'))->get();
+      $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->
+                                      where('sucursal','=',Session::get('sucursal'))->
+                                      where('id_empresa','=',Session::get('id_empresa'))->get();
     }
     
 
@@ -419,6 +425,7 @@ SIGNO MENOS
     $factura = App\Facturas::where('numero',$_GET['numero'])->
                             where('prefijo',$_GET['prefijo'])->
                             where('id_documento',$_GET['id'])->
+                            where('id_empresa','=',Session::get('id_empresa'))->
                             orderBy('numero', 'desc')->get();
     if(sizeof($factura) == 0){
       $factura->numero = $_GET['numero'];
@@ -730,14 +737,16 @@ SIGNO MENOS
 
     $nombre_directorio = "Clientes";
     $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '2')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->
                                     orWhere('id_directorio_tipo_tercero', '=', '3')->get();
-    $usuarios = App\Usuarios::all();
+    $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
 
     //traer las referencias dependiendo el tipo de entrada
-    $referencias = App\Referencias::all();
+    $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
 
     foreach ($referencias as $referencia) {
-      $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->get();
+      $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->
+                                      where('id_empresa','=',Session::get('id_empresa'))->get();
     }
     
 
@@ -745,6 +754,7 @@ SIGNO MENOS
     $factura = App\Facturas::where('numero',$_GET['numero'])->
                             where('prefijo',$_GET['prefijo'])->
                             where('id_documento',$_GET['id'])->
+                            where('id_empresa','=',Session::get('id_empresa'))->
                             orderBy('numero', 'desc')->get();
     if(sizeof($factura) == 0){
       $factura->numero = $_GET['numero'];

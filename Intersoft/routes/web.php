@@ -71,6 +71,21 @@ Route::get('/ciudades', function(){
     ]);
 });
 
+/**
+ * -------------------------------------------------------------------------
+ * web Routes Submenus
+ * -------------------------------------------------------------------------
+ * 
+ * Menus y submenus
+ * 
+ */
+
+Route::get('/submenu/directorio', function(){ return view('submenu.directorio'); });
+Route::get('/submenu/contabilidad', function(){ return view('submenu.contabilidad'); });
+Route::get('/submenu/facturacion', function(){ return view('submenu.facturacion'); });
+Route::get('/submenu/inventario', function(){ return view('submenu.inventario'); });
+Route::get('/submenu/produccion', function(){ return view('submenu.produccion'); });
+Route::get('/submenu/tesoreria', function(){ return view('submenu.tesoreria'); });
 
 /*
 |--------------------------------------------------------------------------

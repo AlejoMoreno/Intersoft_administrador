@@ -6,10 +6,11 @@
 
 use App\Documentos;
 
-$documentos = Documentos::where('ubicacion','=','SALIDA')->get();
+$documentos = Documentos::where('ubicacion','=','SALIDA')->
+                          where('id_empresa','=',Session::get('id_empresa'))->get();
 
-$egresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCartera like 'EGRESO';");
-$ingresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCartera like 'INGRESO';");
+$egresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCartera like 'EGRESO' AND id_empresa = ".Session::get('id_empresa').";");
+$ingresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCartera like 'INGRESO' AND id_empresa = ".Session::get('id_empresa').";");
 ?>
 
 <div class="container-fluid">
@@ -18,11 +19,6 @@ $ingresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCarte
             <div class="card">
                 <div class="header">
                     <center><h4 class="title">Cartera</h4><br>
-                        @if( ($ingresos[0]->total - $egresos[0]->total) > 0 )
-                            <label style="color:green">Total: $ {{ $ingresos[0]->total - $egresos[0]->total }}</label>
-                        @else
-                            <label style="color:red">Total: $ {{ $ingresos[0]->total - $egresos[0]->total }}</label>
-                        @endif
                     </center>
                 </div>
             </div>
@@ -60,7 +56,6 @@ $ingresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCarte
                             <i class="fa fa-circle text-warning"></i>
                         </div>
                         <hr>
-                        <label>Total $ {{ $egresos[0]->total }}</label><br>
                         <div class="stats">
                             <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/layout');"> ir atras.</a>
                         </div>
@@ -101,7 +96,6 @@ $ingresos = DB::select("SELECT sum(total) as total FROM carteras where tipoCarte
                             <i class="fa fa-circle text-warning"></i>
                         </div>
                         <hr>
-                        <label>Total $ {{ $ingresos[0]->total }}</label><br>
                         <div class="stats">
                             <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/index');"> ir atras.</a>
                         </div>

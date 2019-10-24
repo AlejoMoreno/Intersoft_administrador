@@ -40,27 +40,29 @@ class LotesController extends Controller
     }
     
     public function showone($id){
-        $obj = Lotes::find($id);
+        $obj = Lotes::where('id_empresa','=',Session::get('id_empresa'))
+        ->where('id','=',$id)->first();
         return  array(
             "result"=>"success",
             "body"=>$obj);
     }
 
     public function delete($id){
-        $obj = Lotes::find($id);
+        $obj = Lotes::where('id_empresa','=',Session::get('id_empresa'))
+        ->where('id','=',$id)->first();
         $obj->delete();
         return redirect('/inventario/lotes');
     }
 
     public function all(){
-        $obj = Lotes::all();
+        $obj = Lotes::where('id_empresa','=',Session::get('id_empresa'))->get();
         return  array(
             "result"=>"success",
             "body"=>$obj);
     }
 
     public function index(){
-        $objs = Lotes::all();
+        $objs = Lotes::where('id_empresa','=',Session::get('id_empresa'))->get();
         return view('inventario.lotes', [
             'lotes' => $objs]);
     }

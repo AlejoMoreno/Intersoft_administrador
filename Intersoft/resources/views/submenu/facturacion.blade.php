@@ -16,7 +16,7 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->
         <div class="col-md-4">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Salidas de Inventario</h4>
+                    <h4 class="title">Facturación</h4>
                     <p class="category">Nota: Las imagenes que se muestran a continuación representan un link a donde podrás viajar por intersoft.</p>
                 </div>
                 <div class="content">
@@ -40,7 +40,7 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->
         <div class="col-md-8">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Sub menu Salidas</h4>
+                    <h4 class="title">Sub menu Facturación</h4>
                     <p class="category">Elige que quieres hacer</p>
                 </div>
                 <div class="content">
@@ -71,6 +71,14 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->
                                                 <td><a href="{{ $urlconsulta }}" class="btn btn-default">Consultar</a></td>
                                             </tr>
                                         @endforeach
+                                        <tr onclick="config.Redirect('/submenu/inventario');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/2166/2166821.svg"></td>
+                                            <td colspan="2">Liquidación Comisiones</td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/submenu/inventario');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/858/858699.svg"></td>
+                                            <td colspan="2">Estadistica Ventas</td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

@@ -52,8 +52,10 @@ class CarterasController extends Controller
 	}
 
 	public function imprimir($id){
-		$carteras = Carteras::where('id',$id)->get()[0];
-    	$kardexCarteras = KardexCarteras::where('id_cartera','=',$carteras->id)->get();
+		$carteras = Carteras::where('id',$id)->
+							  where('id_empresa','=',Session::get('id_empresa'))->get()[0];
+		$kardexCarteras = KardexCarteras::where('id_cartera','=',$carteras->id)->
+										  where('id_empresa','=',Session::get('id_empresa'))->get();
 
     	$carteras->id_sucursal = Sucursales::where('id',$carteras->id_sucursal)->get();
     	foreach ($carteras->id_sucursal as $sucursal) {
@@ -72,19 +74,22 @@ class CarterasController extends Controller
 	}
 
 	public function consultar_documentos(Request $request){
-		$carteras = Carteras::where('tipoCartera', '=', $request->tipo)->get();
+		$carteras = Carteras::where('tipoCartera', '=', $request->tipo)->
+							  where('id_empresa','=',Session::get('id_empresa'))->get();
 		return view('cartera.consultar_documentos', [
 			"carteras"=>$carteras
 		]);
 	}
 
 	public function anular($id){ 
-		$cartera = Carteras::where('id', '=', $id)->first();
+		$cartera = Carteras::where('id', '=', $id)->
+							 where('id_empresa','=',Session::get('id_empresa'))->first();
 		$cartera->estado = "ANULADO";
         $cartera->id_modificado = Session::get('user_id');
         $kardex = KardexCarteras::where('id_cartera',$cartera->id)->get();
         foreach ($kardex as $obj) {
-            $factura = Facturas::where('id', '=', $obj->id_factura)->first();
+			$factura = Facturas::where('id', '=', $obj->id_factura)->
+							     where('id_empresa','=',Session::get('id_empresa'))->first();
             if($cartera->tipoCartera == 'INGRESO'){
                 $factura->saldo = $factura->saldo - $obj->total;
             }
@@ -102,7 +107,8 @@ class CarterasController extends Controller
 	}
 
 	public function eliminar($id){ 
-		$cartera = Carteras::where('id', '=', $id)->first();
+		$cartera = Carteras::where('id', '=', $id)->
+							 where('id_empresa','=',Session::get('id_empresa'))->first();
 		if($cartera->estado != "ANULADO"){
 			return array(
 	            "result" => "Correcto",
@@ -133,10 +139,20 @@ class CarterasController extends Controller
 
 	public function allDocumentos($id,Request $request){
 		if($request->tipo == "egreso"){
-			$facturas = Facturas::where('id_cliente',$id)->where('signo','=','+')->where('saldo','>','0')->where('estado','!=','ANULADO')->where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
+			$facturas = Facturas::where('id_cliente',$id)->
+								  where('signo','=','+')->
+								  where('saldo','>','0')->
+								  where('id_empresa','=',Session::get('id_empresa'))->
+								  where('estado','!=','ANULADO')->
+								  where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
 		}
 		else{
-			$facturas = Facturas::where('id_cliente',$id)->where('signo','=','-')->where('saldo','>','0')->where('estado','!=','ANULADO')->where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
+			$facturas = Facturas::where('id_cliente',$id)->
+								  where('signo','=','-')->
+								  where('saldo','>','0')->
+								  where('id_empresa','=',Session::get('id_empresa'))->
+								  where('estado','!=','ANULADO')->
+								  where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
 		}
 
 		/*foreach ($facturas as $factura) {

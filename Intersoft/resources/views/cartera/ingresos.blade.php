@@ -135,9 +135,12 @@
 <?php
 
 
-$usuarios = App\Usuarios::all();
-$directorios = App\Directorios::where('id_directorio_tipo_tercero', '!=', '1')->get();
-$carteras = sizeof(App\Carteras::where('tipoCartera', 'like', 'INGRESO')->orderBy('numero', 'desc')->get());
+$usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+$directorios = App\Directorios::where('id_directorio_tipo_tercero', '!=', '1')->
+                                where('id_empresa','=',Session::get('id_empresa'))->get();
+$carteras = sizeof(App\Carteras::where('tipoCartera', 'like', 'INGRESO')->
+                                 where('id_empresa','=',Session::get('id_empresa'))->
+                                 orderBy('numero', 'desc')->get());
 
 ?>
 

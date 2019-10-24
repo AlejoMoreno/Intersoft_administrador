@@ -78,46 +78,52 @@
                         <p>Inicio</p>
                     </a>
                 </li>
+                <li class="directorio" id="directorio">
+                    <a href="#" onclick="config.Redirect('/submenu/directorio');">
+                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/2245/2245320.svg">
+                        <p>Directorio</p>
+                    </a>
+                </li>
                 <li class="inventario" id="inventario">
-                    <a href="#" onclick="config.Redirect('/inventario/index');">
+                    <a href="#" onclick="config.Redirect('/submenu/inventario');">
                         <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/1924/1924873.svg">
-                        <p>Entrada Inventario</p>
+                        <p>Inventario</p>
                     </a>
                 </li>
-                <li class="salida" id="salida">
-                    <a href="#" onclick="config.Redirect('/salida/index');">
+                <li class="produccion" id="produccion"> 
+                    <a href="#" onclick="config.Redirect('/submenu/produccion');">
+                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/2166/2166907.svg">
+                        <p>Producción</p>
+                    </a>
+                </li>
+                <li class="facturacion" id="facturacion">
+                    <a href="#" onclick="config.Redirect('/submenu/facturacion');">
                         <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/138/138360.svg">
-                        <p>Salida Inventario</p>
+                        <p>Facturación</p>
                     </a>
                 </li>
-                <li class="cartera" id="cartera"> 
-                    <a href="#" onclick="config.Redirect('/cartera/index');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/31/31368.svg">
-                        <p>Cartera</p>
+                <li class="tesoreria" id="tesoreria">
+                    <a href="#" onclick="config.Redirect('/submenu/tesoreria');">
+                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/1162/1162498.svg">
+                        <p>Tesorería</p>
                     </a>
                 </li>
                 <li class="contabilidad" id="contabilidad">
-                    <a href="#" onclick="config.Redirect('/contabilidad/index');">
+                    <a href="#" onclick="config.Redirect('/submenu/contabilidad');">
                         <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/313/313062.svg">
                         <p>Contabilidad</p>
                     </a>
                 </li>
-                <li class="calendario" id="calendario">
-                    <a href="#" onclick="config.Redirect('/calendario');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg">
-                        <p>Calendario</p>
-                    </a>
-                </li>
-                <li class="administrador" id="administrador">
+                <li id="administrador">  
                     <a href="#" onclick="config.Redirect('/administrador/index');">
                         <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg">
-                        <p>Administrador</p>
+                        <p>Parámetros</p>
                     </a>
                 </li>
-                <li id="reportes">  
-                    <a href="#" onclick="config.Redirect('/reportes/index');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/1055/1055644.svg">
-                        <p>Reportes</p>
+                <li id="Salida">  
+                    <a href="#" onclick="config.Redirect('/cerrar');">
+                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/529/529873.svg">
+                        <p>Salida</p>
                     </a>
                 </li>
                 <li>
