@@ -75,19 +75,19 @@
                                 </div>
                                 <div class="col-md-6">
                                     <label>Descripción</label><br>
-                                    <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Escribe el descripcion" required="" onkeyup="config.UperCase('descripcion');">
+                                    <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Escribe el descripcion" onkeyup="config.UperCase('descripcion');">
                                 </div>
                                 <div class="col-md-6">
                                     <label>Link logo</label><br>
-                                    <input type="text" class="form-control" name="logo" id="logo" placeholder="Escribe el link del logo " required="" onkeyup="config.UperCase('logo');">
+                                    <input type="text" class="form-control" name="logo" id="logo" placeholder="Escribe el link del logo "  onkeyup="config.UperCase('logo');">
                                 </div>
                                 <div class="col-md-6">
                                     <label>Código interno</label><br>
-                                    <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno " required="" onkeyup="config.UperCase('codigo_interno');">
+                                    <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno "  onkeyup="config.UperCase('codigo_interno');">
                                 </div>
                                 <div class="col-md-6">
                                     <label>Código alterno</label><br>
-                                    <input type="text" class="form-control" name="codigo_alterno" id="codigo_alterno" placeholder="Escribe el codigo_alterno " required="" onkeyup="config.UperCase('codigo_alterno');">
+                                    <input type="text" class="form-control" name="codigo_alterno" id="codigo_alterno" placeholder="Escribe el codigo_alterno " onkeyup="config.UperCase('codigo_alterno');">
                                 </div>
                                 <div class="col-md-6">
                                     <input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control">
