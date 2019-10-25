@@ -308,6 +308,9 @@ Route::post('/inventario/documentos/update', 'DocumentosController@update');
 //Catalogo
 Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
 
+//ordenes de produccion (ficha "receta")
+Route::get('/inventario/ordenesproduccion', 'FichatecnicasController@index');
+
 
 
 /*

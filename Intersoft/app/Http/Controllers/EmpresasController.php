@@ -265,6 +265,12 @@ class EmpresasController extends Controller
             $obj->codigo_interno= "04";
             $obj->id_empresa     = $empresa->id;
             $obj->save();
+            $obj = new Clasificaciones();
+            $obj->nombre     	= "PRODUCTO TERMINADO";
+            $obj->descripcion   = "PRODUCTO TERMINADO";
+            $obj->codigo_interno= "05";
+            $obj->id_empresa     = $empresa->id;
+            $obj->save();
 
             $directorios = new Directorios();
             $directorios->nit       = "222222222";
