@@ -310,6 +310,7 @@ Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
 
 //ordenes de produccion (ficha "receta")
 Route::get('/inventario/ordenesproduccion', 'FichatecnicasController@index');
+Route::get('/inventario/materiaprima', 'ReferenciasController@materiaprima');
 
 
 

@@ -75,9 +75,7 @@
 </div>
 
 <style>
-a img{
-    margin:20px;
-}
+
 </style>
 
 @endsection()

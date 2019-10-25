@@ -80,9 +80,7 @@
 </div>
 
 <style>
-a img{
-    margin:20px;
-}
+
 </style>
 
 <script type="text/javascript">

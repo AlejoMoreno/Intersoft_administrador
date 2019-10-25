@@ -14,9 +14,21 @@ class MarcasController extends Controller
         try{
             $obj = new Marcas();
             $obj->nombre     	= $request->nombre;
+            if(!isset($request->descripcion)){
+                $request->descripcion = $request->nombre;
+            }
             $obj->descripcion   = $request->descripcion;
+            if(!isset($request->logo)){
+                $request->logo = "NO HAY LOGO";
+            }
             $obj->logo  		= $request->logo;
+            if(!isset($request->codigo_interno)){
+                $request->codigo_interno = $request->nombre;
+            }
             $obj->codigo_interno= $request->codigo_interno;
+            if(!isset($request->codigo_alterno)){
+                $request->codigo_alterno = $request->nombre;
+            }
             $obj->codigo_alterno= $request->codigo_alterno;
             $obj->id_empresa    = Session::get('id_empresa');
             $obj->save();

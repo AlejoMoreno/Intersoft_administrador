@@ -222,5 +222,29 @@ class ReferenciasController extends Controller
                 "result"=>"fail",
                 "body"=>$exception);
         }
+	}
+	
+	public function materiaprima(){
+		try{
+			$clasificacion = Clasificaciones::where('codigo_interno','=','01')->
+											where('id_empresa','=',Session::get('id_empresa'))->first();
+			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))->
+							    where('id_clasificacion','=',$clasificacion->id)->get();
+			foreach ($obj as $value) {
+				$value->codigo_linea = Lineas::where('id', $value->codigo_linea)->get();
+				$value->id_presentacion = Tipo_presentaciones::where('id', $value->id_presentacion)->get();
+				$value->id_marca = Marcas::where('id', $value->id_marca)->get();
+				$value->id_clasificacion = Clasificaciones::where('id', $value->id_clasificacion)->get();
+				$value->usuario_creador = Usuarios::where('id', $value->usuario_creador)->get();
+			}
+			return view('inventario.materiaprima', [
+				'referencias' => $obj
+			]);
+		}
+		catch (ModelNotFoundException $exception){
+			return  array(
+				"result"=>"fail",
+				"body"=>$exception);
+		}
     }
 }
