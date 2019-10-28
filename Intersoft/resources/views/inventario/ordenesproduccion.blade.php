@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="header">
                     <h4 class="title">Ordenes de Producción</h4>
-                    <p class="category">Crea fichas técnicas de producción</p>
+                    <p class="category">Crea fichas técnicas de producción <a href="ordenesproduccion" class="btn btn-success" style="background:white;">Nueva</a></p>
                 </div>
                 <div class="content">
                     <table class="table table-hover table-striped" id="tableregimenes">
@@ -38,10 +38,21 @@
                                 <div class="row">
                                     <div class="col-md-4">Creación orden </div>
                                     <div class="col-md-4">
-                                        <input type="text" name="orden" id="orden" class="col-md-6 form-control" value="" placeholder="# codigo" required>
+                                        @if(sizeOf($fichatecnicas) > 0)
+                                        <input type="text" name="orden" id="orden" class="col-md-6 form-control" value="{{$fichatecnicas[0]->orden}}" placeholder="# codigo" required >
+                                        @endif
+                                        @if(sizeOf($fichatecnicas) <= 0)
+                                        <input type="text" name="orden" id="orden" class="col-md-6 form-control" value="0" placeholder="# codigo" required disabled>
+                                        @endif
+                                        
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="text" name="nombre" id="nombre" class="col-md-6 form-control" value="" placeholder="Nombre" required>
+                                        @if(sizeOf($fichatecnicas) > 0)
+                                        <input type="text" name="nombre" id="nombre" class="col-md-6 form-control" value="{{$fichatecnicas[0]->nombre}}" placeholder="nombre" required >
+                                        @endif
+                                        @if(sizeOf($fichatecnicas) <= 0)
+                                        <input type="text" name="nombre" id="nombre" class="col-md-6 form-control" value="" placeholder="Nombre" required >
+                                        @endif
                                     </div>
                                 </div>
                             </div>

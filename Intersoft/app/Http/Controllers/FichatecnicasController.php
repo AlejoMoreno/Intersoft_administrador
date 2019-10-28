@@ -20,6 +20,11 @@ class FichatecnicasController extends Controller
                 $fichatecnica->delete();
             }
             if($request->agregar == "Agregar"){
+                if($request->orden == 0){
+                    $ultima = Fichatecnicas::where('id_empresa','=',Session::get('id_empresa'))
+                                ->orderBy('orden','DESC')->first();
+                    $request->orden = $ultima->orden + 1;
+                }
                 $obj = new Fichatecnicas();
                 $obj->id_referencia = $request->id_referencia;
                 $obj->id_sucursal   = Session::get('sucursal');
@@ -44,7 +49,8 @@ class FichatecnicasController extends Controller
             }
 
             //$ficha = DB::select('SELECT nombre,orden From fichatecnicas WHERE id_empresa = '.Session::get('id_empresa').' GROUP BY nombre,orden');
-            $ficha = DB::table('fichatecnicas')->select(array('nombre','orden'))->groupBy(array('nombre','orden'))->get();
+            $ficha = DB::table('fichatecnicas')->select(array('nombre','orden','id_empresa'))->
+                        where('id_empresa','=',Session::get('id_empresa'))->orderBy('orden','ASC')->groupBy(array('nombre','orden','id_empresa'))->get();
 
             $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
                                       ->where('id_clasificacion','=','2')->get();

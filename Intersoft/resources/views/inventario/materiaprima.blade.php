@@ -29,7 +29,7 @@
                                     <tr>
                                         <td>{{ $obj['id'] }}</td>
                                         <td>{{ $obj['descripcion'] }}</td>
-                                        <td>{{ $obj['cantidad'] }}</td>
+                                        <td>{{ $obj['saldo'] }}</td>
                                         <td>{{ $obj['costo'] }}</td>
                                         <td>{{ $obj['costo_promedio'] }}</td>
                                     </tr>
