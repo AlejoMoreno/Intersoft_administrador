@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Clasificaciones;
+use App\Pucauxiliar;
 use Session;
 
 class ClasificacionesController extends Controller
@@ -32,7 +33,7 @@ class ClasificacionesController extends Controller
             $obj = Clasificaciones::where('id',$request->id)->first();
             $obj->nombre     	= $request->nombre;
             $obj->descripcion  	= $request->descripcion;
-            $obj->codigo_interno= $request->codigo_interno;
+            $obj->cuenta_contable= $request->cuenta_contable;
             $obj->save();
             return $obj;
         }
@@ -88,9 +89,12 @@ class ClasificacionesController extends Controller
 
     public function index(){
         try{
+            $pucauxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
+                                        ->where('codigo','like','14%')->get();
             $objs = Clasificaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
             return view('inventario.clasificaciones', [
-                'clasificaciones' => $objs]);
+                'clasificaciones' => $objs,
+                'pucauxiliares' => $pucauxiliares]);
         }
         catch (ModelNotFoundException $exception){
             return  array(

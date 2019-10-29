@@ -4,88 +4,50 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Cuentas;
+use Session;
+
+use App\Pucauxiliar;
+use App\Pucclases;
+use App\Puccuentas;
+use App\Pucgrupos;
+use App\Pucsubcuentas;
+
+use App\Empresas;
 
 class CuentasController extends Controller
 {
-	/**
-	clase
-nombreClase
-grupo
-nombreGrupo
-cuenta
-nombreCuenta
-subcuenta
-nombreSubcuenta
-auxiliar
-nombreAuxiliar
-homologo
-homologo_1
-	*/
+	public function index(){
+        $pucsubcuentas = Pucsubcuentas::all();
+        $auxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->get();
+        //foreach ($auxiliares as $auxiliar){
+          //  $auxiliar->id_subcuenta = Pucsubcuentas::where('id','=',$auxiliar->id_subcuenta)->first();
+            /*$auxiliar->id_subcuenta->id_cuenta = Puccuentas::where('id','=',$auxiliar->id_subcuenta->id_cuenta)->fisrt();
+            $auxiliar->id_subcuenta->id_cuenta->id_grupo = Pucgrupo::where('id','=',$auxiliar->id_subcuenta->id_cuenta->id_grupo)->fisrt();
+            $auxiliar->id_subcuenta->id_cuenta->id_grupo->id_clase = Pucclase::where('id','=',$auxiliar->id_subcuenta->id_cuenta->id_grupo->id_clase)->fisrt();*/
+        //}
+        return view('contabilidad.cuentas', 
+                ['auxiliares' => $auxiliares,
+                'pucsubcuentas' => $pucsubcuentas]);
+    }
 
     public function create(Request $request){
-        $obj = new Cuentas();
-        $obj->clase = $request->clase;
-		$obj->nombreClase = $request->nombreClase;
-		$obj->grupo = $request->grupo;
-		$obj->nombreGrupo = $request->nombreGrupo;
-		$obj->cuenta = $request->cuenta;
-		$obj->nombreCuenta = $request->nombreCuenta;
-		$obj->subcuenta = $request->subcuenta;
-		$obj->nombreSubcuenta = $request->nombreSubcuenta;
-		$obj->auxiliar = $request->auxiliar;
-		$obj->nombreAuxiliar = $request->nombreAuxiliar;
-		$obj->homologo = $request->homologo;
-		$obj->homologo_1 = $request->homologo_1;
-        $obj->save();
-        return view('contabilidad.cuentas', [
-            'cuentas' => $obj]);
-    }
+        $auxiliar = new Pucauxiliar();
+        $auxiliar->id_pucsubcuentas = $request->pucsubcuentas;
+        $auxiliar->tipo             = $request->tipo;
+        $auxiliar->naturaleza       = $request->naturaleza;
+        $auxiliar->clase            = $request->clase;
+        $auxiliar->codigo           = $request->codigo;
+        $auxiliar->descripcion      = $request->descripcion;
+        $auxiliar->homologo         = $request->codigo;
+        $auxiliar->id_empresa       = Session::get('id_empresa');
+        $auxiliar->exogena          = $request->exogena;
+        $auxiliar->na               = $request->na;
+        $auxiliar->save();
 
-    public function update(Request $request){
-        $obj = Cuentas::where('id',$request->id)->first();
-        $obj->clase = $request->clase;
-		$obj->nombreClase = $request->nombreClase;
-		$obj->grupo = $request->grupo;
-		$obj->nombreGrupo = $request->nombreGrupo;
-		$obj->cuenta = $request->cuenta;
-		$obj->nombreCuenta = $request->nombreCuenta;
-		$obj->subcuenta = $request->subcuenta;
-		$obj->nombreSubcuenta = $request->nombreSubcuenta;
-		$obj->auxiliar = $request->auxiliar;
-		$obj->nombreAuxiliar = $request->nombreAuxiliar;
-		$obj->homologo = $request->homologo;
-		$obj->homologo_1 = $request->homologo_1;
-        $obj->save();
-        return $obj;
-    }
-    
-    public function buscarCuentas(Request $request){
-        $obj = Cuentas::where('clase','=',$request->clase)
-                        ->where('grupo','=',$request->grupo)
-                        ->where('cuenta','=',$request->cuenta)
-                        ->where('subcuenta','=',$request->subcuenta)
-                        ->where('auxiliar','=',$request->auxiliar)->get();
-        return  array(
-            "result"=>"success",
-            "body"=>$obj);
-    }
-
-    public function delete($id){
-        $obj = Cuentas::find($id);
-        $obj->delete();
         return redirect('/contabilidad/cuentas');
     }
 
-    public function all(){
-        $obj = Cuentas::all();
-        return  array(
-            "result"=>"success",
-            "body"=>$obj);
-    }
-
-    public function index(){
-        $objs = Cuentas::first();
-        return view('contabilidad.cuentas', [
-            'cuentas' => $objs]);
+    public function copiarPrimeraVez(){
+        
     }
 }

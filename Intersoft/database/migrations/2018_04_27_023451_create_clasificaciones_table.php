@@ -18,50 +18,11 @@ class CreateClasificacionesTable extends Migration
             $table->increments('id');
             $table->string('nombre');
             $table->string('descripcion');
-            $table->string('codigo_interno');
+            $table->string('cuenta_contable');
             $table->integer('id_empresa');
             $table->timestamps();
         });
 
-        // Insert some stuff
-        DB::table('clasificaciones')->insert(
-            array(
-                'id'        => NULL,
-                'nombre' => 'MATERIA PRIMA', 
-                'descripcion' => 'MATERIA PRIMA',
-                'codigo_interno' => '01',
-                'id_empresa' => '1'
-            ),
-            array(
-                'id'        => NULL,
-                'nombre' => 'PRODUCTO TERMINADO', 
-                'descripcion' => 'PRODUCTO TERMINADO',
-                'codigo_interno' => '02',
-                'id_empresa' => '1'
-            ),
-            array(
-                'id'        => NULL,
-                'nombre' => 'PRODUCTO NACIONAL', 
-                'descripcion' => 'PRODUCTO NACIONAL',
-                'codigo_interno' => '03',
-                'id_empresa' => '1'
-            ),
-            array(
-                'id'        => NULL,
-                'nombre' => 'PRODUCTO INTERNACIONAL', 
-                'descripcion' => 'PRODUCTO INTERNACIONAL',
-                'codigo_interno' => '04',
-                'id_empresa' => '1'
-            )
-            ,
-            array(
-                'id'        => NULL,
-                'nombre' => 'SERVICIO', 
-                'descripcion' => 'SERVICIO',
-                'codigo_interno' => '05',
-                'id_empresa' => '1'
-            )
-        );
     }
 
     /**

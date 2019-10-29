@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Documentos;
+use App\Pucauxiliar;
 use Session;
 
 class DocumentosController extends Controller
@@ -106,9 +107,15 @@ cuenta_contable_contrapartida
 
     public function index(){
         try{
+            $pucauxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->get();
             $objs = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();
+            foreach($objs as $obj){
+                $obj->cuenta_contable_partida = Pucauxiliar::where('id','=',$obj->cuenta_contable_partida)->first();
+                $obj->cuenta_contable_contrapartida = Pucauxiliar::where('id','=',$obj->cuenta_contable_contrapartida)->first();
+            }
             return view('inventario.documentos', [
-            'documentos' => $objs]);
+            'documentos' => $objs,
+            'pucauxiliares' => $pucauxiliares]);
         }
         catch (ModelNotFoundException $exception){
             return  array(

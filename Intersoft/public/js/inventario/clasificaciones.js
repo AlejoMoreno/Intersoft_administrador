@@ -16,7 +16,7 @@ function Clasificaciones(){
         $('#id').val(data.id);
         $('#nombre').val(data.nombre);
 		$('#descripcion').val(data.descripcion);
-		$('#codigo_interno').val(data.codigo_interno);
+		$('#cuenta_contable').val(data.cuenta_contable);
         $('input[type="submit"]').attr('disabled','disabled');
     };
 
@@ -25,7 +25,7 @@ function Clasificaciones(){
             "id" : $('#id').val(),
             "nombre" : $('#nombre').val(),
 			"descripcion" : $('#descripcion').val(),
-			"codigo_interno" : $('#codigo_interno').val()
+			"cuenta_contable" : $('#cuenta_contable').val()
         };
         $.ajax({
 			data:  parametros,

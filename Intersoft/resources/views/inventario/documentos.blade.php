@@ -35,8 +35,8 @@
 										<td>{{ $obj['signo'] }}</td>
                                         <td>{{ $obj['ubicacion'] }}</td>
                                         <td>{{ $obj['prefijo'] }}</td>
-										<td>{{ $obj['cuenta_contable_partida'] }}</td>
-										<td>{{ $obj['cuenta_contable_contrapartida'] }}</td>
+										<td>{{ $obj['cuenta_contable_partida']['codigo'] }}</td>
+										<td>{{ $obj['cuenta_contable_contrapartida']['codigo'] }}</td>
                                         <td><a href="javascript:;" onclick="documentos.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
                                         <!--td><a onclick="config.delete_get('/inventario/documentos/delete/', '{{ $obj }}',  '/inventario/documentos');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
@@ -88,12 +88,17 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label> cuenta_contable_partida</label><br>
-                                    <input type="text" class="form-control" name="cuenta_contable_partida" id="cuenta_contable_partida" placeholder="Escribe cuenta_contable_partida " required="" onkeyup="config.UperCase('cuenta_contable_partida');">
+                                    <input type="text" list="pucauxiliares" class="form-control" name="cuenta_contable_partida" id="cuenta_contable_partida" placeholder="Escribe cuenta_contable_partida " required="" onkeyup="config.UperCase('cuenta_contable_partida');">
                                 </div>
                                 <div class="col-md-3">
                                     <label>cuenta_contable_contrapartida</label><br>
-                                    <input type="text" class="form-control" name="cuenta_contable_contrapartida" id="cuenta_contable_contrapartida" placeholder="Escribe el cuenta_contable_contrapartida " required="" onkeyup="config.UperCase('cuenta_contable_contrapartida');">
+                                    <input type="text" list="pucauxiliares" class="form-control" name="cuenta_contable_contrapartida" id="cuenta_contable_contrapartida" placeholder="Escribe el cuenta_contable_contrapartida " required="" onkeyup="config.UperCase('cuenta_contable_contrapartida');">
                                 </div>
+                                <datalist id="pucauxiliares">
+                                @foreach($pucauxiliares as $obj)
+                                <option value="{{ $obj->id }}">{{ $obj->codigo.'-'.$obj->descripcion }}</option>
+                                @endforeach
+                                </datalist>
                             </div>
 
 

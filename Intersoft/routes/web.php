@@ -368,7 +368,7 @@ Route::get('/contabilidad/cuentas/all', 'CuentasController@all');
 Route::get('/contabilidad/cuentas/{id}', 'CuentasController@formcreate');
 Route::get('/contabilidad/cuentas/delete/{id}', 'CuentasController@delete');
 Route::get('/contabilidad/cuentas/update/{id}', 'CuentasController@showupdate');
-Route::post('/contabilidad/cuentas/create', 'CuentasController@create');
+Route::post('/contabilidad/cuentas', 'CuentasController@create');
 Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 
 Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');

@@ -18,9 +18,9 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Nombre
-                                    <th>Descripcion
-                                    <th>Codigo Interno
+                                    <th>Nombre</th>
+                                    <th>Descripcion</th>
+                                    <th>cuenta_contable</th>
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -30,7 +30,7 @@
                                         <td>{{ $obj['id'] }}</td>
                                         <td>{{ $obj['nombre'] }}</td>
                                         <td>{{ $obj['descripcion'] }}</td>
-                                        <td>{{ $obj['codigo_interno'] }}</td>
+                                        <td>{{ $obj['cuenta_contable'] }}</td>
                                         <td><a href="javascript:;" onclick="clasificaciones.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
                                         <!--td><a onclick="config.delete_get('/inventario/clasificaciones/delete/', '{{ $obj }}',  '/inventario/clasificaciones');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
@@ -52,8 +52,13 @@
                                     <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Escribe la descrioción de esta clasificación" required="" onkeyup="config.UperCase('descripcion');">
                                 </div>
                                 <div class="col-md-4">
-                                    <label>Código Interno</label><br>
-                                    <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo interno" required="" onkeyup="config.UperCase('codigo_interno');">
+                                    <label>Cuenta contable</label><br>
+                                    <input type="text" list="pucauxiliares" class="form-control" name="cuenta_contable" id="cuenta_contable" placeholder="Escribe el codigo interno" required="" onkeyup="config.UperCase('codigo_interno');">
+                                    <datalist id="pucauxiliares">
+                                    @foreach($pucauxiliares as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->codigo.'-'.$obj->descripcion }}</option>
+                                    @endforeach
+                                    </datalist>
                                 </div>
                             </div>
 

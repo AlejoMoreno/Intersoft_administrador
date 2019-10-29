@@ -129,8 +129,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->codigo;
-            $documento->cuenta_contable_contrapartida= $auxiliar->codigo;
+            $documento->cuenta_contable_partida  		= $auxiliar->id;
+            $documento->cuenta_contable_contrapartida= $auxiliar->id;
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -141,8 +141,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->codigo;
-            $documento->cuenta_contable_contrapartida= $auxiliar->codigo;
+            $documento->cuenta_contable_partida  		= $auxiliar->id;
+            $documento->cuenta_contable_contrapartida= $auxiliar->id;
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -153,8 +153,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->codigo;
-            $documento->cuenta_contable_contrapartida= $auxiliar->codigo;
+            $documento->cuenta_contable_partida  		= $auxiliar->id;
+            $documento->cuenta_contable_contrapartida= $auxiliar->id;
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -165,8 +165,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->codigo;
-            $documento->cuenta_contable_contrapartida= $auxiliar->codigo;
+            $documento->cuenta_contable_partida  		= $auxiliar->id;
+            $documento->cuenta_contable_contrapartida= $auxiliar->id;
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -177,8 +177,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->codigo;
-            $documento->cuenta_contable_contrapartida= $auxiliar->codigo;
+            $documento->cuenta_contable_partida  		= $auxiliar->id;
+            $documento->cuenta_contable_contrapartida= $auxiliar->id;
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -189,8 +189,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->codigo;
-            $documento->cuenta_contable_contrapartida= $auxiliar->codigo;
+            $documento->cuenta_contable_partida  		= $auxiliar->id;
+            $documento->cuenta_contable_contrapartida= $auxiliar->id;
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -201,8 +201,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->codigo;
-            $documento->cuenta_contable_contrapartida= $auxiliar->codigo;
+            $documento->cuenta_contable_partida  		= $auxiliar->id;
+            $documento->cuenta_contable_contrapartida= $auxiliar->id;
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -213,8 +213,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->codigo;
-            $documento->cuenta_contable_contrapartida= $auxiliar->codigo;
+            $documento->cuenta_contable_partida  		= $auxiliar->id;
+            $documento->cuenta_contable_contrapartida= $auxiliar->id;
             $documento->id_empresa  = $empresa->id;
             $documento->save();
 
