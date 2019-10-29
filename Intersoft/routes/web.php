@@ -361,6 +361,7 @@ Route::post('/cartera/causar/guardar', 'CarterasController@saveCausar'); //pendi
 Route::get('/contabilidad/index', function(){
     return view('contabilidad.index');
 });
+Route::post('/contabilidad/register', 'ContabilidadesController@register');
 
 //cuentas
 Route::get('/contabilidad/cuentas', 'CuentasController@index');

@@ -16,6 +16,7 @@ class CreateContabilidadesTable extends Migration
         Schema::create('Contabilidades', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->integer('numero_consecutivo');
             $table->integer('id_auxiliar');
             $table->double('debito');
             $table->double('credito');

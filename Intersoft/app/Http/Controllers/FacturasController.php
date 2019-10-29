@@ -80,7 +80,19 @@ class FacturasController extends Controller
 		$obj->estado 			= $request->estado;
 		$obj->saldo             = $request->saldo;
 		$obj->id_empresa	 	= Session::get('id_empresa');
-		$obj->save();
+        $obj->save();
+        
+        //registrar asiento contable
+        $contabilidad = new App\Contabilidades();
+        $auxiliar = App\Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->where('codigo','=','11050501')->first();
+        $contabilidad->id_auxiliar = $auxiliar->id;
+        $contabilidad->debito = $obj->total;
+        $contabilidad->credito = 0;
+        $contabilidad->tipo_documento = "FACTURA_VENTA";
+        $contabilidad->id_documento = $obj->id;
+        $contabilidad->id_sucursal = Session::get('id_sucursal');
+        $contabilidad->id_empresa = Session::get('id_empresa');
+        $asiento_contable = App\ContabilidadesController::register();
 
         //si es en efectivo crear el documento de cartera
         $numero = 1;
@@ -153,7 +165,8 @@ class FacturasController extends Controller
 
 		return  array(
             "result"=>"success",
-            "body"=>$obj);
+            "body"=>$obj,
+            "asiento_contable" => $asiento_contable);
     }
 
     public function imprimir($id){
