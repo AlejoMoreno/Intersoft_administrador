@@ -11,54 +11,72 @@ use App\Documentos;
 use App\Facturas;
 use App\Sucursales;
 
+use App\Clasificaciones;
+use App\Contabilidades;
+
 use Session;
 
 class KardexController extends Controller
 {
-    public function saveDocument(Request $request){
-
-    	if($request->lote == '' || $request->lote == null){
-    		$request->lote = "";
-    		$request->serial = "";
-    		$request->fecha_vencimiento = "";
-    	}
+	static function saveDocument($productosArr,$factura,$asiento_contable){
+		$productos_insertados = array();
+		//recorrer los productos
+		foreach($productosArr as $producto){
+			$obj_pro = KardexController::AddProducto($producto,$factura);
+			$asiento = KardexController::AsientoContable($obj_pro,$asiento_contable,$factura->signo);
+			//asientp contable
+			array_push($productos_insertados, $obj_pro);
+		}
+		return $productos_insertados;
+	}
+    static function AddProducto($producto,$factura){
+		$producto = (object)$producto;
+    	if($producto->lote == '' || $producto->lote == null){
+    		$producto->lote = "";
+    		$producto->serial = "";
+    		$producto->fecha_vencimiento = "";
+		}
+		
+		//buscar la referencia 
+		$referencia = Referencias::where('id','=',$producto->id_referencia)->get()[0];
 
     	$obj = new Kardex();
-    	$obj->id_sucursal	= $request->id_sucursal;
-		$obj->numero 		= $request->numero;
-		$obj->prefijo 		= strval($request->prefijo);
-		$obj->id_cliente 	= $request->id_cliente;
-		$obj->id_factura 	= $request->id_factura;
-		$obj->id_vendedor 	= $request->id_vendedor;
-		$obj->fecha 		= $request->fecha;
-		$obj->id_referencia = $request->id_referencia;
-		$obj->lote 			= $request->lote;
-		$obj->serial 		= $request->serial;
-		$obj->fecha_vencimiento = $request->fecha_vencimiento;
-		$obj->cantidad 		= $request->cantidad;
-		$obj->precio 		= $request->precio;
-		$obj->costo 		= $request->costo;
-		$obj->id_documento 	= $request->id_documento;
-		$obj->signo 		= strval($request->signo);
-		$obj->subtotal 		= $request->subtotal;
-		$obj->iva 			= $request->iva;
-		$obj->impoconsumo 	= $request->impoconsumo;
-		$obj->otro_impuesto = $request->otro_impuesto;
-		$obj->otro_impuesto1 = $request->otro_impuesto1;
-		$obj->descuento 	= $request->descuento;
-		$obj->fletes 		= $request->fletes;
-		$obj->retefuente 	= $request->retefuente;
-		$obj->total 		= $request->total;
-		$obj->observaciones = strval($request->observaciones);
-		$obj->id_modificado = $request->id_modificado;
-		$obj->kardex_anterior = $request->kardex_anterior; //id factura
+    	$obj->id_sucursal	= $factura->id_sucursal;
+		$obj->numero 		= $factura->numero;
+		$obj->prefijo 		= strval($factura->prefijo);
+		$obj->id_cliente 	= $factura->id_cliente;
+		$obj->id_factura 	= $factura->id;
+		$obj->id_vendedor 	= $factura->id_vendedor;
+		$obj->fecha 		= $factura->fecha;
+		$obj->id_referencia = $producto->id_referencia;
+		$obj->lote 			= $producto->lote;
+		$obj->serial 		= $producto->serial;
+		$obj->fecha_vencimiento = $producto->fecha_vencimiento;
+		$obj->cantidad 		= $producto->cantidad;
+		$obj->precio 		= $producto->precio;
+		$obj->costo 		= $producto->costo;
+		$obj->id_documento 	= $factura->id_documento;
+		$obj->signo 		= strval($factura->signo);
+		$obj->subtotal 		= $producto->subtotal;
+		//sacar el iva 
+		$iva = ($producto->subtotal) * $referencia->iva;
+		$obj->iva 			= $iva;
+		$obj->impoconsumo 	= $factura->impoconsumo;
+		$obj->otro_impuesto = $factura->otro_impuesto;
+		$obj->otro_impuesto1 = $factura->otro_impuesto1;
+		$obj->descuento 	= $producto->descuento;
+		$obj->fletes 		= $factura->fletes;
+		$obj->retefuente 	= $factura->retefuente;
+		$obj->total 		= $factura->total;
+		$obj->observaciones = strval($factura->observaciones);
+		$obj->id_modificado = $factura->id_modificado;
+		$obj->kardex_anterior = $factura->id; //id factura
 		$obj->id_empresa	= Session::get('id_empresa');
-		$obj->estado 		= strval($request->estado);
+		$obj->estado 		= strval($factura->estado);
 		$obj->save();
 
 
-		//buscar la referencia 
-		$referencia = Referencias::where('id','=',$obj->id_referencia)->get()[0];
+		
 		$lote = Lotes::where('id_referencia','=',$obj->id_referencia)->
 						where('numero_lote','=',$obj->lote)->
 						where('id_empresa','=',Session::get('id_empresa'))->first();
@@ -130,18 +148,40 @@ class KardexController extends Controller
 			$referencia->saldo = $referencia->saldo;
 		}
 		$referencia->save();
-
-
-
-
-
-		return  array(
-            "result"=>"success",
-            "body"=> array (
-            	$obj,
-            	$referencia,
-            	$lote)
-        );
+		$obj->referencia = $referencia;
+		$obj->lote = $lote;
+		return  $obj;
+	}
+	
+	static function AsientoContable($obj_pro,$asiento_contable,$signo){
+		$referencia = (object)$obj_pro->referencia;
+		//verificar auxiliar contable apartir de la clasificacion del producto
+		$clasificacion = Clasificaciones::where('id','=',$referencia->id_clasificacion)->first();
+		//registrar asiento contable
+		$contabilidad = new Contabilidades();
+		if($signo == '-'){ //va  ala contrapartida
+			$contabilidad->id_auxiliar = $clasificacion->cuenta_contrapartida;
+        	$contabilidad->debito = 0;
+        	$contabilidad->credito = $obj_pro->precio;
+		}
+		else if($signo == '+'){ //va  ala partida
+			$contabilidad->id_auxiliar = $clasificacion->cuenta_contable;
+        	$contabilidad->debito = $obj_pro->precio;
+        	$contabilidad->credito = 0;
+		}        
+		$contabilidad->tipo_documento = $asiento_contable->id_documento;
+		$contabilidad->numero_consecutivo = $asiento_contable->numero_consecutivo;
+        $contabilidad->id_documento = $asiento_contable->id;
+        $contabilidad->id_sucursal = $asiento_contable->id_sucursal;
+        $contabilidad->id_empresa = $asiento_contable->id_empresa;
+		$asiento_contable1 = ContabilidadesController::register($contabilidad);
+		//registrar el iva
+		if($obj_pro->iva > 0){
+			$iva = $obj_pro->iva;
+			$cuenta = $referencia->iva;
+			ContabilidadesController::registerIva($contabilidad,$signo,$iva,$cuenta);
+		}		
+        return $asiento_contable1;
     }
 
     public function showid($id){

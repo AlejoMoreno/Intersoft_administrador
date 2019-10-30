@@ -17,6 +17,7 @@ class ClasificacionesController extends Controller
             $obj->nombre     	= $request->nombre;
             $obj->descripcion   = $request->descripcion;
             $obj->codigo_interno= $request->codigo_interno;
+            $obj->cuenta_contrapartida = $request->cuenta_contrapartida;
             $obj->id_empresa    = Session::get('id_empresa');
             $obj->save();
             return redirect('/inventario/clasificaciones');
@@ -33,6 +34,7 @@ class ClasificacionesController extends Controller
             $obj = Clasificaciones::where('id',$request->id)->first();
             $obj->nombre     	= $request->nombre;
             $obj->descripcion  	= $request->descripcion;
+            $obj->cuenta_contrapartida = $request->cuenta_contrapartida;
             $obj->cuenta_contable= $request->cuenta_contable;
             $obj->save();
             return $obj;
@@ -91,10 +93,13 @@ class ClasificacionesController extends Controller
         try{
             $pucauxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
                                         ->where('codigo','like','14%')->get();
+            $pucauxiliares1 = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
+                                        ->where('codigo','like','47%')->get();
             $objs = Clasificaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
             return view('inventario.clasificaciones', [
                 'clasificaciones' => $objs,
-                'pucauxiliares' => $pucauxiliares]);
+                'pucauxiliares' => $pucauxiliares,
+                'pucauxiliares1' => $pucauxiliares1]);
         }
         catch (ModelNotFoundException $exception){
             return  array(

@@ -16,7 +16,8 @@ function Clasificaciones(){
         $('#id').val(data.id);
         $('#nombre').val(data.nombre);
 		$('#descripcion').val(data.descripcion);
-		$('#cuenta_contable').val(data.cuenta_contable);
+        $('#cuenta_contable').val(data.cuenta_contable);
+        $('#cuenta_contrapartida').val(data.cuenta_contrapartida);
         $('input[type="submit"]').attr('disabled','disabled');
     };
 
@@ -25,7 +26,8 @@ function Clasificaciones(){
             "id" : $('#id').val(),
             "nombre" : $('#nombre').val(),
 			"descripcion" : $('#descripcion').val(),
-			"cuenta_contable" : $('#cuenta_contable').val()
+            "cuenta_contable" : $('#cuenta_contable').val(),
+            "cuenta_contrapartida" : $('#cuenta_contrapartida').val()
         };
         $.ajax({
 			data:  parametros,

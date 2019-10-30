@@ -19,6 +19,7 @@ class CreateClasificacionesTable extends Migration
             $table->string('nombre');
             $table->string('descripcion');
             $table->string('cuenta_contable');
+            $table->string('cuenta_contrapartida');
             $table->integer('id_empresa');
             $table->timestamps();
         });

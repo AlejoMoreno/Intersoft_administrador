@@ -603,8 +603,10 @@ function Documentos(){
     this.saveFactura = function(){
         var prefijo = '';
         var fecha_vencimiento = '';
+        var descuento = '';
         if($('#prefijo').val()=='')             { prefijo = '_'; }                          else { prefijo = $('#prefijo').val(); }
         if($('#fecha_vencimiento').val()=='')   { fecha_vencimiento = $('#fecha').val(); }  else { fecha_vencimiento = $('#fecha_vencimiento').val(); }
+        if($('#descuento').val()=='')   { descuento = '0'; }  else { descuento = $('#descuento').val(); }
         //poner los datos de la tabla de productos en un json 
         var jsonArr = [];
         var tabla = document.getElementById("tabla_productos");
@@ -651,7 +653,7 @@ function Documentos(){
             'impoconsumo' : $('#impoconsumo').val(),
             'otro_impuesto' : $('#otro_impuesto').val(),
             'otro_impuesto1' : '0',
-            'descuento' : $('#descuento').val(),
+            'descuento' : descuento,
             'fletes' : $('#fletes').val(),
             'retefuente' : $('#retefuente').val(),
             'total' : $('#total').val(),
@@ -677,111 +679,32 @@ function Documentos(){
                     factura = response.body;
 
                     localStorage.setItem("factura",factura.id);
-
-                    var tabla = document.getElementById("tabla_productos");
-                    for (var i=1;i < tabla.rows.length; i++){  
-
-                        var cantidad, descuento, valor, total;
-                        cantidad = document.getElementById(i+"_cantidad").value;
-                        valor = document.getElementById(i+"_valor").value;
-                        descuento = document.getElementById(i+"_descuento").value;
-                        descuento = ((cantidad * valor) * descuento ) / 100 ;
-                        total = (cantidad * valor);
-                        if($('#'+i+'_fecha_vence').val() == ''){
-                            $('#'+i+'_fecha_vence').val('1999-12-12');
-                        }
-                        document.getElementById(i+"_valortotal").value = total;
-
-                        var parametros = {
-                            'id_sucursal' : '1',
-                            'numero' : factura.numero,
-                            'prefijo' : factura.prefijo,
-                            'id_cliente' : factura.id_cliente,
-                            'id_factura' : factura.id,
-                            'id_vendedor' : factura.id_vendedor,
-                            'fecha' : factura.fecha,
-                            'id_referencia' : $('#'+i+'_producto').val(),
-                            'lote' : $('#'+i+'_lote').val(),
-                            'serial' : $('#'+i+'_serial').val(), //falta
-                            'fecha_vencimiento' : $('#'+i+'_fecha_vence').val(), //falta
-                            'cantidad': $('#'+i+'_cantidad').val(),
-                            'precio' : $('#'+i+'_valor').val(),
-                            'costo' : $('#'+i+'_valor').val(),
-                            'id_documento' : factura.id_documento,
-                            'signo' : factura.signo,
-                            'subtotal' : $('#'+i+'_valortotal').val(),
-                            'iva' : $('#'+i+'_iva').text(),
-                            'impoconsumo': factura.impoconsumo,
-                            'otro_impuesto' : factura.otro_impuesto,
-                            'otro_impuesto1' : factura.otro_impuesto1,
-                            'descuento' : $('#'+i+'_descuento').val(),
-                            'fletes' : factura.fletes,
-                            'retefuente' : factura.retefuente,
-                            'total' : total,
-                            'observaciones' : factura.observaciones,
-                            'id_modificado' : factura.id_modificado,
-                            'kardex_anterior' : factura.id,
-                            'estado' : factura.estado,
-                            'asiento_contable' : response.asiento_contable
-                        };
-                        $.ajax({
-                            data:  parametros,
-                            url:   HOST+'/kardex/saveDocument',
-                            type:  'post',
-                            beforeSend: function () {
-                                $('#resultado').html('<center><div id="cargando" style="position: absolute;width: 100%;height: 100%;background: black;top: 0px;left: 0px;opacity: 0.8;z-index:100"><img src="http://pa1.narvii.com/6598/aa4c454ca15cbd104315d00a5590246f8b8dbbda_00.gif" style="margin-top: 20%;"></div></center>');
-                            },
-                            success:  function (response) {
-                                $('#resultado').hide();
-                                console.log(response);
-                                //si la respuesta es correcta 
-                                if(response.result == "success"){
-                                    console.log("Guardado exitoso fila "+i);
-                                }
-                                else{
-                                    console.log("Error interno fila "+i);
-                                    swal({
-                                      title: "Algo anda mal",
-                                      text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
-                                      icon: "error",
-                                      button: "Aceptar",
-                                    });
-                                }
-                                
-                            },
-                            error: function (request, status, error) {
-                                $('#resultado').hide();
-                                console.log(request.responseText);
-                                swal({
-                                  title: "Algo anda mal",
-                                  text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
-                                  icon: "error",
-                                  button: "Aceptar",
-                                });
-                            }
-                        });
-                    }
-
+                    $('#resultado').hide();
+                    console.log("Guardado exitoso");
                     swal({
-                      title: "Imprimir",
-                      text: "¿Deseas imprimir el documento?",
-                      icon: "warning",
-                      buttons: true,
-                      dangerMode: true,
-                    })
-                    .then((willDelete) => {
-                      if (willDelete) {
-                        window.location.replace("imprimir/"+factura.id);
-                      } else {
-                        swal("Guardado exitoso. En otra ocación podrás imprmir.");
-                      }
-                    });
-
+                        title: "Imprimir",
+                        text: "¿Deseas imprimir el documento?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true,
+                      })
+                      .then((willDelete) => {
+                        if (willDelete) {
+                          window.location.replace("imprimir/"+factura.id);
+                        } else {
+                          swal("Guardado exitoso. En otra ocación podrás imprmir.");
+                        }
+                      });    
                 }
                 else{
-                    alert("Error interno con el servicio adquirido");
+                    console.log("Error interno fila ");
+                    swal({
+                      title: "Algo anda mal",
+                      text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila  de los productos.",
+                      icon: "error",
+                      button: "Aceptar",
+                    });
                 }
-                
             },
             error: function (request, status, error) {
                 $('#resultado').hide();

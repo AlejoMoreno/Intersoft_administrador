@@ -16,6 +16,10 @@ use App\Referencias;
 
 use App\Carteras;
 use App\KardexCarteras;
+use App\Contabilidades;
+use App\Http\Controllers\ContabilidadesController;
+use App\Http\Controllers\KardexController;
+use App\Pucauxiliar;
 
 use Session;
 
@@ -26,70 +30,24 @@ class FacturasController extends Controller
                                ->where('id_empresa','=',Session::get('id_empresa'))->first();
         //aumentar el numero de documento
         $documento->num_presente = intval($documento->num_presente) + 1;
-        /////$documento->save();
+        $documento->save();
         //verificar el clinete/proveedor/tercero
-        //entradas de inventarios
-        if($documento->signo == '+'){
-            $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','1')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->first();
-        }
-        //salidas de inventarios
-        if($documento->signo == '-'){
-            $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','!=','1')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->first();
-        }
-        //nada con el inventario
-        else{
-
-        }
-        dd($request);
-    }
-    public function saveDocument1(Request $request){
-
-    	//buscar si ya existe ese numero con el prefijo y la sucursal de lo contrario es un error.
-        $busqueda_factura = Facturas::where('numero',$request->numero)->
-                                      where('prefijo',$request->prefijo)->
-                                      where('id_documento',$request->id_documento)->
-                                      where('id_sucursal',$request->id_sucursal)->
-                                      where('id_empresa','=',Session::get('id_empresa'))->
-                                      orderBy('numero', 'desc')->get();
-        if(sizeof($busqueda_factura) != 0){ // es documento que ya existe
-            if($request->signo == "-" || $request->signo == "="){ // se aumenta el numero en 1
-                $request->numero = intval($busqueda_factura[0]->numero) + 1;
-            }
-        }
-    	//verificar que el total sea consecuente con el subtotal. 
-    	if($request->signo == '+'){
-    		$request->id_cliente = Directorios::where('nit',$request->id_cliente)->
-                                                where('id_directorio_tipo_tercero','1')->
-                                                where('id_empresa','=',Session::get('id_empresa'))->get()[0]->id;	
-    	}
-    	else{
-    		$request->id_cliente = Directorios::where('nit',$request->id_cliente)->
-                                                where('id_directorio_tipo_tercero','!=','1')->
-                                                where('id_empresa','=',Session::get('id_empresa'))->get()[0]->id;
-    	}
-
+        $tercero = FacturasController::Tercero($documento->signo,$request);
         //verificar si es en efectivo - credito o no aplica (como ajustes)
-        if($request->tipo_pago == 'efectivo'){
+        if($request->tipo_pago == 'efectivo' || $request->tipo_pago == 'na'){
             $request->saldo = 0;
         }
-        else if($request->tipo_pago == 'na'){
-            $request->saldo = 0;
-        }
-
-    	$obj = new Facturas();
+        //creacion de factura 
+        $obj = new Facturas();
     	$obj->id_sucursal		= Session::get('sucursal');
-    	$obj->numero 			= $request->numero;
-		$obj->prefijo 			= $request->prefijo;
-		$obj->id_cliente 		= $request->id_cliente;
+    	$obj->numero 			= $documento->num_presente;
+		$obj->prefijo 			= $documento->prefijo;
+		$obj->id_cliente 		= $tercero->id;
 		$obj->id_tercero 		= $request->id_tercero;
 		$obj->id_vendedor 		= $request->id_vendedor;
 		$obj->fecha 			= $request->fecha;
 		$obj->fecha_vencimiento = $request->fecha_vencimiento;
-		$obj->id_documento 		= $request->id_documento;
+		$obj->id_documento 		= $documento->id;
 		$obj->signo 			= (string)$request->signo;
 		$obj->subtotal 			= $request->subtotal;
 		$obj->iva 				= $request->iva;
@@ -105,93 +63,130 @@ class FacturasController extends Controller
 		$obj->estado 			= $request->estado;
 		$obj->saldo             = $request->saldo;
 		$obj->id_empresa	 	= Session::get('id_empresa');
-        $obj->save();
-        
-        //registrar asiento contable
-        $contabilidad = new App\Contabilidades();
-        $auxiliar = App\Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->where('codigo','=','11050501')->first();
-        $contabilidad->id_auxiliar = $auxiliar->id;
-        $contabilidad->debito = $obj->total;
-        $contabilidad->credito = 0;
-        $contabilidad->tipo_documento = "FACTURA_VENTA";
-        $contabilidad->id_documento = $obj->id;
-        $contabilidad->id_sucursal = Session::get('id_sucursal');
-        $contabilidad->id_empresa = Session::get('id_empresa');
-        $asiento_contable = App\ContabilidadesController::register();
-
-        //si es en efectivo crear el documento de cartera
-        $numero = 1;
-        $tipocartera = "";
-        if($request->tipo_pago == 'efectivo'){
-            if($request->signo == '+'){
-                $carteras = Carteras::where('tipoCartera','=','EGRESO')->
-                                      where('id_empresa','=',Session::get('id_empresa'))->
-                                      orderBy('numero','DESC')->first();
-                if($carteras){
-                   $numero = $carteras->numero +1; 
+        if($obj->save()){ //si guarda correctamente la factura
+            //registro de asiento contable para la factura
+            $obj->asiento_contable = FacturasController::AsientoContable($obj,$documento);
+            $obj->kardex = KardexController::saveDocument($request->productosArr,$obj,$obj->asiento_contable);
+            if(sizeOf($obj->kardex)>0){
+                //registrar el pago
+                $numero = 1;
+                $tipocartera = "";
+                if($request->tipo_pago == 'efectivo'){
+                    if($request->signo == '+'){
+                        $carteras = Carteras::where('tipoCartera','=','EGRESO')->
+                                            where('id_empresa','=',Session::get('id_empresa'))->
+                                            orderBy('numero','DESC')->first();
+                        if($carteras){
+                        $numero = $carteras->numero +1; 
+                        }
+                        $tipocartera = "EGRESO";
+                    }
+                    else{
+                        $carteras = Carteras::where('tipoCartera','=','INGRESO')->
+                                            where('id_empresa','=',Session::get('id_empresa'))->
+                                            orderBy('numero','DESC')->first();
+                        if($carteras){
+                            $numero = $carteras->numero +1;
+                        }
+                        $tipocartera = "INGRESO";
+                    }
+                    $obj_c = new Carteras();
+                    $obj_c->reteiva       = $request->otro_impuesto1;
+                    $obj_c->reteica       = $request->otro_impuesto;
+                    $obj_c->efectivo      = $obj->total;
+                    $obj_c->sobrecosto    = 0;
+                    $obj_c->descuento     = $request->descuento;
+                    $obj_c->retefuente    = $request->retefuente;
+                    $obj_c->otros         = 0;
+                    $obj_c->id_sucursal   = Session::get('sucursal');
+                    $obj_c->numero        = ( $numero + 1 );
+                    $obj_c->prefijo       = "NA";
+                    $obj_c->id_cliente    = $tercero->id;
+                    $obj_c->id_vendedor   = $request->id_vendedor;
+                    $obj_c->fecha         = $request->fecha;
+                    $obj_c->tipoCartera   = $tipocartera;         
+                    $obj_c->subtotal      = $request->subtotal;
+                    $obj_c->total         = $request->total;
+                    $obj_c->id_modificado = $request->id_modificado;
+                    $obj_c->observaciones = $request->observaciones;
+                    $obj_c->id_empresa = Session::get('id_empresa');
+                    $obj_c->estado        = $request->estado;
+                    if($obj_c->save()){
+                        $obj_1 = new KardexCarteras();
+                        $obj_1->id_cartera    = $obj_c->id;
+                        $obj_1->id_factura    = $obj->id;
+                        $obj_1->fechaFactura  = $obj->fecha;
+                        $obj_1->numeroFactura = $obj->numero;
+                        $obj_1->descuentos    = $obj_c->descuento;
+                        $obj_1->sobrecostos   = 0;
+                        $obj_1->fletes        = $obj->fletes;
+                        $obj_1->retefuente    = $obj_c->retefuente;
+                        $obj_1->efectivo      = $obj_c->efectivo;
+                        $obj_1->reteiva       = $obj_c->reteiva;
+                        $obj_1->reteica       = $obj_c->reteica;
+                        $obj_1->id_empresa    = Session::get('id_empresa');
+                        $obj_1->total         = $obj_c->total;
+                        $obj_1->save();
+                    }
                 }
-                $tipocartera = "EGRESO";
-            }
-            else{
-                $carteras = Carteras::where('tipoCartera','=','INGRESO')->
-                                      where('id_empresa','=',Session::get('id_empresa'))->
-                                      orderBy('numero','DESC')->first();
-                if($carteras){
-                    $numero = $carteras->numero +1;
-                }
-                $tipocartera = "INGRESO";
-            }
-            $obj_c = new Carteras();
-            $obj_c->reteiva       = $request->otro_impuesto1;
-            $obj_c->reteica       = $request->otro_impuesto;
-            $obj_c->efectivo      = $obj->total;
-            $obj_c->sobrecosto    = 0;
-            $obj_c->descuento     = $request->descuento;
-            $obj_c->retefuente    = $request->retefuente;
-            $obj_c->otros         = 0;
-            $obj_c->id_sucursal   = Session::get('sucursal');
-            $obj_c->numero        = ( $numero + 1 );
-            $obj_c->prefijo       = "NA";
-            $obj_c->id_cliente    = $request->id_cliente;
-            $obj_c->id_vendedor   = $request->id_vendedor;
-            $obj_c->fecha         = $request->fecha;
-            $obj_c->tipoCartera   = $tipocartera;         
-            $obj_c->subtotal      = $request->subtotal;
-            $obj_c->total         = $request->total;
-            $obj_c->id_modificado = $request->id_modificado;
-            $obj_c->observaciones = $request->observaciones;
-            $obj_c->id_empresa = Session::get('id_empresa');
-            $obj_c->estado        = $request->estado;
-            if($obj_c->save()){
-                $obj_1 = new KardexCarteras();
-                $obj_1->id_cartera    = $obj_c->id;
-                $obj_1->id_factura    = $obj->id;
-                $obj_1->fechaFactura  = $obj->fecha;
-                $obj_1->numeroFactura = $obj->numero;
-                $obj_1->descuentos    = $obj_c->descuento;
-                $obj_1->sobrecostos   = 0;
-                $obj_1->fletes        = $obj->fletes;
-                $obj_1->retefuente    = $obj_c->retefuente;
-                $obj_1->efectivo      = $obj_c->efectivo;
-                $obj_1->reteiva       = $obj_c->reteiva;
-                $obj_1->reteica       = $obj_c->reteica;
-                $obj_1->id_empresa    = Session::get('id_empresa');
-                $obj_1->total         = $obj_c->total;
-                $obj_1->save();
             }
         }
+        //entradas de inventarios
+        
+        return array(
+            "result" => "success",
+            "body" => $obj 
+        );
+    }
+    
 
-        //actualizar el numero del documento
-        $documento = Documentos::where('id',$request->id_documento)->
-                                where('id_empresa','=',Session::get('id_empresa'))->get()[0];
-        //dd($documento->num_presente);
-        $documento->num_presente = $obj->numero;
-        $documento->save();
+    static function AsientoContable($obj,$documento){
+        //registrar asiento contable
+        $contabilidad = new Contabilidades();
+        $num = 0;
+        $cons = Contabilidades::where('id_empresa','=',Session::get('id_empresa'))->orderBy('numero_consecutivo','DSC')->first();
+        if(isset($cons)){$num=$cons->numero_consecutivo;}
+        $contabilidad->numero_consecutivo = intval($num) + 1;
+        $contabilidad->id_auxiliar = $documento->cuenta_contable_partida;
+        if($documento->signo == '-'){
+            $contabilidad->debito = $obj->total;
+            $contabilidad->credito = 0;
+        }
+        else if($documento->signo == '+'){
+            $contabilidad->debito = 0;
+            $contabilidad->credito = $obj->total;
+        }        
+        else{
+            $contabilidad->debito = 0;
+            $contabilidad->credito = 0;
+        }
+        $contabilidad->tipo_documento = $documento->id;
+        $contabilidad->id_documento = $obj->id;
+        $contabilidad->id_sucursal = Session::get('sucursal');
+        $contabilidad->id_empresa = Session::get('id_empresa');
+        $asiento_contable = ContabilidadesController::register($contabilidad);
+        return $asiento_contable;
+    }
 
-		return  array(
-            "result"=>"success",
-            "body"=>$obj,
-            "asiento_contable" => $asiento_contable);
+    public function Tercero($signo,$request){
+        if($signo == '+'){
+            $tercero = Directorios::where('nit',$request->id_cliente)->
+                                    where('id_directorio_tipo_tercero','1')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->first();
+        }
+        //salidas de inventarios
+        if($signo == '-'){
+            $tercero = Directorios::where('nit',$request->id_cliente)->
+                                    where('id_directorio_tipo_tercero','!=','1')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->first();
+        }
+        //nada con el inventario
+        else{
+            $tercero = Directorios::where('nit',$request->id_cliente)->
+                                    where('id_directorio_tipo_tercero','!=','1')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->first();
+        }
+        return $tercero;
     }
 
     public function imprimir($id){

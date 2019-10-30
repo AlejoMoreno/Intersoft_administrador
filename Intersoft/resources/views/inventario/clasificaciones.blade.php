@@ -21,6 +21,7 @@
                                     <th>Nombre</th>
                                     <th>Descripcion</th>
                                     <th>cuenta_contable</th>
+                                    <th>cuenta_contrapartida</th>
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -31,6 +32,7 @@
                                         <td>{{ $obj['nombre'] }}</td>
                                         <td>{{ $obj['descripcion'] }}</td>
                                         <td>{{ $obj['cuenta_contable'] }}</td>
+                                        <td>{{ $obj['cuenta_contrapartida'] }}</td>
                                         <td><a href="javascript:;" onclick="clasificaciones.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
                                         <!--td><a onclick="config.delete_get('/inventario/clasificaciones/delete/', '{{ $obj }}',  '/inventario/clasificaciones');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
@@ -56,6 +58,15 @@
                                     <input type="text" list="pucauxiliares" class="form-control" name="cuenta_contable" id="cuenta_contable" placeholder="Escribe el codigo interno" required="" onkeyup="config.UperCase('codigo_interno');">
                                     <datalist id="pucauxiliares">
                                     @foreach($pucauxiliares as $obj)
+                                    <option value="{{ $obj->id }}">{{ $obj->codigo.'-'.$obj->descripcion }}</option>
+                                    @endforeach
+                                    </datalist>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Cuenta contrapartida</label><br>
+                                    <input type="text" list="cuenta_contrapartidas" class="form-control" name="cuenta_contrapartida" id="cuenta_contrapartida" placeholder="Escribe el codigo interno" required="" onkeyup="config.UperCase('codigo_interno');">
+                                    <datalist id="cuenta_contrapartidas">
+                                    @foreach($pucauxiliares1 as $obj)
                                     <option value="{{ $obj->id }}">{{ $obj->codigo.'-'.$obj->descripcion }}</option>
                                     @endforeach
                                     </datalist>

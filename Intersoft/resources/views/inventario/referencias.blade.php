@@ -187,7 +187,12 @@
 
                                         <div class="col-md-6">
                                             <label>iva (%)</label><br>
-                                            <input type="number" value="0" maxlength="2" class="form-control" name="iva" id="iva" placeholder="Escribe el iva" required="" onkeyup="config.UperCase('iva');">
+                                            <select class="form-control" name="iva" id="iva" placeholder="Escribe el iva" required="">
+                                                <option value="0.19">0.19%</option>
+                                                <option value="0.05">0.05%</option>
+                                                <option value="0.10">0.10%</option>
+                                                <option value="0.16">0.16%</option>
+                                            </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label>impo consumo (%)</label><br>

@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Clasificaciones extends Model
 {
     //
-    protected $fillable = ['nombre','descripcion','cuenta_contable'];
+    protected $fillable = ['nombre','descripcion','cuenta_contable','cuenta_contrapartida'];
 }
