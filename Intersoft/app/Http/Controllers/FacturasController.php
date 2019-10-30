@@ -22,6 +22,31 @@ use Session;
 class FacturasController extends Controller
 {
     public function saveDocument(Request $request){
+        $documento = Documentos::where('id','=',$request->id_documento)
+                               ->where('id_empresa','=',Session::get('id_empresa'))->first();
+        //aumentar el numero de documento
+        $documento->num_presente = intval($documento->num_presente) + 1;
+        /////$documento->save();
+        //verificar el clinete/proveedor/tercero
+        //entradas de inventarios
+        if($documento->signo == '+'){
+            $tercero = Directorios::where('nit',$request->id_cliente)->
+                                    where('id_directorio_tipo_tercero','1')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->first();
+        }
+        //salidas de inventarios
+        if($documento->signo == '-'){
+            $tercero = Directorios::where('nit',$request->id_cliente)->
+                                    where('id_directorio_tipo_tercero','!=','1')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->first();
+        }
+        //nada con el inventario
+        else{
+
+        }
+        dd($request);
+    }
+    public function saveDocument1(Request $request){
 
     	//buscar si ya existe ese numero con el prefijo y la sucursal de lo contrario es un error.
         $busqueda_factura = Facturas::where('numero',$request->numero)->

@@ -605,6 +605,36 @@ function Documentos(){
         var fecha_vencimiento = '';
         if($('#prefijo').val()=='')             { prefijo = '_'; }                          else { prefijo = $('#prefijo').val(); }
         if($('#fecha_vencimiento').val()=='')   { fecha_vencimiento = $('#fecha').val(); }  else { fecha_vencimiento = $('#fecha_vencimiento').val(); }
+        //poner los datos de la tabla de productos en un json 
+        var jsonArr = [];
+        var tabla = document.getElementById("tabla_productos");
+        for (var i=1;i < tabla.rows.length; i++){  
+
+            var cantidad, descuento, valor, total;
+            cantidad = document.getElementById(i+"_cantidad").value;
+            valor = document.getElementById(i+"_valor").value;
+            descuento = document.getElementById(i+"_descuento").value;
+            descuento = ((cantidad * valor) * descuento ) / 100 ;
+            total = (cantidad * valor);
+            if($('#'+i+'_fecha_vence').val() == ''){
+                $('#'+i+'_fecha_vence').val('1999-12-12');
+            }
+            document.getElementById(i+"_valortotal").value = total;
+
+            var productos = {
+                'id_referencia' : $('#'+i+'_producto').val(),
+                'lote' : $('#'+i+'_lote').val(),
+                'serial' : $('#'+i+'_serial').val(), //falta
+                'fecha_vencimiento' : $('#'+i+'_fecha_vence').val(), //falta
+                'cantidad': $('#'+i+'_cantidad').val(),
+                'precio' : $('#'+i+'_valor').val(),
+                'costo' : $('#'+i+'_valor').val(),
+                'subtotal' : $('#'+i+'_valortotal').val(),
+                'iva' : $('#'+i+'_iva').text(),
+                'descuento' : $('#'+i+'_descuento').val()
+            };
+            jsonArr.push(productos);
+        }
         var parametros = {
             'id_sucursal' : '1',
             'numero' : $('#numero').val(),
@@ -629,7 +659,8 @@ function Documentos(){
             'observaciones' : $('#observaciones').val(),
             'estado' : 'ACTIVO',
             'saldo'  : $('#total').val(),
-            'tipo_pago' : $('#tipo_pago').val()
+            'tipo_pago' : $('#tipo_pago').val(),
+            'productosArr' : jsonArr
         };
         $.ajax({
             data:  parametros,
@@ -690,7 +721,8 @@ function Documentos(){
                             'observaciones' : factura.observaciones,
                             'id_modificado' : factura.id_modificado,
                             'kardex_anterior' : factura.id,
-                            'estado' : factura.estado
+                            'estado' : factura.estado,
+                            'asiento_contable' : response.asiento_contable
                         };
                         $.ajax({
                             data:  parametros,
