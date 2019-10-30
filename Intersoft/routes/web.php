@@ -374,6 +374,8 @@ Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 
 Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
 
+Route::get('/contabilidad/librosauxiliares', 'ContabilidadesController@librosauxiliaresIndex');
+
 
 /*
 |--------------------------------------------------------------------------

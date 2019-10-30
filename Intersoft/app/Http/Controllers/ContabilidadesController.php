@@ -55,5 +55,14 @@ class ContabilidadesController extends Controller
         $contabilidad->save();
         return $contabilidad;
     }
+
+    public function librosauxiliaresIndex(){
+        $libros = Contabilidades::select('id_documento')->where('id_empresa','=',Session::get('id_empresa'))
+                                ->groupBy('id_documento')->get();
+        foreach($libros as $libro){
+            $libro->id_documento = Documentos::where('id','=',$libro->id_documento)->first();
+        }
+        return view('contabilidad.librosauxiliares', ['libros' => $libros]);
+    }
     
 }
