@@ -64,5 +64,13 @@ class ContabilidadesController extends Controller
         }
         return view('contabilidad.librosauxiliares', ['libros' => $libros]);
     }
+
+    public function getDcumentos($id){
+        $contabilidades = Contabilidades::where('id_empresa','=',Session::get('id_empresa'))->
+                                          where('id_documento','=',$id)->get();
+        return view('contabilidad.doc.index',[
+            'contabilidades' => $contabilidades
+        ]);
+    }
     
 }
