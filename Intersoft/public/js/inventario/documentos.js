@@ -25,8 +25,10 @@ function Documentos(){
         $('#num_max').val(data.num_max);
         $('#num_min').val(data.num_min);
         $('#num_presente').val(data.num_presente);
-        $('#cuenta_contable_partida').val(data.cuenta_contable_partida);
-        $('#cuenta_contable_contrapartida').val(data.cuenta_contable_contrapartida);
+        $('#documento_contable').val(data.documento_contable);
+        $('#resolucion').val(data.resolucion);
+        $('#usuario').val(data.usuario);
+        $('#password').val(data.password);
 		$('input[type="submit"]').attr('disabled','disabled');
     };
 
@@ -40,8 +42,10 @@ function Documentos(){
             "num_max"  : $('#num_max').val(),
             "num_min"  : $('#num_min').val(),
             "num_presente"  : $('#num_presente').val(),
-            "cuenta_contable_partida" : $('#cuenta_contable_partida').val(),
-			"cuenta_contable_contrapartida" : $('#cuenta_contable_contrapartida').val()
+            "documento_contable" : $('#documento_contable').val(),
+            "resolucion" : $('#resolucion').val(),
+            "usuario" : $('#usuario').val(),
+            "password" : $('#password').val()
         };
         $.ajax({
 			data:  parametros,

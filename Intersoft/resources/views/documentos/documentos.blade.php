@@ -157,6 +157,9 @@ if(isset($_GET['signo'])){
                             where('id_documento',$_GET['id'])->
                             where('id_empresa','=',Session::get('id_empresa'))->
                             orderBy('numero', 'desc')->get();
+
+    $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get();
+                            
     if(sizeof($factura) == 0){
       $factura->numero = $_GET['numero'];
     }
@@ -207,7 +210,28 @@ if(isset($_GET['signo'])){
                     <option value="{{ $obj['nit'] }}" >{{ $obj['nit'] }} _ {{ $obj['razon_social'] }}</option>
                     @endforeach
                   </datalist>
+
+                  <div class="col-sm-6"> 
+                    <label>Usuario creación:</label>
+                    <input type="text" name="id_modificado" id="id_modificado" list="usuarios" class="form-control" placeholder="Esciba el nombre del vendedor" onkeyup="documentos.siguiente(event,'search_referencia');">
+                    <datalist id="usuarios">
+                      @foreach ($usuarios as $obj)
+                      <option value="{{ $obj['id'] }}">{{ $obj['ncedula'] }} / {{ $obj['nombre'] }}</option>
+                      @endforeach
+                    </datalist>
+                    <script>
+                      document.getElementById("id_modificado").value = localStorage.getItem("Id_usuario");
+                    </script>
+                  </div>
                   
+                  <div class="col-sm-6"> 
+                    <label>Tipo Pago: </label>
+                    <select id="tipo_pago" name="tipo_pago" class="form-control">                      
+                      @foreach ($tipo_pagos as $obj)
+                      <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                      @endforeach
+                    </select>
+                  </div>
                   
                 </div>
               </div>
@@ -216,22 +240,16 @@ if(isset($_GET['signo'])){
                  <div>
                   <label>Fecha:</label>
                   <input type="date" name="fecha" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)">
-                  <label>Fecha vencimiento:</label>
-                  <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
-                  <label>Usuario creación:</label>
-                  <input type="text" name="id_modificado" id="id_modificado" list="usuarios" class="form-control" placeholder="Esciba el nombre del vendedor" onkeyup="documentos.siguiente(event,'search_referencia');">
-                  <datalist id="usuarios">
-                    @foreach ($usuarios as $obj)
-                    <option value="{{ $obj['id'] }}">{{ $obj['ncedula'] }} / {{ $obj['nombre'] }}</option>
-                    @endforeach
-                  </datalist>
-                  <script>
-                    document.getElementById("id_modificado").value = localStorage.getItem("Id_usuario");
-                  </script>
+                  <div class="col-sm-12"> 
+                    <label>Fecha vencimiento:</label>
+                    <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                  </div>
                 </div>
                 <div style="width: 100%;height: 20px;"></div>
               </div>
-              <div class="col-sm-2"> <select id="tipo_pago" name="tipo_pago" class="form-control"><option value="efectivo">EFECTIVO</option><option value="credito">CREDITO</option><option value="na">NA</option></select></div>
+
+              <div class="col-sm-12"><br></div>
+              
             </div>
 
             <div class="row">

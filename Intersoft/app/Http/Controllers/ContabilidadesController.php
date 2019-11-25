@@ -10,9 +10,16 @@ use App\Pucclases;
 use App\Puccuentas;
 use App\Pucgrupos;
 use App\Pucsubcuentas;
+use App\Directorios;
+use App\Sucursales;
+use App\Facturas;
 
 use App\Empresas;
 use App\Contabilidades;
+
+use Excel;
+use PDF;
+use DB;
 
 class ContabilidadesController extends Controller
 {
@@ -72,5 +79,65 @@ class ContabilidadesController extends Controller
             'contabilidades' => $contabilidades
         ]);
     }
-    
+
+
+    /**
+     * Excel Reporte
+     */
+    public function exelComprobantesDiario(Request $request){
+        
+        $obj = DB::select("SELECT 
+            contabilidades.tipo_documento as 'tipo_documento', 
+            sucursales.nombre as 'sucursal', 
+            contabilidades.numero_documento as 'numero_documento', 
+            contabilidades.prefijo as 'prefijo', 
+            contabilidades.valor_transaccion as 'valor_transaccion', 
+            contabilidades.tipo_transaccion as 'tipo_transaccion', 
+            pucauxiliars.codigo as 'cuenta', 
+            pucauxiliars.descripcion as 'descripcion', 
+            directorios.nit as 'tercero', 
+            directorios.razon_social as 'razon_social', 
+            contabilidades.fecha_documento as 'fecha_documento' 
+            FROM `contabilidades`, pucauxiliars, facturas, directorios,sucursales 
+            where 
+            contabilidades.id_auxiliar = pucauxiliars.id AND  
+            contabilidades.tercero = directorios.id AND 
+            contabilidades.id_sucursal = sucursales.id");
+        
+        $data= json_decode( json_encode($obj), true);
+
+        Excel::create('Comprobantes Diarios', function($excel) use($data) {
+            $excel->sheet('Contabilidad', function($sheet) use($data) {
+                $sheet->fromArray($data);
+            });
+        })->export('xls');
+    }
+
+    /**
+     * PDF reportes
+     */
+    public function pdf_comprobanteDiario(Request $request){
+        $obj = DB::select("SELECT 
+            contabilidades.tipo_documento as 'tipo_documento', 
+            sucursales.nombre as 'sucursal', 
+            contabilidades.numero_documento as 'numero_documento', 
+            contabilidades.prefijo as 'prefijo', 
+            contabilidades.valor_transaccion as 'valor_transaccion', 
+            contabilidades.tipo_transaccion as 'tipo_transaccion', 
+            pucauxiliars.codigo as 'cuenta', 
+            pucauxiliars.descripcion as 'descripcion', 
+            directorios.nit as 'tercero', 
+            directorios.razon_social as 'razon_social', 
+            contabilidades.fecha_documento as 'fecha_documento' 
+            FROM `contabilidades`, pucauxiliars, facturas, directorios,sucursales 
+            where 
+            contabilidades.id_auxiliar = pucauxiliars.id AND  
+            contabilidades.tercero = directorios.id AND 
+            contabilidades.id_sucursal = sucursales.id");
+        
+        $data= json_decode( json_encode($obj), true);
+
+        $pdf = PDF::loadView('pdfs.pdfcomprobanteDiario', compact('data'));
+        return $pdf->download('invoice.pdf');
+    }
 }

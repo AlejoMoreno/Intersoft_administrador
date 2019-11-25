@@ -18,6 +18,7 @@ cuenta_contable_contrapartida
     */
 	public function create(Request $request){
         try{
+            if($request->prefijo == ""){ $request->prefijo = "NA";}
             $obj = new Documentos();
             $obj->nombre     	= $request->nombre;
             $obj->signo   		= $request->signo;
@@ -26,8 +27,10 @@ cuenta_contable_contrapartida
             $obj->num_max       = $request->num_max;
             $obj->num_min       = $request->num_min;
             $obj->num_presente  = $request->num_presente;
-            $obj->cuenta_contable_partida  		= 0;
-            $obj->cuenta_contable_contrapartida= 0;
+            $obj->documento_contable  		= $request->documento_contable;
+            $obj->resolucion = $request->resolucion;
+            $obj->usuario = $request->usuario;
+            $obj->password = $request->password;
             $obj->id_empresa  = Session::get('id_empresa');
             $obj->save();
             return redirect('/inventario/documentos');
@@ -41,6 +44,7 @@ cuenta_contable_contrapartida
 
     public function update(Request $request){
         try{
+            if($request->prefijo == ""){ $request->prefijo = "NA";}
             $obj = Documentos::where('id',$request->id)->first();
             $obj->nombre     	= $request->nombre;
             $obj->signo   		= $request->signo;
@@ -49,8 +53,10 @@ cuenta_contable_contrapartida
             $obj->num_max       = $request->num_max;
             $obj->num_min       = $request->num_min;
             $obj->num_presente  = $request->num_presente;
-            $obj->cuenta_contable_partida  		= 0;
-            $obj->cuenta_contable_contrapartida= 0;
+            $obj->documento_contable  		= $request->documento_contable;
+            $obj->resolucion = $request->resolucion;
+            $obj->usuario = $request->usuario;
+            $obj->password = $request->password;
             $obj->id_empresa  = Session::get('id_empresa');
             $obj->save();
             return $obj;

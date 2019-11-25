@@ -39,10 +39,21 @@
             <div class="card">
                 <div class="header">
                     <h4 class="title">Documentos</h4>
-                    <p class="category">Elige que quieres hacer</p>
+                    <p class="category">Elige que quieres hacer</p>                    
                 </div>
+                <div class="col-md-12">
+                        <div class="col-md-6">
+                            <label>Descargar Informe Diario</label><br>
+                            <div onclick="comprobantesDiario.envioExcel()" class="btn btn-success">(EXCEL)</div>
+                            <div onclick="comprobantesDiario.envioPDF()" class="btn btn-danger">(PDF)</div>
+                        </div>                                
+                        <div class="col-md-3"><label>Desde:</label><input id="desde" class="form-control" type="date"></div>
+                        <div class="col-md-3"><label>Hasta:</label><input id="hasta" class="form-control" type="date"></div>
+                    </div>
+                    <div class="col-md-12"><br></div>
                 <div class="content">
                     <div> 
+                            
                     <table class="table table-hover table-striped"  id="datos">
                                     <thead>
                                         <TH>código</TH>
@@ -144,6 +155,25 @@
         </div>
     </div>
 </div>
+
+<script>
+var comprobantesDiario = new ComprobantesDiario();
+
+function ComprobantesDiario(){
+
+    this.envioPDF = function(){
+        var desde = $('#desde').val();
+        var hasta = $('#hasta').val();
+        config.Redirect("/pdf/pdf_comprobanteDiario?desde="+desde+"&hasta="+hasta);
+    }
+
+    this.envioExcel = function(){
+        var desde = $('#desde').val();
+        var hasta = $('#hasta').val();
+        config.Redirect("/excel/excelComprobantesDiario?desde="+desde+"&hasta="+hasta);
+    }
+}
+</script>
 
 @endsection()
 

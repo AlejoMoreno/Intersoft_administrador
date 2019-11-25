@@ -111,8 +111,15 @@ $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->ge
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/documentos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Administración de Documentos</td>
+                                            <td>Documentos entrada y salida de mercancía</td>
                                             <td><?php echo sizeof($documentos); ?></td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
+                                            <td>Administración de Tipo Pagos</td>
+                                            <td></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>

@@ -119,6 +119,15 @@ Route::get('/administrador/ciudades/update/{id}', 'CiudadesController@showupdate
 Route::post('/administrador/ciudades/create', 'CiudadesController@create');
 Route::post('/administrador/ciudades/update', 'CiudadesController@update');
 
+//tipoPagos
+Route::get('/administrador/tipopagos', 'TipopagosController@index');
+Route::get('/administrador/tipopagos/all', 'TipopagosController@all');
+Route::get('/administrador/tipopagos/{id}', 'TipopagosController@formcreate');
+Route::get('/administrador/tipopagos/delete/{id}', 'TipopagosController@delete');
+Route::get('/administrador/tipopagos/update/{id}', 'TipopagosController@showupdate');
+Route::post('/administrador/tipopagos/create', 'TipopagosController@create');
+Route::post('/administrador/tipopagos/update', 'TipopagosController@update');
+
 //inventario Lineas
 Route::get('/inventario/lineas', function(){
     return view('inventario.lineas');
@@ -405,8 +414,10 @@ Route::get('/documentos/consultar/{documento}', 'FacturasController@consultar_do
 
 //DESCARGAR EN EXCEL
 Route::get('/download/excel/sucursales', 'SucursalesController@excel_all');
+Route::get('/excel/excelComprobantesDiario', 'ContabilidadesController@exelComprobantesDiario');
 
 //DESCARGAR EN PDF
 Route::get('/download/pdf/sucursales', 'SucursalesController@pdf_all');
 Route::post('/send', 'EmailController@send');
+Route::get('/pdf/pdf_comprobanteDiario', 'ContabilidadesController@pdf_comprobanteDiario');
 
