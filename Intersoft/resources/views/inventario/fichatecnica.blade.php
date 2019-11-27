@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Ordenes de Producción</h4>
+                    <h4 class="title">Ficha técnica</h4>
                     <p class="category">Crea fichas técnicas de producción <a href="ordenesproduccion" class="btn btn-success" style="background:white;">Nueva</a></p>
                 </div>
                 <div class="content">
@@ -36,7 +36,7 @@
                         <div class="panel panel-success">
                             <div class="panel-heading">
                                 <div class="row">
-                                    <div class="col-md-4">Creación orden </div>
+                                    <div class="col-md-4">Creación ficha </div>
                                     <div class="col-md-4">
                                         @if(sizeOf($fichatecnicas) > 0)
                                         <input type="text" name="orden" id="orden" class="col-md-6 form-control" value="{{$fichatecnicas[0]->orden}}" placeholder="# codigo" required >

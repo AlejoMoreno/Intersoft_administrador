@@ -54,7 +54,7 @@ class FichatecnicasController extends Controller
 
             $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
                                       ->where('id_clasificacion','=','2')->get();
-            return view('inventario.ordenesproduccion', [
+            return view('inventario.fichatecnica', [
                 'fichatecnicas' => $objs,
                 'referencias' => $referencias,
                 'ficha' => $ficha]);
@@ -64,5 +64,13 @@ class FichatecnicasController extends Controller
                 "result"=>"fail",
                 "body"=>$exception);
         }
+    }
+
+    public function ordenesdeproduccion(){
+        $fichatecnica = Fichatecnicas::select(['orden','nombre','id_empresa'])->where('id_empresa','=',Session::get('id_empresa'))
+            ->groupBy(['orden','nombre','id_empresa'])->get();
+        return view('inventario.ordenesdeproduccion', [
+            'fichatecnicas' => $fichatecnica
+        ]);
     }
 }

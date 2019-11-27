@@ -2,7 +2,12 @@ var referencias = new Referencias();
 
 function Referencias(){
 
-    this.initial = function(){
+    this.initial = function(parametros){
+		console.log(parametros);
+		$('#orden').val(parametros.orden);
+		$('#tipo_reporte').val(parametros.tipo_reporte);
+		$('#linea').val(parametros.linea);
+
         $('#actualizar').hide();
         $('#crear').hide();
         $('#tabla').show();
@@ -135,7 +140,28 @@ function Referencias(){
                 config.Redirect('/inventario/referencias');
 			}
         });
-    }
+	}
+	
+	this.observar = function(){
+		var orden = $('#orden').val();
+		var tipo_reporte = $('#tipo_reporte').val();
+		var linea = $('#linea').val();
+        config.Redirect("referencias?orden="+orden+"&tipo_reporte="+tipo_reporte+"&linea="+linea);
+	}
+	
+	this.envioExcel = function(){
+		var orden = $('#orden').val();
+		var tipo_reporte = $('#tipo_reporte').val();
+		var linea = $('#linea').val();
+        config.Redirect("/excel/excelreferencias1?orden="+orden+"&tipo_reporte="+tipo_reporte+"&linea="+linea);
+	}
+
+	this.envioPDF = function(){
+		var orden = $('#orden').val();
+		var tipo_reporte = $('#tipo_reporte').val();
+		var linea = $('#linea').val();
+        config.Redirect("/pdf/pdfreferencias1?orden="+orden+"&tipo_reporte="+tipo_reporte+"&linea="+linea);
+	}
 
 
 

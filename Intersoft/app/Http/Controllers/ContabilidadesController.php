@@ -98,11 +98,11 @@ class ContabilidadesController extends Controller
             directorios.nit as 'tercero', 
             directorios.razon_social as 'razon_social', 
             contabilidades.fecha_documento as 'fecha_documento' 
-            FROM `contabilidades`, pucauxiliars, facturas, directorios,sucursales 
-            where 
-            contabilidades.id_auxiliar = pucauxiliars.id AND  
-            contabilidades.tercero = directorios.id AND 
-            contabilidades.id_sucursal = sucursales.id");
+            FROM `contabilidades` 
+                JOIN sucursales ON contabilidades.id_sucursal = sucursales.id 
+                JOIN pucauxiliars ON contabilidades.id_auxiliar = pucauxiliars.id 
+                JOIN directorios ON contabilidades.tercero = directorios.id
+            WHERE contabilidades.id_empresa = ".Session::get("id_empresa"));
         
         $data= json_decode( json_encode($obj), true);
 
@@ -129,11 +129,11 @@ class ContabilidadesController extends Controller
             directorios.nit as 'tercero', 
             directorios.razon_social as 'razon_social', 
             contabilidades.fecha_documento as 'fecha_documento' 
-            FROM `contabilidades`, pucauxiliars, facturas, directorios,sucursales 
-            where 
-            contabilidades.id_auxiliar = pucauxiliars.id AND  
-            contabilidades.tercero = directorios.id AND 
-            contabilidades.id_sucursal = sucursales.id");
+            FROM `contabilidades` 
+                JOIN sucursales ON contabilidades.id_sucursal = sucursales.id 
+                JOIN pucauxiliars ON contabilidades.id_auxiliar = pucauxiliars.id 
+                JOIN directorios ON contabilidades.tercero = directorios.id
+            WHERE contabilidades.id_empresa = ".Session::get("id_empresa"));
         
         $data= json_decode( json_encode($obj), true);
 

@@ -1,26 +1,18 @@
 <head>
-        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-        <meta name="viewport" content="width=device-width" />
-        <!-- Bootstrap core CSS     -->
-        <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
-        <!-- Animation library for notifications   -->
-        <link href="/assets/css/animate.min.css" rel="stylesheet"/>
-        <!--  Light Bootstrap Table core CSS    -->
-        <link href="/assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
-        <!--  CSS for Demo Purpose, don't include it in your project     -->
-        <link href="/assets/css/demo.css" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="icon" type="image/png" href="http://wakusoft.com/img/works/thumbs/1.png">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<title>Intersoft</title>
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <!-- Bootstrap core CSS     -->
+    <link href="{{ public_path('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
 
-    <head>
-    <meta charset="UTF-8">
-    </head>
-    <style type="text/css">
-        *{
-            font-size: 9px;
-        }
-    </style>
+    <link  href="{{ public_path('assets/css/pdfstyle.css') }}" rel="stylesheet"/>
+</head>
     <div class="container">
         <h1>Reporte Diario Contable</h1>
-        <table class="table">
+        <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>tipo_documento</th>

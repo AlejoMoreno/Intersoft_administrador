@@ -318,7 +318,8 @@ Route::post('/inventario/documentos/update', 'DocumentosController@update');
 Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
 
 //ordenes de produccion (ficha "receta")
-Route::get('/inventario/ordenesproduccion', 'FichatecnicasController@index');
+Route::get('/inventario/fichatecnica', 'FichatecnicasController@index');
+Route::get('/inventario/ordenesdeproduccion', 'FichatecnicasController@ordenesdeproduccion');
 Route::get('/inventario/materiaprima', 'ReferenciasController@materiaprima');
 
 
@@ -415,9 +416,11 @@ Route::get('/documentos/consultar/{documento}', 'FacturasController@consultar_do
 //DESCARGAR EN EXCEL
 Route::get('/download/excel/sucursales', 'SucursalesController@excel_all');
 Route::get('/excel/excelComprobantesDiario', 'ContabilidadesController@exelComprobantesDiario');
+Route::get('/excel/excelreferencias1', 'ReferenciasController@excelreferencias1');
 
 //DESCARGAR EN PDF
 Route::get('/download/pdf/sucursales', 'SucursalesController@pdf_all');
 Route::post('/send', 'EmailController@send');
 Route::get('/pdf/pdf_comprobanteDiario', 'ContabilidadesController@pdf_comprobanteDiario');
+Route::get('/pdf/pdfreferencias1', 'ReferenciasController@pdfreferencias1');
 

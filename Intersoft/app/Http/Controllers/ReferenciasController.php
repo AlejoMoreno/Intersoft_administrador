@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection as Collection;
 
 use App\Referencias;
 
@@ -15,6 +16,8 @@ use App\Cuentas;
 use App\Pucauxiliar;
 
 use DB;
+use Excel;
+use PDF;
 
 use Session;
 
@@ -150,9 +153,33 @@ class ReferenciasController extends Controller
         }
     }
 
-    public function index(){
+    public function index(Request $request){
 		try{
-			$objs = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+			$sql = " WHERE 1=1 ";
+			$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+			if($request->linea != '' ){
+				if($request->linea !=0){
+					$sql .= " AND codigo_linea = ".$request->linea."";
+				}
+			}
+			if($request->tipo_reporte != ''){
+				if($request->tipo_reporte == 'exitencia'){
+					$sql .= " AND saldo > 0 ";
+				}
+			}
+			if($request->orden != ''){
+				if($request->orden == "codigo"){
+					$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+				}
+				else{
+					$orden = " ORDER BY ".$request->orden;
+				}
+			}
+			$objs = DB::select("SELECT * FROM referencias ".$sql." AND id_empresa = ".Session::get('id_empresa')." ".$orden);
+			$objs= Collection::make($objs);
+			
+			//$objs = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+			
 			$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
 			$presentaciones = Tipo_presentaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
 			$marcas = Marcas::where('id_empresa','=',Session::get('id_empresa'))->get();
@@ -246,5 +273,122 @@ class ReferenciasController extends Controller
 				"result"=>"fail",
 				"body"=>$exception);
 		}
+	}
+	
+
+	/**
+     * Excel Reporte
+     */
+    public function excelreferencias1(Request $request){
+        
+        $sql = " WHERE 1=1 ";
+		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+		if($request->linea != '' ){
+			if($request->linea !=0){
+				$sql .= " AND codigo_linea = ".$request->linea."";
+			}
+		}
+		if($request->tipo_reporte != ''){
+			if($request->tipo_reporte == 'exitencia'){
+				$sql .= " AND saldo > 0 ";
+			}
+		}
+		if($request->orden != ''){
+			if($request->orden == "codigo"){
+				$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+			}
+			else{
+				$orden = " ORDER BY ".$request->orden;
+			}
+		}
+		$objs = DB::select("
+			SELECT 
+			concat(referencias.codigo_linea, referencias.codigo_letras, referencias.codigo_consecutivo) as codigo,
+			referencias.descripcion,
+			'' as conteo,
+			referencias.saldo,
+			'' as sobra,
+			'' as falta,
+			referencias.costo,
+			lineas.nombre,
+			tipo_presentaciones.nombre,
+			marcas.nombre,
+			referencias.codigo_barras,
+			referencias.stok_minimo,
+			referencias.stok_maximo,
+			referencias.iva,
+			referencias.impo_consumo,
+			referencias.sobre_tasa,
+			referencias.serie,
+			referencias.descuento,
+			referencias.peso,
+			referencias.precio1,
+			referencias.precio2,
+			referencias.precio3,
+			referencias.precio4,
+			usuarios.ncedula,
+			referencias.id_empresa
+			FROM `referencias` 
+			INNER JOIN lineas ON referencias.codigo_linea = lineas.id
+			INNER JOIN tipo_presentaciones ON referencias.id_presentacion = tipo_presentaciones.id
+			INNER JOIN marcas ON referencias.id_marca = marcas.id
+			INNER JOIN usuarios ON referencias.usuario_creador = usuarios.id
+		".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
+		$objs= Collection::make($objs);
+			
+        
+        $data= json_decode( json_encode($objs), true);
+
+        Excel::create('Comprobantes Diarios', function($excel) use($data) {
+            $excel->sheet('Contabilidad', function($sheet) use($data) {
+                $sheet->fromArray($data);
+            });
+        })->export('xls');
+    }
+
+    /**
+     * PDF reportes
+     */
+    public function pdfreferencias1(Request $request){
+		
+		$sql = " WHERE 1=1 ";
+		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+		if($request->linea != '' ){
+			if($request->linea !=0){
+				$sql .= " AND codigo_linea = ".$request->linea."";
+			}
+		}
+		if($request->tipo_reporte != ''){
+			if($request->tipo_reporte == 'exitencia'){
+				$sql .= " AND saldo > 0 ";
+			}
+		}
+		if($request->orden != ''){
+			if($request->orden == "codigo"){
+				$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+			}
+			else{
+				$orden = " ORDER BY ".$request->orden;
+			}
+		}
+		$objs = DB::select("
+			SELECT 
+			concat(referencias.codigo_linea, referencias.codigo_letras, referencias.codigo_consecutivo) as codigo,
+			referencias.descripcion,
+			'' as conteo,
+			referencias.saldo,
+			'' as sobra,
+			'' as falta,
+			referencias.costo,
+			referencias.id_empresa
+			FROM `referencias` 
+		".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
+		$objs= Collection::make($objs);
+		
+        
+        $data= json_decode( json_encode($objs), true);
+
+        $pdf = PDF::loadView('pdfs.pdfreferencias1', compact('data'));
+        return $pdf->download('Referencias.pdf');
     }
 }
