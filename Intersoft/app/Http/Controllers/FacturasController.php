@@ -216,7 +216,8 @@ class FacturasController extends Controller
         $contabilidad->tercero = $factura->id_cliente;
         $contabilidad->id_auxiliar = $id_auxiliar;
         $contabilidad->id_empresa = Session::get('id_empresa');
-        $asiento_contable = ContabilidadesController::register($contabilidad);
+        $asiento_contable = $contabilidad->save();
+        //$asiento_contable = ContabilidadesController::register($contabilidad);
         return $asiento_contable;
     }
 
