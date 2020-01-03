@@ -173,12 +173,12 @@
                                         <input type="text" class="form-control" name="codigo_barras" id="codigo_barras" placeholder="Escribe el codigo_barras" required="" onkeyup="config.UperCase('codigo_barras');">
 
                                         <div class="col-md-6">
-                                            <label>código interno</label><br>
-                                            <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno" value="NA" onkeyup="config.UperCase('codigo_interno');">
+                                            <!--<label>código interno</label><br>-->
+                                            <input type="hidden" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno" value="NA" onkeyup="config.UperCase('codigo_interno');">
                                         </div>
                                         <div class="col-md-6">
-                                            <label>código alterno</label><br>
-                                            <input type="text" class="form-control" name="codigo_alterno" id="codigo_alterno" placeholder="Escribe el codigo_alterno" value="NA" onkeyup="config.UperCase('codigo_alterno');">
+                                            <!--<label>código alterno</label><br>-->
+                                            <input type="hidden" class="form-control" name="codigo_alterno" id="codigo_alterno" placeholder="Escribe el codigo_alterno" value="NA" onkeyup="config.UperCase('codigo_alterno');">
                                         </div>
 
                                         <div class="col-md-6">
@@ -223,17 +223,18 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label>iva (%)</label><br>
-                                            <select class="form-control" name="iva" id="iva" placeholder="Escribe el iva" required="">
-                                                <option value="0.19">0.19%</option>
+                                            <!--<label>iva (%)</label><br>-->
+                                            <input type="hidden" name="iva" id="iva" value="0.19">
+                                            <!--<select class="form-control" name="iva" id="iva" placeholder="Escribe el iva" required="">
+                                                <option value="">0.19%</option>
                                                 <option value="0.05">0.05%</option>
                                                 <option value="0.10">0.10%</option>
                                                 <option value="0.16">0.16%</option>
-                                            </select>
+                                            </select>-->
                                         </div>
                                         <div class="col-md-6">
-                                            <label>impo consumo (%)</label><br>
-                                            <input type="number" value="0" maxlength="2" class="form-control" name="impo_consumo" id="impo_consumo" placeholder="Escribe el impo_consumo" required="" onkeyup="config.UperCase('impo_consumo');">
+                                            <!--<label>impo consumo (%)</label><br>-->
+                                            <input type="hidden" value="0" maxlength="2" class="form-control" name="impo_consumo" id="impo_consumo" placeholder="Escribe el impo_consumo" required="" onkeyup="config.UperCase('impo_consumo');">
                                         </div>
 
                                         <div class="col-md-6">

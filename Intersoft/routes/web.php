@@ -386,7 +386,12 @@ Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
 
 Route::get('/contabilidad/librosauxiliares', 'ContabilidadesController@librosauxiliaresIndex');
 Route::get('/contabilidad/comprobantesdiario', function(){ return view('contabilidad.comprobantesdiario'); });
-Route::get('/contabilidad/doc/{id}', 'ContabilidadesController@getDcumentos');
+Route::get('/contabilidad/doc/{id}', 'ContabilidadesController@getDocumentos');
+
+Route::post('/contabilidad/comprobantes/viewComprobantes', 'ContabilidadesController@viewComprobantes');
+Route::post('/contabilidad/comprobantes/deleteComprobantes', 'ContabilidadesController@deleteComprobantes');
+Route::post('/contabilidad/comprobantes/updateComprobantes', 'ContabilidadesController@updateComprobantes');
+Route::post('/contabilidad/comprobantes/createComprobantes', 'ContabilidadesController@createComprobantes');
 
 /*
 |--------------------------------------------------------------------------

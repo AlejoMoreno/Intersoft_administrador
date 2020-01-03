@@ -59,8 +59,8 @@
     <script type="text/javascript" src="/js/contabilidad/cuentas.js"></script>
 
 </head>
-<body>
-
+<body onbeforeunload="config.leave_page()">
+<div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;"><div class="loader"></div></div>
 <div class="wrapper">
     <div class="sidebar" data-color="blue" data-image="/assets/img/sidebar-1.jpg" style="overflow-x:hidden">
 
@@ -250,6 +250,7 @@
             document.getElementById(menu[i]).classList.add("active");
         }
     }
+    
 </script>
 
 <style>

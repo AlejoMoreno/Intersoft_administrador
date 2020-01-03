@@ -64,77 +64,77 @@
                                         <tr>
                                             <td>01</td>
                                             <td>EGRESO</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/1">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/1?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>02</td>
                                             <td>RECIBOS DE CAJA</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/2">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/2?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>03</td>
                                             <td>FACTURAS DE VENTA</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/3">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/3?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>04</td>
                                             <td>FACTURAS DE COMPRA</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/4">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/4?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>05</td>
                                             <td>CAUSACIONES</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/5">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/5?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>06</td>
-                                            <td>DEPRESIACION</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/6">*</a></td>
+                                            <td>DEPRECIACION</td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/6?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>07</td>
                                             <td>NOTA DB</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/7">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/7?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>08</td>
                                             <td>CONSIGNACION</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/8">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/8?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>09</td>
                                             <td>NOTA CR</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/9">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/9?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>10</td>
                                             <td>NOTA CONTABLE</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/10">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/10?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>11</td>
                                             <td>COMPROBANTE CIERRE CONTABLE</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/11">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/11?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>12</td>
                                             <td>INGRESO X CONSIGNACION</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/12">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/12?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>13</td>
                                             <td>SALIDA X CONSIGNACION</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/13">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/13?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>14</td>
                                             <td>INGRESO Y SALIDA DE PRODUCCION</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/14">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/14?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                         <tr>
                                             <td>15</td>
                                             <td>NOTA NITF</td>
-                                            <td><a class="btn btn-info" href="/contabilidad/doc/15">*</a></td>
+                                            <td><a class="btn btn-info" onclick="config.Redirect('/contabilidad/doc/15?desde='+$('#desde').val()+'&hasta='+$('#hasta').val())">*</a></td>
                                         </tr>
                                     </tbody>
                                 </table>
