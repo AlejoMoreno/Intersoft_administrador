@@ -20,7 +20,7 @@ use App\Contabilidades;
 use App\Http\Controllers\ContabilidadesController;
 use App\Http\Controllers\KardexController;
 use App\Pucauxiliar;
-use App\TipoPagos;
+use App\Tipopagos;
 
 use Session;
 
@@ -37,7 +37,7 @@ class FacturasController extends Controller
         //verificar si es en efectivo - credito o no aplica (como ajustes)
         $banderaTipoPago = true; // si tiene un tipo de pago, de lo contrario no se tiene en cuenta en contabilidad
         if($request->tipo_pago != 0){
-            $tipopago = TipoPagos::where('id_empresa','=',Session::get('id_empresa'))
+            $tipopago = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))
                               ->where('id','=',$request->tipo_pago)->first();
             if($tipopago->nombre == 'EFECTIVO'){
                 $request->saldo = 0;
@@ -90,7 +90,7 @@ class FacturasController extends Controller
                 $numero = 1;
                 $tipocartera = "";
                 if($request->tipo_pago != 0){
-                    $tipopago = TipoPagos::where('id_empresa','=',Session::get('id_empresa'))
+                    $tipopago = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))
                                       ->where('id','=',$request->tipo_pago)->first();
                     if($tipopago->nombre == 'EFECTIVO'){
                         if($request->signo == '+'){
