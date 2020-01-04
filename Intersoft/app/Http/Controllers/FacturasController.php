@@ -82,9 +82,15 @@ class FacturasController extends Controller
                 else if($request->signo == '-'){
                     $obj->asiento_contable = FacturasController::AsientoContableCaja($obj,$documento,'D',$tipopago->puc_cuenta);
                 }
-            } 
+            }
             //registro de cada saldo y movimientos contables porcada producto
-            $obj->kardex = KardexController::saveDocument($request->productosArr,$obj,$obj->asiento_contable);
+            if($banderaTipoPago == true){
+                $obj->kardex = KardexController::saveDocument($request->productosArr,$obj,$obj->asiento_contable);
+            }
+            else{
+                $obj->kardex = KardexController::saveDocumentSinContabilidad($request->productosArr,$obj,$obj->asiento_contable);
+            }
+            
             if(sizeOf($obj->kardex)>0){
                 //registrar el pago
                 $numero = 1;
@@ -216,9 +222,8 @@ class FacturasController extends Controller
         $contabilidad->tercero = $factura->id_cliente;
         $contabilidad->id_auxiliar = $id_auxiliar;
         $contabilidad->id_empresa = Session::get('id_empresa');
-        $asiento_contable = $contabilidad->save();
-        //$asiento_contable = ContabilidadesController::register($contabilidad);
-        return $asiento_contable;
+        $contabilidad->save();
+        return $contabilidad;
     }
 
     static function AsientoContablePago(){

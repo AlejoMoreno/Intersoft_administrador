@@ -30,6 +30,19 @@ class KardexController extends Controller
 		}
 		return $productos_insertados;
 	}
+
+	static function saveDocumentSinContabilidad($productosArr,$factura,$asiento_contable){
+		$productos_insertados = array();
+		//recorrer los productos
+		foreach($productosArr as $producto){
+			$obj_pro = KardexController::AddProducto($producto,$factura);
+			//$asiento = KardexController::AsientoContable($obj_pro,$asiento_contable,$factura->signo);
+			//asientp contable
+			array_push($productos_insertados, $obj_pro);
+		}
+		return $productos_insertados;
+	}
+
     static function AddProducto($producto,$factura){
 		$producto = (object)$producto;
     	if($producto->lote == '' || $producto->lote == null){
@@ -174,7 +187,7 @@ class KardexController extends Controller
 		if($signo == '-'){ //va  ala contrapartida
 			$tipo_transaccion = "C";
 			$puc = $linea->puc_venta;
-			$puc_val = $obj_pro->precio;
+			$puc_val = $obj_pro->total;
 			$iva = $linea->v_puc_iva;
 			$iva_val = $puc_val * ($linea->iva_porcentaje/100);
 			$reteica = $linea->v_puc_reteica;
@@ -187,7 +200,7 @@ class KardexController extends Controller
 		else if($signo == '+'){ //va  ala partida
 			$tipo_transaccion = "D";
 			$puc = $linea->puc_compra;
-			$puc_val = $obj_pro->precio;
+			$puc_val = $obj_pro->total;
 			$iva = $linea->c_puc_iva;
 			$iva_val = $puc_val * ($linea->iva_porcentaje/100);
 			$reteica = $linea->c_puc_reteica;
@@ -232,6 +245,8 @@ class KardexController extends Controller
 		$contabilidad4->tipo_transaccion = $tipo_transaccion;
 		$contabilidad4->id_auxiliar = $retefuente;
 		$contabilidad4->valor_transaccion = $retefuente_val;
+
+		dd($puc_val);
 
 		$asiento_contable1 = ContabilidadesController::register($contabilidad);
 		$asiento_contable1 = ContabilidadesController::register($contabilidad1);
