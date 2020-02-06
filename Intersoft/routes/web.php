@@ -415,6 +415,9 @@ Route::post('/kardex/saveDocument', 'KardexController@saveDocument');
 Route::post('/factura/saveDocument', 'FacturasController@saveDocument');
 Route::get('/kardex/show/{id}', 'KardexController@showid');
 
+//Factura post
+Route::get('/documentos/facturaPost', 'FacturasController@facturaPost');
+
 //consultar documentos
 Route::get('/documentos/consultar/{documento}', 'FacturasController@consultar_documento');
 

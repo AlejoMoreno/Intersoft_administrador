@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="/css/menu.css">
     <!-- SCRIPTS FAMC -->
     <script type="text/javascript" src="/js/config.js"></script>
+    <script type="text/javascript" src="/js/texto.js"></script>
     <script type="text/javascript" src="/js/DB/sesion.js"></script>
     <script type="text/javascript" src="/js/perfil.js"></script>
     <script type="text/javascript" src="/js/marcas.js"></script>
@@ -300,6 +301,8 @@
     }
 }
 <style>
+
+
 
 </body>
 

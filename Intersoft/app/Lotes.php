@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Lotes extends Model
 {
     //
-    protected $fillable = ['id_referencia','numero_lote','fecha_vence_lote','ubicacion','serial','cantidad'];
+    protected $fillable = ['id_referencia','numero_lote','fecha_vence_lote','ubicacion','serial','cantidad','id_sucursal'];
 }

@@ -114,6 +114,7 @@ class KardexController extends Controller
 	        $lotes->serial            	= $obj->serial;
 			$lotes->cantidad          	= $obj->cantidad;
 			$lotes->id_empresa	= Session::get('id_empresa');
+			$lotes->id_sucursal	= Session::get('sucursal');
 			$lotes->save();
 	        
 		}
@@ -246,7 +247,7 @@ class KardexController extends Controller
 		$contabilidad4->id_auxiliar = $retefuente;
 		$contabilidad4->valor_transaccion = $retefuente_val;
 
-		dd($puc_val);
+		//dd($puc_val);
 
 		$asiento_contable1 = ContabilidadesController::register($contabilidad);
 		$asiento_contable1 = ContabilidadesController::register($contabilidad1);

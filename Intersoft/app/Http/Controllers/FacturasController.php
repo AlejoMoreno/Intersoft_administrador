@@ -405,4 +405,8 @@ class FacturasController extends Controller
             );
         }
     }
+
+    public function facturaPost() {
+        return view('documentos.facturaPost');
+    }
 }

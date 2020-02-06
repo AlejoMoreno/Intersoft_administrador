@@ -6,6 +6,8 @@
 <div class="container-fluid">
     <div class="row">
 
+    
+
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
@@ -44,6 +46,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $auxiliares->links() }}
                     
                 </div>
 
@@ -86,14 +89,17 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input name="pucsubcuentas" list="pucsubcuentas" class="form-control">
-                                    <datalist id="pucsubcuentas">
+                                    <select name="pucsubcuentas"  id="pucsubcuentas" onchange="cuentaContable.changeSubCuentas();" class="form-control">
                                     @foreach($pucsubcuentas as $pucsubcuenta)
                                     <option value="{{ $pucsubcuenta->id }}">{{ $pucsubcuenta->codigo . '-' . $pucsubcuenta->descripcion }}</option>
                                     @endforeach
-                                    </datalist>
+                                    </select>
                                 </td>
-                                <td><input type="text" class="form-control" name="codigo" id="codigo"></td>
+                                <td>
+                                    <input type="text" list="pucauxiliarcuentas" class="form-control" name="codigo" id="codigo" onchange="cuentaContable.changeAuxiliarCuentas();">
+                                    <div id="listachange">
+                                    </div>
+                                </td>
                                 <td><input type="text" class="form-control" name="descripcion" id="descripcion"></td>
                                 <td>
                                     <select type="text" class="form-control" name="exogena" id="exogena">
@@ -148,5 +154,11 @@
     </div>
 </div>
 
+<div id="data">{{ $auxiliares }}</div>
+<script>
+$(document).ready(function(){
+    cuentaContable.init();
+});
+</script>
 
 @endsection()

@@ -489,20 +489,13 @@ SIGNO MENOS
                 <div>
                   <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
                   <label>Cédula: <div class="btn btn-info" style="height: 30px;" data-toggle="modal" data-target="#terceros">+</div></label>
-                  <input type="text" name="cedula_tercero" onkeyup="documentos.searchDirectorio(event);" id="cedula_tercero" class="form-control">
-                  <ul id="listDirectorio">
+                  <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" class="form-control">
+                  <datalist id="listDirectorio">
                     @foreach ($directorios as $obj)
-                    <li><a href="javascript:;" onclick="documentos.seleccionDirectorio({{ $obj }})">{{ $obj['nit'] }}</a></li>
+                    <option value="{{ $obj['nit'] }}" >{{ $obj['nit'] }} _ {{ $obj['razon_social'] }}</option>
                     @endforeach
-                  </ul>
+                  </datalist>
                   
-                  <label>Nombre:</label>
-                  <input type="text" name="nombre_tercero" onkeyup="documentos.searchDirectorio2(event);" id="nombre_tercero" class="form-control">
-                  <ul id="listDirectorio2">
-                    @foreach ($directorios as $obj)
-                    <li><a href="javascript:;" onclick="documentos.seleccionDirectorio({{ $obj }})">{{ $obj['razon_social'] }}</a></li>
-                    @endforeach
-                  </ul>
                 </div>
                 <p>¿Desea vincular a un tercero adicional a este documento? <div class="btn btn-success">SI</div><div class="btn btn-warning">NO</div></p>
               </div>
@@ -652,63 +645,6 @@ SIGNO MENOS
 
           </div>
         </div>
-      </div>
-    </div>
-
-
-    <!-- TERCEROS MODAL -->
-    <div id="terceros" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Creación de Tercero</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-sm-6">
-                <label>Nit</label>
-                <input class="form-control" id="terceronit" placeholder="Escriba el nit">
-              </div>
-              <div class="col-sm-6">
-                <label>Nombre</label>
-                <input class="form-control" id="tercerorazon_social" placeholder="Escriba el razon_social">
-              </div>
-              <div class="col-sm-6">
-                <label>Dirección</label>
-                <input class="form-control" id="tercerodireccion" placeholder="Escriba el direccion">
-              </div>
-              <div class="col-sm-6">
-                <label>Ciudad</label>
-                <input class="form-control" id="terceroid_ciudad" placeholder="Escriba el id_ciudad">
-              </div>
-              <div class="col-sm-6">
-                <label>Correo</label>
-                <input class="form-control" id="tercerocorreo" placeholder="Escriba el correo">
-              </div>
-              <div class="col-sm-6">
-                <label>Teléfono</label>
-                <input class="form-control" id="tercerotelefono" placeholder="Escriba el telefono">
-              </div>
-              <div class="col-sm-12"><br>
-                <div class="form-control btn btn-success" style="background-color: #049F0C;color:white;" onclick="documentos.addTercero();">Guardar</div>
-              </div>
-            </div>
-            
-            
-            
-            
-            
-            
-            
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-          </div>
-        </div>
-
       </div>
     </div>
 

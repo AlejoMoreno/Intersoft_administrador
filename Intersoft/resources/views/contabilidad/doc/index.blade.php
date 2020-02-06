@@ -2,6 +2,14 @@
 
 @section('content')
 
+<?php 
+
+
+$auxiliars = App\Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->get();
+
+$directorios = App\Directorios::where('id_empresa','=',Session::get('id_empresa'))->get();
+
+?>
 
 <div class="container-fluid">
     <div class="row">
@@ -71,8 +79,7 @@
                                         <td> <input placeholder="id_documento" class="form-control" id=id_documento_text"></td>
                                         <td> <input placeholder="numero_documento" class="form-control" id=numero_documento"></td>
                                         <td> <input placeholder="prefijo" class="form-control" id=prefijo"></td>
-                                        <td> <input placeholder="fecha_documento" class="form-control" id=fecha_documento"></td>
-                                                                               
+                                        <td> <input placeholder="fecha_documento" class="form-control" id=fecha_documento"></td>         
                                     </tr>
                                     <tr>
                                         <td> <input placeholder="valor_transaccion" class="form-control" id=valor_transaccion"></td>
@@ -191,7 +198,7 @@ function Obj(){
             var tr = `<tr>
             <td>`+response.contabilidades[i].id+`</td>
             <td>`+response.contabilidades[i].numero_documento+` `+response.contabilidades[i].prefijo+`</td>
-            <td><input class='form-control' id='id_auxiliar`+id+`' value='`+response.contabilidades[i].id_auxiliar+`'></td>`;
+            <td><input datalist='listauxiliar' class='form-control' id='id_auxiliar`+id+`' value='`+response.contabilidades[i].id_auxiliar+`'></td>`;
             if(response.contabilidades[i].tipo_transaccion == 'D'){
                 tr = tr + `
                 <td><input class='form-control' id='Dvalor_transaccion`+id+`' value='`+response.contabilidades[i].valor_transaccion+`'></td>
