@@ -52,7 +52,7 @@ class DepartamentosController extends Controller
     }
 
     public function index(){
-        $departamento = Departamentos::all();
+        $departamento = Departamentos::paginate(10);
         return view('administrador.departamentos', ['departamentos' => $departamento]);
     }
 }

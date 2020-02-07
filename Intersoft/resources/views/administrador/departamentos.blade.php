@@ -55,6 +55,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    {{ $departamentos->links() }}
                     <h4>Crear Departamento</h4>
                     <table class="table table-hover table-striped" id="tabledepartamentos">
                         <thead>

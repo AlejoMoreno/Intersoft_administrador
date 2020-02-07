@@ -57,27 +57,8 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <h4>Crear Ciudad</h4>
-                    <table class="table table-hover table-striped" id="tableciudades">
-                        <thead>
-                            <tr>
-                                <th>Departamento</th>
-                                <th>Nombre</th>                                 
-                                <th>Código</th> 
-                                <th></th> 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <form action='/administrador/ciudades/create' method="POST">
-                                <td><select name="id_departamento" class="form-control" id="id_departamento"><option value="">Seleccione Departamento</option></select></td>
-                                <td><input type="text" name="nombre" class="form-control"  onkeyup="config.UperCase('nombre');" id="nombre" placeholder="Nombre"></td>                                
-                                <td><input type="number" name="codigo" class="form-control"  onkeyup="config.UperCase('codigo');" id="codigo" placeholder="Código"></td>
-                                <td><input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control"></td>
-                                </form>
-                            </tr>
-                        </tbody>
-                    </table>
+                    {{ $ciudades->links() }}
+                    
                     <div class="footer">
                         <div class="legend">
                             <i class="fa fa-circle text-info"></i> 

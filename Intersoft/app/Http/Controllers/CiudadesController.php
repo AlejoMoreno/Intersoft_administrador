@@ -56,7 +56,7 @@ class CiudadesController extends Controller
     }
 
     public function index(){
-        $ciudades = Ciudades::all();
+        $ciudades = Ciudades::paginate(10);
         foreach ($ciudades as $ciudad){
             $id_departamento = Departamentos::where('id', $ciudad->id_departamento)->first();
             $ciudad->id_departamento = $id_departamento;

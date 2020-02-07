@@ -29,7 +29,7 @@
 	}
 </style>
 <body style="width: 300px;margin-left: 35%;">
-<div><center><strong>{{ $factura['id_sucursal'][0]['id_empresa']['razon_social'] }}<br>NIT. {{ $factura['id_sucursal'][0]['id_empresa']['nit_empresa'] }}</strong><br><br>{{ $factura['id_sucursal'][0]['id_empresa']['direccion'] }}<br>Teléfono: {{ $factura['id_sucursal'][0]['id_empresa']['telefono'] }} - {{ $factura['id_sucursal'][0]['id_empresa']['telefono2'] }}<br>Cel. {{ $factura['id_sucursal'][0]['id_empresa']['telefono1'] }}<br>{{ $factura['id_sucursal'][0]['correo'] }}<br> <?php echo $factura['id_sucursal'][0]['nombre'];?><br></center><br></div>
+<div><center><strong>{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}<br>NIT. {{ $factura['id_sucursal']['id_empresa']['nit_empresa'] }}</strong><br><br>{{ $factura['id_sucursal']['id_empresa']['direccion'] }}<br>Teléfono: {{ $factura['id_sucursal']['id_empresa']['telefono'] }} - {{ $factura['id_sucursal']['id_empresa']['telefono2'] }}<br>Cel. {{ $factura['id_sucursal']['id_empresa']['telefono1'] }}<br>{{ $factura['id_sucursal']['correo'] }}<br> <?php echo $factura['id_sucursal']['nombre'];?><br></center><br></div>
 
 <center>
 	<strong>{{ $factura['id_documento']['nombre'] }} # <?php echo $factura['prefijo'].'  '.$factura['numero'];?></strong><br>
@@ -43,15 +43,15 @@
 	<tr>
 		<td class="tg-yw4l" colspan="3">
 			<strong>CLIENTE:</strong><br>
-			<?php echo $factura['id_cliente'][0]['razon_social'];?><br>
-			Nit. <?php echo $factura['id_cliente'][0]['nit'];?><br>
-			Dir. <?php echo $factura['id_cliente'][0]['direccion'];?>
+			<?php echo $factura['id_cliente']['razon_social'];?><br>
+			Nit. <?php echo $factura['id_cliente']['nit'];?><br>
+			Dir. <?php echo $factura['id_cliente']['direccion'];?>
 		</td>
 		<td>
 			<br>
-			Tel. <?php echo $factura['id_cliente'][0]['telefono'];?><br> 
-			Tel2. <?php echo $factura['id_cliente'][0]['telefono1'];?><br> 
-			Ciud. <?php echo $factura['id_cliente'][0]['id_ciudad']['nombre'];?>
+			Tel. <?php echo $factura['id_cliente']['telefono'];?><br> 
+			Tel2. <?php echo $factura['id_cliente']['telefono1'];?><br> 
+			Ciud. <?php echo $factura['id_cliente']['id_ciudad']['nombre'];?>
 		</td>
 	</tr>
 </table>
@@ -190,3 +190,7 @@ strong{
 	left: 5%;
 }
 </style>
+
+<script>
+	window.print();
+	</script>

@@ -145,6 +145,7 @@ Route::get('/administrador/contratos/update/{id}', 'Contrato_laboralController@s
 Route::post('/administrador/contratos/create', 'Contrato_laboralController@create');
 Route::post('/administrador/contratos/update', 'Contrato_laboralController@update');
 
+
 //usuarios
 Route::get('/administrador/usuarios', 'UsuariosController@index');
 Route::get('/administrador/usuarios/all', 'UsuariosController@all');
@@ -425,10 +426,12 @@ Route::get('/documentos/consultar/{documento}', 'FacturasController@consultar_do
 Route::get('/download/excel/sucursales', 'SucursalesController@excel_all');
 Route::get('/excel/excelComprobantesDiario', 'ContabilidadesController@exelComprobantesDiario');
 Route::get('/excel/excelreferencias1', 'ReferenciasController@excelreferencias1');
+Route::get('/excel/excelDirectorio', 'DirectoriosController@excel');
 
 //DESCARGAR EN PDF
 Route::get('/download/pdf/sucursales', 'SucursalesController@pdf_all');
 Route::post('/send', 'EmailController@send');
 Route::get('/pdf/pdf_comprobanteDiario', 'ContabilidadesController@pdf_comprobanteDiario');
 Route::get('/pdf/pdfreferencias1', 'ReferenciasController@pdfreferencias1');
+Route::get('/pdf/pdfDirectorio', 'DirectoriosController@pdf');
 

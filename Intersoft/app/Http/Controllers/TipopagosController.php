@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Tipopagos;
 use App\Pucauxiliar;
+use App\Directorios;
+
 use Session;
 
 class TipopagosController extends Controller
@@ -92,9 +94,16 @@ class TipopagosController extends Controller
         try{
             $objs = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get();
             $cuentas = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->get();
+            $terceros = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                                    ->where('id_directorio_tipo_tercero','=',3)->get();
+            foreach( $objs as $obj ){
+                $obj->puc_cuenta = Pucauxiliar::where('id','=',$obj->puc_cuenta)->first();
+                $obj->tercero = Directorios::where('id','=',$obj->tercero)->first();
+            }
             return view('/administrador/tipopagos', [
                 'tipopagos' => $objs,
-                'cuentas' => $cuentas]);
+                'cuentas' => $cuentas,
+                'terceros' => $terceros]);
         }
         catch (ModelNotFoundException $exception){
             return  array(

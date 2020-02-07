@@ -22,6 +22,8 @@ use App\Http\Controllers\KardexController;
 use App\Pucauxiliar;
 use App\Tipopagos;
 
+use PDF;
+
 use Session;
 
 class FacturasController extends Controller
@@ -254,24 +256,25 @@ class FacturasController extends Controller
     public function imprimir($id){
 
         $factura = Facturas::where('id',$id)->
-                            where('id_empresa','=',Session::get('id_empresa'))->get()[0];
+                            where('id_empresa','=',Session::get('id_empresa'))->first();
         $kardex = Kardex::where('id_factura',$id)->
                           where('id_empresa','=',Session::get('id_empresa'))->get();
-    	$factura->id_sucursal = Sucursales::where('id',$factura->id_sucursal)->get();
-    	foreach ($factura->id_sucursal as $sucursal) {
-    		$sucursal->id_empresa = Empresas::where('id',$sucursal->id_empresa)->get()[0];
-    	}
-    	$factura->id_documento = Documentos::where('id',$factura->id_documento)->get()[0];
-        $factura->id_vendedor = Usuarios::where('id',$factura->id_vendedor)->get()[0];
-    	$factura->id_cliente = Directorios::where('id',$factura->id_cliente)->get();
-    	foreach($factura->id_cliente as $cliente){
-    		$cliente->id_ciudad = Ciudades::where('id',$cliente->id_ciudad)->get()[0];
-    	}
+    	$factura->id_sucursal = Sucursales::where('id',$factura->id_sucursal)->first();
+    	$factura->id_sucursal->id_empresa = Empresas::where('id',$factura->id_sucursal->id_empresa)->first();
+    	$factura->id_documento = Documentos::where('id',$factura->id_documento)->first();
+        $factura->id_vendedor = Usuarios::where('id',$factura->id_vendedor)->first();
+    	$factura->id_cliente = Directorios::where('id',$factura->id_cliente)->first();
+    	$factura->id_cliente->id_ciudad = Ciudades::where('id',$factura->id_cliente->id_ciudad)->first();
         foreach ($kardex as $obj) {
             $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->
                                                where('id_empresa','=',Session::get('id_empresa'))->
                                                get()[0];
         }
+
+        /*$pdf = PDF::loadView('documentos.impresionFactura', compact('factura','kardex'));
+        $pdf->setPaper('letter','landscape');
+        return $pdf->download('Factura_'.$factura->prefijo.'_'.$factura->numero.'.pdf');
+*/
     	return view('documentos.impresionFactura', [
             'factura' => $factura,
         	'kardex' => $kardex]);
@@ -280,19 +283,15 @@ class FacturasController extends Controller
     public function imprimirpost($id){
 
         $factura = Facturas::where('id',$id)->
-                             where('id_empresa','=',Session::get('id_empresa'))->get()[0];
+                            where('id_empresa','=',Session::get('id_empresa'))->first();
         $kardex = Kardex::where('id_factura',$id)->
                           where('id_empresa','=',Session::get('id_empresa'))->get();
-        $factura->id_sucursal = Sucursales::where('id',$factura->id_sucursal)->get();
-        foreach ($factura->id_sucursal as $sucursal) {
-            $sucursal->id_empresa = Empresas::where('id',$sucursal->id_empresa)->get()[0];
-        }
-        $factura->id_documento = Documentos::where('id',$factura->id_documento)->get()[0];
-        $factura->id_vendedor = Usuarios::where('id',$factura->id_vendedor)->get()[0];
-        $factura->id_cliente = Directorios::where('id',$factura->id_cliente)->get();
-        foreach($factura->id_cliente as $cliente){
-            $cliente->id_ciudad = Ciudades::where('id',$cliente->id_ciudad)->get()[0];
-        }
+    	$factura->id_sucursal = Sucursales::where('id',$factura->id_sucursal)->first();
+    	$factura->id_sucursal->id_empresa = Empresas::where('id',$factura->id_sucursal->id_empresa)->first();
+    	$factura->id_documento = Documentos::where('id',$factura->id_documento)->first();
+        $factura->id_vendedor = Usuarios::where('id',$factura->id_vendedor)->first();
+    	$factura->id_cliente = Directorios::where('id',$factura->id_cliente)->first();
+    	$factura->id_cliente->id_ciudad = Ciudades::where('id',$factura->id_cliente->id_ciudad)->first();
         foreach ($kardex as $obj) {
             $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->
                                                where('id_empresa','=',Session::get('id_empresa'))->
@@ -331,16 +330,14 @@ class FacturasController extends Controller
     public function consultar_documento($documento){
         $factura = Facturas::where('id_documento','=',$documento)->
                              where('id_empresa','=',Session::get('id_empresa'))->get();
+        
         foreach ($factura as $obj) {
-            $obj->id_sucursal = Sucursales::where('id','=',$obj->id_sucursal)->get();
-            foreach ($obj->id_sucursal as $sucursal) {
-                $sucursal->id_empresa = Empresas::where('id',$sucursal->id_empresa)->get()[0];
-            }
-            $obj->id_documento = Documentos::where('id','=',$obj->id_documento)->get();
-            $obj->id_cliente = Directorios::where('id','=',$obj->id_cliente)->get();
-            foreach($obj->id_cliente as $cliente){
-                $cliente->id_ciudad = Ciudades::where('id',$cliente->id_ciudad)->get()[0];
-            }
+            $obj->id_sucursal = Sucursales::where('id','=',$obj->id_sucursal)->first();
+            
+            $obj->id_documento = Documentos::where('id','=',$obj->id_documento)->first();
+            $obj->id_cliente = Directorios::where('id','=',$obj->id_cliente)->first();
+            $obj->id_cliente ->id_ciudad = Ciudades::where('id',$obj->id_cliente ->id_ciudad)->first();
+            $obj->id_sucursal ->id_empresa = Empresas::where('id',$obj->id_sucursal ->id_empresa)->first();
         }
         return view('documentos.consultar', [
             'factura' => $factura

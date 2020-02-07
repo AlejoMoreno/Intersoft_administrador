@@ -20,7 +20,9 @@
                                     <th>ID</th>
                                     <th>Nombre
                                     <th>Cuenta Contable</th>
-                                    <th>tercero</th>
+                                    <th>Cuenta Descripción</th>
+                                    <th>Nit</th>
+                                    <th>Razon social</th>
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -29,8 +31,10 @@
                                     <tr id="row{{ $obj['id'] }}">
                                         <td>{{ $obj['id'] }}</td>
                                         <td>{{ $obj['nombre'] }}</td>
-                                        <td>{{ $obj['puc_cuenta'] }}</td>
-                                        <td>{{ $obj['tercero'] }}</td>
+                                        <td>{{ $obj['puc_cuenta']['codigo'] }}</td>
+                                        <td>{{ $obj['puc_cuenta']['descripcion'] }}</td>
+                                        <td>{{ $obj['tercero']['nit'] }}</td>
+                                        <td>{{ $obj['tercero']['razon_social'] }}</td>
                                         <td><a href="javascript:;" onclick="tipopagos.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
                                         <!--td><a onclick="config.delete_get('/inventario/tipo_presentaciones/delete/', '{{ $obj }}',  '/inventario/tipo_presentaciones');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
@@ -57,7 +61,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <label>Tercero Nit</label><br>
-                                    <input type="text" class="form-control" name="tercero" id="tercero" placeholder="Escribe la descrioción de esta clasificación" required="" onkeyup="config.UperCase('descripcion');">
+                                    <input type="text" list="terceros" class="form-control" name="tercero" id="tercero" placeholder="Escribe la descrioción de esta clasificación" required="" onkeyup="config.UperCase('descripcion');">
+                                    <datalist  id="terceros">
+                                        @foreach ($terceros as $obj)
+                                        <option value="{{ $obj['id'] }}"> {{ $obj['nit'] }} - {{ $obj['razon_social'] }}</option>
+                                        @endforeach
+                                    </datalist>
                                 </div>
                             </div>
 

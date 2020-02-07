@@ -2,11 +2,6 @@
 
 @section('content')
 
-<?php 
-
-
-?>
-
 
 
 <div class="container-fluid">
@@ -47,11 +42,11 @@
                             <tbody>
                                 @foreach($factura as $obj)
                                 <tr>
-                                    <td>{{ $obj->id_documento[0]->nombre }} {{ $obj->prefijo }}</td>
-                                    <td>{{ $obj->id_sucursal[0]->nombre }}</td>
+                                    <td>{{ $obj->id_documento->nombre }} {{ $obj->prefijo }}</td>
+                                    <td>{{ $obj->id_sucursal->nombre }}</td>
                                     <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj->id }}')" class="btn btn-success">{{ $obj->numero }}</a></td>
                                     <td>{{ $obj->id_tercero }}</td>
-                                    <td>{{ $obj->id_cliente[0]->razon_social }}</td>
+                                    <td>{{ $obj->id_cliente->razon_social }}</td>
                                     <td>{{ $obj->fecha }}</td>
                                     <td>{{ $obj->fecha_vencimiento }}</td>
                                     <td>{{ number_format($obj->subtotal) }}</td>
@@ -93,7 +88,7 @@
 
 <script language=javascript>
 function envioUrl (url){
-window.open(url, "imprimir documento", "width=600, height=500")
+window.open(url, "imprimir documento", "width=800, height=700")
 }
 </script>
 

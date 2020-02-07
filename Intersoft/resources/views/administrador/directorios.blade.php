@@ -6,14 +6,31 @@
 <div class="container-fluid">
     <div class="row">
 
+        
+
         <form action='/administrador/directorios/create' method="POST">
             <input type="hidden" name="id" id="id">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="header">
-                        <h4 class="title">Crear Directorio</h4>
-                        <p class="category">Diferentes Directorio</p>
+                    <div class="header row">
+                        <div class="col-md-6">
+                            <h4 class="title">Crear Directorio</h4>
+                            <p class="category">Diferentes Directorio</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="col-md-3">
+                                <p>Observar</p>
+                                <div onclick="directorios.buscar()" style="width: 100%;background: white;" class="btn btn-info" data-toggle="modal" data-target="#myModal">(*)</div>    
+                            </div>
+                            <div class="col-md-9">
+                                <p>Descargar</p>
+                                <div onclick="directorios.envioExcel()" style="width: 45%;background: white;" class="btn btn-success">(EXCEL)</div>
+                                <div onclick="directorios.envioPDF()" style="width: 45%;background: white;" class="btn btn-danger">(PDF)</div>
+                            </div>
+                            <div class="col-md-12"><br></div>
+                        </div>
                     </div>
+                    
                     <div class="content">
                         
                         <div class="row">
@@ -56,7 +73,7 @@
                                         <label>ciudad</label>
                                         <select name="id_ciudad" class="form-control"  onkeyup="config.UperCase('id_ciudad');" id="id_ciudad">
                                             @foreach ( $ciudades as $ciudad)
-                                            <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }}</option>
+                                            <option value="{{ $ciudad['id'] }}">{{ $ciudad['codigo'] }} - {{ $ciudad['nombre'] }}</option>
                                             @endforeach
                                         </select>
                                         <label>telefono fijo</label>
@@ -81,10 +98,8 @@
                                         <input type="number" name="financiacion" value="0" class="form-control"  onkeyup="config.UperCase('financiacion');" id="financiacion" placeholder="Ej.(10)">
                                         <label>descuento (%)</label>
                                         <input type="number" name="descuento" value="0" class="form-control"  onkeyup="config.UperCase('descuento');" id="descuento" placeholder="Ej.(30)">
-                                        <label>rete_ica (%)</label>
-                                        <input type="text" name="rete_ica" value="0" class="form-control"  onkeyup="config.UperCase('rete_ica');" id="rete_ica" placeholder="Ej.(8)">
-                                        <label>porcentaje_rete_iva (%)</label>
-                                        <input type="text" name="porcentaje_rete_iva" value="0" class="form-control"  onkeyup="config.UperCase('porcentaje_rete_iva');" id="porcentaje_rete_iva" placeholder="Ej.(8)">
+                                        <input type="hidden" name="rete_ica" value="0" class="form-control"  onkeyup="config.UperCase('rete_ica');" id="rete_ica" value="0" placeholder="Ej.(8)">
+                                        <input type="hidden" name="porcentaje_rete_iva" value="0" class="form-control"  onkeyup="config.UperCase('porcentaje_rete_iva');" value="0" id="porcentaje_rete_iva" placeholder="Ej.(8)">
                                         <label>cupo_financiero ($)</label>
                                         <input type="number" name="cupo_financiero" value="0" class="form-control"  onkeyup="config.UperCase('cupo_financiero');" id="cupo_financiero" placeholder="Ej.(200000000)">
                                         <label>actividad_economica</label>
@@ -104,8 +119,8 @@
                                         <input type="text" name="zona_venta" value="NA" class="form-control"  onkeyup="config.UperCase('zona_venta');" id="zona_venta" placeholder="EJ.(BOGOTA)">
                                         <label>SELECCIONE SI TIENE O NO TRANSPORTE</label>
                                         <select name="transporte" class="form-control"  onkeyup="config.UperCase('transporte');" id="transporte">
-                                            <option value="SI">SI</option>
                                             <option value="NO">NO</option>
+                                            <option value="SI">SI</option>
                                         </select>
                                     
                                     </div>

@@ -1,6 +1,7 @@
 <head>
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <meta name="viewport" content="width=device-width" />
+	<meta name="viewport" content="width=device-width" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <!-- Bootstrap core CSS     -->
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Animation library for notifications   -->
@@ -10,9 +11,6 @@
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="/assets/css/demo.css" rel="stylesheet" />
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
-    <link href="http://localhost:8000/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -26,12 +24,18 @@
 		font-size: 9px;
 	}
 </style>
+<style>
+	.page-break {
+		page-break-after: always;
+	}
+	</style>
+	
  	<section>
 		<div>
-			<img src="dskadsa">
+			<img src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}.png">
 		</div>
 	</section>
-<div><center style="font-size: 7px;"><h2><strong>{{ $factura['id_sucursal'][0]['id_empresa']['razon_social'] }}<br>NIT. {{ $factura['id_sucursal'][0]['id_empresa']['nit_empresa'] }}</strong></h2><br>{{ $factura['id_sucursal'][0]['id_empresa']['direccion'] }}<br>Teléfono: {{ $factura['id_sucursal'][0]['id_empresa']['telefono'] }} - {{ $factura['id_sucursal'][0]['id_empresa']['telefono2'] }}<br>Cel. {{ $factura['id_sucursal'][0]['id_empresa']['telefono1'] }}<br>{{ $factura['id_sucursal'][0]['correo'] }}</center><br></div>
+<div><center style="font-size: 7px;"><h2><strong>{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}<br>NIT. {{ $factura['id_sucursal']['id_empresa']['nit_empresa'] }}</strong></h2><br>{{ $factura['id_sucursal']['id_empresa']['direccion'] }}<br>Teléfono: {{ $factura['id_sucursal']['id_empresa']['telefono'] }} - {{ $factura['id_sucursal']['id_empresa']['telefono2'] }}<br>Cel. {{ $factura['id_sucursal']['id_empresa']['telefono1'] }}<br>{{ $factura['id_sucursal']['correo'] }}</center><br></div>
 
 	<div id="tablas">
 <table class="table table-bordered">
@@ -39,16 +43,16 @@
 		<td rowspan="2"><strong>{{ $factura['id_documento']['nombre'] }} # <?php echo $factura['prefijo'].'  '.$factura['numero'];?></strong></td>
 	    <td class="tg-le8v" colspan="3"><strong>FECHA EMISIÓN</strong><br><?php echo $factura['fecha'];?></td>
 	    <td class="tg-le8v" colspan="4"><strong>FECHA VENCIMIENTO</strong><br><?php echo $factura['fecha_vencimiento'];?></td>
-	    <td class="tg-le8v"><strong>SUCURSAL</strong><br><?php echo $factura['id_sucursal'][0]['nombre'];?></td>
+	    <td class="tg-le8v"><strong>SUCURSAL</strong><br><?php echo $factura['id_sucursal']['nombre'];?></td>
 	    <td class="tg-le8v"><strong>VENDEDOR</strong><br><?php echo $factura['id_vendedor']['ncedula'];?></td>
 	</tr>
 	<tr>
-		<td class="tg-yw4l" colspan="3"><strong>CLIENTE:</strong><br><?php echo $factura['id_cliente'][0]['razon_social'];?></td>
-	    <td class="tg-yw4l" colspan="2"><strong>NIT:</strong><br> <?php echo $factura['id_cliente'][0]['nit'];?></td>
-		<td><strong>DIRECCION:</strong> <br><?php echo $factura['id_cliente'][0]['direccion'];?></td>
-		<td><strong>TELÉFONO:</strong><br> <?php echo $factura['id_cliente'][0]['telefono'];?></td>
-		<td><strong>CELULAR:</strong><br> <?php echo $factura['id_cliente'][0]['telefono1'];?></td>
-		<td><strong>CIUDAD:</strong><br> <?php echo $factura['id_cliente'][0]['id_ciudad']['nombre'];?></td>
+		<td class="tg-yw4l" colspan="3"><strong>CLIENTE:</strong><br><?php echo $factura['id_cliente']['razon_social'];?></td>
+	    <td class="tg-yw4l" colspan="2"><strong>NIT:</strong><br> <?php echo $factura['id_cliente']['nit'];?></td>
+		<td><strong>DIRECCION:</strong> <br><?php echo $factura['id_cliente']['direccion'];?></td>
+		<td><strong>TELÉFONO:</strong><br> <?php echo $factura['id_cliente']['telefono'];?></td>
+		<td><strong>CELULAR:</strong><br> <?php echo $factura['id_cliente']['telefono1'];?></td>
+		<td><strong>CIUDAD:</strong><br> <?php echo $factura['id_cliente']['id_ciudad']['nombre'];?></td>
 	</tr>
 </table>
 <br>
@@ -136,6 +140,7 @@
 </table>
 </div>
 
+	
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;background-color: white;border: 1px solid;color: black;}
 .tg td{font-family:Arial, sans-serif;font-size:14px;padding:2px 10px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
@@ -188,3 +193,7 @@ strong{
 	left: 5%;
 }
 </style>
+
+<script>
+window.print();
+</script>

@@ -48,6 +48,7 @@
     <script type="text/javascript" src="/js/administrador/directorios.js"></script>
     <script type="text/javascript" src="/js/administrador/sucursales.js"></script>
     <script type="text/javascript" src="/js/administrador/usuarios.js"></script>
+    <script type="text/javascript" src="/js/administrador/tipopagos.js"></script>
 
     <script type="text/javascript" src="/js/inventario/clasificaciones.js"></script>
     <script type="text/javascript" src="/js/inventario/tipo_presentacion.js"></script>
