@@ -329,7 +329,7 @@ class FacturasController extends Controller
 
     public function consultar_documento($documento){
         $factura = Facturas::where('id_documento','=',$documento)->
-                             where('id_empresa','=',Session::get('id_empresa'))->get();
+                             where('id_empresa','=',Session::get('id_empresa'))->paginate(5);
         
         foreach ($factura as $obj) {
             $obj->id_sucursal = Sucursales::where('id','=',$obj->id_sucursal)->first();

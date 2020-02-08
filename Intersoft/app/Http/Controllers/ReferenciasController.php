@@ -274,6 +274,62 @@ class ReferenciasController extends Controller
 				"body"=>$exception);
 		}
 	}
+
+	/**
+	 * GET
+	 */
+	public function actualizacionPrecios(Request $request){
+
+		$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
+		$marcas = Marcas::where('id_empresa','=',Session::get('id_empresa'))->get();
+		$clasificacion = Clasificaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
+
+		$sql = "";
+		if($request->buscar == "Buscar"){
+			if($request->codigo_linea != "0"){ $sql .= " AND referencias.codigo_linea = ".$request->codigo_linea;}
+			if($request->descripcion != ""){ $sql .= " AND referencias.descripcion like '%".$request->descripcion."%'";}
+			if($request->id_clasificacion != "0"){ $sql .= " AND referencias.id_clasificacion = ".$request->id_clasificacion;}
+			if($request->id_marca != "0"){ $sql .= " AND referencias.id_marca = ".$request->id_marca;}
+			if($request->estado != "0"){ $sql .= " AND referencias.estado = ".$request->estado;}
+			if($request->saldo != ""){ $sql .= " AND referencias.saldo > ".$request->saldo;}
+		}
+		
+		$objs = DB::select("
+		select 
+			referencias.id,
+			concat(referencias.codigo_linea,referencias.codigo_letras,referencias.codigo_consecutivo) as codigo, 
+			referencias.descripcion, 
+			marcas.nombre, 
+			referencias.precio1, 
+			referencias.precio2, 
+			referencias.precio3, 
+			referencias.precio4, 
+			referencias.estado, 
+			referencias.costo, 
+			referencias.saldo 
+		from referencias 
+		INNER JOIN marcas ON marcas.id = referencias.id_marca 
+		where 1=1 
+			".$sql." 
+		order by referencias.descripcion");
+		$objs= Collection::make($objs);
+			
+        
+        $data= json_decode( json_encode($objs), true);
+		return view('inventario.actualizacionPrecios', [
+			'referencias' => $data,
+			'lineas' => $lineas,
+			'marcas' => $marcas,
+			'clasificacion' => $clasificacion
+		]);
+	}
+
+	/**
+	 * POST
+	 */
+	public function actualizarPrecios(){
+
+	}
 	
 
 	/**

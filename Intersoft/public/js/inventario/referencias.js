@@ -163,6 +163,8 @@ function Referencias(){
         config.Redirect("/pdf/pdfreferencias1?orden="+orden+"&tipo_reporte="+tipo_reporte+"&linea="+linea);
 	}
 
-
+	this.actualizarPrecios = function (){
+		var table = $('#datos').
+	}
 
 }

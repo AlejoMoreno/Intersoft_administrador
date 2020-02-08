@@ -63,6 +63,7 @@ $referencia = App\Referencias::where('id','=',$kardex[0]->id_referencia->id)->fi
                                        @endforeach
                                     </tbody>
                                 </table>
+                                {{ $kardex->links() }}
                             </div>
                     <div class="footer">
                         <div class="legend">

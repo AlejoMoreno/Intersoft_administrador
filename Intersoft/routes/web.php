@@ -323,7 +323,8 @@ Route::get('/inventario/fichatecnica', 'FichatecnicasController@index');
 Route::get('/inventario/ordenesdeproduccion', 'FichatecnicasController@ordenesdeproduccion');
 Route::get('/inventario/materiaprima', 'ReferenciasController@materiaprima');
 
-
+Route::get('/inventario/actualizacionPrecios', 'ReferenciasController@actualizacionPrecios');
+Route::post('/inventario/actualizacionPrecios', 'ReferenciasController@actualizarPrecios');
 
 /*
 |--------------------------------------------------------------------------
@@ -415,6 +416,7 @@ Route::get('/documentos/eliminar/{id}', 'FacturasController@eliminar');
 Route::post('/kardex/saveDocument', 'KardexController@saveDocument');
 Route::post('/factura/saveDocument', 'FacturasController@saveDocument');
 Route::get('/kardex/show/{id}', 'KardexController@showid');
+Route::get('/inventario/kardex', 'KardexController@kardexShow');
 
 //Factura post
 Route::get('/documentos/facturaPost', 'FacturasController@facturaPost');

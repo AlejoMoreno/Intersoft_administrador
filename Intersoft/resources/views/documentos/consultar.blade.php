@@ -68,6 +68,7 @@
                                 @endforeach                                
                             </tbody>
                         </table>
+                        {{ $factura->links() }}
                     </div>
                     <div class="footer">
                         <div class="legend">

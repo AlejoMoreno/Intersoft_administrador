@@ -260,7 +260,7 @@ class KardexController extends Controller
 
     public function showid($id){
 
-		$kardex = Kardex::where('id_referencia','=',$id)->orderBy('created_at')->get();
+		$kardex = Kardex::where('id_referencia','=',$id)->orderBy('created_at')->paginate(5);
     	foreach ($kardex as $value) {
     		$value->cabecera = Facturas::where('numero','=',$value->numero)->where('id_documento','=',$value->id_documento)->get();
     		$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->first();
@@ -271,6 +271,20 @@ class KardexController extends Controller
     	return view('inventario.kardex',[
     		'kardex'=>$kardex
     	]);
-    }
+	}
+	
+	public function kardexShow(){
+		$kardex = Kardex::where('id_empresa','=',Session::get('id_empresa'))->orderBy('created_at')->paginate(5);
+    	foreach ($kardex as $value) {
+    		$value->cabecera = Facturas::where('numero','=',$value->numero)->where('id_documento','=',$value->id_documento)->get();
+    		$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->first();
+    		$value->id_documento = Documentos::where('id','=',$value->id_documento)->first();
+    		$value->id_sucursal = Sucursales::where('id','=',$value->cabecera[0]->id_sucursal)->first();    		
+    	}
+    	//dd($kardex);
+    	return view('inventario.kardex',[
+    		'kardex'=>$kardex
+    	]);
+	}
 
 }
