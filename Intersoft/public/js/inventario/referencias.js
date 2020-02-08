@@ -164,7 +164,7 @@ function Referencias(){
 	}
 
 	this.actualizarPrecios = function (){
-		var table = $('#datos').
+		
 	}
 
 }
