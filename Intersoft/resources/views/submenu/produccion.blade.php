@@ -48,10 +48,10 @@
                                         <th></th>
                                     </tr></thead>
                                     <tbody>
-                                        <tr onclick="config.Redirect('/inventario/ordenesproduccion');">
+                                        <tr onclick="config.Redirect('/inventario/fichatecnica');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/2082/2082163.svg"></td>
-                                            <td>Ordenes de Producción</td>
-                                            <td><img width="20" onclick="config.Redirect('inventarios/searchProductos.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td>Ficha técnica</td>
+                                            <td><img width="20"  src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/materiaprima');">
@@ -60,9 +60,9 @@
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/inventario/controlprocesos');">
+                                        <tr onclick="config.Redirect('/inventario/ordenesdeproduccion');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/1037/1037503.svg"></td>
-                                            <td>Control de Procesos y Costos</td>
+                                            <td>Ordenes de Producción</td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
@@ -80,7 +80,7 @@
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/generacionproducto');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/743/743007.svg"></td>
-                                            <td>Generación Producto Terminado</td>
+                                            <td>Ingreso por producción</td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>

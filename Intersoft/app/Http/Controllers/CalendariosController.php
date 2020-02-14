@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Calendarios;
 
+use Session;
+
 class CalendariosController extends Controller
 {
     public function create(Request $request){
@@ -24,7 +26,7 @@ class CalendariosController extends Controller
         $calendarios->id_empresa	 	= Session::get('id_empresa');
         $calendarios->save();
         $calendario = Calendarios::find($calendarios->id);
-        return view('invitadosform', ['calendario' => $calendario]);
+        return redirect('/calendario');
     }
 
     public function update(Request $request){

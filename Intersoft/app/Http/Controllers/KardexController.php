@@ -10,6 +10,7 @@ use App\Lotes;
 use App\Documentos;
 use App\Facturas;
 use App\Sucursales;
+use App\Lineas;
 
 use App\Clasificaciones;
 use App\Contabilidades;
@@ -29,6 +30,19 @@ class KardexController extends Controller
 		}
 		return $productos_insertados;
 	}
+
+	static function saveDocumentSinContabilidad($productosArr,$factura,$asiento_contable){
+		$productos_insertados = array();
+		//recorrer los productos
+		foreach($productosArr as $producto){
+			$obj_pro = KardexController::AddProducto($producto,$factura);
+			//$asiento = KardexController::AsientoContable($obj_pro,$asiento_contable,$factura->signo);
+			//asientp contable
+			array_push($productos_insertados, $obj_pro);
+		}
+		return $productos_insertados;
+	}
+
     static function AddProducto($producto,$factura){
 		$producto = (object)$producto;
     	if($producto->lote == '' || $producto->lote == null){
@@ -39,6 +53,8 @@ class KardexController extends Controller
 		
 		//buscar la referencia 
 		$referencia = Referencias::where('id','=',$producto->id_referencia)->get()[0];
+
+		$linea = Lineas::where('id','=',$referencia->codigo_linea)->first();
 
     	$obj = new Kardex();
     	$obj->id_sucursal	= $factura->id_sucursal;
@@ -59,14 +75,22 @@ class KardexController extends Controller
 		$obj->signo 		= strval($factura->signo);
 		$obj->subtotal 		= $producto->subtotal;
 		//sacar el iva 
-		$iva = ($producto->subtotal) * $referencia->iva;
+		$iva = ($producto->subtotal) * ($linea->iva_porcentaje/100);
 		$obj->iva 			= $iva;
-		$obj->impoconsumo 	= $factura->impoconsumo;
+		//sacar el reteica
+		$reteica = ($producto->subtotal) * ($linea->reteica_porcentaje/100);
+		$obj->impoconsumo 	= $reteica;
 		$obj->otro_impuesto = $factura->otro_impuesto;
-		$obj->otro_impuesto1 = $factura->otro_impuesto1;
-		$obj->descuento 	= $producto->descuento;
-		$obj->fletes 		= $factura->fletes;
-		$obj->retefuente 	= $factura->retefuente;
+		//sacar el reteiva
+		$reteiva = ($producto->subtotal) * ($linea->reteiva_porcentaje/100);
+		$obj->otro_impuesto1 = $reteiva;
+		//sacar el descuento
+		$descuento = ($producto->subtotal) * ($producto->descuento/100);
+		$obj->descuento 	= $descuento;
+		$obj->fletes 		= 0;
+		//sacar el retefuente
+		$retefuente = ($producto->subtotal) * ($linea->retefuente_porcentaje/100);
+		$obj->retefuente 	= $retefuente;
 		$obj->total 		= $factura->total;
 		$obj->observaciones = strval($factura->observaciones);
 		$obj->id_modificado = $factura->id_modificado;
@@ -74,7 +98,6 @@ class KardexController extends Controller
 		$obj->id_empresa	= Session::get('id_empresa');
 		$obj->estado 		= strval($factura->estado);
 		$obj->save();
-
 
 		
 		$lote = Lotes::where('id_referencia','=',$obj->id_referencia)->
@@ -91,6 +114,7 @@ class KardexController extends Controller
 	        $lotes->serial            	= $obj->serial;
 			$lotes->cantidad          	= $obj->cantidad;
 			$lotes->id_empresa	= Session::get('id_empresa');
+			$lotes->id_sucursal	= Session::get('sucursal');
 			$lotes->save();
 	        
 		}
@@ -121,11 +145,11 @@ class KardexController extends Controller
 				$referencia->costo 		 = 	$obj->costo;
 			}
 			else{
-				$valor = $referencia->saldo-$obj->cantidad;
+				$valor = $referencia->saldo - $obj->cantidad;
 				if($valor == 0){
 					$valor = 0.01;
 				}
-				$referencia->costo_promedio = 	( ($referencia->costo_promedio * $referencia->saldo) + ($obj->costo * $obj->cantidad) )/($valor);
+				$referencia->costo_promedio = 	( ($referencia->costo_promedio * $valor) + ($obj->costo * $obj->cantidad) )/($valor);
 				$referencia->costo 		 = 	$obj->costo;	
 			}
 		}
@@ -140,7 +164,7 @@ class KardexController extends Controller
 				if($valor == 0){
 					$valor = 0.01;
 				}
-				$referencia->precio4 = 	( ($referencia->precio4 * $referencia->saldo) - ( $obj->precio * $obj->cantidad) )/($valor);
+				$referencia->precio4 = 	( ($referencia->precio4 * $valor) - ( $obj->precio * $obj->cantidad) )/($valor);
 			}
 		}
 		else{
@@ -158,35 +182,85 @@ class KardexController extends Controller
 		//verificar auxiliar contable apartir de la clasificacion del producto
 		$clasificacion = Clasificaciones::where('id','=',$referencia->id_clasificacion)->first();
 		//registrar asiento contable
-		$contabilidad = new Contabilidades();
+		$tipo_transaccion = '';
+		//buscar la referencia 
+		$linea = Lineas::where('id','=',$referencia->codigo_linea)->first();
 		if($signo == '-'){ //va  ala contrapartida
-			$contabilidad->id_auxiliar = $clasificacion->cuenta_contrapartida;
-        	$contabilidad->debito = 0;
-        	$contabilidad->credito = $obj_pro->precio;
+			$tipo_transaccion = "C";
+			$puc = $linea->puc_venta;
+			$puc_val = $obj_pro->total;
+			$iva = $linea->v_puc_iva;
+			$iva_val = $puc_val * ($linea->iva_porcentaje/100);
+			$reteica = $linea->v_puc_reteica;
+			$reteica_val = $puc_val * ($linea->reteica_porcentaje/100);
+			$reteiva = $linea->v_puc_reteiva;
+			$reteiva_val = $puc_val * ($linea->reteiva_porcentaje/100);
+			$retefuente = $linea->v_puc_retefuente;
+			$retefuente_val = $puc_val * ($linea->retefuente_porcentaje/100);
 		}
 		else if($signo == '+'){ //va  ala partida
-			$contabilidad->id_auxiliar = $clasificacion->cuenta_contable;
-        	$contabilidad->debito = $obj_pro->precio;
-        	$contabilidad->credito = 0;
+			$tipo_transaccion = "D";
+			$puc = $linea->puc_compra;
+			$puc_val = $obj_pro->total;
+			$iva = $linea->c_puc_iva;
+			$iva_val = $puc_val * ($linea->iva_porcentaje/100);
+			$reteica = $linea->c_puc_reteica;
+			$reteica_val = $puc_val * ($linea->reteica_porcentaje/100);
+			$reteiva = $linea->c_puc_reteiva;
+			$reteiva_val = $puc_val * ($linea->reteiva_porcentaje/100);
+			$retefuente = $linea->c_puc_retefuente;
+			$retefuente_val = $puc_val * ($linea->retefuente_porcentaje/100);
 		}        
-		$contabilidad->tipo_documento = $asiento_contable->id_documento;
-		$contabilidad->numero_consecutivo = $asiento_contable->numero_consecutivo;
-        $contabilidad->id_documento = $asiento_contable->id;
+		
+		//trgistro del movimiento contable
+		$contabilidad = new Contabilidades();
+        $contabilidad->tipo_documento = $asiento_contable->tipo_documento;
         $contabilidad->id_sucursal = $asiento_contable->id_sucursal;
-        $contabilidad->id_empresa = $asiento_contable->id_empresa;
+        $contabilidad->id_documento = $asiento_contable->id_documento;
+        $contabilidad->numero_documento = $asiento_contable->numero_documento;
+        $contabilidad->prefijo = $asiento_contable->prefijo; 
+        $contabilidad->fecha_documento = $asiento_contable->fecha_documento;
+        $contabilidad->tercero = $asiento_contable->tercero;
+		$contabilidad->id_empresa = Session::get('id_empresa');	
+
+		$contabilidad->tipo_transaccion = $tipo_transaccion;
+		$contabilidad->id_auxiliar = $puc;
+		$contabilidad->valor_transaccion = $puc_val;
+
+		$contabilidad1 = $contabilidad; //copiar el registro
+		$contabilidad1->tipo_transaccion = $tipo_transaccion;
+		$contabilidad1->id_auxiliar = $iva;
+		$contabilidad1->valor_transaccion = $iva_val;
+
+		$contabilidad2 = $contabilidad; //copiar el registro
+		$contabilidad2->tipo_transaccion = $tipo_transaccion;
+		$contabilidad2->id_auxiliar = $reteica;
+		$contabilidad2->valor_transaccion = $reteica_val;
+
+		$contabilidad3 = $contabilidad; //copiar el registro
+		$contabilidad3->tipo_transaccion = $tipo_transaccion;
+		$contabilidad3->id_auxiliar = $reteiva;
+		$contabilidad3->valor_transaccion = $reteiva_val;
+
+		$contabilidad4 = $contabilidad; //copiar el registro
+		$contabilidad4->tipo_transaccion = $tipo_transaccion;
+		$contabilidad4->id_auxiliar = $retefuente;
+		$contabilidad4->valor_transaccion = $retefuente_val;
+
+		//dd($puc_val);
+
 		$asiento_contable1 = ContabilidadesController::register($contabilidad);
-		//registrar el iva
-		if($obj_pro->iva > 0){
-			$iva = $obj_pro->iva;
-			$cuenta = $referencia->iva;
-			ContabilidadesController::registerIva($contabilidad,$signo,$iva,$cuenta);
-		}		
+		$asiento_contable1 = ContabilidadesController::register($contabilidad1);
+		$asiento_contable1 = ContabilidadesController::register($contabilidad2);
+		$asiento_contable1 = ContabilidadesController::register($contabilidad3);
+		$asiento_contable1 = ContabilidadesController::register($contabilidad4);
+		
         return $asiento_contable1;
     }
 
     public function showid($id){
 
-		$kardex = Kardex::where('id_referencia','=',$id)->orderBy('created_at')->get();
+		$kardex = Kardex::where('id_referencia','=',$id)->orderBy('created_at')->paginate(5);
     	foreach ($kardex as $value) {
     		$value->cabecera = Facturas::where('numero','=',$value->numero)->where('id_documento','=',$value->id_documento)->get();
     		$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->first();
@@ -197,6 +271,20 @@ class KardexController extends Controller
     	return view('inventario.kardex',[
     		'kardex'=>$kardex
     	]);
-    }
+	}
+	
+	public function kardexShow(){
+		$kardex = Kardex::where('id_empresa','=',Session::get('id_empresa'))->orderBy('created_at')->paginate(5);
+    	foreach ($kardex as $value) {
+    		$value->cabecera = Facturas::where('numero','=',$value->numero)->where('id_documento','=',$value->id_documento)->get();
+    		$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->first();
+    		$value->id_documento = Documentos::where('id','=',$value->id_documento)->first();
+    		$value->id_sucursal = Sucursales::where('id','=',$value->cabecera[0]->id_sucursal)->first();    		
+    	}
+    	//dd($kardex);
+    	return view('inventario.kardex',[
+    		'kardex'=>$kardex
+    	]);
+	}
 
 }

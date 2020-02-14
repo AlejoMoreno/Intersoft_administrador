@@ -9,8 +9,8 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Documentos</h4>
-                    <p class="category">Diferentes documentos</p><br>
+                    <h4 class="title">Documentos entrada y salida de mercancía<</h4>
+                    <p class="category">Diferentes documentos que intervienen con referencias</p><br>
                 </div>
                 <div class="content">
                     <div style="overflow-x:scroll;overflow-y:scroll;height:500px;">
@@ -22,8 +22,10 @@
 									<th>signo</th>
                                     <th>ubicacion</th>
                                     <th>prefijo</th>
-									<th>cta contable partida</th>
-									<th>cta contable ontrapartida</th>
+									<th>Documento Contable</th>
+                                    <th>Resolución</th>
+                                    <th>usuario Facturación Electrónica</th>
+                                    <th>password Facturación Electrónica</th>
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -35,8 +37,10 @@
 										<td>{{ $obj['signo'] }}</td>
                                         <td>{{ $obj['ubicacion'] }}</td>
                                         <td>{{ $obj['prefijo'] }}</td>
-										<td>{{ $obj['cuenta_contable_partida']['codigo'] }}</td>
-										<td>{{ $obj['cuenta_contable_contrapartida']['codigo'] }}</td>
+										<td>{{ $obj['documento_contable'] }}</td>
+                                        <td>{{ $obj['resolucion'] }}</td>
+                                        <td>{{ $obj['usuario'] }}</td>
+                                        <td>{{ $obj['password'] }}</td>
                                         <td><a href="javascript:;" onclick="documentos.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
                                         <!--td><a onclick="config.delete_get('/inventario/documentos/delete/', '{{ $obj }}',  '/inventario/documentos');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
@@ -87,18 +91,26 @@
                                     <input type="number" class="form-control" name="num_presente" id="num_presente" required="">
                                 </div>
                                 <div class="col-md-3">
-                                    <label> cuenta_contable_partida</label><br>
-                                    <input type="text" list="pucauxiliares" class="form-control" name="cuenta_contable_partida" id="cuenta_contable_partida" placeholder="Escribe cuenta_contable_partida " required="" onkeyup="config.UperCase('cuenta_contable_partida');">
+                                    <label> Documento contable</label><br>
+                                    <select class="form-control" name="documento_contable" id="documento_contable" >
+                                        <option value="0">(0) SIN CONTABILIZACIÓN</option>
+                                        <option value="3">(3) FACTURA VENTA</option>
+                                        <option value="4">(4) FACTURA COMPRA</option>
+                                        <option value="10">(10) NOTA CONTABLE</option>
+                                    </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <label>cuenta_contable_contrapartida</label><br>
-                                    <input type="text" list="pucauxiliares" class="form-control" name="cuenta_contable_contrapartida" id="cuenta_contable_contrapartida" placeholder="Escribe el cuenta_contable_contrapartida " required="" onkeyup="config.UperCase('cuenta_contable_contrapartida');">
+                                    <label>Resolución</label><br>
+                                    <input type="text" class="form-control" name="resolucion" id="resolucion" placeholder="Escribe la resolución, si no tiene resolución escriba NA" required="" onkeyup="config.UperCase('cuenta_contable_contrapartida');">
                                 </div>
-                                <datalist id="pucauxiliares">
-                                @foreach($pucauxiliares as $obj)
-                                <option value="{{ $obj->id }}">{{ $obj->codigo.'-'.$obj->descripcion }}</option>
-                                @endforeach
-                                </datalist>
+                                <div class="col-md-3">
+                                    <label>Usuario Facturación Electónica</label><br>
+                                    <input type="text" class="form-control" name="usuario" id="usuario" placeholder="Escribe el usuario">
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Password Facturación Electónica</label><br>
+                                    <input type="text" class="form-control" name="password" id="password" placeholder="Escribe la contraseña" required="" onkeyup="config.UperCase('cuenta_contable_contrapartida');">
+                                </div>
                             </div>
 
 

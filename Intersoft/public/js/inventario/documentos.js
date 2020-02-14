@@ -25,8 +25,10 @@ function Documentos(){
         $('#num_max').val(data.num_max);
         $('#num_min').val(data.num_min);
         $('#num_presente').val(data.num_presente);
-        $('#cuenta_contable_partida').val(data.cuenta_contable_partida);
-        $('#cuenta_contable_contrapartida').val(data.cuenta_contable_contrapartida);
+        $('#documento_contable').val(data.documento_contable);
+        $('#resolucion').val(data.resolucion);
+        $('#usuario').val(data.usuario);
+        $('#password').val(data.password);
 		$('input[type="submit"]').attr('disabled','disabled');
     };
 
@@ -40,8 +42,10 @@ function Documentos(){
             "num_max"  : $('#num_max').val(),
             "num_min"  : $('#num_min').val(),
             "num_presente"  : $('#num_presente').val(),
-            "cuenta_contable_partida" : $('#cuenta_contable_partida').val(),
-			"cuenta_contable_contrapartida" : $('#cuenta_contable_contrapartida').val()
+            "documento_contable" : $('#documento_contable').val(),
+            "resolucion" : $('#resolucion').val(),
+            "usuario" : $('#usuario').val(),
+            "password" : $('#password').val()
         };
         $.ajax({
 			data:  parametros,
@@ -411,7 +415,7 @@ function Documentos(){
         var fechavencimiento = "";
         var valor = "";
         var cantidad = "";
-        if(document.getElementById('signoDocumento').value == '-'){
+        if(document.getElementById('signoDocumento').value == '-' || document.getElementById('signoDocumento').value == '='){
             lotes = "<select onchange='documento.cambiolote();' class='form-control' id='"+lista_productos_seleccionados.length+"_lote' >";
             for (var i = 0; i < producto_seleccionado.lotes.length; i++) {
                 lotes += "<option vale='"+producto_seleccionado.lotes[i].numero_lote+"'>"
@@ -429,13 +433,13 @@ function Documentos(){
                     "</select>";
             cantidad = "<input type='number' onkeyup='documentos.calcular("+lista_productos_seleccionados.length+")' class='form-control' value='0' placeholder='Ej.(1)' id='"+lista_productos_seleccionados.length+"_cantidad' onchange='documentos.cantidad("+lista_productos_seleccionados.length+");'><div id='"+lista_productos_seleccionados.length+"error' class='error'></div><div id='"+lista_productos_seleccionados.length+"peligro' class='peligro'></div>";
         }
-        else if(document.getElementById('signoDocumento').value == '='){
+        /*else if(document.getElementById('signoDocumento').value == '='){
             lotes = "";
             serial = "";
             fechavencimiento = "";
             valor = "<input type='number' onkeyup='documentos.calcular("+lista_productos_seleccionados.length+")' class='form-control' value='0' id='"+lista_productos_seleccionados.length+"_valor' >";
             cantidad = "<input type='number' onkeyup='documentos.calcular("+lista_productos_seleccionados.length+")' class='form-control' value='0' placeholder='Ej.(1)' id='"+lista_productos_seleccionados.length+"_cantidad' onchange='documentos.cantidad("+lista_productos_seleccionados.length+");'><div id='"+lista_productos_seleccionados.length+"error' class='error'></div><div id='"+lista_productos_seleccionados.length+"peligro' class='peligro'></div>"; 
-        }
+        }*/
         else{
             lotes = "<input type='text' class='form-control' value='0' placeholder='Ej.(1887628920)' id='"+lista_productos_seleccionados.length+"_lote' >";
             serial = "<input type='text' class='form-control' value='0' placeholder='Ej.(18-87-6289-20)' id='"+lista_productos_seleccionados.length+"_serial' >";

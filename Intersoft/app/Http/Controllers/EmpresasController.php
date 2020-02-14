@@ -15,6 +15,7 @@ use App\Marcas;
 use App\Directorios;
 use App\Clasificaciones;
 use App\Contrato_laborals;
+use App\Tipopagos;
 
 
 class EmpresasController extends Controller
@@ -129,8 +130,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->id;
-            $documento->cuenta_contable_contrapartida= $auxiliar->id;
+            $documento->documento_contable = "3";
+            $documento->resolucion  = "00000000000 (1-500)";
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -141,8 +142,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->id;
-            $documento->cuenta_contable_contrapartida= $auxiliar->id;
+            $documento->documento_contable = "3";
+            $documento->resolucion  = "00000000000 (1-500)";
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -153,8 +154,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->id;
-            $documento->cuenta_contable_contrapartida= $auxiliar->id;
+            $documento->documento_contable = "0";
+            $documento->resolucion  = "00000000000 (1-500)";
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -165,8 +166,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->id;
-            $documento->cuenta_contable_contrapartida= $auxiliar->id;
+            $documento->documento_contable = "0";
+            $documento->resolucion  = "00000000000 (1-500)";
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -177,8 +178,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->id;
-            $documento->cuenta_contable_contrapartida= $auxiliar->id;
+            $documento->documento_contable = "0";
+            $documento->resolucion  = "00000000000 (1-500)";
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -189,8 +190,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->id;
-            $documento->cuenta_contable_contrapartida= $auxiliar->id;
+            $documento->documento_contable = "4";
+            $documento->resolucion  = "00000000000 (1-500)";
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -201,8 +202,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->id;
-            $documento->cuenta_contable_contrapartida= $auxiliar->id;
+            $documento->documento_contable = "10";
+            $documento->resolucion  = "00000000000 (1-500)";
             $documento->id_empresa  = $empresa->id;
             $documento->save();
             $documento = new Documentos();
@@ -213,8 +214,8 @@ class EmpresasController extends Controller
             $documento->num_max       = "1";
             $documento->num_min       = "100";
             $documento->num_presente  = "1";
-            $documento->cuenta_contable_partida  		= $auxiliar->id;
-            $documento->cuenta_contable_contrapartida= $auxiliar->id;
+            $documento->documento_contable = "10";
+            $documento->resolucion  = "00000000000 (1-500)";
             $documento->id_empresa  = $empresa->id;
             $documento->save();
 
@@ -359,6 +360,12 @@ class EmpresasController extends Controller
             $directorios->id_directorio_tipo_tercero= "3"; //tercero
             $directorios->id_empresa	 	= $empresa->id;
             $directorios->save();
+
+            $tipopago = new Tipopagos();
+            $tipopago->nombre = "EFECTIVO";
+            $tipopago->puc_cuenta = 0;
+            $tipopago->tercero = $empresa->nit_empresa;
+            $tipopago->id_empresa = $empresa->id;
             
             return redirect('/');
         }

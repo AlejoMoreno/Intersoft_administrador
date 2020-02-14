@@ -162,5 +162,45 @@ function Directorios(){
     		alert('No puedes eliminar sin haber buscado el tercero');
     	}
     	
-    }
+	}
+	
+	this.envioExcel = function(){
+		var id_directorio_tipo_tercero = $('#id_directorio_tipo_tercero').val();
+		var id_directorio_clase = $('#id_directorio_clase').val();
+		var id_ciudad = $('#id_ciudad').val();
+		var calificacion = $('#calificacion').val();
+		var nivel = $('#nivel').val();
+		var estado = $('#estado').val();
+		var id_retefuente = $('#id_retefuente').val();
+		var id_regimen = $('#id_regimen').val();
+		config.Redirect("/excel/excelDirectorio?id_directorio_tipo_tercero="+id_directorio_tipo_tercero+
+		"&id_directorio_clase"+id_directorio_clase+
+		"&calificacion="+calificacion+
+		"&nivel="+nivel+
+		"&estado="+estado+
+		"&id_retefuente="+id_retefuente+
+		"&id_retefuente="+id_retefuente+
+		"&id_regimen="+id_regimen+
+		"&id_ciudad="+id_ciudad);
+	}
+
+	this.envioPDF = function(){
+		var id_directorio_tipo_tercero = $('#id_directorio_tipo_tercero').val();
+		var id_directorio_clase = $('#id_directorio_clase').val();
+		var id_ciudad = $('#id_ciudad').val();
+		var calificacion = $('#calificacion').val();
+		var nivel = $('#nivel').val();
+		var estado = $('#estado').val();
+		var id_retefuente = $('#id_retefuente').val();
+		var id_regimen = $('#id_regimen').val();
+        config.Redirect("/pdf/pdfDirectorio?id_directorio_tipo_tercero="+id_directorio_tipo_tercero+
+		"&calificacion="+calificacion+
+		"&id_directorio_clase"+id_directorio_clase+
+		"&nivel="+nivel+
+		"&estado="+estado+
+		"&id_retefuente="+id_retefuente+
+		"&id_retefuente="+id_retefuente+
+		"&id_regimen="+id_regimen+
+		"&id_ciudad="+id_ciudad);
+	}
 }

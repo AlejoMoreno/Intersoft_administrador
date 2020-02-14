@@ -355,5 +355,13 @@ function Config(){
 
 	}
 
+	this.leave_page = function(){
+		console.log("cargando");
+		$('#resultado').css("display","inline");
+	}
+
 }
+
+
+
 

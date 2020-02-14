@@ -53,7 +53,9 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->
                                     </tr></thead>
                                     <tbody>
                                         @foreach ($documentos as $obj)
+                                        
                                             <?php 
+                                            $num = 0;
                                             if($obj["signo"]=='+'){
                                                 $signo = "mas";
                                             }
@@ -63,6 +65,9 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->
                                             else{
                                                 $signo = "igual";
                                             }
+                                            if($obj['nombre']=="MAYORISTA"){
+                                                $num  = $obj['num_presente'];
+                                            }
                                             $url = '/documentos/documento?signo='.$signo.'&nombre='.$obj['nombre'].'&id='.$obj['id'].'&prefijo='.$obj['prefijo'].'&numero='.$obj['num_presente'];?> 
                                             <tr>
                                                 <td><a href="{{ $url }}" target="_blank"><img width="30" src="https://image.flaticon.com/icons/svg/138/138212.svg"></a></td>
@@ -71,6 +76,12 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->
                                                 <td><a href="{{ $urlconsulta }}" class="btn btn-default">Consultar</a></td>
                                             </tr>
                                         @endforeach
+                                        <tr>
+                                            <td><a href="/documentos/facturaPost?signo=menos&nombre=MAYORISTA&id=34&prefijo=NA&numero=<?php echo $num;?>" target="_blank"><img width="30" src="https://image.flaticon.com/icons/svg/138/138212.svg"></a></td>
+                                            <td><a href="/documentos/facturaPost?signo=menos&nombre=MAYORISTA&id=34&prefijo=NA&numero=<?php echo $num;?>" target="_blank">TIPO POST</a></td>
+                                            <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                            <td><a href="{{ $urlconsulta }}" class="btn btn-default">Consultar</a></td>
+                                        </tr>
                                         <tr onclick="config.Redirect('/submenu/inventario');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/2166/2166821.svg"></td>
                                             <td colspan="2">Liquidación Comisiones</td>

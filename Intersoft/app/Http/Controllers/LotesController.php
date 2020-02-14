@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Lotes;
+use App\Sucursales;
+use App\Referencias;
+use DB;
 
 use Session;
 
@@ -19,7 +22,7 @@ class LotesController extends Controller
         $obj->ubicacion   		= $request->ubicacion;
         $obj->serial            = $request->serial;
         $obj->cantidad          = $request->cantidad;
-        $obj->sucursal          = Session::get('sucursal');
+        $obj->id_sucursal          = Session::get('sucursal');
         $obj->id_empresa	= Session::get('id_empresa');
         $obj->save();
         return redirect('/inventario/lotes');
@@ -33,7 +36,7 @@ class LotesController extends Controller
         $obj->ubicacion   		= $request->ubicacion;
         $obj->serial            = $request->serial;
         $obj->cantidad          = $request->cantidad;
-        $obj->sucursal          = Session::get('sucursal');
+        $obj->id_sucursal          = Session::get('sucursal');
         $obj->id_empresa	= Session::get('id_empresa');
         $obj->save();
         return $obj;
@@ -62,8 +65,16 @@ class LotesController extends Controller
     }
 
     public function index(){
-        $objs = Lotes::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $objs = Lotes::where('id_empresa','=',Session::get('id_empresa'))->paginate(10);
+        foreach($objs as $obj){
+            $obj->id_sucursal = Sucursales::where('id','=',$obj->id_sucursal)->first();
+            $obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
+        }
+        $number = DB::select('SELECT sum(cantidad) as total FROM lotes where id_empresa = '.Session::get('id_empresa'));
+        
         return view('inventario.lotes', [
-            'lotes' => $objs]);
+            'lotes' => $objs,
+            'number' => json_encode($number)
+        ]);
     }
 }

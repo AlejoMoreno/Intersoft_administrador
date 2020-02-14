@@ -119,6 +119,15 @@ Route::get('/administrador/ciudades/update/{id}', 'CiudadesController@showupdate
 Route::post('/administrador/ciudades/create', 'CiudadesController@create');
 Route::post('/administrador/ciudades/update', 'CiudadesController@update');
 
+//tipoPagos
+Route::get('/administrador/tipopagos', 'TipopagosController@index');
+Route::get('/administrador/tipopagos/all', 'TipopagosController@all');
+Route::get('/administrador/tipopagos/{id}', 'TipopagosController@formcreate');
+Route::get('/administrador/tipopagos/delete/{id}', 'TipopagosController@delete');
+Route::get('/administrador/tipopagos/update/{id}', 'TipopagosController@showupdate');
+Route::post('/administrador/tipopagos/create', 'TipopagosController@create');
+Route::post('/administrador/tipopagos/update', 'TipopagosController@update');
+
 //inventario Lineas
 Route::get('/inventario/lineas', function(){
     return view('inventario.lineas');
@@ -135,6 +144,7 @@ Route::get('/administrador/contratos/delete/{id}', 'Contrato_laboralController@d
 Route::get('/administrador/contratos/update/{id}', 'Contrato_laboralController@showupdate');
 Route::post('/administrador/contratos/create', 'Contrato_laboralController@create');
 Route::post('/administrador/contratos/update', 'Contrato_laboralController@update');
+
 
 //usuarios
 Route::get('/administrador/usuarios', 'UsuariosController@index');
@@ -309,10 +319,12 @@ Route::post('/inventario/documentos/update', 'DocumentosController@update');
 Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
 
 //ordenes de produccion (ficha "receta")
-Route::get('/inventario/ordenesproduccion', 'FichatecnicasController@index');
+Route::get('/inventario/fichatecnica', 'FichatecnicasController@index');
+Route::get('/inventario/ordenesdeproduccion', 'FichatecnicasController@ordenesdeproduccion');
 Route::get('/inventario/materiaprima', 'ReferenciasController@materiaprima');
 
-
+Route::get('/inventario/actualizacionPrecios', 'ReferenciasController@actualizacionPrecios');
+Route::post('/inventario/actualizacionPrecios', 'ReferenciasController@actualizarPrecios');
 
 /*
 |--------------------------------------------------------------------------
@@ -375,7 +387,13 @@ Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
 
 Route::get('/contabilidad/librosauxiliares', 'ContabilidadesController@librosauxiliaresIndex');
+Route::get('/contabilidad/comprobantesdiario', function(){ return view('contabilidad.comprobantesdiario'); });
+Route::get('/contabilidad/doc/{id}', 'ContabilidadesController@getDocumentos');
 
+Route::post('/contabilidad/comprobantes/viewComprobantes', 'ContabilidadesController@viewComprobantes');
+Route::post('/contabilidad/comprobantes/deleteComprobantes', 'ContabilidadesController@deleteComprobantes');
+Route::post('/contabilidad/comprobantes/updateComprobantes', 'ContabilidadesController@updateComprobantes');
+Route::post('/contabilidad/comprobantes/createComprobantes', 'ContabilidadesController@createComprobantes');
 
 /*
 |--------------------------------------------------------------------------
@@ -398,14 +416,24 @@ Route::get('/documentos/eliminar/{id}', 'FacturasController@eliminar');
 Route::post('/kardex/saveDocument', 'KardexController@saveDocument');
 Route::post('/factura/saveDocument', 'FacturasController@saveDocument');
 Route::get('/kardex/show/{id}', 'KardexController@showid');
+Route::get('/inventario/kardex', 'KardexController@kardexShow');
+
+//Factura post
+Route::get('/documentos/facturaPost', 'FacturasController@facturaPost');
 
 //consultar documentos
 Route::get('/documentos/consultar/{documento}', 'FacturasController@consultar_documento');
 
 //DESCARGAR EN EXCEL
 Route::get('/download/excel/sucursales', 'SucursalesController@excel_all');
+Route::get('/excel/excelComprobantesDiario', 'ContabilidadesController@exelComprobantesDiario');
+Route::get('/excel/excelreferencias1', 'ReferenciasController@excelreferencias1');
+Route::get('/excel/excelDirectorio', 'DirectoriosController@excel');
 
 //DESCARGAR EN PDF
 Route::get('/download/pdf/sucursales', 'SucursalesController@pdf_all');
 Route::post('/send', 'EmailController@send');
+Route::get('/pdf/pdf_comprobanteDiario', 'ContabilidadesController@pdf_comprobanteDiario');
+Route::get('/pdf/pdfreferencias1', 'ReferenciasController@pdfreferencias1');
+Route::get('/pdf/pdfDirectorio', 'DirectoriosController@pdf');
 

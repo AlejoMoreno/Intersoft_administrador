@@ -23,8 +23,10 @@ class CreateDocumentosTable extends Migration
             $table->string('num_max');
             $table->string('num_min');
             $table->string('num_presente');
-            $table->string('cuenta_contable_partida');
-            $table->string('cuenta_contable_contrapartida');
+            $table->string('documento_contable');
+            $table->string('resolucion');
+            $table->string('usuario');
+            $table->string('password');
             $table->integer('id_empresa');
             $table->timestamps();
         });

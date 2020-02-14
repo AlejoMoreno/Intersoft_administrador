@@ -1,0 +1,15 @@
+*{
+    font-size: 7px;
+}
+
+h1{
+    text-align: center;
+    font-size: 10px;
+}
+
+thead{
+    background: #207ce5;
+}
+thead tr th {
+    color: white;
+}

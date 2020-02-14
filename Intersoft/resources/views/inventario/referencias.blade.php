@@ -3,6 +3,7 @@
 @section('content')
 
 
+
 <div class="container-fluid">
     <div class="row">
 
@@ -10,13 +11,51 @@
             <div class="card">
                 <div class="header">
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-12">
                             <h4 class="title">Referencias</h4>
                             <p class="category">Diferentes referencias</p>
                         </div>
                         <div class="col-md-2">
-                            <div class="btn btn-success" style="background: white;" onclick="referencias.crear()">+ Nueva Referencia</div>
+                            <p>Ordenar:</p>
+                            <select name="orden" id="orden" class="form-control">
+                                <option value="codigo">Por Código</option>
+                                <option value="nombre">Por Nombre</option>
+                                <option value="codigo_linea">Por Linea</option>
+                                <option value="id_marca">Por Marca</option>
+                                <option value="costo">Por Costo</option>
+                                <option value="saldo">Por Saldo</option>
+                            </select>
                         </div>
+                        <div class="col-md-2">
+                            <p>Tipo Reporte:</p>
+                            <select name="tipo_reporte" id="tipo_reporte" class="form-control">
+                                <option value="total">Total</option>
+                                <option value="exitencia">Con Existencia</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <p>Linea</p>
+                            <select name="linea" id="linea" class="form-control" >
+                                <option value="0">TODAS</option>
+                                @foreach ($lineas as $linea)
+                                <option value="{{ $linea->id }}">{{ $linea->id }} - {{ $linea->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                                <p>Observar</p>
+                                <div onclick="referencias.observar()" style="width: 100%;background: white;" class="btn btn-info">(*)</div>    
+                            </div>
+                        <div class="col-md-3">
+                            <p>Descargar</p>
+                            <div onclick="referencias.envioExcel()" style="width: 45%;background: white;" class="btn btn-success">(EXCEL)</div>
+                            <div onclick="referencias.envioPDF()" style="width: 45%;background: white;" class="btn btn-danger">(PDF)</div>
+                        </div>
+                        <div class="col-md-2">
+                                <p>Nueva Referencia</p>
+                            <div class="btn btn-success" style="background: white;" onclick="referencias.crear()">(+) </div>
+                        </div>
+                        <div class="col-md-12"><br></div>
                     </div>
                 </div>
                 <div class="content">
@@ -25,7 +64,6 @@
                         <table class="table table-bordered table-striped" id="datos">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Código</th>
                                     <th>descripcion</th>
                                     <th>Código Barras</th>
@@ -37,7 +75,7 @@
                                     <th>precio 3</th>
                                     <th>precio 4</th>
                                     <th>estado</th>
-                                    <th>costo</th>
+                                    <th>Ultimo costo</th>
                                     <th>costo promedio</th>
                                     <th>saldo</th>
                                     <th></th> 
@@ -45,24 +83,23 @@
                             </thead>
                             <tbody>
                                 @foreach ($referencias as $obj)
-                                    <tr id="row{{ $obj['id'] }}">
-                                        <td>{{ $obj['id'] }}</td>
-                                        <td>{{ $obj['codigo_linea'][0]['codigo_interno'].$obj['codigo_letras'].$obj['codigo_consecutivo'] }}</td>
-                                        <td>{{ $obj['descripcion'] }}</td>
-                                        <td><small style="font-size: 9px;">{{ $obj['codigo_barras'] }}</small></td>
-                                        <td>{{ $obj['id_presentacion'][0]['nombre'] }}</td>
-                                        <td>{{ $obj['id_marca'][0]['nombre'] }}</td>
-                                        <td>{{ $obj['peso'] }}</td>
-                                        <td>{{ number_format($obj['precio1'], 0, ",", ".") }}</td>
-                                        <td>{{ number_format($obj['precio2'], 0, ",", ".") }}</td>
-                                        <td>{{ number_format($obj['precio3'], 0, ",", ".") }}</td>
-                                        <td>{{ number_format($obj['precio4'], 0, ",", ".") }}</td>
-                                        <td>{{ $obj['estado'] }}</td>
-                                        <td>{{ number_format($obj['costo'], 0, ",", ".") }}</td>
-                                        <td>{{ number_format($obj['costo_promedio'], 0, ",", ".") }}</td>
-                                        <td>{{ number_format($obj['saldo'], 0, ",", ".") }}</td>
-                                        <td><a href="javascript:;" onclick="referencias.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
-                                        <!--td><a onclick="referencias.delete_get('/inventario/referencias/delete/', '{{ $obj }}',  '/inventario/referencias');" href="#"><button class="btn btn-danger">x</button></a></td-->
+                                    <tr id="row{{ $obj->id }}">
+                                        <td>{{ $obj->codigo_linea[0]->codigo_interno.$obj->codigo_letras.$obj->codigo_consecutivo }}</td>
+                                        <td>{{ $obj->descripcion }}</td>
+                                        <td><small style="font-size: 9px;">{{ $obj->codigo_barras }}</small></td>
+                                        <td>{{ $obj->id_presentacion[0]->nombre }}</td>
+                                        <td>{{ $obj->id_marca[0]->nombre }}</td>
+                                        <td>{{ $obj->peso }}</td>
+                                        <td>{{ number_format($obj->precio1, 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj->precio2, 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj->precio3, 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj->precio4, 0, ",", ".") }}</td>
+                                        <td>{{ $obj->estado }}</td>
+                                        <td>{{ number_format($obj->costo, 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj->costo_promedio, 0, ",", ".") }}</td>
+                                        <td>{{ number_format($obj->saldo, 0, ",", ".") }}</td>
+                                        <td><a href="javascript:;" onclick="referencias.update('{{json_encode($obj)}}');"><button class="btn btn-warning">></button></a></td>
+                                        <!--td><a onclick="referencias.delete_get('/inventario/referencias/delete/', '{{json_encode($obj)}}',  '/inventario/referencias');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -96,7 +133,7 @@
                         <div class="col-md-5" >
                             <div class="card" style="box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);background: white;">
                                 <div class="content">
-                                    <div class="btn btn-success" onclick="referencias.initial()">Regresar</div>
+                                    <div class="btn btn-success" onclick="config.Redirect('/inventario/referencias')">Regresar</div>
                                     <div id="actualizar" onclick="config.send_post('#formulario', '/inventario/referencias/update', '/inventario/referencias');" class="btn btn-warning">Actualizar</div>
                                     <div class="btn btn-danger" onclick="config.printDiv('crear');">Imprimir Ficha</div>
                                     <div class="btn btn-default">Subir Imagen</div>
@@ -136,12 +173,12 @@
                                         <input type="text" class="form-control" name="codigo_barras" id="codigo_barras" placeholder="Escribe el codigo_barras" required="" onkeyup="config.UperCase('codigo_barras');">
 
                                         <div class="col-md-6">
-                                            <label>código interno</label><br>
-                                            <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno" value="NA" onkeyup="config.UperCase('codigo_interno');">
+                                            <!--<label>código interno</label><br>-->
+                                            <input type="hidden" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno" value="NA" onkeyup="config.UperCase('codigo_interno');">
                                         </div>
                                         <div class="col-md-6">
-                                            <label>código alterno</label><br>
-                                            <input type="text" class="form-control" name="codigo_alterno" id="codigo_alterno" placeholder="Escribe el codigo_alterno" value="NA" onkeyup="config.UperCase('codigo_alterno');">
+                                            <!--<label>código alterno</label><br>-->
+                                            <input type="hidden" class="form-control" name="codigo_alterno" id="codigo_alterno" placeholder="Escribe el codigo_alterno" value="NA" onkeyup="config.UperCase('codigo_alterno');">
                                         </div>
 
                                         <div class="col-md-6">
@@ -186,17 +223,18 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <label>iva (%)</label><br>
-                                            <select class="form-control" name="iva" id="iva" placeholder="Escribe el iva" required="">
-                                                <option value="0.19">0.19%</option>
+                                            <!--<label>iva (%)</label><br>-->
+                                            <input type="hidden" name="iva" id="iva" value="0.19">
+                                            <!--<select class="form-control" name="iva" id="iva" placeholder="Escribe el iva" required="">
+                                                <option value="">0.19%</option>
                                                 <option value="0.05">0.05%</option>
                                                 <option value="0.10">0.10%</option>
                                                 <option value="0.16">0.16%</option>
-                                            </select>
+                                            </select>-->
                                         </div>
                                         <div class="col-md-6">
-                                            <label>impo consumo (%)</label><br>
-                                            <input type="number" value="0" maxlength="2" class="form-control" name="impo_consumo" id="impo_consumo" placeholder="Escribe el impo_consumo" required="" onkeyup="config.UperCase('impo_consumo');">
+                                            <!--<label>impo consumo (%)</label><br>-->
+                                            <input type="hidden" value="0" maxlength="2" class="form-control" name="impo_consumo" id="impo_consumo" placeholder="Escribe el impo_consumo" required="" onkeyup="config.UperCase('impo_consumo');">
                                         </div>
 
                                         <div class="col-md-6">
@@ -292,7 +330,7 @@
 </div>
 
 
-<script>referencias.initial();</script>
+<script>referencias.initial( <?php echo json_encode($_GET); ?>);</script>
 
 <style>
 a img{

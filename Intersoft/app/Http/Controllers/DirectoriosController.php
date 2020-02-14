@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection as Collection;
 
 use App\Directorios;
 use App\Retefuentes;
@@ -13,6 +14,10 @@ use App\Directorio_tipos;
 use App\Directorio_clases;
 use App\Directorio_tipo_terceros;
 
+use DB;
+use Excel;
+use PDF;
+
 use Session;
 
 class DirectoriosController extends Controller
@@ -20,25 +25,25 @@ class DirectoriosController extends Controller
     public function create(Request $request){
         try{
             $directorios = new Directorios();
-            $directorios->nit       = $request->nit;
-            $directorios->digito    = $request->digito;
-            $directorios->razon_social= $request->razon_social;
-            $directorios->direccion = $request->direccion;
-            $directorios->correo    = $request->correo;
-            $directorios->telefono  = $request->telefono;
-            $directorios->telefono1 = $request->telefono1;
-            $directorios->telefono2 = $request->telefono2;
-            $directorios->financiacion= $request->financiacion;
-            $directorios->descuento = $request->descuento;
-            $directorios->cupo_financiero= $request->cupo_financiero;
-            $directorios->rete_ica  = $request->rete_ica;
-            $directorios->porcentaje_rete_iva= $request->porcentaje_rete_iva;
+            $directorios->nit       = (string)$request->nit;
+            $directorios->digito    = (string)$request->digito;
+            $directorios->razon_social= (string)$request->razon_social;
+            $directorios->direccion = (string)$request->direccion;
+            $directorios->correo    = (string)$request->correo;
+            $directorios->telefono  = (string)$request->telefono;
+            $directorios->telefono1 = (string)$request->telefono1;
+            $directorios->telefono2 = (string)$request->telefono2;
+            $directorios->financiacion= (double)$request->financiacion;
+            $directorios->descuento = (double)$request->descuento;
+            $directorios->cupo_financiero= (double)$request->cupo_financiero;
+            $directorios->rete_ica  = (double)$request->rete_ica;
+            $directorios->porcentaje_rete_iva= (double)$request->porcentaje_rete_iva;
             $directorios->actividad_economica= $request->actividad_economica;
             $directorios->calificacion= $request->calificacion;
-            $directorios->nivel     = $request->nivel;
-            $directorios->zona_venta= $request->zona_venta;
-            $directorios->transporte= $request->transporte;
-            $directorios->estado    = $request->estado;
+            $directorios->nivel     = (string)$request->nivel;
+            $directorios->zona_venta= (string)$request->zona_venta;
+            $directorios->transporte= (string)$request->transporte;
+            $directorios->estado    = (string)$request->estado;
             $directorios->id_retefuente= $request->id_retefuente;
             $directorios->id_ciudad = $request->id_ciudad;
             $directorios->id_regimen= $request->id_regimen;
@@ -60,25 +65,25 @@ class DirectoriosController extends Controller
     public function update(Request $request){
         try{
             $directorios = Directorios::where('id',$request->id)->first();
-            $directorios->nit       = $request->nit;
-            $directorios->digito    = $request->digito;
-            $directorios->razon_social= $request->razon_social;
-            $directorios->direccion = $request->direccion;
-            $directorios->correo    = $request->correo;
-            $directorios->telefono  = $request->telefono;
-            $directorios->telefono1 = $request->telefono1;
-            $directorios->telefono2 = $request->telefono2;
-            $directorios->financiacion= $request->financiacion;
-            $directorios->descuento = $request->descuento;
-            $directorios->cupo_financiero= $request->cupo_financiero;
-            $directorios->rete_ica  = $request->rete_ica;
-            $directorios->porcentaje_rete_iva= $request->porcentaje_rete_iva;
+            $directorios->nit       = (string)$request->nit;
+            $directorios->digito    = (string)$request->digito;
+            $directorios->razon_social= (string)$request->razon_social;
+            $directorios->direccion = (string)$request->direccion;
+            $directorios->correo    = (string)$request->correo;
+            $directorios->telefono  = (string)$request->telefono;
+            $directorios->telefono1 = (string)$request->telefono1;
+            $directorios->telefono2 = (string)$request->telefono2;
+            $directorios->financiacion= (double)$request->financiacion;
+            $directorios->descuento = (double)$request->descuento;
+            $directorios->cupo_financiero= (double)$request->cupo_financiero;
+            $directorios->rete_ica  = (double)$request->rete_ica;
+            $directorios->porcentaje_rete_iva= (double)$request->porcentaje_rete_iva;
             $directorios->actividad_economica= $request->actividad_economica;
             $directorios->calificacion= $request->calificacion;
-            $directorios->nivel     = $request->nivel;
-            $directorios->zona_venta= $request->zona_venta;
-            $directorios->transporte= $request->transporte;
-            $directorios->estado    = $request->estado;
+            $directorios->nivel     = (string)$request->nivel;
+            $directorios->zona_venta= (string)$request->zona_venta;
+            $directorios->transporte= (string)$request->transporte;
+            $directorios->estado    = (string)$request->estado;
             $directorios->id_retefuente= $request->id_retefuente;
             $directorios->id_ciudad = $request->id_ciudad;
             $directorios->id_regimen= $request->id_regimen;
@@ -113,7 +118,7 @@ class DirectoriosController extends Controller
     public function showone($id){
         try{
             $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
-                                    ->where('id','=',$id)->fisrt();
+                                    ->where('id','=',$id)->get()[0];
             return  array(
                 "result"=>"success",
                 "body"=>$directorios);
@@ -156,7 +161,7 @@ class DirectoriosController extends Controller
     public function index(){
         try{
             $retefuentes = Retefuentes::all();
-            $ciudades = Ciudades::all();
+            $ciudades = Ciudades::where('id','>',0)->orderBy('codigo','ASC')->get();
             $regimenes = Regimenes::all();
             $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
             $directorio_tipos = Directorio_tipos::all();
@@ -256,5 +261,73 @@ class DirectoriosController extends Controller
             "result"=>"success",
             "body"=>$directorios
         );
+    }
+
+    /**
+     * Excel Reporte
+     */
+    public function excel(Request $request){
+        
+		
+		$objs = DB::select("
+        select nit, digito, razon_social, direccion, ciudades.nombre AS id_ciudad, telefono, correo,
+         telefono1, telefono2, calificacion, retefuentes.nombre AS id_retefuente, regimenes.nombre AS id_regimen, 
+         directorio_tipo_terceros.nombre AS id_directorio_tipo_tercero, directorio_clases.nombre AS id_directorio_clase, estado 
+         from directorios  
+         INNER JOIN directorio_clases ON directorios.id_directorio_clase = directorio_clases.id 
+         INNER JOIN directorio_tipo_terceros ON directorios.id_directorio_tipo_tercero = directorio_tipo_terceros.id 
+         INNER JOIN regimenes ON directorios.id_regimen = regimenes.id 
+         INNER JOIN ciudades ON directorios.id_ciudad = ciudades.id 
+         INNER JOIN retefuentes ON directorios.id_retefuente = retefuentes.id 
+         where id_empresa = ".Session::get('id_empresa')." 
+         OR id_regimen = ".$request->id_regimen." 
+         OR id_ciudad = ".$request->id_ciudad." 
+         OR id_retefuente = ".$request->id_retefuente." 
+         OR estado like '".$request->estado."' 
+         OR nivel like '".$request->nivel."' 
+         OR `calificacion` like '".$request->clasificacion."'
+         OR id_directorio_tipo_tercero = ".$request->id_directorio_tipo_tercero."  ");
+		$objs= Collection::make($objs);
+			
+        
+        $data= json_decode( json_encode($objs), true);
+
+        Excel::create('Directorio', function($excel) use($data) {
+            $excel->sheet('directorio', function($sheet) use($data) {
+                $sheet->fromArray($data);
+            });
+        })->export('xls');
+    }
+
+    /**
+     * PDF reportes
+     */
+    public function pdf(Request $request){
+		
+		$objs = DB::select("
+        select nit, digito, razon_social, direccion, ciudades.nombre AS id_ciudad, telefono, correo,
+         telefono1, telefono2, calificacion, retefuentes.nombre AS id_retefuente, regimenes.nombre AS id_regimen, 
+         directorio_tipo_terceros.nombre AS id_directorio_tipo_tercero, directorio_clases.nombre AS id_directorio_clase, estado 
+         from directorios 
+         INNER JOIN directorio_clases ON directorios.id_directorio_clase = directorio_clases.id 
+         INNER JOIN directorio_tipo_terceros ON directorios.id_directorio_tipo_tercero = directorio_tipo_terceros.id 
+         INNER JOIN regimenes ON directorios.id_regimen = regimenes.id 
+         INNER JOIN ciudades ON directorios.id_ciudad = ciudades.id 
+         INNER JOIN retefuentes ON directorios.id_retefuente = retefuentes.id 
+         where id_empresa = ".Session::get('id_empresa')." 
+         OR id_regimen = ".$request->id_regimen." 
+         OR id_ciudad = ".$request->id_ciudad." 
+         OR id_retefuente = ".$request->id_retefuente." 
+         OR estado like '".$request->estado."' 
+         OR nivel like '".$request->nivel."' 
+         OR `calificacion` like '".$request->clasificacion."'
+         OR id_directorio_tipo_tercero = ".$request->id_directorio_tipo_tercero."  ");
+		$objs= Collection::make($objs);
+		
+        
+        $data= json_decode( json_encode($objs), true);
+
+        $pdf = PDF::loadView('pdfs.pdfDirectorio', compact('data'));
+        return $pdf->download('Directorio.pdf');
     }
 }

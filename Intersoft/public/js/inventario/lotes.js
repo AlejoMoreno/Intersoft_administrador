@@ -20,6 +20,7 @@ function Lotes(){
 		$('#ubicacion').val(data.ubicacion);
         $('#serie').val(data.serie);
         $('#cantidad').val(data.cantidad);
+        $('#id_sucursal').val(data.id_sucursal);
         $('input[type="submit"]').attr('disabled','disabled');
     };
 
@@ -31,7 +32,8 @@ function Lotes(){
 			"fecha_vence_lote" : $('#fecha_vence_lote').val(),
 			"ubicacion" : $('#ubicacion').val(),
             "serie" : $('#serie').val(),
-            "cantidad" : $('#cantidad').val()
+            "cantidad" : $('#cantidad').val(),
+            "id_sucursal" : $('#id_sucursal').val()
         };
         $.ajax({
 			data:  parametros,

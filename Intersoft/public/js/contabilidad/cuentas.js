@@ -3,6 +3,7 @@ var cuentaContable = new CuentaContable();
 function CuentaContable(){
 	this.init = function(){
 		$('#actualizar').hide();
+		$('#data').hide();
 	}
 	//funciona unicamente con inputs
 	this.buscar = function(valor){
@@ -174,6 +175,32 @@ function CuentaContable(){
     		$('#cuentaAuxiliar').val(valor.substr(6,2));
     	}
 		cuentaContable.buscar($('#cuentaAuxiliar').val());
-    }
+	}
+	
+	this.changeSubCuentas = function(){
+		var pucsubcuentas = $('#pucsubcuentas').val();
+		var lista = '<datalist id="pucauxiliarcuentas" >';
+		var obj = JSON.parse($('#data').text());
+		obj.forEach(element => {
+			if(element['id_pucsubcuentas']==pucsubcuentas){
+				lista += "<option value='"+element['codigo']+"'>"+element['codigo']+"-"+element['descripcion']+"</option>";
+			}
+		});
+		lista += '</datalist>';
+		$('#listachange').html(lista);
+	}
+
+	this.changeAuxiliarCuentas = function(){
+		var textpucauxiliarcuentas = $('#codigo').val();
+		var obj = JSON.parse($('#data').text());
+		var flag = false;
+		obj.forEach(element => {
+			if(element['codigo']==textpucauxiliarcuentas){
+				$('#descripcion').val(element['descripcion']);
+				flag = true;
+			}
+		});
+		if(!flag==true){$('#descripcion').val("");}
+	}
 
 }

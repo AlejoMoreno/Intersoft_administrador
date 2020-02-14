@@ -10,59 +10,22 @@
                 <div class="header">
                     <h4 class="title">Calendario</h4>
                     <p>Crear un nuevo evento</p>
-                    <form action="/calendario/create" method="post">
-                        <label for="titulo">Titulo Evento</label>
-                        <input type="text" class="form-control" name="titulo" id="titulo" placeholder="Titulo Evento">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label>Fecha inicio</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" name="dd" id="dd"  placeholder="dd" class="form-control">
-                            </div>
-                            <div class="col-md-3">
-                                <select name="mm" id="mm"  class="form-control" >
-                                    <option value="">mm</option>
-                                    <option value="Enero">Enero</option>
-                                    <option value="Febrero">Febrero</option>
-                                    <option value="Marzo">Marzo</option>
-                                    <option value="Abril">Abril</option>
-                                    <option value="Mayo">Mayo</option>
-                                    <option value="Junio">Junio</option>
-                                    <option value="Julio">Julio</option>
-                                    <option value="Agosto">Agosto</option>
-                                    <option value="Septiembre">Septiembre</option>
-                                    <option value="Octubre">Octubre</option>
-                                    <option value="Noviembre">Noviembre</option>
-                                    <option value="Diciembre">Diciembre</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" name="aaaa" id="aaaa" placeholder="aaaa" class="form-control">
-                            </div>
-                        </div>
-                        <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
-                        <label for="hora_inicio">Hora Inicio</label>
-                        <input type="datetime" class="form-control"  name="hora_inicio" id="hora_inicio" value="0:00">
-                        <label for="periodicidad">periodicidad Evento</label>
-                        <select class="form-control" name="periodicidad" id="periodicidad">
-                            <option value="">Periodicidad del Evento</option>
-                            <option value="uno">Una Sola Vez</option>
-                            <option value="diario">Diario</option>
-                            <option value="semanal">Semanal</option>
-                            <option value="mensual">Mensual</option>
-                            <option value="ano">Año</option>
-                        </select>
-                        <div id="finaldate">
+                    
+                </div>
+                <div class="content">
+
+                        <form action="/calendario/create" method="post">
+                            <label for="titulo">Titulo Evento</label>
+                            <input type="text" class="form-control" name="titulo" id="titulo" placeholder="Titulo Evento">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <label>Fecha Final</label>
+                                    <label>Fecha inicio</label>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="number" name="ddfinal" id="ddfinal"  placeholder="dd" class="form-control">
+                                    <input type="number" name="dd" id="dd"  placeholder="dd" class="form-control">
                                 </div>
                                 <div class="col-md-3">
-                                    <select name="mmfinal" id="mmfinal"  class="form-control" >
+                                    <select name="mm" id="mm"  class="form-control" >
                                         <option value="">mm</option>
                                         <option value="Enero">Enero</option>
                                         <option value="Febrero">Febrero</option>
@@ -79,31 +42,68 @@
                                     </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <input type="number" name="aaaafinal" id="aaaafinal" placeholder="aaaa" class="form-control">
+                                    <input type="number" name="aaaa" id="aaaa" placeholder="aaaa" class="form-control">
                                 </div>
                             </div>
-                            <input type="date" class="form-control" name="fecha_final" id="fecha_final">
-                            <label for="hora_final">Hora Final</label>
-                            <input type="datetime" class="form-control"  name="hora_final" id="hora_final" value="0:00">
-                        </div>
-                        <hr><p>Descripción Evento</p>
-                        <label for="lugar">Lugar Evento</label>
-                        <input type="text" class="form-control" name="lugar" id="lugar" placeholder="Lugar Evento">
-                        <label for="descripcion">Descripcion</label>
-                        <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripcion Evento">
-                        <label for="color">Color</label>
-                        <input type="color" name="color" id="color" class="form-control">
-                        <hr><p>Valor de evento</p>
-                        <label for="valor">Valor</label>
-                        <input type="number" name="valor" id="valor" class="form-control" placeholder="Valor">
-                        <br><label for="notificacion">Notificacion</label>
-                        <input type="checkbox" name="notificacion" id="notificacion"><br><br>
-                        <input type="submit" value="Guardar" class="btn btn-succes" >
-                    </form>
-                </div>
-                <div class="content">
-
-
+                            <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
+                            <label for="hora_inicio">Hora Inicio</label>
+                            <input type="datetime" class="form-control"  name="hora_inicio" id="hora_inicio" value="0:00">
+                            <label for="periodicidad">periodicidad Evento</label>
+                            <select class="form-control" name="periodicidad" id="periodicidad">
+                                <option value="">Periodicidad del Evento</option>
+                                <option value="uno">Una Sola Vez</option>
+                                <option value="diario">Diario</option>
+                                <option value="semanal">Semanal</option>
+                                <option value="mensual">Mensual</option>
+                                <option value="ano">Año</option>
+                            </select>
+                            <div id="finaldate">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <label>Fecha Final</label>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" name="ddfinal" id="ddfinal"  placeholder="dd" class="form-control">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select name="mmfinal" id="mmfinal"  class="form-control" >
+                                            <option value="">mm</option>
+                                            <option value="Enero">Enero</option>
+                                            <option value="Febrero">Febrero</option>
+                                            <option value="Marzo">Marzo</option>
+                                            <option value="Abril">Abril</option>
+                                            <option value="Mayo">Mayo</option>
+                                            <option value="Junio">Junio</option>
+                                            <option value="Julio">Julio</option>
+                                            <option value="Agosto">Agosto</option>
+                                            <option value="Septiembre">Septiembre</option>
+                                            <option value="Octubre">Octubre</option>
+                                            <option value="Noviembre">Noviembre</option>
+                                            <option value="Diciembre">Diciembre</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input type="number" name="aaaafinal" id="aaaafinal" placeholder="aaaa" class="form-control">
+                                    </div>
+                                </div>
+                                <input type="date" class="form-control" name="fecha_final" id="fecha_final">
+                                <label for="hora_final">Hora Final</label>
+                                <input type="datetime" class="form-control"  name="hora_final" id="hora_final" value="0:00">
+                            </div>
+                            <hr><p>Descripción Evento</p>
+                            <label for="lugar">Lugar Evento</label>
+                            <input type="text" class="form-control" name="lugar" id="lugar" placeholder="Lugar Evento">
+                            <label for="descripcion">Descripcion</label>
+                            <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Descripcion Evento">
+                            <label for="color">Color</label>
+                            <input type="color" name="color" id="color" class="form-control">
+                            <hr><p>Valor de evento</p>
+                            <label for="valor">Valor</label>
+                            <input type="number" name="valor" id="valor" class="form-control" placeholder="Valor">
+                            <br><label for="notificacion">Notificacion</label>
+                            <input type="checkbox" name="notificacion" id="notificacion"><br><br>
+                            <input type="submit" value="Guardar" class="btn btn-succes" >
+                        </form>
                 
                     
 

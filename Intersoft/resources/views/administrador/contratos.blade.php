@@ -11,11 +11,29 @@
                 </div>
                 <div class="content">
                     <form action='/administrador/contratos/create' method="POST">
-                        <input type="text" name="tipo_contrato" class="form-control" placeholder="Escribir el tipo de contrato">
-                        <input type="number" name="consecutivo" class="form-control" placeholder="Conseutivo del contrato">
-                        <input type="date" name="fecha_inicial" class="form-control">
-                        <input type="date" name="fecha_final" class="form-control">
-                        <textarea id="content" name="descripcion"></textarea><br>
+                        <label>Tipo Contrato</label><input type="text" name="tipo_contrato" class="form-control" placeholder="Escribir el tipo de contrato">
+                        <label>Consecutivo</label><input type="number" name="consecutivo" class="form-control" placeholder="Conseutivo del contrato">
+                        <label>Fecha Inicial</label><input type="date" name="fecha_inicial" class="form-control">
+                        <label>Fecha Final</label><input type="date" name="fecha_final" class="form-control">
+                        <p>* Se indica que si se quiere hacer referencia a el nombre del usuario se debe hacer __nombre__ y la cedula __cedula__ </p>
+                        <div id="sample">
+                            <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script> <script type="text/javascript">
+                            //<![CDATA[
+                                    bkLib.onDomLoaded(function() { nicEditors.allTextAreas() });
+                            //]]>
+                            </script>
+                            <textarea id="descripcion" name="descripcion" style="width: 100%;">
+                                    <center><strong>CONTRATO DE PRESTACION DE SERVICIO</strong></center><br>
+                                        <center><strong> __numero__ </strong></center><br><br>
+
+El señor __nombre__ con la cedula __cedula__, se presenta para realizar trabajos de servicio como desarrollo de software, por un valor de $2.000.000 de pesos colombianos.<br><br>
+<br><br>
+Autorizado por: 
+<br>
+<strong>Alejandro Moreno Castro
+Gerente General</strong>
+                            </textarea>
+                        </div>
                         <input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control">
                     </form>
                 </div>    
