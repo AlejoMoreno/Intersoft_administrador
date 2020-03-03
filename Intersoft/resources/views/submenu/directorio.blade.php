@@ -44,6 +44,10 @@
                                         <th></th>
                                     </tr></thead>
                                     <tbody>
+                                        <tr onclick="config.Redirect('/administrador/index');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
+                                            <td colspan="2">Parámetros</td>
+                                        </tr>
                                         <tr onclick="config.Redirect('/administrador/directorios');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/png/512/265/265675.png"></td>
                                             <td>Creación, Consulta Directorio</td>

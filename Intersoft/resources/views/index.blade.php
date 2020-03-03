@@ -26,7 +26,7 @@
                             </tr>
                             <tr onclick="config.Redirect('/submenu/directorio');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/2245/2245320.svg"></td>
-                                <td colspan="2">Directorio</td>
+                                <td colspan="2">Información General</td>
                             </tr>
                             <tr onclick="config.Redirect('/submenu/inventario');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/1924/1924873.svg"></td>
@@ -47,10 +47,6 @@
                             <tr onclick="config.Redirect('/submenu/contabilidad');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/313/313062.svg"></td>
                                 <td colspan="2">Contabilidad</td>
-                            </tr>
-                            <tr onclick="config.Redirect('/administrador/index');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                <td colspan="2">Parámetros</td>
                             </tr>
                             <tr onclick="config.Redirect('/cerrar');">
                                 <td><img width="30" src="https://image.flaticon.com/icons/svg/529/529873.svg"></td>

@@ -60,6 +60,20 @@
 
     <script type="text/javascript" src="/js/contabilidad/cuentas.js"></script>
 
+
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+    var OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+        OneSignal.init({
+        appId: "0f1b955e-ce5f-41b7-b75d-daa385e4e52a",
+        notifyButton: {
+            enable: true,
+        },
+        });
+    });
+    </script>
+
 </head>
 <body onbeforeunload="config.leave_page()">
 <div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;"><div class="loader"></div></div>
