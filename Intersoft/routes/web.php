@@ -320,7 +320,8 @@ Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
 
 //ordenes de produccion (ficha "receta")
 Route::get('/inventario/fichatecnica', 'FichatecnicasController@index');
-Route::get('/inventario/ordenesdeproduccion', 'FichatecnicasController@ordenesdeproduccion');
+Route::post('/inventario/fichatecnica', 'FichatecnicasController@index');
+Route::get('/inventario/ordenesdeproduccion', 'ProduccioningresosController@index');
 Route::get('/inventario/materiaprima', 'ReferenciasController@materiaprima');
 
 Route::get('/inventario/actualizacionPrecios', 'ReferenciasController@actualizacionPrecios');
@@ -436,4 +437,5 @@ Route::post('/send', 'EmailController@send');
 Route::get('/pdf/pdf_comprobanteDiario', 'ContabilidadesController@pdf_comprobanteDiario');
 Route::get('/pdf/pdfreferencias1', 'ReferenciasController@pdfreferencias1');
 Route::get('/pdf/pdfDirectorio', 'DirectoriosController@pdf');
+Route::get('/pdf/fichatecnica', 'FichatecnicasController@pdf');
 

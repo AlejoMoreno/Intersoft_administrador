@@ -20,22 +20,45 @@
 </head>
 
 <body>
+
+	<?php 
+
+	use App\Usuarios;
+	use App\Empresas;
+	use App\Mail\Mail\Olvido;
+	use Illuminate\Support\Facades\Mail;
+	
+	if(isset($_GET['boton'])){
+		
+		if($_GET['boton'] == "Recordar"){ //gerenar el recordatorio
+			$empresa =  Empresas::where('nit_empresa','=',$_GET['data'])->first();
+			$usuarios = Usuarios::where('ncedula',$_GET['cedula'])->where('id_empresa',$empresa->id)->first();
+			
+				if($usuarios==null){
+					echo "<div style='width:100%;background-color:red;color:white;'><center>No existe el usuario</center></div>";
+				}
+				else{
+					echo "el usuario si existe";
+					Mail::to($usuarios->correo)->send(new App\Mail\Mail\Olvido($usuarios));
+				}
+		}
+	}
+	?>
 	
 	<center>
-		<form style="width: 300px;">
-			<img class="logo" src="http://famc.net.co/intersoft/pages/images/logo.png">
+		<form action="" method="GET" style="width: 300px;">
+			
 
-			<p id="empresaConfig">Intersoft</p>
+			<p id="empresaConfig">Recordar Contraseña</p>
+			<div class="input-group">
+				<span class="input-group-addon"><i class="glyphicon glyphicon-home"></i></span>
+				<input id="data" type="text" class="form-control has-success" name="data" value="<?php echo $_GET['data']; ?>" placeholder="empresa" >
+			</div>
 			<div class="input-group">
 				<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 				<input id="cedula" type="text" class="form-control has-success" name="cedula" placeholder="Cédula" >
 			</div>
-			<div class="input-group">
-				<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-				<input id="password" type="password" class="form-control" name="password" placeholder="Password" >
-			</div>
-			<div  id="boton" onclick="login.recordar();" class="olvido2">Recordar</div>
-			<div class="olvido1" onclick="config.Redirect('registro');"><a href="#" style="color:white"> Date de alta como usuario</a></div>
+			<input type="submit" id="boton" class="olvido2" name="boton" value="Recordar">
 			<div class="olvido" ><a href="/" style="color:white">Ingresa ahora!</a></div>
 			<!--ENTER Resultado -->
 			<div id="resultado"></div>

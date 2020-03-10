@@ -17,7 +17,7 @@
                         <table class="table table-hover table-striped" id="datos">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
+                                    <th>Codigo</th>
                                     <th>Descripcion</th>
                                     <th>Cantidad</th>
                                     <th>Costo</th>
@@ -27,7 +27,7 @@
                             <tbody>
                                 @foreach ($referencias as $obj)
                                     <tr>
-                                        <td>{{ $obj['id'] }}</td>
+                                        <td>{{ $obj['codigo_linea']['id']}}{{ $obj['codigo_letras']}}{{ $obj['codigo_consecutivo'] }}</td>
                                         <td>{{ $obj['descripcion'] }}</td>
                                         <td>{{ $obj['saldo'] }}</td>
                                         <td>{{ $obj['costo'] }}</td>

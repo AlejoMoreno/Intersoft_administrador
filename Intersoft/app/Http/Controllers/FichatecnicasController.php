@@ -9,6 +9,8 @@ use App\Referencias;
 use Session;
 use DB;
 
+use PDF;
+
 class FichatecnicasController extends Controller
 {
     //
@@ -23,7 +25,12 @@ class FichatecnicasController extends Controller
                 if($request->orden == 0){
                     $ultima = Fichatecnicas::where('id_empresa','=',Session::get('id_empresa'))
                                 ->orderBy('orden','DESC')->first();
-                    $request->orden = $ultima->orden + 1;
+                    if(count($ultima)==0){
+                        $request->orden = $request->orden + 1;
+                    }
+                    else{
+                        $request->orden = $ultima->orden + 1;
+                    }
                 }
                 $obj = new Fichatecnicas();
                 $obj->id_referencia = $request->id_referencia;
@@ -72,5 +79,16 @@ class FichatecnicasController extends Controller
         return view('inventario.ordenesdeproduccion', [
             'fichatecnicas' => $fichatecnica
         ]);
+    }
+
+    public function pdf(Request $request){
+        $objs = Fichatecnicas::where('id_empresa','=',Session::get('id_empresa'))->
+                               where('orden','=',$request->orden)->get();
+        foreach($objs as $obj){
+            $obj->id_referencia = Referencias::where('id_empresa','=',Session::get('id_empresa'))->
+                                                where('id','=',$obj->id_referencia)->first();
+        }
+        $pdf = PDF::loadView('pdfs.fichatecnica', compact('objs'));
+        return $pdf->download('fichatecnica.pdf');
     }
 }

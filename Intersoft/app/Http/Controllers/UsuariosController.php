@@ -8,6 +8,10 @@ use App\Contrato_laborals;
 use App\Sessions;
 use App\Sucursales;
 use App\Http\Controllers\SessionsController;
+
+use Mail;
+use App\Mail\Mail\Welcome;
+
 use Session;
 
 class UsuariosController extends Controller
@@ -131,6 +135,8 @@ class UsuariosController extends Controller
             $usuario->telefono_referencia = $request->telefono_referencia;
             $usuario->id_empresa  = Session::get('id_empresa');
             $usuario->save();
+            //envio mail
+            Mail::to($usuario->correo)->send(new Welcome($usuario));
             return redirect('/administrador/usuarios');
         }
         catch (ModelNotFoundException $exception){
@@ -205,6 +211,13 @@ class UsuariosController extends Controller
             $usuario->telefono_referencia = $request->telefono_referencia;
             $usuario->id_empresa  = Session::get('id_empresa');
             $usuario->save();
+            //envio mail
+            Mail::send('mail.welcome', ['usuario' => $usuario], function ($m) use ($usuario) {
+                $m->from('intersoft@wakusoft.com', 'Intersoft');
+    
+                $m->to($usuario->correo, $usuario->nombre)->subject('Bienvenida');
+            });
+            //Mail::to($usuario->correo)->send(new Welcome($usuario));
             return $usuario;
         }
         catch (ModelNotFoundException $exception){

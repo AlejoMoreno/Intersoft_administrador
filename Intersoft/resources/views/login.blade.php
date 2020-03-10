@@ -80,7 +80,7 @@
 				</div>
 				<!--div  id="boton" onclick="login.loguearse();" class="olvido2">Entrar</div-->
 				<input  id="boton" type="submit" name="boton" class="olvido2" style="border: 0px;" value="Entrar">
-				<div class="olvido" onclick="config.Redirect('olvido');"><a href="#" style="color:white"> Olvido de Contraseña</a></div>
+				<div class="olvido" onclick="config.Redirect('olvido?data='+$('#nit_empresa').val());"><a href="#" style="color:white"> Olvido de Contraseña</a></div>
 				<!--<div class="olvido1" onclick="config.Redirect('registro');"><a href="#" style="color:white"> Date de alta como usuario</a></div>-->
 			</div>
 			<!--ENTER Resultado -->

@@ -253,16 +253,16 @@ class ReferenciasController extends Controller
 	
 	public function materiaprima(){
 		try{
-			$clasificacion = Clasificaciones::where('codigo_interno','=','01')->
+			$clasificacion = Clasificaciones::where('nombre','=','MATERIA PRIMA')->
 											where('id_empresa','=',Session::get('id_empresa'))->first();
 			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))->
 							    where('id_clasificacion','=',$clasificacion->id)->get();
 			foreach ($obj as $value) {
-				$value->codigo_linea = Lineas::where('id', $value->codigo_linea)->get();
-				$value->id_presentacion = Tipo_presentaciones::where('id', $value->id_presentacion)->get();
-				$value->id_marca = Marcas::where('id', $value->id_marca)->get();
-				$value->id_clasificacion = Clasificaciones::where('id', $value->id_clasificacion)->get();
-				$value->usuario_creador = Usuarios::where('id', $value->usuario_creador)->get();
+				$value->codigo_linea = Lineas::where('id', $value->codigo_linea)->first();
+				$value->id_presentacion = Tipo_presentaciones::where('id', $value->id_presentacion)->first();
+				$value->id_marca = Marcas::where('id', $value->id_marca)->first();
+				$value->id_clasificacion = Clasificaciones::where('id', $value->id_clasificacion)->first();
+				$value->usuario_creador = Usuarios::where('id', $value->usuario_creador)->first();
 			}
 			return view('inventario.materiaprima', [
 				'referencias' => $obj

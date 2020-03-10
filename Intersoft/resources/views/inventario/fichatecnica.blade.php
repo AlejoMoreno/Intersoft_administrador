@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="header">
                     <h4 class="title">Ficha técnica</h4>
-                    <p class="category">Crea fichas técnicas de producción <a href="ordenesproduccion" class="btn btn-success" style="background:white;">Nueva</a></p>
+                    <p class="category">Crea fichas técnicas de producción <a href="fichatecnica" class="btn btn-success" style="background:white;">Nueva</a></p>
                 </div>
                 <div class="content">
                     <table class="table table-hover table-striped" id="tableregimenes">
@@ -18,6 +18,7 @@
                             <tr>
                                 <th>Código orden</th>
                                 <th>Nombre</th>
+                                <th></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -27,12 +28,14 @@
                                     <td>{{ $obj->orden }}</td>
                                     <td>{{ $obj->nombre }}</td>
                                     <?php $url = "?orden=".$obj->orden;  ?>
+                                    <?php $url2 = "/pdf/fichatecnica?orden=".$obj->orden;  ?>
                                     <td><a href="{{ $url }}" class="btn btn-warning">Actualizar</a></td>
+                                    <td><a href="{{ $url2 }}" class="btn btn-info">Imprimir</a></td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <form action='' method="GET" >
+                    <form action='/inventario/fichatecnica'' method="POST" >
                         <div class="panel panel-success">
                             <div class="panel-heading">
                                 <div class="row">
@@ -118,5 +121,6 @@ function Obj(){
     };
 }
 </script>
+
 
 @endsection()
