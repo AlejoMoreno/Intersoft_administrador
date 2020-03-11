@@ -84,186 +84,202 @@ $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->ge
                                         <tr onclick="config.Redirect('/administrador/contratos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/png/512/148/148971.png"></td>
                                             <td>Contratos</td>
-                                            <td><?php echo sizeof($contratos); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/retefuentes');">
                                             <td><img width="30" src="https://pbs.twimg.com/profile_images/728257432313532416/ATp81uTy.jpg"></td>
                                             <td>Rete-Fuentes</td>
-                                            <td><?php echo sizeof($retefuentes); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/regimenes');">
                                             <td><img width="30" src="https://pbs.twimg.com/profile_images/728257432313532416/ATp81uTy.jpg"></td>
                                             <td>Regímenes</td>
-                                            <td><?php echo sizeof($regimenes); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/sucursales');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/149/149060.svg"></td>
                                             <td>Sucursales</td>
-                                            <td><?php echo sizeof($sucursales); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/documentos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
                                             <td>Documentos entrada y salida de mercancía</td>
-                                            <td><?php echo sizeof($documentos); ?></td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/tipopagos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Administración de Tipo Pagos</td>
-                                            <td></td>
+                                            <td>Administración de Tipo Pagos</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        
+                                        <tr onclick="config.Redirect('/administrador/departamentos');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/185/185277.svg"></td>
+                                            <td>Departamentos</td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/administrador/ciudades');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/189/189060.svg"></td>
+                                            <td>Ciudades</td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/administrador/actividad');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Actividad</td>
-                                            <td></td>
+                                            <td>Actividad</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/bancos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Bancos</td>
-                                            <td></td>
+                                            <td>Bancos</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/base_retencion');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Base Retención</td>
-                                            <td></td>
+                                            <td>Base Retención</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/mis_bancos');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Mis Bancos</td>
-                                            <td></td>
+                                            <td>Mis Bancos</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/centro_de_costo');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Centro de Costo</td>
-                                            <td></td>
+                                            <td>Centro de Costo</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/control');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Control  (CRTL)</td>
-                                            <td></td>
+                                            <td>Control  (CRTL)</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/cuenta');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Cuenta</td>
-                                            <td></td>
+                                            <td>Cuenta</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/entidad');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Entidad</td>
-                                            <td></td>
+                                            <td>Entidad</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/etapa');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Etapa </td>
-                                            <td></td>
+                                            <td>Etapa </td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/forma');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Forma</td>
-                                            <td></td>
+                                            <td>Forma</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/limi');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>LIMI</td>
-                                            <td></td>
+                                            <td>LIMI</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/novedad');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Novedad</td>
-                                            <td></td>
+                                            <td>Novedad</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/plan');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Plan</td>
-                                            <td></td>
+                                            <td>Plan</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/porcion');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Porción</td>
-                                            <td></td>
+                                            <td>Porción</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/rets');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Resolución</td>
-                                            <td></td>
+                                            <td>RETS</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/tarjeta');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Retefuente</td>
-                                            <td></td>
+                                            <td>Tarjeta</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/tgru');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>RETS</td>
-                                            <td></td>
+                                            <td>TGRU</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
+                                        <tr onclick="config.Redirect('/administrador/trabajo');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Tarjeta</td>
-                                            <td></td>
+                                            <td>Trabajo</td>                                             
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>TGRU</td>
-                                            <td></td>
+                                        <tr onclick="config.Redirect('/administrador/directorio_clases');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/485/485280.png"></td>
+                                            <td>Directorio Clases</td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/tipopagos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
-                                            <td>Trabajo</td>
-                                            <td></td>
+                                        <tr onclick="config.Redirect('/administrador/directorio_tipos');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/485/485482.png"></td>
+                                            <td>Directorio tipos</td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-
+                                        <tr onclick="config.Redirect('/administrador/directorio_tipo_terceros');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/148/148971.png"></td>
+                                            <td>Directorio Tipo Terceros</td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/marcas');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/265/265706.svg"></td>
+                                            <td>Marcas</td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/lineas');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/149/149023.svg"></td>
+                                            <td>Líneas</td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/clasificaciones');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/272/272480.png"></td>
+                                            <td>Clasificaciones de los productos</td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/inventario/tipo_presentaciones');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/340/340077.svg"></td>
+                                            <td>Tipo Presentaciones</td>
+                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -275,7 +291,7 @@ $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->ge
                         </div>
                         <hr>
                         <div class="stats">
-                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/index');"> ir atras.</a>
+                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/submenu/directorio');"> ir atras.</a>
                         </div>
                     </div>
                 </div>

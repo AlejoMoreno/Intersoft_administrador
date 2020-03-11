@@ -142,12 +142,6 @@
                         <p>Salida</p>
                     </a>
                 </li>
-                <li>
-                   <a href="#" onclick="config.Intoredirect('perfil.html?user='+localStorage.getItem('id'));" >
-                       <i class="pe-7s-rocket"></i>
-                       <p id="perfil"></p>
-                    </a>
-                </li>
             </ul>
     	</div>
     </div>
@@ -208,13 +202,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#">
+                            <a href="https://wakusoft.com">
                                 Terminos y Condiciones
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                Portafolio
                             </a>
                         </li>
                         <li>
@@ -227,7 +216,7 @@
                     </ul>
                 </nav>
                 <p class="copyright pull-right">
-                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://famc.net.co">famc.net.co</a>, derechos reservados
+                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://wakusoft.com">wakusoft.com</a>, derechos reservados
                 </p>
             </div>
         </footer>

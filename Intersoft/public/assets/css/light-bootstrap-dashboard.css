@@ -2813,3 +2813,22 @@ body > .navbar-collapse {
     overflow-y: hidden;
     -ms-overflow-style: -ms-autohiding-scrollbar;
     -webkit-overflow-scrolling: touch; } }
+
+
+    @media (max-width: 991px){
+      .wrapper {
+          background-color: black !important;
+      }
+      .main-panel > .content{
+           padding: 0px 0px !important;
+      }
+      
+      .container-fluid{
+          padding-right: 0px !important;
+          padding-left: 0px !important; 
+      }
+      
+      .sidebar, .main-panel{
+          width: 100% !important;
+      }
+  }

@@ -54,18 +54,6 @@
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/departamentos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/185/185277.svg"></td>
-                                            <td>Departamentos</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/ciudades');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/189/189060.svg"></td>
-                                            <td>Ciudades</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
                                         <tr onclick="config.Redirect('/calendario');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg"></td>
                                             <td>Calendario</td>
@@ -76,24 +64,6 @@
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/201/201570.svg"></td>
                                             <td>Usuarios</td>
                                             <td><img width="20" onclick="config.Intoredirect('administrador/usuarios.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/directorio_clases');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/485/485280.png"></td>
-                                            <td>Directorio Clases</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/directorio_tipos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/485/485482.png"></td>
-                                            <td>Directorio tipos</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/administrador/directorio_tipo_terceros');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/148/148971.png"></td>
-                                            <td>Directorio Tipo Terceros</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
                                     </tbody>

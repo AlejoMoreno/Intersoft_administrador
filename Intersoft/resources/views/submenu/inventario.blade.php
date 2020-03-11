@@ -118,30 +118,6 @@ $documentos = Documentos::where('ubicacion','=','ENTRADA')
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/inventario/marcas');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/265/265706.svg"></td>
-                                            <td>Marcas</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/lineas');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/149/149023.svg"></td>
-                                            <td>Líneas</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/clasificaciones');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/272/272480.png"></td>
-                                            <td>Clasificaciones de los productos</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
-                                        <tr onclick="config.Redirect('/inventario/tipo_presentaciones');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/340/340077.svg"></td>
-                                            <td>Tipo Presentaciones</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
