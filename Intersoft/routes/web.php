@@ -322,7 +322,10 @@ Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
 Route::get('/inventario/fichatecnica', 'FichatecnicasController@index');
 Route::post('/inventario/fichatecnica', 'FichatecnicasController@index');
 Route::get('/inventario/ordenesdeproduccion', 'ProduccioningresosController@index');
+Route::post('/inventario/ordenesdeproduccion', 'ProduccioningresosController@createOrden');
 Route::get('/inventario/materiaprima', 'ReferenciasController@materiaprima');
+
+Route::get('/inventario/ingresoporproduccion', 'ProduccioningresosController@ingresoporproduccion');
 
 Route::get('/inventario/actualizacionPrecios', 'ReferenciasController@actualizacionPrecios');
 Route::post('/inventario/actualizacionPrecios', 'ReferenciasController@actualizarPrecios');

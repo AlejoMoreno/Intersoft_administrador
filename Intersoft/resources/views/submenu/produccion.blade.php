@@ -78,7 +78,7 @@
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/inventario/generacionproducto');">
+                                        <tr onclick="config.Redirect('/inventario/ingresoporproduccion');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/743/743007.svg"></td>
                                             <td>Ingreso por producción</td>
                                             <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">

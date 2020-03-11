@@ -63,7 +63,7 @@
 
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
     <script>
-    var OneSignal = window.OneSignal || [];
+    /*var OneSignal = window.OneSignal || [];
     OneSignal.push(function() {
         OneSignal.init({
         appId: "0f1b955e-ce5f-41b7-b75d-daa385e4e52a",
@@ -71,7 +71,7 @@
             enable: true,
         },
         });
-    });
+    });*/
     </script>
 
 </head>
