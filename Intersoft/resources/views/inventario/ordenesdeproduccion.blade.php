@@ -87,7 +87,15 @@
                                 <option value="11">Final</option>
                             </select>
                         </div>
-                        <div class="col-md-2"><input type="number" placeholder="cantidad" class="form-control" name="unidades" id="unidades"></div>
+                        <div class="col-md-1">
+                            <select name="id_cliente" class="form-control" id="id_cliente">
+                                <option value="">Seleccionar cliente</option>
+                                @foreach( $clientes as $cliente)
+                                <option value="{{ $cliente->id }}">{{ $cliente->nit }} / {{ $cliente->razon_social }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-1"><input type="number" placeholder="cantidad" class="form-control" name="unidades" id="unidades"></div>
                     </div>
                     <div class="content">
                         <input type="submit" value="Guardar" name="Guardar" class="form-control btn btn-success">
@@ -103,6 +111,7 @@
                         <thead>
                             <th>ficha tecnica</th>
                             <th>sucursal</th>
+                            <th>cliente</th>
                             <th>turno</th>
                             <th>orden_produccion</th>
                             <th>fecha</th>
@@ -121,6 +130,7 @@
                                 <tr>
                                     <td>{{ $obj['id_ficha_tecnica']['nombre'] }}</td>
                                     <td>{{ $obj['id_sucursal']['nombre'] }}</td>
+                                    <td>{{ $obj['id_cliente']['razon_social'] }}</td>
                                     <td>Turno {{ $obj['id_turno'] }}</td>
                                     <td>{{ $obj['orden_produccion'] }}</td>
                                     <td>{{ $obj['fecha'] }}</td>

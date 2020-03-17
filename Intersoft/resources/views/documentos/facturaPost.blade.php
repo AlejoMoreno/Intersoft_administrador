@@ -121,7 +121,7 @@ $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))-
 <body >
     <div class="content">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link active" id="Factura1-tab" data-toggle="tab" href="#Factura1" role="tab" aria-controls="Factura1" aria-selected="true">Factura 1</a>
@@ -207,7 +207,7 @@ $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))-
                     </div>
                 </div>
             </div>
-            <div class="col-md-6" >
+            <div class="col-md-5" >
                 <div class="card">
                     <ul class="nav nav-tabs" id="myTabProduc" role="tablist">
                         <li class="nav-item">
@@ -227,24 +227,20 @@ $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))-
                                                     <th><input type="text" id="search_referencia" onkeyup="documentos.searchReferencia(1,'search_referencia');" name="" class="form-control" style="width: 100px;" placeholder="REFERNCIA"></th>
                                                     <th><input type="text" id="search_codigobarras" onkeyup="documentos.searchReferencia(2,'search_codigobarras');" name="" class="form-control" style="width: 100px;" placeholder="CODIGO BARRAS"></th>
                                                     <th><input type="text" id="search_descrpcion" onkeyup="documentos.searchReferencia(3,'search_descrpcion');" name="" class="form-control" style="width: 100px;" placeholder="DESCRIPCION"></th>
-                                                    <th>Stock_min.</th>
-                                                    <th>Stock_max.</th>
                                                     <th>iva.</th>
                                                     <th>Costo.</th>
                                                     <th>Saldo.</th>
                                                     <th>Añadir</th>
                                                 </tr>
                                                 @foreach ($referencias as $obj)
-                                                <tr>
-                                                    <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                                                <tr onclick="documentos.seleccionReferencia({{ $obj }})" >
+                                                    <td></td>
                                                     <td>{{ $obj['codigo_interno'] }}</td>
                                                     <td>{{ $obj['codigo_barras'] }}</td>
                                                     <td>{{ $obj['descripcion'] }}</td>
-                                                    <td>{{ $obj['stok_minimo'] }}</td>
-                                                    <td>{{ $obj['stok_maximo'] }}</td>
                                                     <td>{{ $obj['iva'] }}</td>
-                                                    <td>{{ $obj['costo_promedio'] }}</td>
-                                                    <td>{{ $obj['saldo'] }}</td>
+                                                    <td>{{ number_format($obj['costo_promedio'], 2, ',', '.') }}</td>
+                                                    <td>{{ number_format($obj['saldo'], 2, ',', '.') }}</td>
                                                     <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
                                                 </tr>
                                                 @endforeach
@@ -392,5 +388,18 @@ $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))-
       }
     });
   </script>
+
+
+<style>
+    *{
+        font-size: 10px;
+    }
+    .table td, .table th{
+        padding: .3rem;
+    }
+    .alert-warning{
+        display: none;
+    }
+</style>
 
 </html>

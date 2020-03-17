@@ -2832,3 +2832,13 @@ body > .navbar-collapse {
           width: 100% !important;
       }
   }
+
+  .table > tbody > tr > th, .table > tfoot > tr > th, .table > tbody > tr > td, .table > tfoot > tr > td{
+    padding: 3px !important; 
+  }
+  .btn{
+    padding: 3px !important;
+  }
+  *{
+    font-size: 11px;
+  }

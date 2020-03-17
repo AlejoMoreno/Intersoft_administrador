@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Produccioningresos extends Model
 {
     //
-    protected $fillable = ['id_ficha_tecnica','id_sucursal','id_empresa','id_turno','orden_produccion','fecha','operario','id_referencia','lote','etapa','unidades'];
+    protected $fillable = ['id_cliente','id_ficha_tecnica','id_sucursal','id_empresa','id_turno','orden_produccion','fecha','operario','id_referencia','lote','etapa','unidades'];
 }

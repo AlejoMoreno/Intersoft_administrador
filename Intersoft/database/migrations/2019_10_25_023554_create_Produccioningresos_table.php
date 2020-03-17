@@ -15,6 +15,7 @@ class CreateProduccioningresosTable extends Migration
     {
         Schema::create('produccioningresos', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id_cliente')->nullable(false);
             $table->integer('id_ficha_tecnica');
             $table->integer('id_sucursal');
             $table->integer('id_empresa');

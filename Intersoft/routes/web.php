@@ -326,6 +326,8 @@ Route::post('/inventario/ordenesdeproduccion', 'ProduccioningresosController@cre
 Route::get('/inventario/materiaprima', 'ReferenciasController@materiaprima');
 
 Route::get('/inventario/ingresoporproduccion', 'ProduccioningresosController@ingresoporproduccion');
+Route::post('/inventario/ingresoporproduccion/update', 'ProduccioningresosController@update');
+Route::post('/inventario/ingresoporproduccion/convertir', 'ProduccioningresosController@convertir');
 
 Route::get('/inventario/actualizacionPrecios', 'ReferenciasController@actualizacionPrecios');
 Route::post('/inventario/actualizacionPrecios', 'ReferenciasController@actualizarPrecios');
