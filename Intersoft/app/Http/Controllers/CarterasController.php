@@ -164,6 +164,10 @@ class CarterasController extends Controller
             "body"=>$facturas
 		);
 	}
+
+	function gastosindex(){
+		return view('cartera.gastos');
+	}
 	
 
 }

@@ -10,6 +10,8 @@ use App\Ciudades;
 use Excel;
 use PDF;
 
+use DB;
+
 use Session;
 
 class SucursalesController extends Controller
@@ -118,6 +120,20 @@ class SucursalesController extends Controller
                 "result"=>"fail",
                 "body"=>$exception);
         }
+    }
+
+    public function chartPie(){
+        $result = \DB::table('facturas')
+                    ->select('id_sucursal','id_documento', DB::raw('SUM(total) as total'))
+                    ->where('id_empresa',Session::get('id_empresa'))
+                    ->where('estado','=','ACTIVO')
+                    ->groupBy('id_sucursal','id_documento')
+                    ->get();
+        foreach($result as $obj){
+            $obj->id_documento = \App\Documentos::where('id',$obj->id_documento)->first();
+        }
+        
+        return response()->json($result);
     }
 
     public function excel_all(){

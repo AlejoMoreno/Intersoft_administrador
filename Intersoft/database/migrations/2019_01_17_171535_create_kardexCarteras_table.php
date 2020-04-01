@@ -29,6 +29,7 @@ class CreateKardexCarterasTable extends Migration
             $table->double('reteiva');
             $table->double('reteica');
             $table->double('total');
+            $table->integer('id_auxiliar');
             $table->timestamps();
         });
     }

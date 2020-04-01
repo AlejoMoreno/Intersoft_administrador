@@ -367,6 +367,8 @@ Route::get('/cartera/eliminar/{id}', 'CarterasController@eliminar');
 Route::get('/cartera/causar', 'CarterasController@causar'); //pendiente 
 Route::post('/cartera/causar/guardar', 'CarterasController@saveCausar'); //pendiente
 
+Route::get('/cartera/gastos', 'CarterasController@gastosindex');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -400,6 +402,19 @@ Route::post('/contabilidad/comprobantes/viewComprobantes', 'ContabilidadesContro
 Route::post('/contabilidad/comprobantes/deleteComprobantes', 'ContabilidadesController@deleteComprobantes');
 Route::post('/contabilidad/comprobantes/updateComprobantes', 'ContabilidadesController@updateComprobantes');
 Route::post('/contabilidad/comprobantes/createComprobantes', 'ContabilidadesController@createComprobantes');
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes GRAFICAS
+|--------------------------------------------------------------------------
+|
+| Get de datos para graficos
+|
+*/
+Route::get('/administrador/sucursales/chart/pie', 'SucursalesController@chartPie');
+
+
 
 /*
 |--------------------------------------------------------------------------

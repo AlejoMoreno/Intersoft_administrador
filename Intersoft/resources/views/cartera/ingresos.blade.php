@@ -141,6 +141,7 @@ $directorios = App\Directorios::where('id_directorio_tipo_tercero', '!=', '1')->
 $carteras = sizeof(App\Carteras::where('tipoCartera', 'like', 'INGRESO')->
                                  where('id_empresa','=',Session::get('id_empresa'))->
                                  orderBy('numero', 'desc')->get());
+$auxiliares = App\Pucauxiliar::where('id_empresa','=',14)->get();
 
 ?>
 
@@ -225,6 +226,7 @@ $carteras = sizeof(App\Carteras::where('tipoCartera', 'like', 'INGRESO')->
                       <th>Desc</th>
                       <th>Efectivo</th>
                       <th>Total</th>
+                      <th>Puc Auxiliar</th>
                     </tr>
                   </thead>
                 </table>

@@ -19,5 +19,6 @@ class KardexCarteras extends Model
 		'efectivo',
 		'reteiva',
 		'reteica',
-		'total'];
+		'total',
+		'id_auxiliar'];
 }

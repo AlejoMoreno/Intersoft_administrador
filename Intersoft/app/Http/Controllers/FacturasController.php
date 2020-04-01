@@ -163,6 +163,7 @@ class FacturasController extends Controller
                             $obj_1->reteica       = $obj_c->reteica;
                             $obj_1->id_empresa    = Session::get('id_empresa');
                             $obj_1->total         = $obj_c->total;
+                            $obj_1->id_auxiliar	  = 1; //arreglar
                             $obj_1->save();
 
                             //registro contable egreso/ingreso

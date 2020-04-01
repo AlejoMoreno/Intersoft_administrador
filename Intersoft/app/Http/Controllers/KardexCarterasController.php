@@ -27,13 +27,17 @@ class KardexCarterasController extends Controller
 		$obj->reteiva 		= $request->reteiva;
 		$obj->reteica 		= $request->reteica;
 		$obj->id_empresa	= Session::get('id_empresa');
+		$obj->id_auxiliar	= $request->id_auxiliar;
 		$obj->total	 		= $request->total;
 
 		$obj->save();
 
 		$factura = Facturas::where('id',$obj->id_factura)->get()[0];
-		$factura->saldo = $factura->saldo - $obj->efectivo;
-		$factura->save();
+		if($factura->saldo != 0){
+			$factura->saldo = $factura->saldo - $obj->efectivo;
+			$factura->save();
+		}
+		
 
 
 		return array(

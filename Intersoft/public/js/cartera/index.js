@@ -156,6 +156,7 @@ function Carteras(){
         var cel10 = row.insertCell(9);
         var cel11 = row.insertCell(10);
         var cel12 = row.insertCell(11);
+        var cel13 = row.insertCell(12);
 
 
         cel0.innerHTML = "<input type='hidden' value='"+id+"' id='"+lista_seleccionados.length+"_id_factura'>" + 
@@ -171,6 +172,7 @@ function Carteras(){
         cel10.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
         cel11.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
         cel12.innerHTML = "<input type='text' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled>";
+        cel13.innerHTML = "<select type='text' style='width: 80px;' class='form-control' id='"+lista_seleccionados.length+"_id_auxiliar'></select>";
         carteras.calcular(lista_seleccionados.length);
         //desaparecer el boton pagar
         $('#pagarbtn').hide();
@@ -393,6 +395,7 @@ function Carteras(){
                         numero = document.getElementById(i+"_numero").value;
                         fecha = document.getElementById(i+"_fecha").value;
                         total = document.getElementById(i+"_total").value;
+                        id_auxiliar = document.getElementById(i+"_id_auxiliar").value;
                         id_factura = document.getElementById(i+"_id_factura").value;
                         
 
@@ -408,7 +411,8 @@ function Carteras(){
                             'efectivo' : efectivo,
                             'reteiva' : reteiva,
                             'reteica' : reteica,
-                            'total' : total
+                            'total' : total,
+                            'id_auxiliar' : id_auxiliar
                         };
                         $.ajax({
                             data:  parametros,
@@ -473,6 +477,53 @@ function Carteras(){
             }
 
         });
+    }
+
+    this.agregar_gasto = function(){
+        //console.log(id);
+        id = $('#in_factura').val();
+        id_factura = $('#in_factura').val();
+        prefijo = $('#in_prefijo').val();
+        numero = $('#in_factura').val();
+        fecha = $('#in_fecha').val();
+        saldo = $('#in_total').val();
+        id_auxiliar = $('#in_auxiliar').val();
+        auxiliar = $('#in_auxiliar option:selected').text();
+		lista_seleccionados.push(id);
+		var tabla = document.getElementById("tabla_facturas_seleccionadas");
+        var row = tabla.insertRow(tabla.rows.length);
+        var cel0 = row.insertCell(0);
+        var cel2 = row.insertCell(1);
+        var cel3 = row.insertCell(2);
+        var cel4 = row.insertCell(3);
+        var cel5 = row.insertCell(4);
+        var cel6 = row.insertCell(5);
+        var cel7 = row.insertCell(6);
+        var cel8 = row.insertCell(7);
+        var cel9 = row.insertCell(8);
+        var cel10 = row.insertCell(9);
+        var cel11 = row.insertCell(10);
+        var cel12 = row.insertCell(11);
+        var cel13 = row.insertCell(12);
+
+
+        cel0.innerHTML = "<input type='hidden' value='"+id+"' id='"+lista_seleccionados.length+"_id_factura'>" + 
+        	"<input type='checkbox' id='"+lista_seleccionados.length+"_check' class='form-control' onchange='carteras.seleccion_renglon("+lista_seleccionados.length+");' >";
+        cel2.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_prefijo' value='"+prefijo+"'>"+prefijo;
+        cel3.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_numero' value='"+numero+"'>"+numero;
+        cel4.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_fecha' value='"+fecha+"'>"+fecha;
+        cel5.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_flete' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel6.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_retefuente' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel7.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteiva' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel8.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteica' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel9.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_interes' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel10.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel11.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel12.innerHTML = "<input type='text' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled>";
+        cel13.innerHTML = "<input type='hidden' style='width: 80px;' class='form-control' value='"+id_auxiliar+"' id='"+lista_seleccionados.length+"_id_auxiliar' disabled>"+auxiliar;
+        carteras.calcular(lista_seleccionados.length);
+        //desaparecer el boton pagar
+        $('#pagarbtn').hide();
     }
 
 

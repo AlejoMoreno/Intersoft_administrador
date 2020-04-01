@@ -134,9 +134,8 @@
 
 <?php
 
-
 $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
-$directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '1')->
+$directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '3')->
                                 where('id_empresa','=',Session::get('id_empresa'))->get();
 $auxiliares = App\Pucauxiliar::where('id_empresa','=',14)->get();
 ?>
@@ -145,7 +144,7 @@ $auxiliares = App\Pucauxiliar::where('id_empresa','=',14)->get();
     <body>
 
     <div class="jumbotron text-center" style="background: #4262d3;color:white;">
-      <h3>EGRESO</h3>
+      <h3>Control de Gastos</h3>
     </div>
       
     <div class="container">
@@ -170,7 +169,7 @@ $auxiliares = App\Pucauxiliar::where('id_empresa','=',14)->get();
                   <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
                   <label>Cédula: <a target="_blank" href="/administrador/directorios"><img style="width: 20px;" src="https://image.flaticon.com/icons/svg/148/148764.svg"></a></label>
                   <select name="cedula_tercero" id="cedula_tercero" class="form-control" onchange="carteras.allDocumentos();">
-                    <option value="">Seleccione Proveedor</option>
+                    <option value="">Seleccione Tercero</option>
                     @foreach($directorios as $obj)
                       <option value="{{ $obj['id'] }}">{{ $obj['nit'] }} Nom. {{ $obj['razon_social'] }}</option>
                     @endforeach
@@ -196,16 +195,36 @@ $auxiliares = App\Pucauxiliar::where('id_empresa','=',14)->get();
                     document.getElementById("id_modificado").value = localStorage.getItem("Id_usuario");
                   </script>
                 </div>
-                <div style="width: 100%;height: 20px;"></div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-sm-12">
-                <p>Facturas con saldo mayor a 0</p>
-                <div id="tabla_facturas" style="overflow-y:scroll;height:150px;"></div>
-              </div>
               <div class="col-sm-12" style="overflow-x: scroll;">
+                <p></p>
+                <table class="table table-bordered" style="width: 96%;margin-left: 2%;">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Prefijo</th>
+                        <th># Factura</th>
+                        <th>Fecha Factura</th>
+                        <th>Total</th>
+                        <th>Puc Auxiliar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <td><div class="btn btn-success" onclick="carteras.agregar_gasto()">Agregar</div></td>
+                        <td><input type="text" name="in_prefijo" id="in_prefijo"></td>
+                        <td><input type="text" name="in_factura" id="in_factura"></td>
+                        <td><input type="date" name="in_fecha" id="in_fecha"></td>
+                        <td><input type="number" name="in_total" id="in_total"></td>
+                        <td><select name="in_auxiliar" id="in_auxiliar">
+                            @foreach ( $auxiliares as $obj )
+                            <option value="{{ $obj->id }}">{{ $obj->codigo }}</option>
+                            @endforeach    
+                        </select></td>
+                    </tbody>
+                </table>
                 <p style="margin-left: 20px;"><br><br>Tabla que indica los documentos que serán incorporados en el egreso:</p> 
                 <table id="tabla_facturas_seleccionadas" class="table table-bordered" style="width: 96%;margin-left: 2%;">
                   <thead>

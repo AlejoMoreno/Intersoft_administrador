@@ -14,6 +14,7 @@
                     <a href="/download/excel/sucursales"><img width="50" src="https://image.flaticon.com/icons/svg/179/179383.svg" alt="Descargar Todo" title="Descargar todo"></a>
                     <a href="/download/excel/sucursales"><img width="50" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Microsoft_Excel_2013_logo.svg/2000px-Microsoft_Excel_2013_logo.svg.png" alt="Descargar parcial xls" title="Descargar parcial xls"></a>
                     <a href="/download/pdf/sucursales"><img width="50" src="https://image.flaticon.com/icons/svg/337/337946.svg" alt="Descargar parcial pdf" title="Descargar parcial pdf"></a>
+                    <div data-toggle="modal" data-target="#grafica"><img width="50" src="https://image.flaticon.com/icons/svg/2709/2709704.svg"></div>
                 </div>
                 <div class="content">
                     <div style="overflow-x:scroll;overflow-y:scroll;height:500px;">
@@ -104,9 +105,65 @@
     </div>
 </div>
 
-<style>
+<!-- Modal -->
+<div id="grafica" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Grafica de ventas y compras por sucursales</h4>
+        </div>
+        <div class="modal-body">
+            <canvas id="canvas" height="280" width="600"></canvas>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+  
+    </div>
+  </div>
 
-</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js" charset="utf-8"></script>
+<script>
+    var url = HOST + '/administrador/sucursales/chart/pie';
+    var ejeX = new Array();
+    var Labels = new Array();
+    var ejeY = new Array();
+    $(document).ready(function(){
+      $.get(url, function(response){
+        response.forEach(function(data){
+            ejeX.push((data.id_documento.nombre + data.id_sucursal));
+            Labels.push(data.id_sucursal);
+            ejeY.push(data.total);
+        });
+      });
+      var ctx = document.getElementById("canvas").getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels:ejeX,
+                datasets: [{
+                    label: "Total documento",
+                    data: ejeY,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+    });
+    </script>
 
 <script type="text/javascript">
     sucursal.initial();
