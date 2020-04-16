@@ -49,39 +49,39 @@
                                     </tr></thead>
                                     <tbody>
                                         <tr onclick="config.Redirect('/inventario/fichatecnica');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/2082/2082163.svg"></td>
+                                            <td><img width="30" src="/assets/2082163.svg"></td>
                                             <td>Ficha técnica</td>
-                                            <td><img width="20"  src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20"  src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/materiaprima');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1924/1924873.svg"></td>
+                                            <td><img width="30" src="/assets/1924873.svg"></td>
                                             <td>Inventario Materia Prima</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/ordenesdeproduccion');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1037/1037503.svg"></td>
+                                            <td><img width="30" src="/assets/1037503.svg"></td>
                                             <td>Ordenes de Producción</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/liquidacionobra');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/157/157631.svg"></td>
+                                            <td><img width="30" src="/assets/157631.svg"></td>
                                             <td>Liquidación Mano de Obra</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/costosdirectos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1286/1286724.svg"></td>
+                                            <td><img width="30" src="/assets/1286724.svg"></td>
                                             <td>Costos Directos</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/ingresoporproduccion');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/743/743007.svg"></td>
+                                            <td><img width="30" src="/assets/743007.svg"></td>
                                             <td>Ingreso por producción</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                     </tbody>

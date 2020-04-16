@@ -49,57 +49,57 @@
                                     </tr></thead>
                                     <tbody>
                                         <tr onclick="config.Redirect('/cartera/gastos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1907/1907668.svg"></td>
+                                            <td><img width="30" src="/assets/1907668.svg"></td>
                                             <td>Control de Gastos</td>
-                                            <td><img width="20" onclick="config.Redirect('inventarios/searchProductos.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" onclick="config.Redirect('inventarios/searchProductos.html');" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/cartera/otrosingresos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1907/1907692.svg"></td>
+                                            <td><img width="30" src="/assets/1907692.svg"></td>
                                             <td>Otros Ingresos</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/cartera/egresos');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/2146/2146243.svg"></td>
+                                            <td><img width="30" src="/assets/2146243.svg"></td>
                                             <td>Pago a Proveedores</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/cartera/ingresos');">
-                                            <td><img width="30" src="https://www.flaticon.es/premium-icon/icons/svg/2174/2174854.svg"></td>
+                                            <td><img width="30" src="/assets/2174854.svg"></td>
                                             <td>Cobro Cartera</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/cartera/cheques');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138297.svg"></td>
+                                            <td><img width="30" src="/assets/138297.svg"></td>
                                             <td>Cheques</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/cartera/Importaciones');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/2083/2083108.svg"></td>
+                                            <td><img width="30" src="/assets/2083108.svg"></td>
                                             <td>Pago Importaciones</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/cartera/pagoobligaciones');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/495/495653.svg"></td>
+                                            <td><img width="30" src="/assets/495653.svg"></td>
                                             <td>Retefuente, Iva, Reteica</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/cartera/extracto');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/2145/2145576.svg"></td>
+                                            <td><img width="30" src="/assets/2145576.svg"></td>
                                             <td>Extracto y Cuentas de Cobro</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/cartera/Causaciones');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/2150/2150839.svg"></td>
+                                            <td><img width="30" src="/assets/2150839.svg"></td>
                                             <td>Causaciones</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                     </tbody>

@@ -52,9 +52,9 @@ $documentos = Documentos::where('ubicacion','=','ENTRADA')
                                     </tr></thead>
                                     <tbody>
                                         <tr onclick="config.Redirect('/inventario/referencias');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138226.svg"></td>
+                                            <td><img width="30" src="/assets/138226.svg"></td>
                                             <td>Maestro de Referencias</td>
-                                            <td><img width="20" onclick="config.Redirect('inventarios/searchProductos.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" onclick="config.Redirect('inventarios/searchProductos.html');" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         @foreach ($documentos as $obj)
@@ -70,52 +70,52 @@ $documentos = Documentos::where('ubicacion','=','ENTRADA')
                                             }
                                             $url = '/documentos/documento?signo='.$signo.'&nombre='.$obj['nombre'].'&id='.$obj['id'].'&prefijo='.$obj['prefijo'].'&numero='.$obj['num_presente'];?> 
                                             <tr>
-                                                <td><a href="{{ $url }}" target="_blank"><img width="30" src="https://image.flaticon.com/icons/svg/138/138212.svg"></a></td>
+                                                <td><a href="{{ $url }}" target="_blank"><img width="30" src="/assets/138212.svg"></a></td>
                                                 <td><a href="{{ $url }}">{{ $obj['nombre'] }}</a></td>
                                                 <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
                                                 <td><a href="{{ $urlconsulta }}" class="btn btn-default">Consultar</a></td>
                                             </tr>
                                         @endforeach
                                         <tr onclick="config.Redirect('/inventario/lotes');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/272/272429.svg"></td>
+                                            <td><img width="30" src="/assets/272429.svg"></td>
                                             <td>Maestro de Lotes</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/catalogo');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1857/1857056.svg"></td>
+                                            <td><img width="30" src="/assets/1857056.svg"></td>
                                             <td>Catálogo</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/kardex');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1493/1493661.svg"></td>
+                                            <td><img width="30" src="/assets/1493661.svg"></td>
                                             <td>Tarjeta Kardex</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/kardex');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1286/1286724.svg"></td>
+                                            <td><img width="30" src="/assets/1286724.svg"></td>
                                             <td>Costo Promedio Ponderado</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/actualizacionPrecios');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/743/743007.svg"></td>
+                                            <td><img width="30" src="/assets/743007.svg"></td>
                                             <td>Actualización y Lista de Precios</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/kardex');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148750.svg"></td>
+                                            <td><img width="30" src="/assets/148750.svg"></td>
                                             <td>Presupuestos de Reposición</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/cierreInventario');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138213.svg"></td>
+                                            <td><img width="30" src="/assets/138213.svg"></td>
                                             <td>Cierre de Inventario</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                     </tbody>

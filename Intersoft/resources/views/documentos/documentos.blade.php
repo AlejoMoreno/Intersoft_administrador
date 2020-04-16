@@ -204,7 +204,7 @@ if(isset($_GET['signo'])){
                 <h3>{{ $nombre_directorio }}:</h3>
                 <div>
                   <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
-                  <label>Cédula / Nombre: <a target="_blank" href="/administrador/directorios"><img title="crear nuevo {{ $nombre_directorio }}" style="width: 20px;" src="https://image.flaticon.com/icons/svg/148/148764.svg"></a></label>
+                  <label>Cédula / Nombre: <a target="_blank" href="/administrador/directorios"><img title="crear nuevo {{ $nombre_directorio }}" style="width: 20px;" src="/assets/148764.svg"></a></label>
                   <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" class="form-control">
                   <datalist id="listDirectorio">
                     @foreach ($directorios as $obj)

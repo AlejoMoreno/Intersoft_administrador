@@ -11,10 +11,10 @@
                 <div class="header">
                     <h4 class="title">Sucursales</h4>
                     <p class="category">Diferentes Sucursales</p><br>
-                    <a href="/download/excel/sucursales"><img width="50" src="https://image.flaticon.com/icons/svg/179/179383.svg" alt="Descargar Todo" title="Descargar todo"></a>
-                    <a href="/download/excel/sucursales"><img width="50" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Microsoft_Excel_2013_logo.svg/2000px-Microsoft_Excel_2013_logo.svg.png" alt="Descargar parcial xls" title="Descargar parcial xls"></a>
-                    <a href="/download/pdf/sucursales"><img width="50" src="https://image.flaticon.com/icons/svg/337/337946.svg" alt="Descargar parcial pdf" title="Descargar parcial pdf"></a>
-                    <div data-toggle="modal" data-target="#grafica"><img width="50" src="https://image.flaticon.com/icons/svg/2709/2709704.svg"></div>
+                    <a href="/download/excel/sucursales"><img width="50" src="/assets/179383.svg" alt="Descargar Todo" title="Descargar todo"></a>
+                    <a href="/download/excel/sucursales"><img width="50" src="/assets/2000px-Microsoft_Excel_2013_logo.svg.png" alt="Descargar parcial xls" title="Descargar parcial xls"></a>
+                    <a href="/download/pdf/sucursales"><img width="50" src="/assets/337946.svg" alt="Descargar parcial pdf" title="Descargar parcial pdf"></a>
+                    <div data-toggle="modal" data-target="#grafica"><img width="50" src="/assets/2709704.svg"></div>
                 </div>
                 <div class="content">
                     <div style="overflow-x:scroll;overflow-y:scroll;height:500px;">

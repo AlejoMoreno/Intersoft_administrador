@@ -25,7 +25,7 @@
 	?>
 	<center>
 		<form class="row" action="/empresas/register" method="POST">
-			<img class="logo col-md-12" src="http://wakusoft.com/img/works/thumbs/1.png">
+			<img class="logo col-md-12" src="/assets/1.png">
 			<p class="col-md-12"></p>
 			<div class="col-md-6">
 				<div class="panel panel-success " id="empresa">

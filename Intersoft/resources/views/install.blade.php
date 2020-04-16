@@ -29,7 +29,7 @@
 			{{ csrf_field() }}
 			<h2>Datos De la empresa</h2><hr>
 			<div id="install_1">
-				<img src="https://image.flaticon.com/icons/svg/531/531290.svg" alt="" style="float:left;width:180px;padding:40px;">
+				<img src="/assets/531290.svg" alt="" style="float:left;width:180px;padding:40px;">
 				<p id="empresaConfig"></p>
 				<div class="input-group">
 					<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -54,7 +54,7 @@
 			</div>
 			<h2>Datos de Contacto</h2><hr>
 			<div style="display:none" id="install_2">	
-				<img src="https://image.flaticon.com/icons/svg/167/167747.svg" alt="" style="float:right ;width:250px;padding:40px;">		
+				<img src="/assets/167747.svg" alt="" style="float:right ;width:250px;padding:40px;">		
 				<div class="input-group">
 					<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
 					<input id="telefono" type="text" class="form-control" onkeyup="config.UperCase('telefono');" name="telefono" placeholder="telefono" >

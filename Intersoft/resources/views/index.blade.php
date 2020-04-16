@@ -21,35 +21,35 @@
                         </tr></thead>
                         <tbody>
                             <tr onclick="config.Redirect('/index');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/204/204366.svg"></td>
+                                <td><img width="30" src="/assets/204366.svg"></td>
                                 <td colspan="2">Inicio</td> 
                             </tr>
                             <tr onclick="config.Redirect('/submenu/directorio');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/2245/2245320.svg"></td>
+                                <td><img width="30" src="/assets/2245320.svg"></td>
                                 <td colspan="2">Información General</td>
                             </tr>
                             <tr onclick="config.Redirect('/submenu/inventario');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/1924/1924873.svg"></td>
+                                <td><img width="30" src="/assets/1924873.svg"></td>
                                 <td colspan="2">Inventario</td>
                             </tr>
                             <tr onclick="config.Redirect('/submenu/produccion');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/2166/2166907.svg"></td>
+                                <td><img width="30" src="/assets/2166907.svg"></td>
                                 <td colspan="2">Producción</td>
                             </tr>
                             <tr onclick="config.Redirect('/submenu/facturacion');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138360.svg"></td>
+                                <td><img width="30" src="/assets/138360.svg"></td>
                                 <td colspan="2">Facturación</td>
                             </tr>
                             <tr onclick="config.Redirect('/submenu/tesoreria');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/1162/1162498.svg"></td>
+                                <td><img width="30" src="/assets/1162498.svg"></td>
                                 <td colspan="2">Tesorería</td>
                             </tr>
                             <tr onclick="config.Redirect('/submenu/contabilidad');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/313/313062.svg"></td>
+                                <td><img width="30" src="/assets/313062.svg"></td>
                                 <td colspan="2">Contabilidad</td>
                             </tr>
                             <tr onclick="config.Redirect('/cerrar');">
-                                <td><img width="30" src="https://image.flaticon.com/icons/svg/529/529873.svg"></td>
+                                <td><img width="30" src="/assets/529873.svg"></td>
                                 <td colspan="2">Salida</td>
                             </tr>
                         </tbody>

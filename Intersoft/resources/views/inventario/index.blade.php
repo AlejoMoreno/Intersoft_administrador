@@ -59,31 +59,31 @@ $lotes = Lotes::where('id_empresa','=',Session::get('id_empresa'))->get();
                                     </tr></thead>
                                     <tbody>
                                         <tr onclick="config.Redirect('/inventario/referencias');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138226.svg"></td>
+                                            <td><img width="30" src="/assets/138226.svg"></td>
                                             <td>Referencias</td>
                                             <td><?php  echo sizeof($referencias); ?></td></a>
-                                            <td><img width="20" onclick="config.Redirect('inventarios/searchProductos.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" onclick="config.Redirect('inventarios/searchProductos.html');" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/lotes');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/272/272429.svg"></td>
+                                            <td><img width="30" src="/assets/272429.svg"></td>
                                             <td>Lotes</td>
                                             <td><?php  echo sizeof($lotes); ?></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/cierreInventario');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/138/138213.svg"></td>
+                                            <td><img width="30" src="/assets/138213.svg"></td>
                                             <td>Cierre de Inventario</td>
                                             <td>?</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/catalogo');">
-                                            <td><img width="30" src="https://www.flaticon.com/premium-icon/icons/svg/296/296383.svg"></td>
+                                            <td><img width="30" src="/assets/296383.svg"></td>
                                             <td>Catálogo</td>
                                             <td>?</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         @foreach ($documentos as $obj)
@@ -99,7 +99,7 @@ $lotes = Lotes::where('id_empresa','=',Session::get('id_empresa'))->get();
                                             }
                                             $url = '/documentos/documento?signo='.$signo.'&nombre='.$obj['nombre'].'&id='.$obj['id'].'&prefijo='.$obj['prefijo'].'&numero='.$obj['num_presente'];?> 
                                             <tr>
-                                                <td><a href="{{ $url }}" target="_blank"><img width="30" src="https://image.flaticon.com/icons/svg/138/138212.svg"></a></td>
+                                                <td><a href="{{ $url }}" target="_blank"><img width="30" src="/assets/138212.svg"></a></td>
                                                 <td><a href="{{ $url }}">{{ $obj['nombre'] }}</a></td>
                                                 <td></td>
                                                 <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>

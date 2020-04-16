@@ -52,17 +52,17 @@
                                     </tr></thead>
                                     <tbody>
                                         <tr onclick="config.Redirect('/contabilidad/cuentas');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/201/201570.svg"></td>
+                                            <td><img width="30" src="/assets/201570.svg"></td>
                                             <td>Cuentas Contables</td>
                                             <td></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/contabilidad/contabilidad');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/265/265675.png"></td>
+                                            <td><img width="30" src="/assets/265675.png"></td>
                                             <td>Contabilidad</td>
                                             <td></td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         

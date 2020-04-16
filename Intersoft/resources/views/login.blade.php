@@ -6,21 +6,21 @@
 	<html lang="en">
 	<title>Login</title>
 	<meta charset="utf-8">
-	<link rel="icon" type="image/png" href="http://wakusoft.com/img/works/thumbs/1.png">
+	<link rel="icon" type="image/png" href="/assets/img/logo_intersot.png">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/intersoft.css">
 	<link rel="stylesheet" href="css/login.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="/assets/js/jquery.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<script src="/assets/js/jquery.min3.js"></script>
 	<script  type="text/javascript" src="js/index.js"></script>
 	<script src="js/config.js"></script>
 	<script src="js/DB/sesion.js"></script>
   	<script src="js/login.js"></script>
 
-  	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  	<script src="/assets/js/sweetalert.min.js"></script>
 </head>
 <?php if(isset($result)==false){ $result = "";} ?>
 <body>
@@ -53,7 +53,7 @@
 		
 
 		<form action="/loguin" method="POST" style="width: 300px;" >
-			<img class="logo" src="http://wakusoft.com/img/works/thumbs/1.png">
+			<img class="logo" src="/assets/img/logo_intersoft1.png">
 			<p></p>
 			<div class="panel panel-success" id="empresa">
 				<div class="panel-heading">Escribe Nit de la empresa</div>

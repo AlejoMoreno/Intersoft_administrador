@@ -50,7 +50,7 @@
                                         </select>
                                     
                                         <div class="col-md-10">
-                                            <label>nit </label><button type="button" class="boton_invisible" data-toggle="modal" data-target="#myModal"><img onclick="directorios.buscar();" style="width: 30px;padding-left: 10px;" src="https://image.flaticon.com/icons/svg/751/751381.svg" title="Buscar en la base de datos"></button>
+                                            <label>nit </label><button type="button" class="boton_invisible" data-toggle="modal" data-target="#myModal"><img onclick="directorios.buscar();" style="width: 30px;padding-left: 10px;" src="/assets/751381.svg" title="Buscar en la base de datos"></button>
                                             <input type="text" name="nit" class="form-control" onkeyup="config.UperCase('nit');" id="nit" placeholder="Ej.(1030570356)" required="">
                                         </div>
                                         <div class="col-md-2">
@@ -63,12 +63,12 @@
                                             <option value="{{ $value['id'] }}">{{ $value['nombre'] }}</option>
                                             @endforeach
                                         </select>
-                                        <label>razon_social / nombre completo</label><button type="button" class="boton_invisible"  data-toggle="modal" data-target="#myModal"><img onclick="directorios.buscar();" style="width: 30px;padding-left: 10px;" src="https://image.flaticon.com/icons/svg/751/751381.svg" title="Buscar en la base de datos"></button>
+                                        <label>razon_social / nombre completo</label><button type="button" class="boton_invisible"  data-toggle="modal" data-target="#myModal"><img onclick="directorios.buscar();" style="width: 30px;padding-left: 10px;" src="/assets/751381.svg" title="Buscar en la base de datos"></button>
                                         <input type="text" name="razon_social" class="form-control"  onkeyup="config.UperCase('razon_social');" id="razon_social" placeholder="Ej.(EMPRESA S.A.S)" required="">                                    
 
                                         <label>dirección comercial</label>
                                         <input type="text" name="direccion" class="form-control"  onkeyup="config.UperCase('direccion');" id="direccion" placeholder="Ej.(CALLE 38 A 50 A 89 sur)">
-                                        <label>dirección correo</label><button type="button" class="boton_invisible" data-toggle="modal" data-target="#myModal"><img onclick="directorios.buscar();" style="width: 30px;padding-left: 10px;" src="https://image.flaticon.com/icons/svg/751/751381.svg" title="Buscar en la base de datos"></button>
+                                        <label>dirección correo</label><button type="button" class="boton_invisible" data-toggle="modal" data-target="#myModal"><img onclick="directorios.buscar();" style="width: 30px;padding-left: 10px;" src="/assets/751381.svg" title="Buscar en la base de datos"></button>
                                         <input type="text" name="correo" class="form-control"  onkeyup="config.UperCase('correo');" id="correo" placeholder="Ej.(ADMINISTRACION@GMAIL.COM)">
                                         <label>ciudad</label>
                                         <select name="id_ciudad" class="form-control"  onkeyup="config.UperCase('id_ciudad');" id="id_ciudad">

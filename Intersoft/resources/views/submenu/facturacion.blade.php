@@ -70,7 +70,7 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->
                                             }
                                             $url = '/documentos/documento?signo='.$signo.'&nombre='.$obj['nombre'].'&id='.$obj['id'].'&prefijo='.$obj['prefijo'].'&numero='.$obj['num_presente'];?> 
                                             <tr>
-                                                <td><a href="{{ $url }}" target="_blank"><img width="30" src="https://image.flaticon.com/icons/svg/138/138212.svg"></a></td>
+                                                <td><a href="{{ $url }}" target="_blank"><img width="30" src="/assets/138212.svg"></a></td>
                                                 <td><a href="{{ $url }}">{{ $obj['nombre'] }} <small style="color:black;">Prefijo:</small> {{ $obj['prefijo'] }}</a></td>
                                                 <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
                                                 <td><a href="{{ $urlconsulta }}" class="btn btn-default">Consultar</a></td>

@@ -45,25 +45,25 @@
                                     </tr></thead>
                                     <tbody>
                                         <tr onclick="config.Redirect('/administrador/index');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg"></td>
+                                            <td><img width="30" src="/assets/148912.svg"></td>
                                             <td colspan="2">Parámetros</td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/directorios');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/png/512/265/265675.png"></td>
+                                            <td><img width="30" src="/assets/265675.png"></td>
                                             <td>Creación, Consulta Directorio</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/calendario');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/123/123392.svg"></td>
+                                            <td><img width="30" src="/assets/123392.svg"></td>
                                             <td>Calendario</td>
-                                            <td><img width="20" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/usuarios');">
-                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/201/201570.svg"></td>
+                                            <td><img width="30" src="/assets/201570.svg"></td>
                                             <td>Usuarios</td>
-                                            <td><img width="20" onclick="config.Intoredirect('administrador/usuarios.html');" src="https://image.flaticon.com/icons/svg/265/265727.svg">
+                                            <td><img width="20" onclick="config.Intoredirect('administrador/usuarios.html');" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                     </tbody>

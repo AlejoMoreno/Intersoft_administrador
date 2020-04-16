@@ -172,7 +172,7 @@ $auxiliares = App\Pucauxiliar::where('id_empresa','=',14)->get();
               <div class="col-sm-6">
                 <div>
                   <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
-                  <label>Cédula: <a target="_blank" href="/administrador/directorios"><img style="width: 20px;" src="https://image.flaticon.com/icons/svg/148/148764.svg"></a></label>
+                  <label>Cédula: <a target="_blank" href="/administrador/directorios"><img style="width: 20px;" src="/assets/148764.svg"></a></label>
                   <select name="cedula_tercero" id="cedula_tercero" class="form-control" onchange="carteras.allDocumentos_ingreso();">
                     <option value="">Seleccione Cliente</option>
                     @foreach($directorios as $obj)

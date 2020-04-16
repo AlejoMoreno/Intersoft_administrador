@@ -1,6 +1,6 @@
 <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <link rel="icon" type="image/png" href="http://wakusoft.com/img/works/thumbs/1.png">
+        <link rel="icon" type="image/png" href="/assets/1.png">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
         <title>Intersoft</title>
         <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />

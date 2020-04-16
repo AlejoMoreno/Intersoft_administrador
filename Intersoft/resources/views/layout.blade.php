@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<link rel="icon" type="image/png" href="http://wakusoft.com/img/works/thumbs/1.png">
+	<link rel="icon" type="image/png" href="/assets/img/logo_intersoft.png">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<title>Intersoft</title>
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -17,18 +17,18 @@
     <link href="/assets/css/demo.css" rel="stylesheet" />
     <!--  CSS for animated     -->
     <link href="/assets/css/animate.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
+    <link rel="stylesheet" href="/assets/css/animate.min.css">
     <!--     Fonts and icons     -->
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
     <link href="/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+	<script src="/assets/js/bootstrap.min.js"></script>
+	<script src="/assets/js/jquery.min3.js"></script>
     <!-- TEXT EDTIT -->
     <!--script src="https://imperavi.com/assets/redactor/redactor.js?v"></script>-->
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/assets/js/sweetalert.min.js"></script>
 
     
 
@@ -90,55 +90,55 @@
             <ul class="nav">
                 <li class="index" id="index">
                     <a href="#" onclick="config.Redirect('/index');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/204/204366.svg">
+                        <img style="float: left;" width="30" src="/assets/204366.svg">
                         <p>Inicio</p>
                     </a>
                 </li>
                 <li class="directorio" id="directorio">
                     <a href="#" onclick="config.Redirect('/submenu/directorio');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/2245/2245320.svg">
+                        <img style="float: left;" width="30" src="/assets/2245320.svg">
                         <p>Directorio</p>
                     </a>
                 </li>
                 <li class="inventario" id="inventario">
                     <a href="#" onclick="config.Redirect('/submenu/inventario');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/1924/1924873.svg">
+                        <img style="float: left;" width="30" src="/assets/1924873.svg">
                         <p>Inventario</p>
                     </a>
                 </li>
                 <li class="produccion" id="produccion"> 
                     <a href="#" onclick="config.Redirect('/submenu/produccion');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/2166/2166907.svg">
+                        <img style="float: left;" width="30" src="/assets/2166907.svg">
                         <p>Producción</p>
                     </a>
                 </li>
                 <li class="facturacion" id="facturacion">
                     <a href="#" onclick="config.Redirect('/submenu/facturacion');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/138/138360.svg">
+                        <img style="float: left;" width="30" src="/assets/138360.svg">
                         <p>Facturación</p>
                     </a>
                 </li>
                 <li class="tesoreria" id="tesoreria">
                     <a href="#" onclick="config.Redirect('/submenu/tesoreria');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/1162/1162498.svg">
+                        <img style="float: left;" width="30" src="/assets/1162498.svg">
                         <p>Tesorería</p>
                     </a>
                 </li>
                 <li class="contabilidad" id="contabilidad">
                     <a href="#" onclick="config.Redirect('/submenu/contabilidad');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/313/313062.svg">
+                        <img style="float: left;" width="30" src="/assets/313062.svg">
                         <p>Contabilidad</p>
                     </a>
                 </li>
                 <li id="administrador">  
                     <a href="#" onclick="config.Redirect('/administrador/index');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/148/148912.svg">
+                        <img style="float: left;" width="30" src="/assets/148912.svg">
                         <p>Parámetros</p>
                     </a>
                 </li>
                 <li id="Salida">  
                     <a href="#" onclick="config.Redirect('/cerrar');">
-                        <img style="float: left;" width="30" src="https://image.flaticon.com/icons/svg/529/529873.svg">
+                        <img style="float: left;" width="30" src="/assets/529873.svg">
                         <p>Salida</p>
                     </a>
                 </li>
@@ -215,6 +215,7 @@
                         </li>
                     </ul>
                 </nav>
+                <img style="width: 30%;maring-left:20%" src="/assets/img/logo_intersoft1.png">
                 <p class="copyright pull-right">
                     &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://wakusoft.com">wakusoft.com</a>, derechos reservados
                 </p>
