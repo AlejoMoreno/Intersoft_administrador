@@ -20,6 +20,8 @@
 	<script src="js/DB/sesion.js"></script>
   	<script src="js/login.js"></script>
 
+	  <script data-ad-client="ca-pub-4639820515028360" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
   	<script src="/assets/js/sweetalert.min.js"></script>
 </head>
 <?php if(isset($result)==false){ $result = "";} ?>

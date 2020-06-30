@@ -74,8 +74,74 @@
     });*/
     </script>
 
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+
 </head>
 <body onbeforeunload="config.leave_page()">
+
+<!-- firebase -->
+<script src="/firebase-messaging-sw.js"></script>
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.15.4/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyB45GQ3cj-A4fA2aV1bSrGVYYiXMSshIQk",
+    authDomain: "intersoft-655ef.firebaseapp.com",
+    databaseURL: "https://intersoft-655ef.firebaseio.com",
+    projectId: "intersoft-655ef",
+    storageBucket: "intersoft-655ef.appspot.com",
+    messagingSenderId: "353136592516",
+    appId: "1:353136592516:web:2e8b33f4943b7aaac464d1",
+    measurementId: "G-28LXEZLN6B"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+  console.log(firebase);
+
+
+    // Retrieve Firebase Messaging object.
+    const messaging = firebase.messaging();
+    // Add the public key generated from the console here.
+    messaging.usePublicVapidKey("BPTTqruAhfHF4tZqPqGwyk-g3NGK2EOUNoKQ56-tLKVDjXRbuBPCINohHdZLJAdteXKg5vCP6pQeia8hVFzbVSE");
+
+    // Get Instance ID token. Initially this makes a network call, once retrieved
+    // subsequent calls to getToken will return from cache.
+    messaging.getToken().then((currentToken) => {
+    if (currentToken) {
+        sendTokenToServer(currentToken);
+        updateUIForPushEnabled(currentToken);
+    } else {
+        // Show permission request.
+        console.log('No Instance ID token available. Request permission to generate one.');
+        // Show permission UI.
+        updateUIForPushPermissionRequired();
+        setTokenSentToServer(false);
+    }
+    }).catch((err) => {
+    console.log('An error occurred while retrieving token. ', err);
+    showToken('Error retrieving Instance ID token. ', err);
+    setTokenSentToServer(false);
+    });
+
+    
+</script>
+
+
 <div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;"><div class="loader"></div></div>
 <div class="wrapper">
     <div class="sidebar" data-color="blue" data-image="/assets/img/sidebar-1.jpg" style="overflow-x:hidden">
