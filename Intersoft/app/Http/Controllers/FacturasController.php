@@ -233,19 +233,14 @@ class FacturasController extends Controller
 
     }
 
-    public function Tercero($signo,$request){
+    static function Tercero($signo,$request){
+        $tercero = null;
         if($signo == '+'){
             $tercero = Directorios::where('nit',$request->id_cliente)->
                                     where('id_directorio_tipo_tercero','1')->
                                     where('id_empresa','=',Session::get('id_empresa'))->first();
         }
-        //salidas de inventarios
-        if($signo == '-'){
-            $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','!=','1')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->first();
-        }
-        //nada con el inventario
+        //nada con el inventario o Salida de inventario
         else{
             $tercero = Directorios::where('nit',$request->id_cliente)->
                                     where('id_directorio_tipo_tercero','!=','1')->

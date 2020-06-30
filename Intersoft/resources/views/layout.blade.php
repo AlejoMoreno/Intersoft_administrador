@@ -141,6 +141,21 @@
     
 </script>
 
+<?php 
+
+$lista = null;
+if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
+    $lista = ["Inicio", "Directorio", "Inventario", "Producción", "Facturación", "Tesorería", "Contabilidad", "Parámetros", "Salida"];
+}
+if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
+    $lista = ["Inicio", "Directorio", "Producción", "Facturación", "Tesorería", "Salida"];
+}
+if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Session::get('cargo') == "Obrero"){
+    $lista = ["Inicio", "Inventario", "Producción", "Salida"];
+}
+
+?>
+
 
 <div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;"><div class="loader"></div></div>
 <div class="wrapper">
@@ -153,61 +168,91 @@
                 </a>
             </div>
 
+            
             <ul class="nav">
-                <li class="index" id="index">
-                    <a href="#" onclick="config.Redirect('/index');">
-                        <img style="float: left;" width="30" src="/assets/204366.svg">
-                        <p>Inicio</p>
-                    </a>
-                </li>
-                <li class="directorio" id="directorio">
-                    <a href="#" onclick="config.Redirect('/submenu/directorio');">
-                        <img style="float: left;" width="30" src="/assets/2245320.svg">
-                        <p>Directorio</p>
-                    </a>
-                </li>
-                <li class="inventario" id="inventario">
-                    <a href="#" onclick="config.Redirect('/submenu/inventario');">
-                        <img style="float: left;" width="30" src="/assets/1924873.svg">
-                        <p>Inventario</p>
-                    </a>
-                </li>
-                <li class="produccion" id="produccion"> 
-                    <a href="#" onclick="config.Redirect('/submenu/produccion');">
-                        <img style="float: left;" width="30" src="/assets/2166907.svg">
-                        <p>Producción</p>
-                    </a>
-                </li>
-                <li class="facturacion" id="facturacion">
-                    <a href="#" onclick="config.Redirect('/submenu/facturacion');">
-                        <img style="float: left;" width="30" src="/assets/138360.svg">
-                        <p>Facturación</p>
-                    </a>
-                </li>
-                <li class="tesoreria" id="tesoreria">
-                    <a href="#" onclick="config.Redirect('/submenu/tesoreria');">
-                        <img style="float: left;" width="30" src="/assets/1162498.svg">
-                        <p>Tesorería</p>
-                    </a>
-                </li>
-                <li class="contabilidad" id="contabilidad">
-                    <a href="#" onclick="config.Redirect('/submenu/contabilidad');">
-                        <img style="float: left;" width="30" src="/assets/313062.svg">
-                        <p>Contabilidad</p>
-                    </a>
-                </li>
-                <li id="administrador">  
-                    <a href="#" onclick="config.Redirect('/administrador/index');">
-                        <img style="float: left;" width="30" src="/assets/148912.svg">
-                        <p>Parámetros</p>
-                    </a>
-                </li>
-                <li id="Salida">  
-                    <a href="#" onclick="config.Redirect('/cerrar');">
-                        <img style="float: left;" width="30" src="/assets/529873.svg">
-                        <p>Salida</p>
-                    </a>
-                </li>
+                <?php if(in_array("Inicio",$lista)){ ?>
+
+                    <li class="index" id="index">
+                        <a href="#" onclick="config.Redirect('/index');">
+                            <img style="float: left;" width="30" src="/assets/204366.svg">
+                            <p>Inicio</p>
+                        </a>
+                    </li>
+
+                <?php } ?>
+               
+                <?php if(in_array("Directorio",$lista)){ ?>
+                    <li class="directorio" id="directorio">
+                        <a href="#" onclick="config.Redirect('/submenu/directorio');">
+                            <img style="float: left;" width="30" src="/assets/2245320.svg">
+                            <p>Directorio</p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php if(in_array("Inventario",$lista)){ ?>
+                    <li class="inventario" id="inventario">
+                        <a href="#" onclick="config.Redirect('/submenu/inventario');">
+                            <img style="float: left;" width="30" src="/assets/1924873.svg">
+                            <p>Inventario</p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php if(in_array("Producción",$lista)){ ?>
+                    <li class="produccion" id="produccion"> 
+                        <a href="#" onclick="config.Redirect('/submenu/produccion');">
+                            <img style="float: left;" width="30" src="/assets/2166907.svg">
+                            <p>Producción</p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php if(in_array("Facturación",$lista)){ ?>
+                    <li class="facturacion" id="facturacion">
+                        <a href="#" onclick="config.Redirect('/submenu/facturacion');">
+                            <img style="float: left;" width="30" src="/assets/138360.svg">
+                            <p>Facturación</p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php if(in_array("Tesorería",$lista)){ ?>
+                    <li class="tesoreria" id="tesoreria">
+                        <a href="#" onclick="config.Redirect('/submenu/tesoreria');">
+                            <img style="float: left;" width="30" src="/assets/1162498.svg">
+                            <p>Tesorería</p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php if(in_array("Contabilidad",$lista)){ ?>
+                    <li class="contabilidad" id="contabilidad">
+                        <a href="#" onclick="config.Redirect('/submenu/contabilidad');">
+                            <img style="float: left;" width="30" src="/assets/313062.svg">
+                            <p>Contabilidad</p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php if(in_array("Parámetros",$lista)){ ?>
+                    <li id="administrador">  
+                        <a href="#" onclick="config.Redirect('/administrador/index');">
+                            <img style="float: left;" width="30" src="/assets/148912.svg">
+                            <p>Parámetros</p>
+                        </a>
+                    </li>
+                <?php } ?>
+
+                <?php if(in_array("Salida",$lista)){ ?>
+                    <li id="Salida">  
+                        <a href="#" onclick="config.Redirect('/cerrar');">
+                            <img style="float: left;" width="30" src="/assets/529873.svg">
+                            <p>Salida</p>
+                        </a>
+                    </li>
+                <?php } ?>
+
             </ul>
     	</div>
     </div>
