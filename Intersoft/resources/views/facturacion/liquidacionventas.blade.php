@@ -48,6 +48,7 @@
                     <h4 class="title">Facturas</h4>
                     <p class="category">Elige las facturas para usuario</p>
                 </div>
+                <?php  $total = 0; ?>
                 <div class="content">
                     <div style="overflow-x:scroll;overflow-y:scroll;height:300px;">
                     <table class="table table-hover table-striped"  id="datos">
@@ -77,7 +78,6 @@
                             <tbody>
                             
                                 @if($facturas!=null)
-                                <?php  $total = 0; ?>
                                     @foreach($facturas as $obj)
                                     <?php $total = $total + ( ($obj['subtotal']*$valor)/100 );  ?>
                                     <tr>
@@ -108,7 +108,9 @@
                         </table>
                         
                     </div>
-                    <h2>Calculo total de comisión con valor {{ $valor }}(%) es: {{ $total }} </h2>
+                    @if($total!=0)
+                        <h2>Calculo total de comisión con valor {{ $valor }}(%) es: {{ $total }} </h2>
+                    @endif
                     <div class="footer">
                         <div class="legend">
                             <i class="fa fa-circle text-info"></i> 
