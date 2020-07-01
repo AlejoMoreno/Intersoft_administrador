@@ -87,6 +87,23 @@ Route::get('/submenu/inventario', function(){ return view('submenu.inventario');
 Route::get('/submenu/produccion', function(){ return view('submenu.produccion'); });
 Route::get('/submenu/tesoreria', function(){ return view('submenu.tesoreria'); });
 
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes FACTURACION
+|--------------------------------------------------------------------------
+|
+| Registros y servicios del modulo de facturacion
+|
+*/
+Route::get('/facturacion/zona', 'UsuariosController@listaZonas');
+Route::get('/facturacion/zona/{id}', 'UsuariosController@listaZonas1');
+Route::post('/facturacion/zonacreate', 'UsuariosController@createZonas');
+Route::get('/facturacion/zonadelete/{id}', 'UsuariosController@deleteZonas');
+Route::get('/facturacion/liquidacionventas', 'UsuariosController@liquidacionVentas');
+Route::get('/facturacion/estadisticaventas', 'UsuariosController@estadisticaVentas');
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes ADMINISTRADOR

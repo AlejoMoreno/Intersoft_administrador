@@ -87,8 +87,7 @@ $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))-
 
     $nombre_directorio = "Clientes";
     $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '2')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->
-                                    orWhere('id_directorio_tipo_tercero', '=', '3')->get();
+                                        where('id_empresa','=',Session::get('id_empresa'))->get();
     $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
 
     //traer las referencias dependiendo el tipo de entrada
