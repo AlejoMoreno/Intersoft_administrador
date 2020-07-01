@@ -14,10 +14,12 @@
                 </div>
                 <div class="content">
                     <div class="row">
+
+                        <input type="number" id="valor" name="valor" placeholder="porcentaje (%) comisión" class="form-control"><br>
                         
                         @foreach($usuarios as $obj)
                         <div class="col-md-12">
-                            <div class="btn-success" style="padding:3%;color:white;" onclick="verUsuarioZonas({{ $obj['id'] }})">
+                            <div class="btn-success" style="padding:3%;color:white;" onclick="verUsuarioVentas({{ $obj['id'] }})">
                                 {{ $obj['ncedula'] }} / {{ $obj['correo'] }}
                             </div>
                         </div>
@@ -43,71 +45,70 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="header">
-                    <h4 class="title">Zonas</h4>
-                    <p class="category">Elige la zona para usuario {{ $id }}</p>
+                    <h4 class="title">Facturas</h4>
+                    <p class="category">Elige las facturas para usuario</p>
                 </div>
                 <div class="content">
                     <div style="overflow-x:scroll;overflow-y:scroll;height:300px;">
-                        <table class="table table-hover table-striped" id="datos">
+                    <table class="table table-hover table-striped"  id="datos">
                             <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Usuario</th>
-                                    <th>Cliente</th>
-                                    <th>Direccion</th>
-                                    <th>Zona</th>
-                                    <th>Telefono</th>
-                                    <th>Documentos</th>
-                                    <th>Desasingar</th>
-                                </tr>
-                            </thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Sucursal</th>
+                                <th>#</th>
+                                <th>Tercero</th>
+                                <th>Nombre</th>
+                                <th>Fecha ___Emisión___</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>subtotal</th>
+                                <th>iva</th>
+                                <th>impoconsumo</th>
+                                <th>impuesto 1</th>
+                                <th>impuesto 2</th>
+                                <th>descuento</th>
+                                <th>fletes</th>
+                                <th>retefuente</th>
+                                <th>total</th>
+                                <th>Saldo Cartera</th>
+                                <th>Estado</th>
+                                <th>Fecha creado</th>
+                                <th>Fecha Actualizado</th>
+                            </tr></thead>
                             <tbody>
-                                @if($zona!=null)
-                                    @foreach($zona as $obj)
+                            
+                                @if($facturas!=null)
+                                <?php  $total = 0; ?>
+                                    @foreach($facturas as $obj)
+                                    <?php $total = $total + ( ($obj['subtotal']*$valor)/100 );  ?>
                                     <tr>
-                                        <td>{{ $obj['id'] }}</td>
-                                        <td>{{ $obj['id_usuario']['ncedula'] }} - {{ $obj['id_usuario']['correo'] }}</td>
-                                        <td>{{ $obj['id_tercero']['nit'] }} - {{ $obj['id_tercero']['razon_social'] }}</td>
-                                        <td>{{ $obj['id_tercero']['direccion'] }}</td>
-                                        <td>{{ $obj['zona'] }}</td>
-                                        <td>{{ $obj['id_tercero']['telefono'] }} - {{ $obj['id_tercero']['telefono1'] }} - {{ $obj['id_tercero']['telefono2'] }}</td>
-                                        <td>{{ $obj['id_tercero']['id'] }}</td>
-                                        <td><a href="/facturacion/zonadelete/{{ $obj['id'] }}" class="btn btn-danger">x</a></td>
+                                        <td>{{ $obj['id_documento']['nombre'] }} {{ $obj->prefijo }}</td>
+                                        <td>{{ $obj['id_sucursal']['nombre'] }}</td>
+                                        <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj['id'] }}')" class="btn btn-success">{{ $obj['numero'] }}</a></td>
+                                        <td>{{ $obj['id_tercero'] }}</td>
+                                        <td>{{ $obj['id_cliente']['razon_social'] }}</td>
+                                        <td>{{ $obj['fecha'] }}</td>
+                                        <td>{{ $obj['fecha_vencimiento'] }}</td>
+                                        <td>{{ number_format($obj['subtotal']) }}</td>
+                                        <td>{{ number_format($obj['iva']) }}</td>
+                                        <td>{{ number_format($obj['impoconsumo']) }}</td>
+                                        <td>{{ number_format($obj['otro_impuesto']) }}</td>
+                                        <td>{{ number_format($obj['otro_impuesto_1']) }}</td>
+                                        <td>{{ number_format($obj['descuento']) }}</td>
+                                        <td>{{ number_format($obj['fletes']) }}</td>
+                                        <td>{{ number_format($obj['retefuente']) }}</td>
+                                        <td>{{ number_format($obj['total']) }}</td>
+                                        <td>{{ number_format($obj['saldo']) }}</td>
+                                        <td>{{ $obj['estado'] }}</td>
+                                        <td>{{ $obj['created_at'] }}</td>
+                                        <td>{{ $obj['updated_at'] }}</td>
                                     </tr>
-                                    @endforeach
-                                @endif
+                                    @endforeach         
+                                @endif                       
                             </tbody>
                         </table>
-                    </div>
-                    <div class="row"><br><br></div>
-                    <div class="row">
-
-                        <form action="/facturacion/zonacreate" method="post">
-
-                            <div class="col-md-4">
-                                <input type="hidden" id="id_usuario" name="id_usuario" value="{{ $id }}">
-                                <select id="id_tercero" class="form-control" name="id_tercero">
-                                    <option value="">Seleccione Cliente</option>
-                                    @foreach($directorios as $obj)
-                                        <option value="{{ $obj['id'] }}">{{ $obj['nit'] }} - {{ $obj['razon_social'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <select id="zona" class="form-control" name="zona">
-                                    <option value="">Seleccione Zona</option>
-                                    @foreach($directorios as $obj)
-                                        <option value="{{ $obj['zona_venta'] }}">{{ $obj['contador'] }} - {{ $obj['zona_venta'] }}</option>
-                                    @endforeach
-                                </select> 
-                            </div>
-                            <div class="col-md-4">
-                                <input type="submit" id="boton_asignar" class="btn btn-success form-control" value="Asignar">
-                            </div>
-
-                        </form>
                         
                     </div>
+                    <h2>Calculo total de comisión con valor {{ $valor }}(%) es: {{ $total }} </h2>
                     <div class="footer">
                         <div class="legend">
                             <i class="fa fa-circle text-info"></i> 
@@ -127,7 +128,13 @@
 </div>
 
 <script>
-
+function verUsuarioVentas(id){
+    valor = $('#valor').val();
+    config.Redirect('/facturacion/liquidacionventas/'+id+'/'+valor);
+}
+function envioUrl(url){
+    window.open(url, "imprimir documento", "width=800, height=700")
+}
 </script>
 
 @endsection()

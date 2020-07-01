@@ -101,6 +101,7 @@ Route::get('/facturacion/zona/{id}', 'UsuariosController@listaZonas1');
 Route::post('/facturacion/zonacreate', 'UsuariosController@createZonas');
 Route::get('/facturacion/zonadelete/{id}', 'UsuariosController@deleteZonas');
 Route::get('/facturacion/liquidacionventas', 'UsuariosController@liquidacionVentas');
+Route::get('/facturacion/liquidacionventas/{id}/{valor}', 'UsuariosController@liquidacionVentas1');
 Route::get('/facturacion/estadisticaventas', 'UsuariosController@estadisticaVentas');
 
 

@@ -10,6 +10,7 @@ use App\Sucursales;
 use App\Zonasusuarios;
 use App\Directorios;
 use DB;
+use App\Facturas;
 use App\Http\Controllers\SessionsController;
 
 use Mail;
@@ -348,10 +349,30 @@ class UsuariosController extends Controller
         return redirect('/facturacion/zona/'.$zona->id_usuario);
     }
 
-    
+
 
     public function liquidacionVentas(){
-        return view('facturacion.liquidacionventas');
+        $valor = 0;
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $facturas = null;
+        return view('facturacion.liquidacionventas',array(
+            'usuarios'=>$usuarios,
+            'facturas'=>$facturas,
+            'valor'=>$valor
+        ));
+    }
+
+    public function liquidacionVentas1($id,$valor){
+        $facturas = Facturas::where('id_modificado',$id)->
+                             where('saldo','=',0)->
+                             where('id_empresa','=',Session::get('id_empresa'))->get();
+
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+        return view('facturacion.liquidacionventas',array(
+            'usuarios'=>$usuarios,
+            'facturas'=>$facturas,
+            'valor'=>$valor
+        ));
     }
 
     public function estadisticaVentas(){
