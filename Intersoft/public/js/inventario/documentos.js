@@ -562,7 +562,7 @@ function Documentos(){
         $('#subtotal').val(valor_principal);
         $('#iva').val(valor_iva);
         $('#descuento').val(valor_descuento);
-        $('#retefuente').val(valor_retefuente);
+        $('#retefuente').val(0);
         $('#total').val(valor_principal + valor_iva - valor_descuento + valor_flete - valor_retefuente + impoconsumo + otro_impuesto);
     }
 
