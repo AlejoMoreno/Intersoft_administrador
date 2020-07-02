@@ -226,6 +226,15 @@ class DirectoriosController extends Controller
             "body"=>$directorios);
     }
 
+    public function searchText(Request $request){
+        $directorios = Directorios::where('razon_social','like','%'.$request->texto.'%')
+                ->where('id_directorio_tipo_tercero', '=', '2')
+                ->where('id_empresa','=',Session::get('id_empresa'))->get();
+        return  array(
+            "result"=>"success",
+            "body"=>$directorios);
+    }
+
     public function addTercero(Request $request){
         $directorios = new Directorios();
         $directorios->nit       = $request->nit;

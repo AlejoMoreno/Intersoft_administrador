@@ -86,18 +86,18 @@
 
                             <div class="col-md-4">
                                 <input type="hidden" id="id_usuario" name="id_usuario" value="{{ $id }}">
-                                <select id="id_tercero" class="form-control" name="id_tercero">
-                                    <option value="">Seleccione Cliente</option>
-                                    @foreach($directorios as $obj)
-                                        <option value="{{ $obj['id'] }}">{{ $obj['nit'] }} - {{ $obj['razon_social'] }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" id="id_tercero" name="id_tercero" class="form-control" placeholder="Razón social Cliente" list="Listaclientes" onchange="buscarcliente(this.value)">
+                                <div id="divClientes">
+                                    <datalist id="Listaclientes">
+                                    </datalist>
+                                </div>
+                                <p style="font-size:10px">Para buscar el cliente debe tener un minimo de 5 caracteres</p>
                             </div>
                             <div class="col-md-4">
                                 <select id="zona" class="form-control" name="zona">
                                     <option value="">Seleccione Zona</option>
-                                    @foreach($directorios as $obj)
-                                        <option value="{{ $obj['zona_venta'] }}">{{ $obj['contador'] }} - {{ $obj['zona_venta'] }}</option>
+                                    @foreach($nombre_zonas as $obj)
+                                        <option value="{{ $obj->zona_venta }}">{{ $obj->contador }} - {{ $obj->zona_venta }}</option>
                                     @endforeach
                                 </select> 
                             </div>
@@ -129,6 +129,37 @@
 <script>
 function verUsuarioZonas(id){
     config.Redirect('/facturacion/zona/'+id);
+}
+function buscarcliente(texto){
+    console.log(texto);
+    if(texto.length > 5){
+        var urls = "/administrador/diretorios/search/searchText";
+        parametros = {
+                "texto" : texto
+            };
+            $.ajax({
+                data:  parametros,
+                url:   urls,
+                type:  'get',
+                beforeSend: function () {
+                    $('#resultado').html('<p>Espere porfavor</p>');
+                },
+                success:  function (response) {
+                    console.log(response);
+                    $('#Listaclientes').html();
+                    for (var i=0; i < response.body.length; i++){
+                        var valor = response.body[i];
+                        optionText = valor.nit + '-' + valor.razon_social;
+                        optionValue = valor.id;
+                        //console.log(optionText + '  ' + optionValue);
+                        $('#Listaclientes').append('<option value="'+optionValue+'">'+optionText+'</option>');
+                    }
+                }
+            });
+    }
+    
+    
+    
 }
 </script>
 

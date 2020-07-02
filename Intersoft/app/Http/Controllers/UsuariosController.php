@@ -290,9 +290,7 @@ class UsuariosController extends Controller
      * FUNCIONES PARA TOMAR LISTA DE ZONAS Y REPORTES DE VENTAS
      */
     public function listaZonas(){
-        $directorios = Directorios::where('id_directorio_tipo_tercero', '=', '2')->
-                                        where('id_empresa','=',Session::get('id_empresa'))->get();
-
+        
         $nombre_zonas = DB::table('directorios')
                                         ->select(DB::raw('count(*) as contador, zona_venta'))
                                         ->where('id_empresa','=',Session::get('id_empresa'))
@@ -304,15 +302,12 @@ class UsuariosController extends Controller
         return view('facturacion.zona',array(
             'usuarios'=>$usuarios,
             'zona'=>$zonas,
-            'directorios'=>$directorios,
             'id'=>0,
             'nombre_zonas'=>$nombre_zonas
         ));
     }
     public function listaZonas1($id){
-        $directorios = Directorios::where('id_directorio_tipo_tercero', '=', '2')->
-                                        where('id_empresa','=',Session::get('id_empresa'))->get();
-
+        
         $nombre_zonas = DB::table('directorios')
                                         ->select(DB::raw('count(*) as contador, zona_venta'))
                                         ->where('id_empresa','=',Session::get('id_empresa'))
@@ -328,7 +323,6 @@ class UsuariosController extends Controller
         return view('facturacion.zona',array(
             'usuarios'=>$usuarios,
             'zona'=>$zonas,
-            'directorios'=>$directorios,
             'id'=>$id,
             'nombre_zonas'=>$nombre_zonas
         ));

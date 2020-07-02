@@ -422,8 +422,7 @@ SIGNO MENOS
     //variables importantes para la vista
 
     $nombre_directorio = "Clientes";
-    $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '2')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->get();
+    
     $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
 
     //traer las referencias dependiendo el tipo de entrada
@@ -488,12 +487,41 @@ SIGNO MENOS
                 <div>
                   <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
                   <label>Cédula: <div class="btn btn-info" style="height: 30px;" data-toggle="modal" data-target="#terceros">+</div></label>
-                  <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" class="form-control">
+                  <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" class="form-control" onchange="buscarcliente(this.value)">
                   <datalist id="listDirectorio">
-                    @foreach ($directorios as $obj)
-                    <option value="{{ $obj['nit'] }}" >{{ $obj['nit'] }} _ {{ $obj['razon_social'] }}</option>
-                    @endforeach
+                    
                   </datalist>
+                  <p style="font-size:10px">Para buscar el cliente debe tener un minimo de 6 caracteres</p>
+                  <script>
+                  function buscarcliente(texto){
+                    console.log(texto);
+                    if(texto.length > 5){
+                        var urls = "/administrador/diretorios/search/searchText";
+                        parametros = {
+                                "texto" : texto
+                            };
+                            $.ajax({
+                                data:  parametros,
+                                url:   urls,
+                                type:  'get',
+                                beforeSend: function () {
+                                    $('#resultado').html('<p>Espere porfavor</p>');
+                                },
+                                success:  function (response) {
+                                    console.log(response);
+                                    $('#listDirectorio').html();
+                                    for (var i=0; i < response.body.length; i++){
+                                        var valor = response.body[i];
+                                        optionText = valor.nit + '-' + valor.razon_social;
+                                        optionValue = valor.nit;
+                                        //console.log(optionText + '  ' + optionValue);
+                                        $('#listDirectorio').append('<option value="'+optionValue+'">'+optionText+'</option>');
+                                    }
+                                }
+                            });
+                    }
+                  }
+                  </script>
                   
                 </div>
                 <p>¿Desea vincular a un tercero adicional a este documento? <div class="btn btn-success">SI</div><div class="btn btn-warning">NO</div></p>
@@ -696,9 +724,7 @@ SIGNO MENOS
     //variables importantes para la vista
 
     $nombre_directorio = "Clientes";
-    $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '2')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->
-                                    orWhere('id_directorio_tipo_tercero', '=', '3')->get();
+
     $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
 
     //traer las referencias dependiendo el tipo de entrada
@@ -760,12 +786,42 @@ SIGNO MENOS
             <div>
               <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
               <label>Cédula: </label>
-              <input type="text" name="cedula_tercero" onkeyup="documentos.searchDirectorio(event);" id="cedula_tercero" class="form-control">
-              <ul id="listDirectorio">
-                @foreach ($directorios as $obj)
-                <li><a href="javascript:;" onclick="documentos.seleccionDirectorio({{ $obj }})">{{ $obj['nit'] }}</a></li>
-                @endforeach
-              </ul>
+              <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" class="form-control" onchange="buscarcliente(this.value)">
+              
+              <datalist id="listDirectorio">
+                    
+                  </datalist>
+                  <p style="font-size:10px">Para buscar el cliente debe tener un minimo de 6 caracteres</p>
+                  <script>
+                  function buscarcliente(texto){
+                    console.log(texto);
+                    if(texto.length > 5){
+                        var urls = "/administrador/diretorios/search/searchText";
+                        parametros = {
+                                "texto" : texto
+                            };
+                            $.ajax({
+                                data:  parametros,
+                                url:   urls,
+                                type:  'get',
+                                beforeSend: function () {
+                                    $('#resultado').html('<p>Espere porfavor</p>');
+                                },
+                                success:  function (response) {
+                                    console.log(response);
+                                    $('#listDirectorio').html();
+                                    for (var i=0; i < response.body.length; i++){
+                                        var valor = response.body[i];
+                                        optionText = valor.nit + '-' + valor.razon_social;
+                                        optionValue = valor.nit;
+                                        //console.log(optionText + '  ' + optionValue);
+                                        $('#listDirectorio').append('<option value="'+optionValue+'">'+optionText+'</option>');
+                                    }
+                                }
+                            });
+                    }
+                  }
+                  </script>
               
               <label>Nombre:</label>
               <input type="text" name="nombre_tercero" onkeyup="documentos.searchDirectorio2(event);" id="nombre_tercero" class="form-control">

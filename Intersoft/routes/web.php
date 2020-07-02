@@ -240,6 +240,7 @@ Route::get('/administrador/directorios/update/{id}', 'DirectoriosController@show
 Route::post('/administrador/directorios/create', 'DirectoriosController@create');
 Route::post('/administrador/directorios/update', 'DirectoriosController@update');
 Route::post('/administrador/diretorios/search/search', 'DirectoriosController@search');
+Route::get('/administrador/diretorios/search/searchText', 'DirectoriosController@searchText');
 
 //calendarios
 Route::get('/calendario', 'CalendariosController@index');

@@ -86,8 +86,7 @@ $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))-
     //variables importantes para la vista
 
     $nombre_directorio = "Clientes";
-    $directorios = App\Directorios::where('id_directorio_tipo_tercero', '=', '2')->
-                                        where('id_empresa','=',Session::get('id_empresa'))->get();
+ 
     $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
 
     //traer las referencias dependiendo el tipo de entrada
@@ -314,12 +313,41 @@ $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))-
                         <div>
                         <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
                         <label>Cédula: </label>
-                        <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" class="form-control">
+                        <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" class="form-control" onchange="buscarcliente(this.value)">
                         <datalist id="listDirectorio">
-                            @foreach ($directorios as $obj)
-                            <option value="{{ $obj['nit'] }}" >{{ $obj['nit'] }} _ {{ $obj['razon_social'] }}</option>
-                            @endforeach
+                            
                         </datalist>
+                        <p style="font-size:10px">Para buscar el cliente debe tener un minimo de 6 caracteres</p>
+                        <script>
+                        function buscarcliente(texto){
+                            console.log(texto);
+                            if(texto.length > 5){
+                                var urls = "/administrador/diretorios/search/searchText";
+                                parametros = {
+                                        "texto" : texto
+                                    };
+                                    $.ajax({
+                                        data:  parametros,
+                                        url:   urls,
+                                        type:  'get',
+                                        beforeSend: function () {
+                                            $('#resultado').html('<p>Espere porfavor</p>');
+                                        },
+                                        success:  function (response) {
+                                            console.log(response);
+                                            $('#listDirectorio').html();
+                                            for (var i=0; i < response.body.length; i++){
+                                                var valor = response.body[i];
+                                                optionText = valor.nit + '-' + valor.razon_social;
+                                                optionValue = valor.nit;
+                                                //console.log(optionText + '  ' + optionValue);
+                                                $('#listDirectorio').append('<option value="'+optionValue+'">'+optionText+'</option>');
+                                            }
+                                        }
+                                    });
+                            }
+                        }
+                        </script>
                         </div>
                     </div>
                     <div class="col-sm-6">
