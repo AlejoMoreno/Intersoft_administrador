@@ -555,14 +555,37 @@ function Documentos(){
         }
         //console.log("SUBTOTAL");
         //console.log(totales);
-        var valor_retefuente = (valor_principal * 2.5)/100;
+
+        //consultar cliente para ver si tiene retencion o no
+        var urls = "/administrador/diretorios/search/search";
+        //$('#retefuente').val((parseInt(valor_principal)*2.5)/100);
+        $('#retefuente').val(0);
+        valor_retefuente = 0;
+        parametros = {
+            "nit" : $('#cedula_tercero').val()
+        };
+        $.ajax({
+            data:  parametros,
+            url:   urls,
+            type:  'post',
+            beforeSend: function () {
+                $('#resultado').html('<p>Espere porfavor</p>');
+            },
+            success:  function (response) {
+                console.log(response);
+                if(response.body[0].id_retefuente == 3){
+                    $('#retefuente').val(0);
+                }
+            }
+        });
+
         impoconsumo = parseInt($('#impoconsumo').val());
         otro_impuesto = parseInt($('#otro_impuesto').val());
 
         $('#subtotal').val(valor_principal);
         $('#iva').val(valor_iva);
         $('#descuento').val(valor_descuento);
-        $('#retefuente').val(0);
+        valor_retefuente = $('#retefuente').val();
         $('#total').val(valor_principal + valor_iva - valor_descuento + valor_flete - valor_retefuente + impoconsumo + otro_impuesto);
     }
 
