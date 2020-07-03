@@ -43,10 +43,12 @@ class EmpresasController extends Controller
         $empresa = Empresas::where('nit_empresa','=',$request->nit)->first();
         try{
             $sucursales = Sucursales::where('id_empresa','=',$empresa->id)->get();
+            $usuarios = Usuarios::where('id_empresa','=',$empresa->id)->get();
             return  array(
                 "result"=>"Success",
                 "body"=>$empresa,
-                "sucursales"=>$sucursales);
+                "sucursales"=>$sucursales,
+                "usuarios"=>$usuarios);
         }
         catch (ModelNotFoundException $exception){
             return  array(
