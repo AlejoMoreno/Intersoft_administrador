@@ -15,6 +15,8 @@ use App\Usuarios;
 use App\Cuentas;
 use App\Pucauxiliar;
 
+use Yajra\Datatables\Datatables;
+
 use DB;
 use Excel;
 use PDF;
@@ -108,8 +110,8 @@ class ReferenciasController extends Controller
 				"result"=>"fail",
 				"body"=>$exception);
 		}
-    }
-    
+	}
+	    
     public function showone($id){
 		try{
 			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))
@@ -278,6 +280,15 @@ class ReferenciasController extends Controller
 	/**
 	 * GET
 	 */
+
+	public function updatePrecios($id,$precio1,$precio2,$precio3){
+		$obj = Referencias::where('id',$id)->first();
+		$obj->precio1 			= $precio1;
+		$obj->precio2 			= $precio2;
+		$obj->precio3 			= $precio3;
+		$obj->update();
+		return redirect('inventario/actualizacionPrecios');
+	}
 	public function actualizacionPrecios(Request $request){
 
 		$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();

@@ -350,6 +350,7 @@ Route::post('/inventario/ingresoporproduccion/convertir', 'ProduccioningresosCon
 
 Route::get('/inventario/actualizacionPrecios', 'ReferenciasController@actualizacionPrecios');
 Route::post('/inventario/actualizacionPrecios', 'ReferenciasController@actualizarPrecios');
+Route::get('/inventario/actualizacionPrecios/{id}/{precio1}/{precio2}/{precio3}', 'ReferenciasController@updatePrecios');
 
 /*
 |--------------------------------------------------------------------------

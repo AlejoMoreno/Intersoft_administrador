@@ -61,6 +61,11 @@
     <script type="text/javascript" src="/js/contabilidad/cuentas.js"></script>
 
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+  
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+
     <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
     <script>
     /*var OneSignal = window.OneSignal || [];
@@ -73,6 +78,8 @@
         });
     });*/
     </script>
+
+    
 
     <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
 

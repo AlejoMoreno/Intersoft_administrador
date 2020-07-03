@@ -183,6 +183,8 @@ return [
         //pdf generate
         Barryvdh\DomPDF\ServiceProvider::class,
 
+        
+
     ],
 
     /*
