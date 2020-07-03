@@ -127,12 +127,40 @@
 			padding-top: 5%;
 			padding-bottom: 5%;
 		}
+		.card{
+			border-radius: 0px 0px 0px 0px;
+			-moz-border-radius: 0px 0px 0px 0px;
+			-webkit-border-radius: 0px 0px 0px 0px;
+			border: 0px solid #000000;
+			background:white;
+			margin:1%;
+			color: #666;
+			-webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+			-moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+			box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+			height: 200px;
+		}
+		.card-title{
+			background:#e3569d;
+			color:white;
+			margin:0 auto;
+			padding: 8%;
+			top:0px;
+			left:0px;
+			width:100%;
+		}
+		.card-text{
+			margin-left:6%;
+			width:80%;
+			padding-top:5%;
+			text-align:justify;
+		}
 	</style>
 	
 
 </head>
 <?php if(isset($result)==false){ $result = "";} ?>
-<body>
+<body style="overflow-x:hidden;width:100%;">
 
 
 
@@ -246,7 +274,7 @@
 
 
 	<div class="content body-content">
-		<article class="row">
+		<article class="row" style="padding-bottom:5%;">
 			<div class="col-md-6">
 				<h1 style="margin-left:10%;font-size:40pt;">Nosotros</h1>
 				<p style="margin-left:10%;font-size:20pt;">Intersoft es un sistema realizado por la empresa <a href="https://www.wakusoft.com">Wakusoft</a>.<p>
@@ -254,7 +282,79 @@
 				Wakusoft es un área dedicada al desarrollo de software a la medida, que brinda a sus clientes confiabilidad, calidad, efectividad y seguridad en el software entregado.</p>
 			</div>
 			<div class="col-md-6">
+				<div class="circulo" style="background-image: url('/assets/img/fondo1.png');width:250px;height:250px;opacity:1;margin-left:30%;margin-top:10%; ">
+				</div>
+			</div>
+		</article>
 
+		<article class="row" style="background:#022c76;color:white;padding-bottom:5%;">
+			<div class="col-md-12">
+				<h1 style="margin-left:5%;font-size:40pt;"><br>Modulos</h1>
+				<p style="margin-left:5%;font-size:20pt;">Intersoft presenta a su disposición varios módulos como lo son:</a>.<p>
+				<div class="row" style="width:100%;margin-left:5%;">
+					<div class="card col-md-3" >
+						<div class="card-body">
+							<h5 class="card-title" style="background:#5abd61">Información General</h5>
+							<p class="card-text">Crea usuarios ilimitados, clientes y proveedores. Parametriza tu negocio</p>
+							<br><br>
+						</div>
+					</div>
+					<div class="card col-md-3" >
+						<div class="card-body">
+							<h5 class="card-title" style="background:#022c76">Inventario</h5>
+							<p class="card-text">Crea referencias, genera stock nuevo, compras y ventas de mercancia, fabricacion por materia prima.</p>
+							<br><br>
+						</div>
+					</div>
+					<div class="card col-md-3" >
+						<div class="card-body">
+							<h5 class="card-title" style="background:#022c76">Producción</h5>
+							<p class="card-text">Llevar el control del producción de mercancia terminada.</p>
+							<br><br>
+						</div>
+					</div>
+					<div class="card col-md-3" >
+						<div class="card-body">
+							<h5 class="card-title" style="background:#e3569d">Facturación</h5>
+							<p class="card-text">Crea cotizaciones, remisiones, facturas de venta tipo post. Proximamente integración XML DIAN</p>
+							<br><br>
+						</div>
+					</div>
+					<div class="card col-md-3" >
+						<div class="card-body">
+							<h5 class="card-title" style="background:#ce3a28">Tesoreria</h5>
+							<p class="card-text">Registra tus gastos y creditos.</p>
+							<br><br>
+						</div>
+					</div>
+					<div class="card col-md-3" >
+						<div class="card-body">
+							<h5 class="card-title" style="background:#fbc430">Contabilidad</h5>
+							<p class="card-text">Genera reportes contables básicos</p>
+							<br><br>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</article>
+
+		<article class="row" style="margin-left:5%;font-size:12pt;"	>
+			<h1 style="margin-left:5%;font-size:40pt;">Contactos</h1>
+			<div class="col-md-4" style="padding-top:5%">
+				Nuestras oficinas<br>
+				<a href="https://www.google.com/maps/dir/Calle+38A+Sur+%2350a71,+Bogot%C3%A1/Cl.+71+Sur,+Bosa,+Bogot%C3%A1/@4.5933655,-74.1780862,14z/data=!3m1!4b1!4m13!4m12!1m5!1m1!1s0x8e3f9ed28717659f:0xe66ee148df96e1df!2m2!1d-74.127088!2d4.597795!1m5!1m1!1s0x8e3f9e409ee9807d:0xfebdf204db45bce6!2m2!1d-74.1940864!2d4.6063584" target="_blank">Calle 38 A # 50 A - 71 Sur,</a><br>
+				Bogotá Colombia
+			</div>
+			<div class="col-md-4" style="padding-top:5%">
+				Llamanos<br>
+				<a href="https://api.whatsapp.com/send?phone=3115065024" target="_blank">311 506 50 24</a><br>
+				<a href="https://api.whatsapp.com/send?phone=32199045297" target="_blank">321 904 52 97</a>
+			</div>
+			<div class="col-md-4" style="padding-top:5%">
+				Email us<br>
+				<a href="mailto:wakusoft@gmail.com">wakusoft@gmail.com</a><br>
+				<a href="mailto:interconsis@yahoo.com">interconsis@yahoo.com</a>
 			</div>
 		</article>
 	</div>
