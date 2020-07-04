@@ -33,7 +33,18 @@ Route::get('/layout', function(){
     return view('layout');
 });
 Route::get('/index', function(){
-    return view('index');
+    $zonas = App\Zonasusuarios::where('id_empresa','=',Session::get('id_empresa'))->where('id_usuario','=',Session::get('user_id'))->get();
+    foreach($zonas as $zona){
+        $zona->id_usuario = App\Usuarios::where('id','=',$zona->id_usuario)->first();
+        $zona->id_tercero = App\Directorios::where('id','=',$zona->id_tercero)->first();
+    }
+    $facturas = App\Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('id_vendedor','=',Session::get('user_id'))->where('saldo','>',0)->get();
+    $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+    return view('index', array(
+        "zona"=>$zonas,
+        "facturas"=>$facturas,
+        "referencias"=>$referencias
+    ));
 });
 
 //ruta para cerrar sesion
