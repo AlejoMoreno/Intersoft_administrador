@@ -402,4 +402,62 @@ class FacturasController extends Controller
     public function facturaPost() {
         return view('documentos.facturaPost');
     }
+
+    /**
+     * PEDIDOS FACTURA
+     */
+    public function pedidos(){
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $pedidos = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','=')->whereNotIn('estado',['FACTURADO','RECHAZADO'])->get(); //estado=FACTURADO
+        foreach($pedidos as $pedido){
+            $pedido->id_documento = Documentos::where('id','=',$pedido->id_documento)->first();
+            $pedido->id_cliente = Directorios::where('id','=',$pedido->id_cliente)->first();
+            $pedido->id_vendedor = Usuarios::where('id','=',$pedido->id_vendedor)->first();
+        }
+        return view('facturacion.pedidos',array(
+            "referencias"=>$referencias,
+            "pedidos"=>$pedidos
+        ));
+    }
+
+    public function updatePedidos(Request $request){
+        $pedido = Facturas::where('id','=',$request->id_documento)->first();
+        $pedido->estado = $request->estado; //FACTURADO / RECHAZADO
+        $pedido->save();
+    }
+
+    /**
+     * DEVOLUCIONES FACTURA
+     */
+    public function devoluciones(){
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $facturas = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','-')->whereNotIn('estado',['FACTURADO','RECHAZADO'])->get(); //estado=FACTURADO
+        foreach($facturas as $factura){
+            $factura->id_documento = Documentos::where('id','=',$factura->id_documento)->first();
+            $factura->id_cliente = Directorios::where('id','=',$factura->id_cliente)->first();
+            $factura->id_vendedor = Usuarios::where('id','=',$factura->id_vendedor)->first();
+        }
+        return view('facturacion.devoluciones',array(
+            "referencias"=>$referencias,
+            "facturas"=>$facturas
+        ));
+    }
+
+    public function updateDevoluciones(Request $request){
+        $pedido = Facturas::where('id','=',$request->id_documento)->first();
+        $pedido->estado = $request->estado; //FACTURADO / RECHAZADO
+        $pedido->save();
+    }
+
+    public function venta($id_documento){
+        $documento = Documentos::where('id','=',$id_documento)->first();
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $ciudades = Ciudades::all();
+        
+        return view('facturacion.venta',array(
+            "referencias"=>$referencias,
+            "documento"=>$documento,
+            "ciudades"=>$ciudades
+        ));
+    }
 }

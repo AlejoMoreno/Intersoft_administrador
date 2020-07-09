@@ -227,9 +227,18 @@ class DirectoriosController extends Controller
     }
 
     public function searchText(Request $request){
-        $directorios = Directorios::where('razon_social','like','%'.$request->texto.'%')
-                ->where('id_directorio_tipo_tercero', '=', '2')
-                ->where('id_empresa','=',Session::get('id_empresa'))->get();
+        if(isset($request->nit)){
+            $directorios = Directorios::where('nit','=',$request->nit)
+                                      ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->where('id_directorio_tipo_tercero', '=', '2')
+                                      ->get();
+        }
+        else{
+            $directorios = Directorios::where('razon_social','like','%'.$request->texto.'%')
+                            ->where('id_directorio_tipo_tercero', '=', '2')
+                            ->where('id_empresa','=',Session::get('id_empresa'))->get();
+        }
+        
         return  array(
             "result"=>"success",
             "body"=>$directorios);
@@ -262,7 +271,12 @@ class DirectoriosController extends Controller
         $directorios->id_usuario= "1";
         $directorios->id_directorio_tipo= "1";
         $directorios->id_directorio_clase= "1";
-        $directorios->id_directorio_tipo_tercero= "3";
+        if(isset($request->id_directorio_tipo_tercero)){
+            $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
+        }
+        else{
+            $directorios->id_directorio_tipo_tercero= "3";
+        }
         $directorios->id_empresa	 	= Session::get('id_empresa');
         $directorios->save();
 

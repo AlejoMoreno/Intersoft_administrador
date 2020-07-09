@@ -823,13 +823,7 @@ SIGNO MENOS
                   }
                   </script>
               
-              <label>Nombre:</label>
-              <input type="text" name="nombre_tercero" onkeyup="documentos.searchDirectorio2(event);" id="nombre_tercero" class="form-control">
-              <ul id="listDirectorio2">
-                @foreach ($directorios as $obj)
-                <li><a href="javascript:;" onclick="documentos.seleccionDirectorio({{ $obj }})">{{ $obj['razon_social'] }}</a></li>
-                @endforeach
-              </ul>
+              
             </div>
           </div>
           <div class="col-sm-6">
@@ -1007,6 +1001,682 @@ SIGNO MENOS
   }
 }
 ?>
+
+
+
+
+
+<?php 
+
+/**
+ * --------------------------------PASAR DOCUMENTO A FACTURA ---------------------------
+ */
+
+?>
+
+<?php
+
+  
+  if(isset($_GET['pasarafactura'])){ //si es un signo de = es decir no afecta a el inventario
+
+    //variables importantes para la vista
+
+    $nombre_directorio = "Clientes";
+    
+    $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+
+    //traer las referencias dependiendo el tipo de entrada
+    // $referencias =  DB::SELECT("SELECT * FROM `referencias` WHERE id IN (SELECT id_referencia FROM `lotes` where sucursal = ".Session::get('sucursal').") AND saldo > 0");
+    $referencias = App\Referencias::where('saldo','>','0')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->get();
+
+
+    foreach ($referencias as $referencia) {
+      $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->
+                                      where('id_empresa','=',Session::get('id_empresa'))->get();
+    }
+    
+
+    $documentos = App\Documentos::where('nombre','like','%venta%')->first();
+
+    $pedido = App\Facturas::where('id','=',$_GET['pasarafactura'])->get();
+    foreach($pedido as $obj){
+      $obj->id_cliente = App\Directorios::where('id','=',$obj->id_cliente)->first();
+    }
+
+    $kardex = App\Kardex::where('id_factura','=',$_GET['pasarafactura'])->get();
+    foreach($kardex as $obj){
+      $obj->lotes = App\Lotes::where('id_referencia','=',$obj->id_referencia)->first();
+      $obj->id_referencia = App\Referencias::where('id','=',$obj->id_referencia)->first();
+    }
+ 
+
+    //buscar el mayor numero del documento que existe
+    $factura = App\Facturas::where('prefijo',$documentos->prefijo)->
+                            where('id_documento',$documentos->id)->
+                            where('id_empresa','=',Session::get('id_empresa'))->
+                            orderBy('numero', 'desc')->get();
+    if(sizeof($factura) == 0){
+      $factura->numero = 0;
+    }
+    else{
+      $factura = $factura[0];
+    }
+
+
+
+
+
+    ?>
+
+
+    <body>
+
+    <div class="jumbotron text-center" style="background: #4262d3;color:white;">
+      <h3><?php echo $documentos->nombre; ?></h3>
+      <input type="hidden" name="idDocumento" id="idDocumento" value="<?php echo $documentos->id ?>">
+      <input type="hidden" name="signoDocumento" id="signoDocumento" value="-">
+    </div>
+      
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card"> 
+            <div class="row">
+              <div class="col-sm-2">
+                <label>Prefijo: </label><input type="text" name="prefijo" id="prefijo" class="form-control" value="<?php echo $documentos->prefijo; ?>" onkeyup="documentos.siguiente(event,'numero');" disabled>
+              </div>
+              <div class="col-sm-2">
+                <label>Número de documento: </label><input type="number" name="numero" id="numero" class="form-control" value="<?php echo intval($factura->numero + 1); ?>" onkeyup="documentos.siguiente(event,'cedula_tercero');" disabled>
+              </div>
+            </div>
+            
+            <div class="row titulo" >
+              <div class="col-sm-6">
+                <h3>{{ $nombre_directorio }}:</h3>
+                <div>
+                  <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
+                  <label>Cédula: </label>
+                  <input type="text" value="{{ $pedido[0]->id_cliente->nit }}" name="cedula_tercero"  id="cedula_tercero" class="form-control" >
+                  
+                  <p style="font-size:10px">El cliente no se pude modificar</p>
+                  <script>
+                  function buscarcliente(texto){
+                    console.log(texto);
+                    if(texto.length > 5){
+                        var urls = "/administrador/diretorios/search/searchText";
+                        parametros = {
+                                "texto" : texto
+                            };
+                            $.ajax({
+                                data:  parametros,
+                                url:   urls,
+                                type:  'get',
+                                beforeSend: function () {
+                                    $('#resultado').html('<p>Espere porfavor</p>');
+                                },
+                                success:  function (response) {
+                                    console.log(response);
+                                    $('#listDirectorio').html();
+                                    for (var i=0; i < response.body.length; i++){
+                                        var valor = response.body[i];
+                                        optionText = valor.nit + '-' + valor.razon_social;
+                                        optionValue = valor.nit;
+                                        //console.log(optionText + '  ' + optionValue);
+                                        $('#listDirectorio').append('<option value="'+optionValue+'">'+optionText+'</option>');
+                                    }
+                                }
+                            });
+                    }
+                  }
+                  </script>
+                  
+                </div>
+                <p>¿Desea vincular a un tercero adicional a este documento? <div class="btn btn-success">SI</div><div class="btn btn-warning">NO</div></p>
+              </div>
+              <div class="col-sm-6">
+                <h3>Fecha Documento:</h3>
+                <div>
+                  <label>Fecha:</label>
+                  <input type="date" name="fecha" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                  <label>Fecha vencimiento:</label>
+                  <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                  <label>Vendedor:</label>
+                  <input type="text" name="id_modificado" id="id_modificado" list="usuarios" class="form-control" placeholder="Esciba el nombre del vendedor" onkeyup="documentos.siguiente(event,'search_referencia');">
+                  <datalist id="usuarios">
+                    @foreach ($usuarios as $obj)
+                    <option value="{{ $obj['id'] }}">{{ $obj['ncedula'] }} / {{ $obj['nombre'] }}</option>
+                    @endforeach
+                  </datalist>
+                  <script>
+                    document.getElementById("id_modificado").value = localStorage.getItem("Id_usuario");
+                  </script>
+                </div>
+                <div style="width: 100%;height: 20px;"></div>
+              </div>
+              <div class="col-sm-6"> 
+                <label>Tipo Pago: </label>
+                <select id="tipo_pago" name="tipo_pago" class="form-control">                      
+                  @foreach ($tipo_pagos as $obj)
+                  <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="row" style="overflow-x: scroll;overflow-y: scroll;height: 500px;">
+                  <div style="position: fixed;width: 100%;left: 0px;bottom: -10px; height: 150px;background: white;z-index: 200;overflow: scroll;">
+                    <table class="table" id="lista_referencias" >
+                      <tr>
+                        <th>Añadir</th>
+                        <th><input type="text" id="search_referencia" onkeyup="documentos.searchReferencia(1,'search_referencia');" name="" class="form-control" style="width: 100px;" placeholder="REFERNCIA"></th>
+                        <th><input type="text" id="search_codigobarras" onkeyup="documentos.searchReferencia(2,'search_codigobarras');" name="" class="form-control" style="width: 100px;" placeholder="CODIGO BARRAS"></th>
+                        <th><input type="text" id="search_descrpcion" onkeyup="documentos.searchReferencia(3,'search_descrpcion');" name="" class="form-control" style="width: 100px;" placeholder="DESCRIPCION"></th>
+                        <th>Stock_min.</th>
+                        <th>Stock_max.</th>
+                        <th>iva.</th>
+                        <th>Costo.</th>
+                        <th>Saldo.</th>
+                        <th>Añadir</th>
+                      </tr>
+                      @foreach ($referencias as $obj)
+                      <tr>
+                        <td><div onclick="documentos.seleccionReferencia({{ $obj }})" id="referencia_click" class="btn btn-success" >+</div></td>
+                        <td>{{ $obj['codigo_interno'] }}</td>
+                        <td>{{ $obj['codigo_barras'] }}</td>
+                        <td>{{ $obj['descripcion'] }}</td>
+                        <td>{{ $obj['stok_minimo'] }}</td>
+                        <td>{{ $obj['stok_maximo'] }}</td>
+                        <td>{{ $obj['iva'] }}</td>
+                        <td>{{ $obj['costo_promedio'] }}</td>
+                        <td>{{ $obj['saldo'] }}</td>
+                        <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                      </tr>
+                      @endforeach
+                    </table>
+                  </div>
+                  <div class="col-sm-12" style="height: 30px;"></div>
+                    <p style="margin-left: 20px;"><br><br>Tabla que indica los productos que serán incorporados en el documento:</p> 
+                    <table id="tabla_productos" class="table table-bordered" style="width: 96%;margin-left: 2%;">
+                      <thead>
+                        <tr>
+                          <th><input type="checkbox" name="" id="checkbox_noname"> </th>
+                          <th>REFERNCIA</th>
+                          <th>DESCRIPCIÓN</th>
+                          <th>LOTE</th>
+                          <th></th>
+                          <th></th>
+                          <th>CANTIDAD</th>
+                          <th>DSC (%)</th>
+                          <th>VALOR_UNIDAD.</th>
+                          <th>IVA</th>
+                          <th>VALOR_TOTAL.</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <?php $cont=1; ?>
+                      @foreach ($kardex as $obj)
+                      
+                      <tr>
+                        <td><input type="checkbox" id="{{ $cont }}_check" class="form-control" onchange="documentos.seleccion_renglon(<?php echo $cont; ?>);"></td>
+                        <td><input type="hidden" id="{{ $cont }}_producto" value="{{ $obj->id_referencia->id }}">{{ $obj->id_referencia->codigo_interno }}</td>
+                        <td><input type="hidden" id="{{ $cont }}_saldo" value="{{ $obj->id_referencia->saldo }}"><input type="hidden" id="1_maxmin" value="0_1">{{ $obj->id_referencia->descripcion }}</td>
+                        <td><input type="text" class="form-control" value="{{ $obj['lotes']['id'] }}" placeholder="Ej.(1887628920)" id="{{ $cont }}_lote"></td>
+                        <td><input type="text" class="form-control" value="{{ $obj['lotes']['serial'] }}" placeholder="Ej.(18-87-6289-20)" id="{{ $cont }}_serial"></td>
+                        <td><input type="date" class="form-control" value="{{ $obj['lotes']['fecha_vence_lote'] }}" style="width:100px" id="{{ $cont }}_fecha_vence"></td>
+                        <td><input type="number" onkeyup="documentos.calcular(<?php echo $cont; ?>)" class="form-control" value="{{ $obj->cantidad }}" placeholder="Ej.(1)" id="1_cantidad"></td>
+                        <td><input type="number" onkeyup="documentos.calcular(<?php echo $cont; ?>)" class="form-control" value="{{ $obj->descuento }}" placeholder="Ej.(10)" id="1_descuento"></td>
+                        <td><input type="number" onkeyup="documentos.calcular(<?php echo $cont; ?>)" class="form-control" value="<?php echo ($obj->subtotal/$obj->cantidad) ?>" id="<?php echo $cont; ?>_valor"></td>
+                        <td><span id="<?php echo $cont; ?>_iva">0</span></td><td><input type="number" id="<?php echo $cont; ?>_valortotal" value="{{ $obj->subtotal }}" class="form-control" disabled=""></td>
+                      </tr>
+                      <?php $cont++; ?>
+                      @endforeach
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                Nota: <br>
+                Para <strong>agregar productos</strong> dirijase al boton más.<br>
+                Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
+                <div class="btn btn-danger" onclick="documentos.eliminar();">Eliminar</div><br>
+                Si ha <strong>terminado de registrar</strong> los productos dirijase al boton Guardar.<br><br><br>
+              </div>
+              <div class="col-sm-12">
+                <div class="row titulo">
+                  <div class="col-sm-3">
+                    <label>SUB.TOTAL</label>
+                    <input type="number" name="subtotal" id="subtotal" class="form-control" disabled="" value="{{ $pedido[0]->subtotal }}">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>IVA</label>
+                    <input type="number" name="iva" id="iva" class="form-control" disabled="" value="{{ $pedido[0]->iva }}">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>DESCUENTO</label>
+                    <input type="number" name="descuento" id="descuento" class="form-control" onkeyup="documentos.recorrer();" value="{{ $pedido[0]->descuento }}">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>FLETES</label>
+                    <input type="number" name="fletes" value="{{ $pedido[0]->fletes }}" id="fletes" onkeyup="documentos.recorrer();" class="form-control" >
+                  </div>
+                  <div class="col-sm-3">
+                    <label>RETEFUENTE</label>
+                    <input type="number" name="retefuente" value="{{ $pedido[0]->retefuente }}" id="retefuente" class="form-control" onkeyup="documentos.recorrer();">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>IMPOCONSUMO</label>
+                    <input type="number" name="impoconsumo" value="{{ $pedido[0]->impoconsumo }}" id="impoconsumo" class="form-control" onkeyup="documentos.recorrer();">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>Otro Impuesto</label>
+                    <input type="number" name="otro_impuesto" value="{{ $pedido[0]->otro_impuesto }}" id="otro_impuesto" class="form-control" onkeyup="documentos.recorrer();">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>TOTAL</label>
+                    <input type="number" name="total" id="total" class="form-control" disabled="" value="{{ $pedido[0]->total }}">
+                  </div>
+                  <div class="col-sm-12" style="height: 20px;"></div>
+                  <div class="col-sm-12">
+                    <label>CONDICIONES DE <?php echo $documentos->nombre; ?></label>
+                    <input id="observaciones" name="observaciones" class="form-control" onkeyup="documentos.enterObser(event);" value="{{ $pedido[0]->observaciones }}" >
+                  </div>
+                  <div class="col-sm-12" style="height: 20px;"></div>
+                  <div class="col-sm-12">
+                    <input type="hidden" value="{{ $documentos->nombre }} {{ $pedido[0]->prefijo }} {{ $pedido[0]->numero }}" id="pedidoID" name="pedidoID">
+                    <input type="hidden" value="{{ $_GET['pasarafactura'] }}" id="pasarafactura" name="pasarafactura">
+                    <div id="Guardar" class="btn btn-success form-control" onclick="documentos.save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
+                    <div id="imprimirPOST" onclick="documentos.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
+                    <div id="imprimirDOC" onclick="documentos.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
+                  </div>
+                  <div class="col-sm-12" style="height: 20px;"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+          $('#imprimirPOST').hide();
+          $('#imprimirDOC').hide();
+
+          $('#checkbox_noname').change(function(){
+            var tabla = document.getElementById("tabla_productos");
+            if($(this).is(":checked")){
+              for (var i=1;i < tabla.rows.length; i++){  
+                id = document.getElementById(tabla.rows[i].cells[0].getElementsByTagName("input")[0].id);
+                id.checked = true;
+                var padre = id.parentNode.parentNode;
+                padre.style.background = "#4262d3";
+                padre.style.color = "#ffffff";
+              }
+            }
+            else{
+              for (var i=1;i < tabla.rows.length; i++){  
+                id = document.getElementById(tabla.rows[i].cells[0].getElementsByTagName("input")[0].id);
+                id.checked = false;
+                var padre = id.parentNode.parentNode;
+                padre.style.background = "#ffffff";
+                padre.style.color = "#000000";
+              }
+            }
+          });
+        </script>
+
+
+    <?php
+  }
+?>
+
+
+
+
+
+
+<?php 
+
+/**
+ * --------------------------------DEVOLUCIONES ---------------------------
+ */
+
+?>
+
+<?php
+
+  
+  if(isset($_GET['devoluciones'])){ //si es un signo de = es decir no afecta a el inventario
+
+    //variables importantes para la vista
+
+    $nombre_directorio = "Clientes";
+    
+    $usuarios = App\Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+
+    //traer las referencias dependiendo el tipo de entrada
+    // $referencias =  DB::SELECT("SELECT * FROM `referencias` WHERE id IN (SELECT id_referencia FROM `lotes` where sucursal = ".Session::get('sucursal').") AND saldo > 0");
+    $referencias = App\Referencias::where('saldo','>','0')->
+                                    where('id_empresa','=',Session::get('id_empresa'))->get();
+
+
+    foreach ($referencias as $referencia) {
+      $referencia->lotes = App\Lotes::where('id_referencia',$referencia->id)->
+                                      where('id_empresa','=',Session::get('id_empresa'))->get();
+    }
+    
+
+    $documentos = App\Documentos::where('nombre','like','%venta%')->first();
+
+    $pedido = App\Facturas::where('id','=',$_GET['devoluciones'])->get();
+    foreach($pedido as $obj){
+      $obj->id_cliente = App\Directorios::where('id','=',$obj->id_cliente)->first();
+    }
+
+    $kardex = App\Kardex::where('id_factura','=',$_GET['devoluciones'])->get();
+    foreach($kardex as $obj){
+      $obj->lotes = App\Lotes::where('id_referencia','=',$obj->id_referencia)->first();
+      $obj->id_referencia = App\Referencias::where('id','=',$obj->id_referencia)->first();
+    }
+ 
+
+    //buscar el mayor numero del documento que existe
+    $factura = App\Facturas::where('prefijo',$documentos->prefijo)->
+                            where('id_documento',$documentos->id)->
+                            where('id_empresa','=',Session::get('id_empresa'))->
+                            orderBy('numero', 'desc')->get();
+    if(sizeof($factura) == 0){
+      $factura->numero = 0;
+    }
+    else{
+      $factura = $factura[0];
+    }
+
+
+
+
+
+    ?>
+
+
+    <body>
+
+    <div class="jumbotron text-center" style="background: #4262d3;color:white;">
+      <h3>Devoluciones</h3>
+      <input type="hidden" name="idDocumento" id="idDocumento" value="<?php echo $documentos->id ?>">
+      <input type="hidden" name="signoDocumento" id="signoDocumento" value="+">
+    </div>
+      
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="card"> 
+            <div class="row">
+              <div class="col-sm-2">
+                <label>Prefijo: </label><input type="text" name="prefijo" id="prefijo" class="form-control" value="<?php echo $documentos->prefijo; ?>" onkeyup="documentos.siguiente(event,'numero');" disabled>
+              </div>
+              <div class="col-sm-2">
+                <label>Número de documento: </label><input type="number" name="numero" id="numero" class="form-control" value="<?php echo intval($factura->numero + 1); ?>" onkeyup="documentos.siguiente(event,'cedula_tercero');" disabled>
+              </div>
+            </div>
+            
+            <div class="row titulo" >
+              <div class="col-sm-6">
+                <h3>{{ $nombre_directorio }}:</h3>
+                <div>
+                  <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
+                  <label>Cédula: </label>
+                  <input type="text" value="{{ $pedido[0]->id_cliente->nit }}" name="cedula_tercero"  id="cedula_tercero" class="form-control" >
+                  
+                  <p style="font-size:10px">El cliente no se pude modificar</p>
+                  <script>
+                  function buscarcliente(texto){
+                    console.log(texto);
+                    if(texto.length > 5){
+                        var urls = "/administrador/diretorios/search/searchText";
+                        parametros = {
+                                "texto" : texto
+                            };
+                            $.ajax({
+                                data:  parametros,
+                                url:   urls,
+                                type:  'get',
+                                beforeSend: function () {
+                                    $('#resultado').html('<p>Espere porfavor</p>');
+                                },
+                                success:  function (response) {
+                                    console.log(response);
+                                    $('#listDirectorio').html();
+                                    for (var i=0; i < response.body.length; i++){
+                                        var valor = response.body[i];
+                                        optionText = valor.nit + '-' + valor.razon_social;
+                                        optionValue = valor.nit;
+                                        //console.log(optionText + '  ' + optionValue);
+                                        $('#listDirectorio').append('<option value="'+optionValue+'">'+optionText+'</option>');
+                                    }
+                                }
+                            });
+                    }
+                  }
+                  </script>
+                  
+                </div>
+                <p>¿Desea vincular a un tercero adicional a este documento? <div class="btn btn-success">SI</div><div class="btn btn-warning">NO</div></p>
+              </div>
+              <div class="col-sm-6">
+                <h3>Fecha Documento:</h3>
+                <div>
+                  <label>Fecha:</label>
+                  <input type="date" name="fecha" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                  <label>Fecha vencimiento:</label>
+                  <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                  <label>Vendedor:</label>
+                  <input type="text" name="id_modificado" id="id_modificado" list="usuarios" class="form-control" placeholder="Esciba el nombre del vendedor" onkeyup="documentos.siguiente(event,'search_referencia');">
+                  <datalist id="usuarios">
+                    @foreach ($usuarios as $obj)
+                    <option value="{{ $obj['id'] }}">{{ $obj['ncedula'] }} / {{ $obj['nombre'] }}</option>
+                    @endforeach
+                  </datalist>
+                  <script>
+                    document.getElementById("id_modificado").value = localStorage.getItem("Id_usuario");
+                  </script>
+                </div>
+                <div style="width: 100%;height: 20px;"></div>
+              </div>
+              <div class="col-sm-6"> 
+                <label>Tipo Pago: </label>
+                <select id="tipo_pago" name="tipo_pago" class="form-control">                      
+                  @foreach ($tipo_pagos as $obj)
+                  <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="row" style="overflow-x: scroll;overflow-y: scroll;height: 500px;">
+                  <div style="position: fixed;width: 100%;left: 0px;bottom: -10px; height: 150px;background: white;z-index: 200;overflow: scroll;">
+                    <table class="table" id="lista_referencias" >
+                      <tr>
+                        <th>Añadir</th>
+                        <th><input type="text" id="search_referencia" onkeyup="documentos.searchReferencia(1,'search_referencia');" name="" class="form-control" style="width: 100px;" placeholder="REFERNCIA"></th>
+                        <th><input type="text" id="search_codigobarras" onkeyup="documentos.searchReferencia(2,'search_codigobarras');" name="" class="form-control" style="width: 100px;" placeholder="CODIGO BARRAS"></th>
+                        <th><input type="text" id="search_descrpcion" onkeyup="documentos.searchReferencia(3,'search_descrpcion');" name="" class="form-control" style="width: 100px;" placeholder="DESCRIPCION"></th>
+                        <th>Stock_min.</th>
+                        <th>Stock_max.</th>
+                        <th>iva.</th>
+                        <th>Costo.</th>
+                        <th>Saldo.</th>
+                        <th>Añadir</th>
+                      </tr>
+                      @foreach ($referencias as $obj)
+                      <tr>
+                        <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                        <td>{{ $obj['codigo_interno'] }}</td>
+                        <td>{{ $obj['codigo_barras'] }}</td>
+                        <td>{{ $obj['descripcion'] }}</td>
+                        <td>{{ $obj['stok_minimo'] }}</td>
+                        <td>{{ $obj['stok_maximo'] }}</td>
+                        <td>{{ $obj['iva'] }}</td>
+                        <td>{{ $obj['costo_promedio'] }}</td>
+                        <td>{{ $obj['saldo'] }}</td>
+                        <td><div onclick="documentos.seleccionReferencia({{ $obj }})" class="btn btn-success" >+</div></td>
+                      </tr>
+                      @endforeach
+                    </table>
+                  </div>
+                  <div class="col-sm-12" style="height: 30px;"></div>
+                    <p style="margin-left: 20px;"><br><br>Tabla que indica los productos que serán incorporados en el documento:</p> 
+                    <table id="tabla_productos" class="table table-bordered" style="width: 96%;margin-left: 2%;">
+                      <thead>
+                        <tr>
+                          <th><input type="checkbox" name="" id="checkbox_noname"> </th>
+                          <th>REFERNCIA</th>
+                          <th>DESCRIPCIÓN</th>
+                          <th>LOTE</th>
+                          <th></th>
+                          <th></th>
+                          <th>CANTIDAD</th>
+                          <th>DSC (%)</th>
+                          <th>VALOR_UNIDAD.</th>
+                          <th>IVA</th>
+                          <th>VALOR_TOTAL.</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <?php $cont=1; ?>
+                      @foreach ($kardex as $obj)
+                      
+                      <tr>
+                        <td><input type="checkbox" id="{{ $cont }}_check" class="form-control" onchange="documentos.seleccion_renglon(<?php echo $cont; ?>);"></td>
+                        <td><input type="hidden" id="{{ $cont }}_producto" value="{{ $obj->id_referencia->id }}">{{ $obj->id_referencia->codigo_interno }}</td>
+                        <td><input type="hidden" id="{{ $cont }}_saldo" value="{{ $obj->id_referencia->saldo }}"><input type="hidden" id="1_maxmin" value="0_1">{{ $obj->id_referencia->descripcion }}</td>
+                        <td><input type="text" class="form-control" value="{{ $obj['lotes']['id'] }}" placeholder="Ej.(1887628920)" id="{{ $cont }}_lote"></td>
+                        <td><input type="text" class="form-control" value="{{ $obj['lotes']['serial'] }}" placeholder="Ej.(18-87-6289-20)" id="{{ $cont }}_serial"></td>
+                        <td><input type="date" class="form-control" value="{{ $obj['lotes']['fecha_vence_lote'] }}" style="width:100px" id="{{ $cont }}_fecha_vence"></td>
+                        <td><input type="number" onkeyup="documentos.calcular(<?php echo $cont; ?>)" class="form-control" value="{{ $obj->cantidad }}" placeholder="Ej.(1)" id="{{ $cont }}_cantidad"></td>
+                        <td><input type="number" onkeyup="documentos.calcular(<?php echo $cont; ?>)" class="form-control" value="{{ $obj->descuento }}" placeholder="Ej.(10)" id="{{ $cont }}_descuento"></td>
+                        <td><input type="number" onkeyup="documentos.calcular(<?php echo $cont; ?>)" class="form-control" value="{{ $obj->subtotal }}" id="<?php echo $cont; ?>_valor"></td>
+                        <td><span id="<?php echo $cont; ?>_iva">0</span></td><td><input type="number" id="<?php echo $cont; ?>_valortotal" value="{{ $obj->total }}" class="form-control" disabled=""></td>
+                      </tr>
+                      <?php $cont++; ?>
+                      @endforeach
+                      </tbody>
+                    </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-12">
+                Nota: <br>
+                Para <strong>agregar productos</strong> dirijase al boton más.<br>
+                Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
+                <div class="btn btn-danger" onclick="documentos.eliminar();">Eliminar</div><br>
+                Si ha <strong>terminado de registrar</strong> los productos dirijase al boton Guardar.<br><br><br>
+              </div>
+              <div class="col-sm-12">
+                <div class="row titulo">
+                  <div class="col-sm-3">
+                    <label>SUB.TOTAL</label>
+                    <input type="number" name="subtotal" id="subtotal" class="form-control" disabled="" value="{{ $pedido[0]->subtotal }}">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>IVA</label>
+                    <input type="number" name="iva" id="iva" class="form-control" disabled="" value="{{ $pedido[0]->iva }}">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>DESCUENTO</label>
+                    <input type="number" name="descuento" id="descuento" class="form-control" disabled="" value="{{ $pedido[0]->descuento }}">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>FLETES</label>
+                    <input type="number" name="fletes" value="{{ $pedido[0]->fletes }}" id="fletes" onkeyup="documentos.recorrer();" class="form-control" >
+                  </div>
+                  <div class="col-sm-3">
+                    <label>RETEFUENTE</label>
+                    <input type="number" name="retefuente" value="{{ $pedido[0]->retefuente }}" id="retefuente" class="form-control" onkeyup="documentos.recorrer();">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>IMPOCONSUMO</label>
+                    <input type="number" name="impoconsumo" value="{{ $pedido[0]->impoconsumo }}" id="impoconsumo" class="form-control" onkeyup="documentos.recorrer();">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>Otro Impuesto</label>
+                    <input type="number" name="otro_impuesto" value="{{ $pedido[0]->otro_impuesto }}" id="otro_impuesto" class="form-control" onkeyup="documentos.recorrer();">
+                  </div>
+                  <div class="col-sm-3">
+                    <label>TOTAL</label>
+                    <input type="number" name="total" id="total" class="form-control" disabled="" value="{{ $pedido[0]->total }}">
+                  </div>
+                  <div class="col-sm-12" style="height: 20px;"></div>
+                  <div class="col-sm-12">
+                    <label>CONDICIONES DE <?php echo $documentos->nombre; ?></label>
+                    <input id="observaciones" name="observaciones" class="form-control" onkeyup="documentos.enterObser(event);" value="{{ $pedido[0]->observaciones }}" >
+                  </div>
+                  <div class="col-sm-12" style="height: 20px;"></div>
+                  <div class="col-sm-12">
+                    <input type="hidden" value="{{ $documentos->nombre }} {{ $pedido[0]->prefijo }} {{ $pedido[0]->numero }}" id="pedidoID" name="pedidoID">
+                    <input type="hidden" value="{{ $_GET['devoluciones'] }}" id="devoluciones" name="devoluciones">
+                    <div id="Guardar" class="btn btn-success form-control" onclick="documentos.save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
+                    <div id="imprimirPOST" onclick="documentos.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
+                    <div id="imprimirDOC" onclick="documentos.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
+                  </div>
+                  <div class="col-sm-12" style="height: 20px;"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+          $('#imprimirPOST').hide();
+          $('#imprimirDOC').hide();
+
+          $('#checkbox_noname').change(function(){
+            var tabla = document.getElementById("tabla_productos");
+            if($(this).is(":checked")){
+              for (var i=1;i < tabla.rows.length; i++){  
+                id = document.getElementById(tabla.rows[i].cells[0].getElementsByTagName("input")[0].id);
+                id.checked = true;
+                var padre = id.parentNode.parentNode;
+                padre.style.background = "#4262d3";
+                padre.style.color = "#ffffff";
+              }
+            }
+            else{
+              for (var i=1;i < tabla.rows.length; i++){  
+                id = document.getElementById(tabla.rows[i].cells[0].getElementsByTagName("input")[0].id);
+                id.checked = false;
+                var padre = id.parentNode.parentNode;
+                padre.style.background = "#ffffff";
+                padre.style.color = "#000000";
+              }
+            }
+          });
+        </script>
+
+
+    <?php
+  }
+?>
+
+
+
+
+
+
+
 
 <div style="width: 100%;height: 200px;"></div>
 

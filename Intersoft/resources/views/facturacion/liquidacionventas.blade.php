@@ -54,8 +54,6 @@
                     <table class="table table-hover table-striped"  id="datos">
                             <thead>
                             <tr>
-                                <th>Documento</th>
-                                <th>Sucursal</th>
                                 <th>#</th>
                                 <th>Tercero</th>
                                 <th>Nombre</th>
@@ -81,8 +79,6 @@
                                     @foreach($facturas as $obj)
                                     <?php $total = $total + ( ($obj['subtotal']*$valor)/100 );  ?>
                                     <tr>
-                                        <td>{{ $obj['id_documento']['nombre'] }} {{ $obj->prefijo }}</td>
-                                        <td>{{ $obj['id_sucursal']['nombre'] }}</td>
                                         <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj['id'] }}')" class="btn btn-success">{{ $obj['numero'] }}</a></td>
                                         <td>{{ $obj['id_tercero'] }}</td>
                                         <td>{{ $obj['id_cliente']['razon_social'] }}</td>

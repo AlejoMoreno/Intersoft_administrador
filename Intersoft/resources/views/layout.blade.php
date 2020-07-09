@@ -159,7 +159,9 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
 ?>
 
 
-<body onbeforeunload="config.leave_page()" style="background:#ededed;">
+<body onbeforeunload="config.leave_page()" style="background:#ededed;overflow-x:hidden;">
+
+    <div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;top:0px;left:0px;"><div class="loader"></div></div>
 
     <?php 
 
@@ -281,6 +283,10 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                             <li><a href="javascript:;" onclick="config.Redirect('/facturacion/estadisticaventas');">Estadistica Ventas</a></li>
                             <li><a href="javascript:;" onclick="config.Redirect('/facturacion/zona');">Zonas Asingada</a></li>
                             <li role="separator" class="divider"></li>
+                            <li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/pedidos');">Pasar PEDIDOS a FACTURA</a></div></li>
+                            <li role="separator" class="divider"></li>
+                            <li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/devoluciones');">DEVOLUCIONES</a></div></li>
+                            <li role="separator" class="divider"></li>
                             @foreach ($documentosSalida as $obj)
                                 <?php 
                                 if($obj["signo"]=='+'){
@@ -398,7 +404,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
 
     <div class="content row" style="background:#ededed;">
         @if(Session::has('user_id'))
-        <section class="col-md-10 row">
+        <section class="col-md-11 row">
             <article class="col-md-12">
                 <!-- INICIO ARTICULO -->
                 @yield('content')
@@ -406,7 +412,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
             </article>
         </section>
         @else
-        <section class="col-md-10 row">
+        <section class="col-md-12 row">
             <article class="col-md-12">
                 <div class="card">
                     <div class="header">
@@ -419,44 +425,46 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
         @endif
     </div>
     
-    <!-- FORTER ENTER-->
-    <footer class="footer">
-        <div class="container-fluid">
-            <nav class="pull-left">
-                <ul>
-                    <li>
-                        <a href="#">
-                            Manual
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://wakusoft.com">
-                            Terminos y Condiciones
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <?php $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first(); ?>
-                            <small><strong>Empresa: </strong>{{ $empresa->razon_social }}</small>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <small><strong>Sucursal: </strong>{{ Session::get('sucursalNombre') }}</small>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <img style="width: 20%;maring-left:20%" src="/assets/img/logo_intersoft1.png">
-            <p class="copyright pull-right">
-                &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://wakusoft.com">wakusoft.com</a>, derechos reservados
-            </p>
+    <div style="position:fixed;width:100%;left:0px;z-index:100">
+        <!-- FORTER ENTER-->
+        <div class="footer">
+            <div class="container-fluid">
+                <nav class="pull-left">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                Manual
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://wakusoft.com">
+                                Terminos y Condiciones
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <?php $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first(); ?>
+                                <small><strong>Empresa: </strong>{{ $empresa->razon_social }}</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <small><strong>Sucursal: </strong>{{ Session::get('sucursalNombre') }}</small>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                <img style="width: 20%;maring-left:20%" src="/assets/img/logo_intersoft1.png">
+                <p class="copyright pull-right">
+                    &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://wakusoft.com">wakusoft.com</a>, derechos reservados
+                </p>
+            </div>
         </div>
-    </footer>
-    <!-- FORTER FIN-->
+        <!-- FORTER FIN-->
+    </div>
 
 
-<div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;"><div class="loader"></div></div>
+
 
 
 <script>

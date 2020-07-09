@@ -38,12 +38,20 @@ Route::get('/index', function(){
         $zona->id_usuario = App\Usuarios::where('id','=',$zona->id_usuario)->first();
         $zona->id_tercero = App\Directorios::where('id','=',$zona->id_tercero)->first();
     }
-    $facturas = App\Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('id_vendedor','=',Session::get('user_id'))->where('saldo','>',0)->get();
+    $facturas = App\Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('id_vendedor','=',Session::get('user_id'))->get();
     $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+    $to = date("Y-m-d");
+    $from = date("Y-m-d",strtotime($to."- 2 month"));
+    $lotes = App\Lotes::where('fecha_vence_lote','<=',$from)->where('id_empresa','=',Session::get('id_empresa'))->get();
+    foreach($lotes as $lote){
+        $lote->id_referencia = App\Referencias::where('id','=',$lote->id_referencia)->first();
+        $lote->id_sucursal = App\Sucursales::where('id','=',$lote->id_sucursal)->first();
+    }
     return view('index', array(
         "zona"=>$zonas,
         "facturas"=>$facturas,
-        "referencias"=>$referencias
+        "referencias"=>$referencias,
+        "lotes"=>$lotes
     ));
 });
 
@@ -114,6 +122,11 @@ Route::get('/facturacion/zonadelete/{id}', 'UsuariosController@deleteZonas');
 Route::get('/facturacion/liquidacionventas', 'UsuariosController@liquidacionVentas');
 Route::get('/facturacion/liquidacionventas/{id}/{valor}', 'UsuariosController@liquidacionVentas1');
 Route::get('/facturacion/estadisticaventas', 'UsuariosController@estadisticaVentas');
+Route::get('/facturacion/pedidos', 'FacturasController@pedidos');
+Route::post('/facturacion/pedidosUpdate', 'FacturasController@updatePedidos');
+Route::get('/facturacion/devoluciones', 'FacturasController@devoluciones');
+Route::post('/facturacion/devolucionesUpdate', 'FacturasController@updateDevoluciones');
+Route::get('/facturacion/venta/{id_documento}', 'FacturasController@venta');
 
 
 /*
@@ -252,6 +265,7 @@ Route::post('/administrador/directorios/create', 'DirectoriosController@create')
 Route::post('/administrador/directorios/update', 'DirectoriosController@update');
 Route::post('/administrador/diretorios/search/search', 'DirectoriosController@search');
 Route::get('/administrador/diretorios/search/searchText', 'DirectoriosController@searchText');
+Route::post('/administrador/diretorios/addtercero', 'DirectoriosController@addTercero');
 
 //calendarios
 Route::get('/calendario', 'CalendariosController@index');
@@ -320,7 +334,7 @@ Route::post('/inventario/clasificaciones/update', 'ClasificacionesController@upd
 //referencias
 Route::get('/inventario/referencias', 'ReferenciasController@index');
 Route::get('/inventario/referencias/all', 'ReferenciasController@all');
-Route::get('/inventario/referencias/{id}', 'ReferenciasController@formcreate');
+Route::get('/inventario/referencias/{id}', 'ReferenciasController@showone');
 Route::get('/inventario/referencias/delete/{id}', 'ReferenciasController@delete');
 Route::get('/inventario/referencias/update/{id}', 'ReferenciasController@showupdate');
 Route::post('/inventario/referencias/create', 'ReferenciasController@create');
@@ -465,6 +479,7 @@ Route::get('/documentos/imprimirpost/{id}', 'FacturasController@imprimirpost');
 Route::get('/documentos/anular/{id}', 'FacturasController@anular');
 Route::get('/documentos/eliminar/{id}', 'FacturasController@eliminar');
 
+Route::get('/kardex/pedidos/{id_documento}', 'KardexController@pedidos');
 Route::post('/kardex/saveDocument', 'KardexController@saveDocument');
 Route::post('/factura/saveDocument', 'FacturasController@saveDocument');
 Route::get('/kardex/show/{id}', 'KardexController@showid');

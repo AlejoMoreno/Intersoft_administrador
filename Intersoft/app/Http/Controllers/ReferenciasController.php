@@ -8,6 +8,7 @@ use Illuminate\Support\Collection as Collection;
 use App\Referencias;
 
 use App\Lineas;
+use App\Lotes;
 use App\Tipo_presentaciones;
 use App\Marcas;
 use App\Clasificaciones;
@@ -116,9 +117,14 @@ class ReferenciasController extends Controller
 		try{
 			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))
 							->where('id','=',$id)->first();
+			
+			$linea = Lineas::where('id','=',$obj->codigo_linea)->first();							
+			$lote = $lote = Lotes::where('id_referencia','=',$obj->id)->orderBy('fecha_vence_lote','desc')->get();
 			return  array(
 				"result"=>"success",
-				"body"=>$obj);
+				"body"=>$obj,
+				"lote"=>$lote,
+				"linea"=>$linea);
 		}
         catch (ModelNotFoundException $exception){
             return  array(

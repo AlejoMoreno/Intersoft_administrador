@@ -287,4 +287,12 @@ class KardexController extends Controller
     	]);
 	}
 
+
+	public function pedidos( $id_documento ){
+		$kardex = Kardex::where('id_documento','=',$id_documento)->get();
+		return array(
+			"kardex"=>$kardex
+		);
+	}
+
 }
