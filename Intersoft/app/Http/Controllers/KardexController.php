@@ -24,7 +24,7 @@ class KardexController extends Controller
 		//recorrer los productos
 		foreach($productosArr as $producto){
 			$obj_pro = KardexController::AddProducto($producto,$factura);
-			$asiento = KardexController::AsientoContable($obj_pro,$asiento_contable,$factura->signo);
+			//$asiento = KardexController::AsientoContable($obj_pro,$asiento_contable,$factura->signo);
 			//asientp contable
 			array_push($productos_insertados, $obj_pro);
 		}
