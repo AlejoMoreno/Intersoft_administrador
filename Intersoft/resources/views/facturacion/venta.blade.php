@@ -283,7 +283,7 @@ function saveFactura(){
         'observaciones' : $('#observaciones').val(),
         'estado' : 'ACTIVO',
         'saldo'  : $('#total').val(),
-        'tipo_pago' : 1, //$('#tipo_pago').val(),
+        'tipo_pago' : "4", //$('#tipo_pago').val(),
         'productosArr' : jsonArr
     };
     $.ajax({
