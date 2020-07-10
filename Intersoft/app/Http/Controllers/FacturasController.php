@@ -176,7 +176,7 @@ class FacturasController extends Controller
                             $contabilidad->id_empresa = Session::get('id_empresa');	
 
                             $contabilidad->tipo_transaccion = $tipo_transaccion;
-                            $contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
+                            //$contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
                             $contabilidad->valor_transaccion = $obj_c->total;
                             //$asiento_contable = ContabilidadesController::register($contabilidad);
                             $asiento_contable = $contabilidad->save();
@@ -193,7 +193,7 @@ class FacturasController extends Controller
                             $contabilidad->id_empresa = Session::get('id_empresa');	
 
                             $contabilidad->tipo_transaccion = $tipo_transaccion_2;
-                            $contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
+                            //$contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
                             $contabilidad->valor_transaccion = $obj_c->total;
                             //$asiento_contable = ContabilidadesController::register($contabilidad);
                             $asiento_contable = $contabilidad->save();
