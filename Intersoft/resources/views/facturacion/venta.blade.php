@@ -28,6 +28,7 @@
     <input type="hidden" id="signoDocumento" value="{{ $documento['signo'] }}">
 </div>
 
+<?php $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get(); ?>
 <?php if(isset($_GET['nit'])){ $nit = $_GET['nit']; }else{ $nit="";} ?>
 
 <div class="row top-11-w">
@@ -140,6 +141,12 @@
         </div>
         <div class="col-sm-12">
         <div class="row titulo">
+        <label>Tipo Pago: </label>
+                <select id="tipo_pago" name="tipo_pago" class="form-control">                      
+                  @foreach ($tipo_pagos as $obj)
+                  <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                  @endforeach
+                </select>
             <div class="col-sm-3">
             <label>SUB.TOTAL</label>
             <input type="number" id="subtotal" class="form-control" disabled="">
@@ -283,7 +290,7 @@ function saveFactura(){
         'observaciones' : $('#observaciones').val(),
         'estado' : 'ACTIVO',
         'saldo'  : $('#total').val(),
-        'tipo_pago' : "4", //$('#tipo_pago').val(),
+        'tipo_pago' : $('#tipo_pago').val(),
         'productosArr' : jsonArr
     };
     $.ajax({
