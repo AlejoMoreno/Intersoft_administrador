@@ -24,7 +24,7 @@ class KardexController extends Controller
 		//recorrer los productos
 		foreach($productosArr as $producto){
 			$obj_pro = KardexController::AddProducto($producto,$factura);
-			//$asiento = KardexController::AsientoContable($obj_pro,$asiento_contable,$factura->signo);
+			$asiento = KardexController::AsientoContable($obj_pro,$asiento_contable,$factura->signo);
 			//asientp contable
 			array_push($productos_insertados, $obj_pro);
 		}
@@ -249,11 +249,11 @@ class KardexController extends Controller
 
 		//dd($puc_val);
 
-		$asiento_contable1 = ContabilidadesController::register($contabilidad);
-		$asiento_contable1 = ContabilidadesController::register($contabilidad1);
-		$asiento_contable1 = ContabilidadesController::register($contabilidad2);
-		$asiento_contable1 = ContabilidadesController::register($contabilidad3);
-		$asiento_contable1 = ContabilidadesController::register($contabilidad4);
+		$asiento_contable1 = $contabilidad->save();//ContabilidadesController::register($contabilidad);
+		$asiento_contable1 = $contabilidad1->save();//ContabilidadesController::register($contabilidad1);
+		$asiento_contable1 = $contabilidad2->save();//ContabilidadesController::register($contabilidad2);
+		$asiento_contable1 = $contabilidad3->save();//ContabilidadesController::register($contabilidad3);
+		$asiento_contable1 = $contabilidad4->save();//ContabilidadesController::register($contabilidad4);
 		
         return $asiento_contable1;
     }

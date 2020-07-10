@@ -39,8 +39,7 @@ class FacturasController extends Controller
         //verificar si es en efectivo - credito o no aplica (como ajustes)
         $banderaTipoPago = true; // si tiene un tipo de pago, de lo contrario no se tiene en cuenta en contabilidad
         if($request->tipo_pago != 0){
-            $tipopago = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))
-                              ->where('id','=',$request->tipo_pago)->first();
+            $tipopago = Tipopagos::where('id','=',$request->tipo_pago)->first();
             if($tipopago->nombre == 'EFECTIVO'){
                 $request->saldo = 0;
             }
@@ -98,8 +97,7 @@ class FacturasController extends Controller
                 $numero = 1;
                 $tipocartera = "";
                 if($request->tipo_pago != 0){
-                    $tipopago = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))
-                                      ->where('id','=',$request->tipo_pago)->first();
+                    $tipopago = Tipopagos::where('id','=',$request->tipo_pago)->first();
                     if($tipopago->nombre == 'EFECTIVO'){
                         if($request->signo == '+'){
                             $carteras = Carteras::where('tipoCartera','=','EGRESO')->
@@ -180,7 +178,8 @@ class FacturasController extends Controller
                             $contabilidad->tipo_transaccion = $tipo_transaccion;
                             $contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
                             $contabilidad->valor_transaccion = $obj_c->total;
-                            $asiento_contable = ContabilidadesController::register($contabilidad);
+                            //$asiento_contable = ContabilidadesController::register($contabilidad);
+                            $asiento_contable = $contabilidad->save();
 
                             //registro contable egreso/ingreso contrapartida
                             $contabilidad = new Contabilidades();
@@ -196,7 +195,8 @@ class FacturasController extends Controller
                             $contabilidad->tipo_transaccion = $tipo_transaccion_2;
                             $contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
                             $contabilidad->valor_transaccion = $obj_c->total;
-                            $asiento_contable = ContabilidadesController::register($contabilidad);
+                            //$asiento_contable = ContabilidadesController::register($contabilidad);
+                            $asiento_contable = $contabilidad->save();
                         }
                     }
                 }
