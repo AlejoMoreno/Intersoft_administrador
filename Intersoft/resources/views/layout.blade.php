@@ -304,7 +304,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                                 ?> 
                                 <li>
                                     <div class="row">
-                                        <?php $url = '/facturacion/venta/'.$obj['id']; ?>
+                                        <?php $url = '/documentos/documento?signo='.$signo.'&nombre='.$obj['nombre'].'&id='.$obj['id'].'&prefijo='.$obj['prefijo'].'&numero='.$obj['num_presente']; ?>
                                         <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
                                         <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
                                         <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
