@@ -4,6 +4,7 @@
 
 
 <style>
+
 .title{
     margin-left: 2%;
     font-weight: bold;
@@ -27,7 +28,7 @@
     <input type="hidden" id="signoDocumento" value="{{ $documento['signo'] }}">
 </div>
 
-
+<?php if(isset($_GET['nit'])){ $nit = $_GET['nit']; }else{ $nit="";} ?>
 
 <div class="row top-11-w">
     
@@ -36,7 +37,7 @@
             <h4 class="title col-md-12" style="color:black;">Datos Cliente<hr></h4>
             <div class="col-md-4">
                 <label>Nit:</label>
-                <input type="text" list="listDirectorio" name="cedula_tercero"  id="cedula_tercero" placeholder="nit" class="form-control" onkeyup="buscarcliente(this.value)">
+                <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onkeyup="buscarcliente(this.value)">
                 <p style="font-size:10px;color:black;" id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
                 
             </div>
@@ -86,13 +87,13 @@
 
 <div class="row top-11-w">
     
-    <div class="card" style="margin:3%;margin-top:0%;">
-        <div class="header row" style="background:#dbdbdb">
+    <div class="card col-md-4" style="margin:3%;margin-top:0%;color:black;">
+        <div class="header row " style="background:white;overflow-x:scroll;">
             <table id="busquedaReferencia" class="table" style="color:black;">
                 <thead>
                     <tr>
                         <th>id</th>
-                        <th>codigo_interno</th>
+                        <th>codigo interno</th>
                         <th>descripcion</th>
                         <th>precio1</th>
                         <th>precio2</th>
@@ -101,9 +102,14 @@
                         <th>saldo</th>
                     </tr>
                 </thead>
-            </table>
-            
+            </table>   
         </div>
+        <br>
+        Nota: <br>
+        Para <strong>agregar productos</strong> dirijase al boton más.<br>
+        Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
+        <div class="btn btn-danger" onclick="documentos.eliminar();">Eliminar</div><br>
+        Si ha <strong>terminado de registrar</strong> los productos dirijase al boton Guardar.<br><br><br>
     </div>
 
     <div class="card" style="margin:3%;margin-top:0%;">
@@ -130,11 +136,7 @@
     </div>
 
     <div class="col-sm-12">
-        Nota: <br>
-        Para <strong>agregar productos</strong> dirijase al boton más.<br>
-        Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
-        <div class="btn btn-danger" onclick="documentos.eliminar();">Eliminar</div><br>
-        Si ha <strong>terminado de registrar</strong> los productos dirijase al boton Guardar.<br><br><br>
+        
         </div>
         <div class="col-sm-12">
         <div class="row titulo">
@@ -310,7 +312,7 @@ function saveFactura(){
                     })
                     .then((willDelete) => {
                     if (willDelete) {
-                        window.location.replace("imprimir/"+factura.id);
+                        window.location.replace("/documentos/imprimir/"+factura.id);
                     } else {
                         swal("Guardado exitoso. En otra ocación podrás imprmir.");
                     }
@@ -384,7 +386,7 @@ $(document).ready( function () {
                 targets: 0,
                 render: function ( id, type, row, meta ) {
                     if(type === 'display'){
-                        data = '<a href="javascript:;" onclick="getReferencia('+row.id+')" class="btn btn-warning">Actualizar</a>';
+                        data = '<a href="javascript:;" onclick="getReferencia('+row.id+')" class="btn btn-warning">+</a>';
                     }
                     return data;
                 }
@@ -429,7 +431,7 @@ function getReferencia(id){
             cell3.innerHTML = lotes;
             cell4.innerHTML = "<input type='number' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
             cell5.innerHTML = precios;
-            cell6.innerHTML = "<input type='text' value='"+linea.iva_porcentaje+"' class='form-control' name='iva' disabled>";
+            cell6.innerHTML = "<input type='text' value='"+linea.iva_porcentaje+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
             cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled>";
         },
         error: function(){
@@ -455,12 +457,21 @@ function recorrerproductos(element){
     id = inputs[1].value;
     cantidad = inputs[2].value;
     iva = inputs[3].value;
-    subtotal = inputs[4].value;
+    totaliva = inputs[4].value;
+    subtotal = inputs[5].value;
 
     lote = selects[0].value;
     valor_unidad = selects[1].value;
 
-    inputs[4].value = parseInt(cantidad) * parseInt(valor_unidad);
+    
+    inputs[5].value = parseInt(cantidad) * parseInt(valor_unidad);
+
+    if(iva == 0){
+        inputs[4].value = 0;    
+    }
+    else{
+        inputs[4].value = (parseInt(cantidad) * parseInt(valor_unidad) * parseInt(iva))/100;
+    }
 
     recorrerTotal();
 }
@@ -473,9 +484,15 @@ function recorrerTotal(){
         element = subtotales[i];
         subtot += parseInt(element.value);
     }
+    ivas = document.getElementsByName("totaliva");
+    iva = 0;
+    for(i=0;i<ivas.length;i++){ 
+        element = ivas[i];
+        iva += parseInt(element.value);
+    }
     $('#subtotal').val(subtot);
     $('#total').val(subtot);
-    $('#iva').val(0);
+    $('#iva').val(iva);
     $('#descuento').val(0);
 }
 
