@@ -157,7 +157,7 @@
             </div>
             <div class="col-sm-3">
             <label>DESCUENTO</label>
-            <input type="number" id="descuento" class="form-control" disabled="">
+            <input type="number" id="descuento" class="form-control">
             </div>
             <div class="col-sm-3">
             <label>FLETES</label>
@@ -282,7 +282,7 @@ function saveFactura(){
         'impoconsumo' : $('#impoconsumo').val(),
         'otro_impuesto' : $('#otro_impuesto').val(),
         'otro_impuesto1' : '0',
-        'descuento' : 0,
+        'descuento' : $('#descuento').val(),
         'fletes' : $('#fletes').val(),
         'retefuente' : $('#retefuente').val(),
         'total' : $('#total').val(),
