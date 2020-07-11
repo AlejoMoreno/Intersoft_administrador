@@ -53,11 +53,8 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Usuario</th>
-                                    <th>Cliente</th>
-                                    <th>Direccion</th>
                                     <th>Zona</th>
-                                    <th>Telefono</th>
-                                    <th>Documentos</th>
+                                    <th>Día de la semana</th>
                                     <th>Desasingar</th>
                                 </tr>
                             </thead>
@@ -67,11 +64,8 @@
                                     <tr>
                                         <td>{{ $obj['id'] }}</td>
                                         <td>{{ $obj['id_usuario']['ncedula'] }} - {{ $obj['id_usuario']['correo'] }}</td>
-                                        <td>{{ $obj['id_tercero']['nit'] }} - {{ $obj['id_tercero']['razon_social'] }}</td>
-                                        <td>{{ $obj['id_tercero']['direccion'] }}</td>
                                         <td>{{ $obj['zona'] }}</td>
-                                        <td>{{ $obj['id_tercero']['telefono'] }} - {{ $obj['id_tercero']['telefono1'] }} - {{ $obj['id_tercero']['telefono2'] }}</td>
-                                        <td>{{ $obj['id_tercero']['id'] }}</td>
+                                        <td>{{ $obj['estado'] }}</td>
                                         <td><a href="/facturacion/zonadelete/{{ $obj['id'] }}" class="btn btn-danger">x</a></td>
                                     </tr>
                                     @endforeach
@@ -83,21 +77,23 @@
                     <div class="row">
 
                         <form action="/facturacion/zonacreate" method="post">
-
                             <div class="col-md-4">
                                 <input type="hidden" id="id_usuario" name="id_usuario" value="{{ $id }}">
-                                <input type="text" id="id_tercero" name="id_tercero" class="form-control" placeholder="Razón social Cliente" list="Listaclientes" onchange="buscarcliente(this.value)">
-                                <div id="divClientes">
-                                    <datalist id="Listaclientes">
-                                    </datalist>
-                                </div>
-                                <p style="font-size:10px">Para buscar el cliente debe tener un minimo de 5 caracteres</p>
+                                <select name="estado" class="form-control">
+                                <option value="1">LUNES</option>
+                                <option value="2">MARTES</option>
+                                <option value="3">MIERCOLES</option>
+                                <option value="4">JUEVES</option>
+                                <option value="5">VIERNES</option>
+                                <option value="6">SABADO</option>
+                                <option value="7">DOMINGO</option>
+                                </select>
                             </div>
                             <div class="col-md-4">
                                 <select id="zona" class="form-control" name="zona">
                                     <option value="">Seleccione Zona</option>
                                     @foreach($nombre_zonas as $obj)
-                                        <option value="{{ $obj->zona_venta }}">{{ $obj->contador }} - {{ $obj->zona_venta }}</option>
+                                        <option value="{{ $obj->zona_venta }}">{{ $obj->contador }} # Clientes en zona cod.{{ $obj->zona_venta }}</option>
                                     @endforeach
                                 </select> 
                             </div>

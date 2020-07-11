@@ -165,16 +165,37 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
 
     <?php 
 
+    date_default_timezone_set('America/Bogota');
+    $hora = date('Hi');
+    $hora_limite = date('1600');
+    $dif = $hora_limite - $hora;
+
     $lista = null;
     if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
         $lista = ["Inicio", "Directorio", "Inventario", "Producción", "Facturación", "Tesorería", "Contabilidad", "Parámetros", "Salida"];
+        $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
+        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario'];
+        $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
+        $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES'];
+        $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
     }
-    if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
-        $lista = ["Inicio", "Directorio", "Producción", "Facturación", "Tesorería", "Salida"];
+    else if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
+        $lista = ["Inicio", "Facturación", "Salida"];
+        $Facturacion = ['Estadistica Ventas'];
     }
-    if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Session::get('cargo') == "Obrero"){
-        $lista = ["Inicio", "Inventario", "Producción", "Salida"];
+    else if(Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario"){
+        $lista = ["Inicio", "Inventario", "Producción", "Facturación", "Salida"];
+        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario'];
+        $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
+        $Facturacion = ['Estadistica Ventas'];
     }
+    else if(Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos"){
+        $lista = ["Inicio", "Directorio", "Facturación", "Tesorería", "Salida"];
+        $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
+        $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
+        $Facturacion = ['Estadistica Ventas','Zonas Asingada'];
+    }
+    
 
     ?>
 
@@ -189,6 +210,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#"><img style="width: 100px;" src="/assets/img/logo_intersoft1.png"></a>
+          
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
@@ -208,10 +230,10 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Directorio
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:;" onclick="config.Redirect('/administrador/index');">Parámetros</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/administrador/directorios');">Creación, Consulta, Directorio</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/calendario');">Calendario</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/administrador/usuarios');">Usuarios</a></li>
+                            <?php if(in_array("Parámetros",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/index');">Parámetros</a></li><?php } ?>
+                            <?php if(in_array("Creación, Consulta, Directorio",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/directorios');">Creación, Consulta, Directorio</a></li><?php } ?>
+                            <?php if(in_array("Calendario",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/calendario');">Calendario</a></li><?php } ?>
+                            <?php if(in_array("Usuarios",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/usuarios');">Usuarios</a></li><?php } ?>
                         </ul>
                     </a>
                 </li>
@@ -222,14 +244,14 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Inventario
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/referencias');">Maestro de Referencias</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/lotes');">Maestro de Lotes</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/catalogo');">Catálogo</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Tarjeta Kardex</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Costo Promedio Ponderado</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/actualizacionPrecios');">Actualización y Lista de Precios</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Presupuestos de Reposición</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/cierreInventario');">Cierre de Inventario</a></li>
+                            <?php if(in_array("Maestro de Referencias",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/referencias');">Maestro de Referencias</a></li><?php } ?>
+                            <?php if(in_array("Maestro de Lotes",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/lotes');">Maestro de Lotes</a></li><?php } ?>
+                            <?php if(in_array("Catálogo",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/catalogo');">Catálogo</a></li><?php } ?>
+                            <?php if(in_array("Tarjeta Kardex",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Tarjeta Kardex</a></li><?php } ?>
+                            <?php if(in_array("Costo Promedio Ponderado",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Costo Promedio Ponderado</a></li><?php } ?>
+                            <?php if(in_array("Actualización y Lista de Precios",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/actualizacionPrecios');">Actualización y Lista de Precios</a></li><?php } ?>
+                            <?php if(in_array("Presupuestos de Reposición",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Presupuestos de Reposición</a></li><?php } ?>
+                            <?php if(in_array("Cierre de Inventario",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/cierreInventario');">Cierre de Inventario</a></li><?php } ?>
                             <li role="separator" class="divider"></li>
                             @foreach ($documentos as $obj)
                                 <?php 
@@ -263,12 +285,12 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Producción
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/fichatecnica');">Ficha técnica</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/materiaprima');">Inventario Materia Prima</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/ordenesdeproduccion');">Ordenes de Producción</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/liquidacionobra');">Liquidación Mano de Obra</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/costosdirectos');">Costos Directos</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/inventario/ingresoporproduccion');">Ingreso por producción</a></li>
+                            <?php if(in_array("Ficha técnica",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/fichatecnica');">Ficha técnica</a></li><?php } ?>
+                            <?php if(in_array("Inventario Materia Prima",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/materiaprima');">Inventario Materia Prima</a></li><?php } ?>
+                            <?php if(in_array("Ordenes de Producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ordenesdeproduccion');">Ordenes de Producción</a></li><?php } ?>
+                            <?php if(in_array("Liquidación Mano de Obra",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/liquidacionobra');">Liquidación Mano de Obra</a></li><?php } ?>
+                            <?php if(in_array("Costos Directos",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/costosdirectos');">Costos Directos</a></li><?php } ?>
+                            <?php if(in_array("Ingreso por producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ingresoporproduccion');">Ingreso por producción</a></li><?php } ?>
                         </ul>
                     </a>
                 </li>
@@ -279,39 +301,41 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Facturación
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:;" onclick="config.Redirect('/facturacion/liquidacionventas');">Liquidación Comisiones</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/facturacion/estadisticaventas');">Estadistica Ventas</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/facturacion/zona');">Zonas Asingada</a></li>
+                            <?php if(in_array("Liquidación Comisiones",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/liquidacionventas');">Liquidación Comisiones</a></li><?php } ?>
+                            <?php if(in_array("Estadistica Ventas",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/estadisticaventas');">Estadistica Ventas</a></li><?php } ?>
+                            <?php if(in_array("Zonas Asingada",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/zona');">Zonas Asingada</a></li><?php } ?>
                             <li role="separator" class="divider"></li>
-                            <li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/pedidos');">Pasar PEDIDOS a FACTURA</a></div></li>
+                            <?php if(in_array("Pasar PEDIDOS a FACTURA",$Facturacion)){ ?><li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/pedidos');">Pasar PEDIDOS a FACTURA</a></div></li><?php } ?>
                             <li role="separator" class="divider"></li>
-                            <li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/devoluciones');">DEVOLUCIONES</a></div></li>
+                            <?php if(in_array("DEVOLUCIONES",$Facturacion)){ ?><li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/devoluciones');">DEVOLUCIONES</a></div></li><?php } ?>
                             <li role="separator" class="divider"></li>
-                            @foreach ($documentosSalida as $obj)
-                                <?php 
-                                if($obj["signo"]=='+'){
-                                    $signo = "mas";
-                                }
-                                elseif($obj["signo"]=='-'){
-                                    $signo = "menos";
-                                }
-                                else{
-                                    $signo = "igual";
-                                }
-                                if($obj['nombre']=="MAYORISTA"){
-                                    $num  = $obj['num_presente'];
-                                }
-                                ?> 
-                                <li>
-                                    <div class="row">
-                                        <?php $url = '/facturacion/venta/'.$obj['id']; ?>
-                                        <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
-                                        <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
-                                        <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
-                                    <div>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                            @endforeach
+                            @if( !$dif < 0 )
+                                @foreach ($documentosSalida as $obj)
+                                    <?php 
+                                    if($obj["signo"]=='+'){
+                                        $signo = "mas";
+                                    }
+                                    elseif($obj["signo"]=='-'){
+                                        $signo = "menos";
+                                    }
+                                    else{
+                                        $signo = "igual";
+                                    }
+                                    if($obj['nombre']=="MAYORISTA"){
+                                        $num  = $obj['num_presente'];
+                                    }
+                                    ?> 
+                                    <li>
+                                        <div class="row">
+                                            <?php $url = '/facturacion/venta/'.$obj['id']; ?>
+                                            <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
+                                            <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                            <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                        <div>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                @endforeach
+                            @endif
                         </ul>
                     </a>
                 </li>
@@ -322,15 +346,15 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Tesorería
                         <ul class="dropdown-menu">
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/gastos');">Control de Gastos</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/otrosingresos');">Otros Ingresos</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/egresos');">Pago a Proveedores</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Cobro Cartera</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/cheques');">Cheques</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/Importaciones');">Pago Importaciones</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/pagoobligaciones');">Retefuente, Iva, Reteica</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto y Cuentas de Cobro</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/cartera/Causaciones');">Causaciones</a></li>
+                            <?php if(in_array("Control de Gastos",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/gastos');">Control de Gastos</a></li><?php } ?>
+                            <?php if(in_array("Otros Ingresos",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/otrosingresos');">Otros Ingresos</a></li><?php } ?>
+                            <?php if(in_array("Pago a Proveedores",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/egresos');">Pago a Proveedores</a></li><?php } ?>
+                            <?php if(in_array("Cobro Cartera",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Cobro Cartera</a></li><?php } ?>
+                            <?php if(in_array("Cheques",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/cheques');">Cheques</a></li><?php } ?>
+                            <?php if(in_array("Pago Importaciones",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/Importaciones');">Pago Importaciones</a></li><?php } ?>
+                            <?php if(in_array("Retefuente, Iva, Reteica",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/pagoobligaciones');">Retefuente, Iva, Reteica</a></li><?php } ?>
+                            <?php if(in_array("Extracto y Cuentas de Cobro",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto y Cuentas de Cobro</a></li><?php } ?>
+                            <?php if(in_array("Causaciones",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/Causaciones');">Causaciones</a></li><?php } ?>
                         </ul>
                     </a>
                 </li>
@@ -383,7 +407,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
             
 
             <li id="Salida">  
-                <a href="#">
+                <a href="/contrasena">
                     </strong>{{ Session::get('nombre') }} / {{ Session::get('cargo') }}</small>
                 </a>
             </li>

@@ -33,10 +33,36 @@ Route::get('/layout', function(){
     return view('layout');
 });
 Route::get('/index', function(){
-    $zonas = App\Zonasusuarios::where('id_empresa','=',Session::get('id_empresa'))->where('id_usuario','=',Session::get('user_id'))->get();
+    date_default_timezone_set('America/Bogota');
+    $day = date("l");
+    $dia = 1;
+    switch ($day) {
+        case "Sunday":
+            $dia = 7;
+        break;
+        case "Monday":
+            $dia = 1;
+        break;
+        case "Tuesday":
+            $dia = 2;
+        break;
+        case "Wednesday":
+            $dia = 3;
+        break;
+        case "Thursday":
+            $dia = 4;
+        break;
+        case "Friday":
+            $dia = 5;
+        break;
+        case "Saturday":
+            $dia = 6;
+        break;
+    }
+    $zonas = App\Zonasusuarios::where('id_empresa','=',Session::get('id_empresa'))->where('id_usuario','=',Session::get('user_id'))->where('estado','=',$dia)->get();
     foreach($zonas as $zona){
         $zona->id_usuario = App\Usuarios::where('id','=',$zona->id_usuario)->first();
-        $zona->id_tercero = App\Directorios::where('id','=',$zona->id_tercero)->first();
+        $zona->id_tercero = App\Directorios::where('zona_venta','=',$zona->zona)->get();
     }
     $facturas = App\Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('id_vendedor','=',Session::get('user_id'))->get();
     $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
@@ -51,7 +77,8 @@ Route::get('/index', function(){
         "zona"=>$zonas,
         "facturas"=>$facturas,
         "referencias"=>$referencias,
-        "lotes"=>$lotes
+        "lotes"=>$lotes,
+        "day"=>$day
     ));
 });
 
@@ -74,6 +101,10 @@ Route::get('/documentos/documentos', function(){
 Route::get('/cartera/index', function(){
     return view('cartera.index');
 });
+Route::get('/contrasena', function(){
+    return view('contrasena');
+});
+Route::post('/contrasena', 'UsuariosController@contrasenanueva');
 
 //install
 Route::get('/install', function(){

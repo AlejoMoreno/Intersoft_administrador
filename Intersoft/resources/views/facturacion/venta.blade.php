@@ -203,6 +203,13 @@
 <script>
 
 
+$('#cedula_tercero').on('keydown', function(e) {
+    if (e.key === "Enter") {
+        buscarcliente($('#cedula_tercero').val());
+        return false;
+    }
+});
+
 
 function save_documento(){
         

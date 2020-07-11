@@ -42,27 +42,31 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
 
 <div class="row top-5-w">
     <div class="col-md-5" style="overflow-x:scroll;margin-left:2%">
-        <p style="font-size:10pt;font-family:Poppins">Rutas asignadas</p>
+        <p style="font-size:10pt;font-family:Poppins">Rutas asignadas Día ({{ $day }})</p>
         <table class="table table-sm  table-striped" id="datos">
             <thead>
                 <tr>
                     <th>Usuario</th>
-                    <th>Cliente</th>
-                    <th>Direccion</th>
                     <th>Zona</th>
-                    <th>Telefono</th>
+                    <th>Nit</th>
+                    <th>Razon social</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
                 </tr>
             </thead>
             <tbody>
                 @if($zona!=null)
                     @foreach($zona as $obj)
-                    <tr>
-                        <td>{{ $obj['id_usuario']['ncedula'] }} - {{ $obj['id_usuario']['correo'] }}</td>
-                        <td>{{ $obj['id_tercero']['nit'] }} - {{ $obj['id_tercero']['razon_social'] }}</td>
-                        <td>{{ $obj['id_tercero']['direccion'] }}</td>
-                        <td>{{ $obj['zona'] }}</td>
-                        <td>{{ $obj['id_tercero']['telefono'] }} - {{ $obj['id_tercero']['telefono1'] }} - {{ $obj['id_tercero']['telefono2'] }}</td>
-                    </tr>
+                        @foreach($obj['id_tercero'] as $objo)
+                        <tr>
+                            <td>{{ $obj['id_usuario']['ncedula'] }}-{{ $obj['id_usuario']['nombre'] }}</td>
+                            <td>{{ $obj['zona'] }}</td>
+                            <td><a href="/facturacion/venta/37?nit={{ $objo['nit'] }}">{{ $objo['nit'] }}</a></td>
+                            <td>{{ $objo['razon_social'] }}</td>
+                            <td>{{ $objo['direccion'] }}</td>
+                            <td>{{ $objo['telefono'] }}</td>
+                        </tr>
+                        @endforeach
                     @endforeach
                 @endif
             </tbody>

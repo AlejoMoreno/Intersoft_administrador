@@ -328,19 +328,30 @@ class UsuariosController extends Controller
         ));
     }
     public function createZonas(Request $request){
+
+        $obj = Zonasusuarios::where('id_usuario','=',$request->id_usuario)->where('zona','=',$request->zona)->get();
         $zona = new Zonasusuarios();
         $zona->id_usuario = $request->id_usuario;
-        $zona->id_tercero = $request->id_tercero;
-        $zona->zona = $request->zona;
-        $zona->id_empresa = Session::get('id_empresa');
-        $zona->estado = 1;
-        $zona->save();
+        if(sizeof($obj)==0){             
+            $zona->id_tercero = 1;
+            $zona->zona = $request->zona;
+            $zona->id_empresa = Session::get('id_empresa');
+            $zona->estado = $request->estado;
+            $zona->save();
+        }
         return redirect('/facturacion/zona/'.$zona->id_usuario);
     }
     public function deleteZonas($id){
         $zona = Zonasusuarios::where('id','=',$id)->first();
         $zona->delete();
         return redirect('/facturacion/zona/'.$zona->id_usuario);
+    }
+
+    public function contrasenanueva(Request $request){
+        $usuario = Usuarios::where('id','=',Session::get('user_id'))->first();
+        $usuario->password = $request->password;
+        $usuario->save();
+        return view('contrasena');
     }
 
 
