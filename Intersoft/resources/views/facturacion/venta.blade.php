@@ -62,7 +62,7 @@
                 <label>Ciudad:</label>
                 <select name="id_ciudad" class="form-control"  id="id_ciudad">
                     @foreach ( $ciudades as $ciudad)
-                    <option value="{{ $ciudad['id'] }}">{{ $ciudad['codigo'] }} - {{ $ciudad['nombre'] }}</option>
+                    <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
                     @endforeach
                 </select>
             </div>
@@ -210,6 +210,16 @@ $('#cedula_tercero').on('keydown', function(e) {
     }
 });
 
+
+$(document).on('click', 'button.deletebtn', function () {
+    var mensaje;
+    var opcion = confirm("¿Desea eliminar la fila?");
+    if (opcion == true) {
+        $(this).closest('tr').remove();
+        recorrerTotal();
+	}   
+    return false;
+});
 
 function save_documento(){
         
@@ -439,7 +449,7 @@ function getReferencia(id){
             var cell5 = row.insertCell(5);
             var cell6 = row.insertCell(6);
             var cell7 = row.insertCell(7);
-            cell0.innerHTML = "<input type='checkbox' value='0' class='form-control' name='check'><input type='hidden' name='id' value='"+referencia.id+"'>";
+            cell0.innerHTML = "<button type='button' class='deletebtn btn btn-danger' title='Remove row'>X</button><input type='hidden' value='0' class='' name='check'><input type='hidden' name='id' value='"+referencia.id+"'>";
             cell1.innerHTML = "<strong style='color:black'>"+referencia.codigo_interno+"</strong>";
             cell2.innerHTML = "<strong style='color:black'>"+referencia.descripcion+"</strong>";
             cell3.innerHTML = lotes;

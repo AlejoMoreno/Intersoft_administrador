@@ -449,10 +449,13 @@ class FacturasController extends Controller
         $pedido->save();
     }
 
+    /**
+     * FACTURAS DE VENTA
+     */
     public function venta($id_documento){
         $documento = Documentos::where('id','=',$id_documento)->first();
         $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
-        $ciudades = Ciudades::all();
+        $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
         
         return view('facturacion.venta',array(
             "referencias"=>$referencias,

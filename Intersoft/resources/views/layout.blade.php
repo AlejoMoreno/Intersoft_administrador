@@ -210,7 +210,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#"><img style="width: 100px;" src="/assets/img/logo_intersoft1.png"></a>
-          
+          {{ $dif }}
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
