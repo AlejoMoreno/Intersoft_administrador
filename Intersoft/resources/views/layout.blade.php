@@ -309,7 +309,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                             <li role="separator" class="divider"></li>
                             <?php if(in_array("DEVOLUCIONES",$Facturacion)){ ?><li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/devoluciones');">DEVOLUCIONES</a></div></li><?php } ?>
                             <li role="separator" class="divider"></li>
-                            @if( !$dif < 0 )
+                            @if( true )
                                 @foreach ($documentosSalida as $obj)
                                     <?php 
                                     if($obj["signo"]=='+'){
