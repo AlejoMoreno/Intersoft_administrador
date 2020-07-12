@@ -32,10 +32,10 @@
 	
  	<section>
 		<div>
-			<img src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}.png">
+			<img style="width:100px;" src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['id'] }}.jpeg">
 		</div>
 	</section>
-<div><center style="font-size: 7px;"><h2><strong>{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}<br>NIT. {{ $factura['id_sucursal']['id_empresa']['nit_empresa'] }}</strong></h2><br>{{ $factura['id_sucursal']['id_empresa']['direccion'] }}<br>Teléfono: {{ $factura['id_sucursal']['id_empresa']['telefono'] }} - {{ $factura['id_sucursal']['id_empresa']['telefono2'] }}<br>Cel. {{ $factura['id_sucursal']['id_empresa']['telefono1'] }}<br>{{ $factura['id_sucursal']['correo'] }}</center><br></div>
+<div style="top:-30px;left:30%;position:absolute;"><div style="font-size: 7px;"><h2><strong>{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}<br>NIT. {{ $factura['id_sucursal']['id_empresa']['nit_empresa'] }}</strong></h2>{{ $factura['id_sucursal']['id_empresa']['direccion'] }}<br>Teléfono: {{ $factura['id_sucursal']['id_empresa']['telefono'] }} - {{ $factura['id_sucursal']['id_empresa']['telefono2'] }}<br>Cel. {{ $factura['id_sucursal']['id_empresa']['telefono1'] }}<br>{{ $factura['id_sucursal']['correo'] }}</div><br></div>
 
 	<div id="tablas">
 <table class="table table-bordered">
@@ -59,32 +59,18 @@
 <table id="productos" class="table table-striped table-sm">
 	<thead>
 		<tr>
-			<th class="tg-le8v"><strong>REFERENCIA</strong></th>
-			<th class="tg-le8v"><strong>COD.Barras</strong></th>
-			<th class="tg-le8v"><strong>NOMBRE</strong></th>
-			<th class="tg-le8v"><strong>LOTE</strong></th>
-			<th class="tg-le8v"><strong>SERIAL</strong></th>
-			<th class="tg-le8v"><strong>VENCIMIENTO</strong></th>
-			<th class="tg-le8v"><strong>CANTIDAD</strong></th>
-			<th class="tg-le8v"><strong>DSC</strong></th>
-			<th class="tg-le8v"><strong>IVA</strong></th> 
-			<th class="tg-le8v"><strong>VALOR UNIDAD</strong></th>
-			<th class="tg-le8v"><strong>VALOR TOTAL</strong></th>
+			<th class="tg-le8v"><strong>Descripción</strong></th>
+			<th class="tg-le8v"><strong>Unidades</strong></th>
+			<th class="tg-le8v"><strong>Precio Unitario</strong></th>
+			<th class="tg-le8v"><strong>Precio</strong></th>
 		</tr>
 	</thead>
 	@foreach($kardex as $obj)
 	<tr>
-		<td class="tg-yw4l">{{ $obj['id_referencia']['codigo_linea'].$obj['id_referencia']['codigo_letras'].$obj['id_referencia']['codigo_consecutivo'] }}</td>
-		<td class="tg-yw4l">{{ $obj['id_referencia']['codigo_barras'] }}</td>
 		<td class="tg-yw4l">{{ $obj['id_referencia']['descripcion'] }}</td>
-		<td class="tg-yw4l">{{ $obj['lote'] }}</td>
-		<td class="tg-yw4l">{{ $obj['serial'] }}</td>
-		<td class="tg-yw4l">{{ $obj['fecha_vencimiento'] }}</td>
 		<td class="tg-yw4l">{{ $obj['cantidad'] }}</td>
-		<td class="tg-yw4l">{{ $obj['descuento'] }}</td>
-		<td class="tg-yw4l">{{ $obj['iva'] }}</td>
 		<td class="tg-yw4l">{{ number_format($obj['precio'], 0, ",", ".") }}</td>
-		<td class="tg-yw4l">{{ number_format(($obj['total']), 0, ",", ".") }}</td>
+		<td class="tg-yw4l"><?php $tt = $obj['precio'] * $obj['cantidad']; ?>{{ number_format(($tt), 0, ",", ".") }}</td>
 	</tr>
 	@endforeach
 </table>
@@ -92,11 +78,11 @@
 <br><br>
 <table class="table">
 	<tr>
-		<td style="width: 65%"></td>
+		<td style="width: 65%"><strong>OBS:</strong> <?php echo $factura['observaciones'] ?></td></td>
 		<td>
 			<table class="">
 				<tr>
-					<td><strong>SUBTOTAL: </strong></td>
+					<td><strong>Total parcial: </strong></td>
 					<td>$ <?php echo number_format($factura['subtotal'], 0, ",", ".");?></td>
 				</tr>
 				<tr>
@@ -104,41 +90,29 @@
 					<td>$ <?php echo number_format($factura['iva'], 0, ",", ".");?></td>
 				</tr>
 				<tr>
-					<td><strong>IMPOCONSUMO: </strong></td>
+					<td><strong>Impoconsumo: </strong></td>
 					<td>$ <?php echo number_format($factura['impoconsumo'], 0, ",", ".");?></td>
 				</tr>
 				<tr>
-					<td><strong>DESCUENTO:</strong></td>
+					<td><strong>Descuento:</strong></td>
 					<td>$ <?php echo number_format($factura['descuento'], 0, ",", ".");?></td>
 				</tr>
 				<tr>
-					<td><strong>FLETES:</strong></td>
+					<td><strong>Flete:</strong></td>
 					<td>$ <?php echo number_format($factura['fletes'], 0, ",", ".");?></td>
 				</tr>
 				<tr>
-					<td><strong>RETEFUENTE:</strong></td>
+					<td><strong>Retefuente:</strong></td>
 					<td>$ <?php echo number_format($factura['retefuente'], 0, ",", ".");?></td>
 				</tr>
-				<tr>
-					<td><strong>TOTAL: </strong></td>
+				<tr style="background:#ddd">
+					<td><strong>TOTAL FACTURA: </strong></td>
 					<td><strong>$ <?php echo number_format($factura['total'], 0, ",", ".");?></strong></td>
 				</tr>
 			</table>
 			
 	</tr>
 </table>
-<br><br>
-
-<table class="table table-bordered">
-	<tr>
-		<td colspan="2" style="font-size: 10px"><strong>OBS:</strong> <?php echo $factura['observaciones'] ?></td>
-	</tr>
-	<tr>
-		<td style="width: 50%"><strong>RECIBIDO</strong></td>
-		<td><br><strong>Autorizado</strong><br><br><br>__________________________________________<br>Alejandro Moreno Castro<br>CC. 8989898989<br>Tel. 89ds898989</td>
-	</tr>
-</table>
-</div>
 
 	
 <style type="text/css">

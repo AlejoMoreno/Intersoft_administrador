@@ -7,6 +7,10 @@ use App\Usuarios;
 use App\Contrato_laborals;
 use App\Sessions;
 use App\Sucursales;
+use App\Zonasusuarios;
+use App\Directorios;
+use DB;
+use App\Facturas;
 use App\Http\Controllers\SessionsController;
 
 use Mail;
@@ -280,5 +284,103 @@ class UsuariosController extends Controller
     public function cerrar(){
         SessionsController::deleteSession();
         return redirect('/');
+    }
+
+    /**
+     * FUNCIONES PARA TOMAR LISTA DE ZONAS Y REPORTES DE VENTAS
+     */
+    public function listaZonas(){
+        
+        $nombre_zonas = DB::table('directorios')
+                                        ->select(DB::raw('count(*) as contador, zona_venta'))
+                                        ->where('id_empresa','=',Session::get('id_empresa'))
+                                        ->groupBy('zona_venta')
+                                        ->get();
+                                        
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $zonas = null;
+        return view('facturacion.zona',array(
+            'usuarios'=>$usuarios,
+            'zona'=>$zonas,
+            'id'=>0,
+            'nombre_zonas'=>$nombre_zonas
+        ));
+    }
+    public function listaZonas1($id){
+        
+        $nombre_zonas = DB::table('directorios')
+                                        ->select(DB::raw('count(*) as contador, zona_venta'))
+                                        ->where('id_empresa','=',Session::get('id_empresa'))
+                                        ->groupBy('zona_venta')
+                                        ->get();
+
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $zonas = Zonasusuarios::where('id_empresa','=',Session::get('id_empresa'))->where('id_usuario','=',$id)->get();
+        foreach($zonas as $zona){
+            $zona->id_usuario = Usuarios::where('id','=',$zona->id_usuario)->first();
+            $zona->id_tercero = Directorios::where('id','=',$zona->id_tercero)->first();
+        }
+        return view('facturacion.zona',array(
+            'usuarios'=>$usuarios,
+            'zona'=>$zonas,
+            'id'=>$id,
+            'nombre_zonas'=>$nombre_zonas
+        ));
+    }
+    public function createZonas(Request $request){
+
+        $obj = Zonasusuarios::where('id_usuario','=',$request->id_usuario)->where('zona','=',$request->zona)->get();
+        $zona = new Zonasusuarios();
+        $zona->id_usuario = $request->id_usuario;
+        if(sizeof($obj)==0){             
+            $zona->id_tercero = 1;
+            $zona->zona = $request->zona;
+            $zona->id_empresa = Session::get('id_empresa');
+            $zona->estado = $request->estado;
+            $zona->save();
+        }
+        return redirect('/facturacion/zona/'.$zona->id_usuario);
+    }
+    public function deleteZonas($id){
+        $zona = Zonasusuarios::where('id','=',$id)->first();
+        $zona->delete();
+        return redirect('/facturacion/zona/'.$zona->id_usuario);
+    }
+
+    public function contrasenanueva(Request $request){
+        $usuario = Usuarios::where('id','=',Session::get('user_id'))->first();
+        $usuario->password = $request->password;
+        $usuario->save();
+        return view('contrasena');
+    }
+
+
+
+    public function liquidacionVentas(){
+        $valor = 0;
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $facturas = null;
+        return view('facturacion.liquidacionventas',array(
+            'usuarios'=>$usuarios,
+            'facturas'=>$facturas,
+            'valor'=>$valor
+        ));
+    }
+
+    public function liquidacionVentas1($id,$valor){
+        $facturas = Facturas::where('id_modificado',$id)->
+                             where('saldo','=',0)->
+                             where('id_empresa','=',Session::get('id_empresa'))->get();
+
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+        return view('facturacion.liquidacionventas',array(
+            'usuarios'=>$usuarios,
+            'facturas'=>$facturas,
+            'valor'=>$valor
+        ));
+    }
+
+    public function estadisticaVentas(){
+        return view('facturacion.estadisticaventas');
     }
 }

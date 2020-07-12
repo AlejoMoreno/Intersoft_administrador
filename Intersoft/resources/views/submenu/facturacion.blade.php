@@ -82,13 +82,17 @@ $documentos = Documentos::where('ubicacion','=','SALIDA')->
                                             <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
                                             <td><a href="{{ $urlconsulta }}" class="btn btn-default">Consultar</a></td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/submenu/inventario');">
+                                        <tr onclick="config.Redirect('/facturacion/liquidacionventas');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/2166/2166821.svg"></td>
                                             <td colspan="2">Liquidación Comisiones</td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/submenu/inventario');">
+                                        <tr onclick="config.Redirect('/facturacion/estadisticaventas');">
                                             <td><img width="30" src="https://image.flaticon.com/icons/svg/858/858699.svg"></td>
                                             <td colspan="2">Estadistica Ventas</td>
+                                        </tr>
+                                        <tr onclick="config.Redirect('/facturacion/zona');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/2928/2928892.svg"></td>
+                                            <td colspan="2">Zonas Asingadas</td>
                                         </tr>
                                     </tbody>
                                 </table>

@@ -57,11 +57,11 @@
                             </div>
                         </div>
                     </form>
+                    <p style="font-size:10px;">Para realizar cambios a la lista de precios uno a uno debe buscar el producto y dar dobleclick a los tres valores que existen en azul</p>
                     <div style="overflow-x:scroll;overflow-y:scroll;height:500px;">
                         <table class="table table-hover table-striped" id="datos">
                             <thead>
                                 <tr>
-                                    <th></th> 
                                     <th>codigo</th>
                                     <th>descripcion</th>
                                     <th>nombre</th>
@@ -72,24 +72,11 @@
                                     <th>estado</th>
                                     <th>costo</th>
                                     <th>saldo</th>
+                                    <th></th> 
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ( $referencias as $ob)
-                                <tr>
-                                    <td><input id="obj_{{ $ob['id'] }}" type="checkbox" ></td> 
-                                    <td>{{ $ob['codigo'] }}</td>
-                                    <td>{{ $ob['descripcion'] }}</td>
-                                    <td>{{ $ob['nombre'] }}</td>
-                                    <td>{{ $ob['precio1'] }}</td>
-                                    <td>{{ $ob['precio2'] }}</td>
-                                    <td>{{ $ob['precio3'] }}</td>
-                                    <td>{{ $ob['precio4'] }}</td>
-                                    <td>{{ $ob['estado'] }}</td>
-                                    <td>{{ $ob['costo'] }}</td>
-                                    <td>{{ $ob['saldo'] }}</td>
-                                </tr>
-                                @endforeach
+                               
                             </tbody>
                         </table>
                     </div>
@@ -130,8 +117,109 @@
     </div>
 </div>
 
-<style>
+<script>
+$(document).ready( function () {
+    referencias = {!! json_encode($referencias) !!};
+    $('#datos').DataTable( {
+        data: referencias,
+        columns: [
+            { data: 'codigo' },
+            { data: 'descripcion' },
+            { data: 'nombre' },
+            { data: 'precio1' },
+            { data: 'precio2' },
+            { data: 'precio3' },
+            { data: 'precio4' },
+            { data: 'estado' },
+            { data: 'costo' },
+            { data: 'saldo' },
+            { id: 'id' }
+        ],
+        columnDefs: [
+            {
+                targets: 10,
+                render: function ( id, type, row, meta ) {
+                    if(type === 'display'){
+                        data = '<a href="javascript:;" onclick="actualizarPrecio('+row.id+','+id+')" class="btn btn-warning">Actualizar</a>';
+                    }
+                    return data;
+                }
+            },
+            {
+                targets: 3,
+                render: function ( data, type, row, meta ) {
+                    if(type === 'display'){
+                        data = '<div ondblclick="changeToPrecio1('+row.id+',this)" class="success"><label>'+data+'</label></div>';
+                    }
+                    return data;
+                }
+            },
+            {
+                targets: 4,
+                render: function ( data, type, row, meta ) {
+                    if(type === 'display'){
+                        data = '<div ondblclick="changeToPrecio2('+row.id+',this)" class="success"><label>'+data+'</label></div>';
+                    }
+                    return data;
+                }
+            },
+            {
+                targets: 5,
+                render: function ( data, type, row, meta ) {
+                    if(type === 'display'){
+                        data = '<div ondblclick="changeToPrecio3('+row.id+',this)" class="success"><label>'+data+'</label></div>';
+                    }
+                    return data;
+                }
+            }
+        ]     
+    } );
+    
+} );
 
-</style>
+function actualizarPrecio(row, id){
+    var urls = "/inventario/actualizacionPrecios";
+    
+    precio1 = $('#precio1'+row).val();
+    precio2 = $('#precio2'+row).val();
+    precio3 = $('#precio3'+row).val();
+    
+    config.Redirect(urls+'/'+row+'/'+precio1+'/'+precio2+'/'+precio3);
+}
+function changeToPrecio1(data, element){
+    console.log(data);
+    var node = element;
+    var label = node.firstChild;
+    label.style.display = "none";
+    var x = document.createElement("INPUT");
+    x.setAttribute("type", "text");
+    x.setAttribute("class", "form-control");
+    x.setAttribute("id", "precio1"+data);
+    x.setAttribute("value", label.innerText);
+    node.appendChild(x);
+}
+function changeToPrecio2(data, element){
+    var node = element;
+    var label = node.firstChild;
+    label.style.display = "none";
+    var x = document.createElement("INPUT");
+    x.setAttribute("type", "text");
+    x.setAttribute("class", "form-control");
+    x.setAttribute("id", "precio2"+data);
+    x.setAttribute("value", label.innerText);
+    node.appendChild(x);
+}
+function changeToPrecio3(data, element){
+    var node = element;
+    var label = node.firstChild;
+    label.style.display = "none";
+    var x = document.createElement("INPUT");
+    x.setAttribute("type", "text");
+    x.setAttribute("class", "form-control");
+    x.setAttribute("id", "precio3"+data);
+    x.setAttribute("value", label.innerText);
+    node.appendChild(x);
+}
+</script>
 
 @endsection()

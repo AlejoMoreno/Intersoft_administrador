@@ -39,8 +39,7 @@ class FacturasController extends Controller
         //verificar si es en efectivo - credito o no aplica (como ajustes)
         $banderaTipoPago = true; // si tiene un tipo de pago, de lo contrario no se tiene en cuenta en contabilidad
         if($request->tipo_pago != 0){
-            $tipopago = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))
-                              ->where('id','=',$request->tipo_pago)->first();
+            $tipopago = Tipopagos::where('id','=',$request->tipo_pago)->first();
             if($tipopago->nombre == 'EFECTIVO'){
                 $request->saldo = 0;
             }
@@ -98,8 +97,7 @@ class FacturasController extends Controller
                 $numero = 1;
                 $tipocartera = "";
                 if($request->tipo_pago != 0){
-                    $tipopago = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))
-                                      ->where('id','=',$request->tipo_pago)->first();
+                    $tipopago = Tipopagos::where('id','=',$request->tipo_pago)->first();
                     if($tipopago->nombre == 'EFECTIVO'){
                         if($request->signo == '+'){
                             $carteras = Carteras::where('tipoCartera','=','EGRESO')->
@@ -178,9 +176,10 @@ class FacturasController extends Controller
                             $contabilidad->id_empresa = Session::get('id_empresa');	
 
                             $contabilidad->tipo_transaccion = $tipo_transaccion;
-                            $contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
+                            //$contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
                             $contabilidad->valor_transaccion = $obj_c->total;
-                            $asiento_contable = ContabilidadesController::register($contabilidad);
+                            //$asiento_contable = ContabilidadesController::register($contabilidad);
+                            $asiento_contable = $contabilidad->save();
 
                             //registro contable egreso/ingreso contrapartida
                             $contabilidad = new Contabilidades();
@@ -194,9 +193,10 @@ class FacturasController extends Controller
                             $contabilidad->id_empresa = Session::get('id_empresa');	
 
                             $contabilidad->tipo_transaccion = $tipo_transaccion_2;
-                            $contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
+                            //$contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
                             $contabilidad->valor_transaccion = $obj_c->total;
-                            $asiento_contable = ContabilidadesController::register($contabilidad);
+                            //$asiento_contable = ContabilidadesController::register($contabilidad);
+                            $asiento_contable = $contabilidad->save();
                         }
                     }
                 }
@@ -233,19 +233,14 @@ class FacturasController extends Controller
 
     }
 
-    public function Tercero($signo,$request){
+    static function Tercero($signo,$request){
+        $tercero = null;
         if($signo == '+'){
             $tercero = Directorios::where('nit',$request->id_cliente)->
                                     where('id_directorio_tipo_tercero','1')->
                                     where('id_empresa','=',Session::get('id_empresa'))->first();
         }
-        //salidas de inventarios
-        if($signo == '-'){
-            $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','!=','1')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->first();
-        }
-        //nada con el inventario
+        //nada con el inventario o Salida de inventario
         else{
             $tercero = Directorios::where('nit',$request->id_cliente)->
                                     where('id_directorio_tipo_tercero','!=','1')->
@@ -406,5 +401,66 @@ class FacturasController extends Controller
 
     public function facturaPost() {
         return view('documentos.facturaPost');
+    }
+
+    /**
+     * PEDIDOS FACTURA
+     */
+    public function pedidos(){
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $pedidos = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','=')->whereNotIn('estado',['FACTURADO','RECHAZADO'])->get(); //estado=FACTURADO
+        foreach($pedidos as $pedido){
+            $pedido->id_documento = Documentos::where('id','=',$pedido->id_documento)->first();
+            $pedido->id_cliente = Directorios::where('id','=',$pedido->id_cliente)->first();
+            $pedido->id_vendedor = Usuarios::where('id','=',$pedido->id_vendedor)->first();
+        }
+        return view('facturacion.pedidos',array(
+            "referencias"=>$referencias,
+            "pedidos"=>$pedidos
+        ));
+    }
+
+    public function updatePedidos(Request $request){
+        $pedido = Facturas::where('id','=',$request->id_documento)->first();
+        $pedido->estado = $request->estado; //FACTURADO / RECHAZADO
+        $pedido->save();
+    }
+
+    /**
+     * DEVOLUCIONES FACTURA
+     */
+    public function devoluciones(){
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $facturas = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','-')->whereNotIn('estado',['FACTURADO','RECHAZADO'])->get(); //estado=FACTURADO
+        foreach($facturas as $factura){
+            $factura->id_documento = Documentos::where('id','=',$factura->id_documento)->first();
+            $factura->id_cliente = Directorios::where('id','=',$factura->id_cliente)->first();
+            $factura->id_vendedor = Usuarios::where('id','=',$factura->id_vendedor)->first();
+        }
+        return view('facturacion.devoluciones',array(
+            "referencias"=>$referencias,
+            "facturas"=>$facturas
+        ));
+    }
+
+    public function updateDevoluciones(Request $request){
+        $pedido = Facturas::where('id','=',$request->id_documento)->first();
+        $pedido->estado = $request->estado; //FACTURADO / RECHAZADO
+        $pedido->save();
+    }
+
+    /**
+     * FACTURAS DE VENTA
+     */
+    public function venta($id_documento){
+        $documento = Documentos::where('id','=',$id_documento)->first();
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
+        
+        return view('facturacion.venta',array(
+            "referencias"=>$referencias,
+            "documento"=>$documento,
+            "ciudades"=>$ciudades
+        ));
     }
 }

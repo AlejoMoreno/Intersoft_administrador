@@ -3,77 +3,197 @@
 @section('content')
 
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">Menú</h4>
-                </div>
-                <div class="content">
-                    
 
-                	<table class="table table-hover table-striped"  id="datos">
-                        <thead>
-                            <tr><th></th>
-                            <th>Opcion</th>
-                            <th></th>
-                        </tr></thead>
-                        <tbody>
-                            <tr onclick="config.Redirect('/index');">
-                                <td><img width="30" src="/assets/204366.svg"></td>
-                                <td colspan="2">Inicio</td> 
-                            </tr>
-                            <tr onclick="config.Redirect('/submenu/directorio');">
-                                <td><img width="30" src="/assets/2245320.svg"></td>
-                                <td colspan="2">Información General</td>
-                            </tr>
-                            <tr onclick="config.Redirect('/submenu/inventario');">
-                                <td><img width="30" src="/assets/1924873.svg"></td>
-                                <td colspan="2">Inventario</td>
-                            </tr>
-                            <tr onclick="config.Redirect('/submenu/produccion');">
-                                <td><img width="30" src="/assets/2166907.svg"></td>
-                                <td colspan="2">Producción</td>
-                            </tr>
-                            <tr onclick="config.Redirect('/submenu/facturacion');">
-                                <td><img width="30" src="/assets/138360.svg"></td>
-                                <td colspan="2">Facturación</td>
-                            </tr>
-                            <tr onclick="config.Redirect('/submenu/tesoreria');">
-                                <td><img width="30" src="/assets/1162498.svg"></td>
-                                <td colspan="2">Tesorería</td>
-                            </tr>
-                            <tr onclick="config.Redirect('/submenu/contabilidad');">
-                                <td><img width="30" src="/assets/313062.svg"></td>
-                                <td colspan="2">Contabilidad</td>
-                            </tr>
-                            <tr onclick="config.Redirect('/cerrar');">
-                                <td><img width="30" src="/assets/529873.svg"></td>
-                                <td colspan="2">Salida</td>
-                            </tr>
-                        </tbody>
-                    </table>
+<?php 
 
+$lista = null;
+if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
+    $lista = 'admin';
+}
+if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
+    $lista = 'venta';
+}
+if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Session::get('cargo') == "Obrero"){
+    $lista = 'obrero';
+}
 
+?>
 
-                    <div class="footer">
-                        <div class="legend">
-                            <i class="fa fa-circle text-info"></i> 
-                            <i class="fa fa-circle text-danger"></i> 
-                            <i class="fa fa-circle text-warning"></i> 
-                        </div>
-                        <hr>
-                        <div class="stats">
-                            <i class="fa fa-clock-o"></i> Ir a la sección del manual
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<style>
+.title{
+    margin-left: 2%;
+    font-weight: bold;
+    font-family: Poppins;
+}
+.top-5-w{
+    margin-top:5%;
+}
+.table > thead th {
+    -webkit-animation: pantallain 100s infinite; /* Safari 4.0 - 8.0 */
+    -webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+    animation: pantallain 100s infinite;
+    animation-direction: alternate;
+}
+</style>
 
-        
+<div class="enc-article">
+    <h4 class="title">Tablero</h4>
+</div>
+
+<div class="row top-5-w">
+    <div class="col-md-5" style="overflow-x:scroll;margin-left:2%">
+        <p style="font-size:10pt;font-family:Poppins">Rutas asignadas Día ({{ $day }})</p>
+        <table class="table table-sm  table-striped" id="datos">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Zona</th>
+                    <th>Nit</th>
+                    <th>Razon social</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($zona!=null)
+                    @foreach($zona as $obj)
+                        @foreach($obj['id_tercero'] as $objo)
+                        <tr>
+                            <td>{{ $obj['id_usuario']['ncedula'] }}-{{ $obj['id_usuario']['nombre'] }}</td>
+                            <td>{{ $obj['zona'] }}</td>
+                            <td><a href="/facturacion/venta/37?nit={{ $objo['nit'] }}">{{ $objo['nit'] }}</a></td>
+                            <td>{{ $objo['razon_social'] }}</td>
+                            <td>{{ $objo['direccion'] }}</td>
+                            <td>{{ $objo['telefono'] }}</td>
+                        </tr>
+                        @endforeach
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6" style="overflow-x:scroll;margin-left:2%">
+        <p style="font-size:10pt;font-family:Poppins">Facturas realizadas</p>
+        <table class="table table-sm  table-striped" id="facturas">
+            <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Vencimiento</th>
+                    <th>Saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($facturas!=null)
+                    @foreach($facturas as $obj)
+                    <tr>
+                        <td>{{ $obj['numero'] }} - {{ $obj['prefijo'] }}</td>
+                        <td>{{ $obj['id_cliente'] }} </td>
+                        <td>{{ $obj['fecha'] }}</td>
+                        <td>{{ $obj['fecha_vencimiento'] }}</td>
+                        <td>{{ $obj['saldo'] }}</td>
+                    </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
     </div>
 </div>
+
+<div class="row"> 
+    <div class="col-md-12" style="overflow-x:scroll;margin-top:2%">
+        <p style="font-size:10pt;font-family:Poppins">Referencias de la empresa</p>
+        <table class="table table-sm  table-striped" id="referencias">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>descripcion</th>
+                    <th>Código Barras</th>
+                    <th>precio 1</th>
+                    <th>precio 2</th>
+                    <th>precio 3</th>
+                    <th>estado</th>
+                    <th>Ultimo costo</th>
+                    <th>saldo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($referencias!=null)
+                    @foreach($referencias as $obj)
+                    <tr>
+                        <td>{{ $obj['codigo_linea'] }}{{ $obj['codigo_letras'] }}{{ $obj['codigo_consecutivo'] }}</td>
+                        <td>{{ $obj['descripcion'] }}</td>
+                        <td>{{ $obj['codigo_barras'] }}</td>
+                        <td>{{ $obj['precio1'] }}</td>
+                        <td>{{ $obj['precio2'] }}</td>
+                        <td>{{ $obj['precio3'] }}</td>
+                        <td>{{ $obj['estado'] }}</td>
+                        <td>{{ $obj['costo'] }}</td>
+                        <td>{{ $obj['saldo'] }}</td>
+                    </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row"> 
+    <div class="col-md-12" style="overflow-x:scroll;margin-top:2%">
+        <p style="font-size:10pt;font-family:Poppins">Referencias a punto de vencer (corte: <small><?php echo date("Y-m-d",strtotime(date("Y-m-d")."- 2 month")); ?></small>)</p>
+        <table class="table table-sm  table-striped" id="lotes">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>descripcion</th>
+                    <th>Fecha vencimiento</th>
+                    <th>Lote</th>
+                    <th>Sucursal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($lotes!=null)
+                    @foreach($lotes as $obj)
+                    <tr>
+                        <td>{{ $obj['id_referencia']['codigo_linea'] }}{{ $obj['id_referencia']['codigo_letras'] }}{{ $obj['id_referencia']['codigo_consecutivo'] }}</td>
+                        <td>{{ $obj['id_referencia']['descripcion'] }}</td>
+                        <td>{{ $obj['fecha_vence_lote'] }}</td>
+                        <td>{{ $obj['numero_lote'] }}</td>
+                        <td>{{ $obj['id_sucursal']['nombre'] }}</td>
+                    </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+<script>
+$(document).ready( function () {
+    zona = {!! json_encode($zona) !!};
+    $('#datos').DataTable({});
+    $('#facturas').DataTable({});
+    $('#lotes').DataTable({});
+    $('#referencias').DataTable({
+        'rowCallback': function(row, data, index){
+            if(data[8] <= 0){
+                $(row).find('td:eq(8)').css('color', 'red');
+                $(row).find('td:eq(8)').attr('data-toggle', 'tooltip');
+                $(row).find('td:eq(8)').attr('title', 'No cuenta con saldo');
+            }
+            if(data[3] >= data[7] || data[4] >= data[7] || data[5] >= data[7] ){
+                $(row).find('td:eq(7)').css('color', 'red');
+                $(row).find('td:eq(8)').attr('data-toggle', 'tooltip');
+                $(row).find('td:eq(8)').attr('title', 'El costo es mayor o igual al precio');
+            }
+        }
+    });    
+} );
+</script>
+
 
 @endsection()

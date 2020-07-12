@@ -544,25 +544,49 @@ function Documentos(){
         var tabla = document.getElementById("tabla_productos");
         for (var i=1;i < tabla.rows.length; i++){  
             valor_principal=parseInt($('#'+i+'_valortotal').val())+valor_principal;
-            valor_iva=parseInt(
-                ( parseInt($('#'+i+'_valortotal').val()) * $('#'+i+'_iva').text() )
-            )+valor_iva;
-            valor_descuento = (
-                ( parseInt($('#'+i+'_descuento').val()) * parseInt($('#'+i+'_valortotal').val()) )
-                /100)+valor_descuento;
+            valor_iva = parseInt( ( parseInt($('#'+i+'_valortotal').val()) * $('#'+i+'_iva').text() ) )+valor_iva;
+            des = parseInt($('#'+i+'_descuento').val());
+            if (isNaN(des)) des = 0; 
+            tot = parseInt($('#'+i+'_valortotal').val());
+            console.log(des + " "+ tot);
+            valor_descuento = parseInt( ( parseInt(des) * parseInt(tot) ) /100)+valor_descuento;
 
-            //console.log(valor_principal);
+            
         }
         //console.log("SUBTOTAL");
         //console.log(totales);
-        var valor_retefuente = (valor_principal * 2.5)/100;
         impoconsumo = parseInt($('#impoconsumo').val());
         otro_impuesto = parseInt($('#otro_impuesto').val());
 
+        
+        
+
+        //consultar cliente para ver si tiene retencion o no
+        var urls = "/administrador/diretorios/search/search";
+        //$('#retefuente').val((parseInt(valor_principal)*2.5)/100);
+        $('#retefuente').val(0);
+        valor_retefuente = 0;
+        parametros = {
+            "nit" : $('#cedula_tercero').val()
+        };
+        $.ajax({
+            data:  parametros,
+            url:   urls,
+            type:  'post',
+            beforeSend: function () {
+                $('#resultado').html('<p>Espere porfavor</p>');
+            },
+            success:  function (response) {
+                console.log(response);
+                if(response.body[0].id_retefuente == 3){
+                    $('#retefuente').val(0);
+                }
+            }
+        });
         $('#subtotal').val(valor_principal);
         $('#iva').val(valor_iva);
         $('#descuento').val(valor_descuento);
-        $('#retefuente').val(valor_retefuente);
+        valor_retefuente = $('#retefuente').val();
         $('#total').val(valor_principal + valor_iva - valor_descuento + valor_flete - valor_retefuente + impoconsumo + otro_impuesto);
     }
 
@@ -572,6 +596,9 @@ function Documentos(){
         if(this.verificar() == true){ //todo esta correcto
             this.saveFactura();
             $('#Guardar').hide();
+            if($("#pasarafactura").length != 0){
+                this.actualizardocumento($("#pasarafactura").val());
+            }
             $('#imprimirPOST').show(100);
             $('#imprimirDOC').show(100);
         }
@@ -585,6 +612,21 @@ function Documentos(){
         }
         
         
+    }
+
+    this.actualizardocumento = function(id_documento){
+        var parametros = {
+            "estado":"FACTURADO",
+            "id_documento":id_documento
+        };
+        $.ajax({
+            data:  parametros,
+            url:   '/facturacion/pedidosUpdate',
+            type:  'post',
+           success:  function (response) {
+                console.log(response);
+            }
+        });
     }
 
     this.verificar = function(){
@@ -640,6 +682,9 @@ function Documentos(){
                 'descuento' : $('#'+i+'_descuento').val()
             };
             jsonArr.push(productos);
+        }
+        if($("#pedidoID").length != 0){
+            $('#observaciones').val( $('#observaciones').val() + " pedido No." + $('#pedidoID').val());
         }
         var parametros = {
             'id_sucursal' : '1',

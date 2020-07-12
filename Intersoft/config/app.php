@@ -183,8 +183,12 @@ return [
         //pdf generate
         Barryvdh\DomPDF\ServiceProvider::class,
 
+<<<<<<< HEAD
         //soap 
         Artisaninweb\SoapWrapper\ServiceProvider::class, 
+=======
+        
+>>>>>>> 1d1ecc9066171e0ae725872e75eb5ff5fb91bdf7
 
     ],
 

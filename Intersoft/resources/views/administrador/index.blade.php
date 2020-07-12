@@ -2,42 +2,6 @@
 
 @section('content')
 
-<?php 
-
-use App\Usuarios;
-$usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
-use App\Directorios;
-$directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))->get();
-use App\Departamentos;
-$departamentos = Departamentos::all();
-use App\Ciudades;
-$ciudades = Ciudades::all();
-use App\Contrato_laborals;
-$contratos = Contrato_laborals::where('id_empresa','=',Session::get('id_empresa'))->get();
-use App\Retefuentes;
-$retefuentes = Retefuentes::all();
-use App\Regimenes;
-$regimenes = Regimenes::all();
-use App\Directorio_clases;
-$directorio_clases = Directorio_clases::all();
-use App\Directorio_tipos;
-$directorio_tipos = Directorio_tipos::all();
-use App\Directorio_tipo_terceros;
-$directorio_tipo_terceros = Directorio_tipo_terceros::all();
-use App\Sucursales;
-$sucursales = Sucursales::where('id_empresa','=',Session::get('id_empresa'))->get();
-use App\Lineas;
-$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
-use App\Marcas;
-$marcas = Marcas::where('id_empresa','=',Session::get('id_empresa'))->get();
-use App\Clasificaciones;
-$clasificaciones = Clasificaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
-use App\Tipo_presentaciones;
-$tipo_presentaciones = Tipo_presentaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
-use App\Documentos;
-$documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();?>
-
-
 
 <div class="container-fluid">
     <div class="row">

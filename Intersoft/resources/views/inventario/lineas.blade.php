@@ -32,8 +32,6 @@
                                     <th>iva porcentaje</th>
                                     <th>v puc iva</th>
                                     <th>c puc iva</th>
-                                    <th>puc compra</th>
-                                    <th>puc venta</th>
                                     <th></th> 
                                 </tr>
                             </thead>
@@ -55,8 +53,6 @@
                                         <td>{{ $obj['iva_porcentaje'] }}</td>
                                         <td>{{ $obj['v_puc_iva']['codigo'] }}</td>
                                         <td>{{ $obj['c_puc_iva']['codigo'] }}</td>
-                                        <td>{{ $obj['puc_compra']['codigo'] }}</td>
-                                        <td>{{ $obj['puc_venta']['codigo'] }}</td>
                                         <td><a href="javascript:;" onclick="lineas.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
                                         <!--td><a onclick="config.delete_get('/inventario/lineas/delete/', '{{ $obj }}',  '/inventario/lineas');" href="#"><button class="btn btn-danger">x</button></a></td-->
                                     </tr>

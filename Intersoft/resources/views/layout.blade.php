@@ -17,10 +17,10 @@
     <link href="/assets/css/demo.css" rel="stylesheet" />
     <!--  CSS for animated     -->
     <link href="/assets/css/animate.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/css/animate.min.css">
     <!--     Fonts and icons     -->
     <link href="/assets/css/font-awesome.min.css" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400&display=swap" rel="stylesheet">
     <link href="/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
     <script src="/assets/js/jquery.min.js"></script>
 	<script src="/assets/js/bootstrap.min.js"></script>
@@ -33,7 +33,7 @@
     
 
     <!-- CSS FAMC -->
-    <link rel="stylesheet" href="/css/menu.css">
+    <!--<link rel="stylesheet" href="/css/menu.css">-->
     <!-- SCRIPTS FAMC -->
     <script type="text/javascript" src="/js/config.js"></script>
     <script type="text/javascript" src="/js/texto.js"></script>
@@ -61,138 +61,397 @@
     <script type="text/javascript" src="/js/contabilidad/cuentas.js"></script>
 
 
-    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-    <script>
-    /*var OneSignal = window.OneSignal || [];
-    OneSignal.push(function() {
-        OneSignal.init({
-        appId: "0f1b955e-ce5f-41b7-b75d-daa385e4e52a",
-        notifyButton: {
-            enable: true,
-        },
-        });
-    });*/
-    </script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+    
+
+
+
+    <style>
+        .navbar-default .navbar-nav > li > a:not(.btn) {
+            color: white;
+        }
+        .navbar-default .navbar-nav > li > a:not(.btn):hover,.navbar-default .navbar-nav > li > a:not(.btn):focus{
+            color: black !important;
+        }
+        .fondo-dinamico{
+            -webkit-animation: pantallain 100s infinite; /* Safari 4.0 - 8.0 */
+			-webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+			animation: pantallain 100s infinite;
+			animation-direction: alternate;
+		}
+		/* Safari 4.0 - 8.0 */
+		@-webkit-keyframes pantallain {
+			0%   {background: #022c76;}
+			50%  {background: #5abd61;}
+			100%  {background: #022c76;} 
+		}
+		
+		@keyframes pantallain {
+			0%   {background: #022c76;}
+			50%  {background: #5abd61;}
+			100%  {background: #022c76;} 
+        }
+        section{
+            background: #ededed;
+        }
+        article{
+            margin:5%;
+            margin-top:2%;
+            padding: 5%;
+            background: white;
+            -webkit-box-shadow: 0px 0px 5px 0px rgba(158,158,158,1);
+            -moz-box-shadow: 0px 0px 5px 0px rgba(158,158,158,1);
+            box-shadow: 0px 0px 5px 0px rgba(158,158,158,1);
+        }
+        @media (max-width: 991px){
+            .navbar .navbar-collapse.collapse, .navbar .navbar-collapse.collapse.in, .navbar .navbar-collapse.collapsing {
+                display: inline !important;
+            }
+        }
+
+
+        .enc-article{
+            background: white;
+            position: absolute;
+            top:0px;
+            left:0px;
+            width: 100%;
+            -webkit-animation: tituloart 20s infinite; /* Safari 4.0 - 8.0 */
+            -webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+            animation: tituloart 20s infinite;
+            animation-direction: alternate;
+            border: 0px;
+            border-bottom: 1pt solid #ededed;
+        }
+        /* Safari 4.0 - 8.0 */
+        @-webkit-keyframes tituloart {
+            0%   {background: #f7f7f7;}
+            100%  {background: #ededed;} 
+        }
+
+        @keyframes tituloart {
+            0%   {background: #f7f7f7;}
+            100%  {background: #ededed;} 
+        }
+        footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
 
 </head>
-<body onbeforeunload="config.leave_page()">
-<div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;"><div class="loader"></div></div>
-<div class="wrapper">
-    <div class="sidebar" data-color="blue" data-image="/assets/img/sidebar-1.jpg" style="overflow-x:hidden">
 
-    	<div class="sidebar-wrapper">
-            <div class="logo">
-                <a href="dashboard.html" class="simple-text">
-                     Intersoft
+
+
+
+<?php 
+
+use App\Documentos;
+$documentos = Documentos::where('ubicacion','=','ENTRADA')
+                        ->where('id_empresa','=',Session::get('id_empresa'))->get();
+
+$documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
+                        where('id_empresa','=',Session::get('id_empresa'))->get();
+
+?>
+
+
+<body onbeforeunload="config.leave_page()" style="background:#ededed;overflow-x:hidden;">
+
+    <div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;top:0px;left:0px;"><div class="loader"></div></div>
+
+    <?php 
+
+    date_default_timezone_set('America/Bogota');
+    $hora = date('Hi');
+    $hora_limite = date('1600');
+    $dif = $hora_limite - $hora;
+
+    $lista = null;
+    if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
+        $lista = ["Inicio", "Directorio", "Inventario", "Producción", "Facturación", "Tesorería", "Contabilidad", "Parámetros", "Salida"];
+        $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
+        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario'];
+        $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
+        $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES'];
+        $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
+    }
+    else if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
+        $lista = ["Inicio", "Facturación", "Salida"];
+        $Facturacion = ['Estadistica Ventas'];
+    }
+    else if(Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario"){
+        $lista = ["Inicio", "Inventario", "Producción", "Facturación", "Salida"];
+        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario'];
+        $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
+        $Facturacion = ['Estadistica Ventas'];
+    }
+    else if(Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos"){
+        $lista = ["Inicio", "Directorio", "Facturación", "Tesorería", "Salida"];
+        $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
+        $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
+        $Facturacion = ['Estadistica Ventas','Zonas Asingada'];
+    }
+    
+
+    ?>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default fondo-dinamico">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"><img style="width: 100px;" src="/assets/img/logo_intersoft1.png"></a>
+          {{ $dif }}
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            
+          <?php if(in_array("Inicio",$lista)){ ?>
+
+            <li class="index" id="index">
+                <a href="#" onclick="config.Redirect('/index');">
+                    Inicio
                 </a>
-            </div>
+            </li>
 
-            <ul class="nav">
-                <li class="index" id="index">
-                    <a href="#" onclick="config.Redirect('/index');">
-                        <img style="float: left;" width="30" src="/assets/204366.svg">
-                        <p>Inicio</p>
-                    </a>
-                </li>
+            <?php } ?>
+
+            <?php if(in_array("Directorio",$lista)){ ?>
                 <li class="directorio" id="directorio">
-                    <a href="#" onclick="config.Redirect('/submenu/directorio');">
-                        <img style="float: left;" width="30" src="/assets/2245320.svg">
-                        <p>Directorio</p>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Directorio
+                        <ul class="dropdown-menu">
+                            <?php if(in_array("Parámetros",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/index');">Parámetros</a></li><?php } ?>
+                            <?php if(in_array("Creación, Consulta, Directorio",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/directorios');">Creación, Consulta, Directorio</a></li><?php } ?>
+                            <?php if(in_array("Calendario",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/calendario');">Calendario</a></li><?php } ?>
+                            <?php if(in_array("Usuarios",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/usuarios');">Usuarios</a></li><?php } ?>
+                        </ul>
                     </a>
                 </li>
+            <?php } ?>
+
+            <?php if(in_array("Inventario",$lista)){ ?>
                 <li class="inventario" id="inventario">
-                    <a href="#" onclick="config.Redirect('/submenu/inventario');">
-                        <img style="float: left;" width="30" src="/assets/1924873.svg">
-                        <p>Inventario</p>
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Inventario
+                        <ul class="dropdown-menu">
+                            <?php if(in_array("Maestro de Referencias",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/referencias');">Maestro de Referencias</a></li><?php } ?>
+                            <?php if(in_array("Maestro de Lotes",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/lotes');">Maestro de Lotes</a></li><?php } ?>
+                            <?php if(in_array("Catálogo",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/catalogo');">Catálogo</a></li><?php } ?>
+                            <?php if(in_array("Tarjeta Kardex",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Tarjeta Kardex</a></li><?php } ?>
+                            <?php if(in_array("Costo Promedio Ponderado",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Costo Promedio Ponderado</a></li><?php } ?>
+                            <?php if(in_array("Actualización y Lista de Precios",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/actualizacionPrecios');">Actualización y Lista de Precios</a></li><?php } ?>
+                            <?php if(in_array("Presupuestos de Reposición",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Presupuestos de Reposición</a></li><?php } ?>
+                            <?php if(in_array("Cierre de Inventario",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/cierreInventario');">Cierre de Inventario</a></li><?php } ?>
+                            <li role="separator" class="divider"></li>
+                            @foreach ($documentos as $obj)
+                                <?php 
+                                if($obj["signo"]=='+'){
+                                    $signo = "mas";
+                                }
+                                elseif($obj["signo"]=='-'){
+                                    $signo = "menos";
+                                }
+                                else{
+                                    $signo = "igual";
+                                }
+                                ?> 
+                                <li>
+                                    <div class="row">
+                                        <?php $url = '/documentos/documento?signo='.$signo.'&nombre='.$obj['nombre'].'&id='.$obj['id'].'&prefijo='.$obj['prefijo'].'&numero='.$obj['num_presente']; ?>
+                                        <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
+                                        <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                        <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                    <div>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                            @endforeach
+                        </ul>
                     </a>
                 </li>
+            <?php } ?>
+
+            <?php if(in_array("Producción",$lista)){ ?>
                 <li class="produccion" id="produccion"> 
-                    <a href="#" onclick="config.Redirect('/submenu/produccion');">
-                        <img style="float: left;" width="30" src="/assets/2166907.svg">
-                        <p>Producción</p>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Producción
+                        <ul class="dropdown-menu">
+                            <?php if(in_array("Ficha técnica",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/fichatecnica');">Ficha técnica</a></li><?php } ?>
+                            <?php if(in_array("Inventario Materia Prima",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/materiaprima');">Inventario Materia Prima</a></li><?php } ?>
+                            <?php if(in_array("Ordenes de Producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ordenesdeproduccion');">Ordenes de Producción</a></li><?php } ?>
+                            <?php if(in_array("Liquidación Mano de Obra",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/liquidacionobra');">Liquidación Mano de Obra</a></li><?php } ?>
+                            <?php if(in_array("Costos Directos",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/costosdirectos');">Costos Directos</a></li><?php } ?>
+                            <?php if(in_array("Ingreso por producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ingresoporproduccion');">Ingreso por producción</a></li><?php } ?>
+                        </ul>
                     </a>
                 </li>
+            <?php } ?>
+
+            <?php if(in_array("Facturación",$lista)){ ?>
                 <li class="facturacion" id="facturacion">
-                    <a href="#" onclick="config.Redirect('/submenu/facturacion');">
-                        <img style="float: left;" width="30" src="/assets/138360.svg">
-                        <p>Facturación</p>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Facturación
+                        <ul class="dropdown-menu">
+                            <?php if(in_array("Liquidación Comisiones",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/liquidacionventas');">Liquidación Comisiones</a></li><?php } ?>
+                            <?php if(in_array("Estadistica Ventas",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/estadisticaventas');">Estadistica Ventas</a></li><?php } ?>
+                            <?php if(in_array("Zonas Asingada",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/zona');">Zonas Asingada</a></li><?php } ?>
+                            <li role="separator" class="divider"></li>
+                            <?php if(in_array("Pasar PEDIDOS a FACTURA",$Facturacion)){ ?><li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/pedidos');">Pasar PEDIDOS a FACTURA</a></div></li><?php } ?>
+                            <li role="separator" class="divider"></li>
+                            <?php if(in_array("DEVOLUCIONES",$Facturacion)){ ?><li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/devoluciones');">DEVOLUCIONES</a></div></li><?php } ?>
+                            <li role="separator" class="divider"></li>
+                            @if( true )
+                                @foreach ($documentosSalida as $obj)
+                                    <?php 
+                                    if($obj["signo"]=='+'){
+                                        $signo = "mas";
+                                    }
+                                    elseif($obj["signo"]=='-'){
+                                        $signo = "menos";
+                                    }
+                                    else{
+                                        $signo = "igual";
+                                    }
+                                    if($obj['nombre']=="MAYORISTA"){
+                                        $num  = $obj['num_presente'];
+                                    }
+                                    ?> 
+                                    <li>
+                                        <div class="row">
+                                            <?php $url = '/facturacion/venta/'.$obj['id']; ?>
+                                            <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
+                                            <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                            <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                        <div>
+                                    </li>
+                                    <li role="separator" class="divider"></li>
+                                @endforeach
+                            @endif
+                        </ul>
                     </a>
                 </li>
+            <?php } ?>
+
+            <?php if(in_array("Tesorería",$lista)){ ?>
                 <li class="tesoreria" id="tesoreria">
-                    <a href="#" onclick="config.Redirect('/submenu/tesoreria');">
-                        <img style="float: left;" width="30" src="/assets/1162498.svg">
-                        <p>Tesorería</p>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Tesorería
+                        <ul class="dropdown-menu">
+                            <?php if(in_array("Control de Gastos",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/gastos');">Control de Gastos</a></li><?php } ?>
+                            <?php if(in_array("Otros Ingresos",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/otrosingresos');">Otros Ingresos</a></li><?php } ?>
+                            <?php if(in_array("Pago a Proveedores",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/egresos');">Pago a Proveedores</a></li><?php } ?>
+                            <?php if(in_array("Cobro Cartera",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Cobro Cartera</a></li><?php } ?>
+                            <?php if(in_array("Cheques",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/cheques');">Cheques</a></li><?php } ?>
+                            <?php if(in_array("Pago Importaciones",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/Importaciones');">Pago Importaciones</a></li><?php } ?>
+                            <?php if(in_array("Retefuente, Iva, Reteica",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/pagoobligaciones');">Retefuente, Iva, Reteica</a></li><?php } ?>
+                            <?php if(in_array("Extracto y Cuentas de Cobro",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto y Cuentas de Cobro</a></li><?php } ?>
+                            <?php if(in_array("Causaciones",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/Causaciones');">Causaciones</a></li><?php } ?>
+                        </ul>
                     </a>
                 </li>
+            <?php } ?>
+
+            <?php if(in_array("Contabilidad",$lista)){ ?>
                 <li class="contabilidad" id="contabilidad">
-                    <a href="#" onclick="config.Redirect('/submenu/contabilidad');">
-                        <img style="float: left;" width="30" src="/assets/313062.svg">
-                        <p>Contabilidad</p>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Contabilidad
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/cuentas');">PUC</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/comprobantesdiario');">Comprobantes de Diario</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/librosauxiliares');">Libros Auxiliares</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/librosmayores');">Libros Mayores</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/balancecomprobacion');">Balance de Comprobación</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/perdidasganancias');">Perdidas y Ganancias</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/analisismensual');">Análisis Mensual Gastos</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/mediosmagneticos');">Medios Magnéticos</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/balancegeneral');">Balance General</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/certificados');">Certificados</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/liquidacionimpuestos');">Liquidación Impuestos</a></li>
+                        </ul>
                     </a>
                 </li>
+            <?php } ?>
+
+            <?php if(in_array("Parámetros",$lista)){ ?>
                 <li id="administrador">  
                     <a href="#" onclick="config.Redirect('/administrador/index');">
-                        <img style="float: left;" width="30" src="/assets/148912.svg">
-                        <p>Parámetros</p>
+                        Parámetros
                     </a>
                 </li>
+            <?php } ?>
+
+            <!--<li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Action</a></li>
+                <li><a href="#">Another action</a></li>
+                <li><a href="#">Something else here</a></li>
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">Nav header</li>
+                <li><a href="#">Separated link</a></li>
+                <li><a href="#">One more separated link</a></li>
+              </ul>
+            </li>-->
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            
+            
+
+            <li id="Salida">  
+                <a href="/contrasena">
+                    </strong>{{ Session::get('nombre') }} / {{ Session::get('cargo') }}</small>
+                </a>
+            </li>
+
+            <?php if(in_array("Salida",$lista)){ ?>
                 <li id="Salida">  
                     <a href="#" onclick="config.Redirect('/cerrar');">
-                        <img style="float: left;" width="30" src="/assets/529873.svg">
-                        <p>Salida</p>
+                        <img style="float: left;" width="20" src="/assets/529873.svg">
                     </a>
                 </li>
-            </ul>
-    	</div>
-    </div>
-    <div class="main-panel">
+            <?php } ?>
+            
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
 
-        <script>
-        //$("#mostrar").hide();
-        toogle();
-        function toogle(){
-            $(".sidebar-wrapper").css("width","260px");
-            $(".sidebar").css("width","75px");
-            $(".main-panel").css("width","calc(100% - 75px)");
-            $("#ocultar").hide();
-            $("#mostrar").show();
-        }
-        function toogle1(){
-            $(".sidebar-wrapper").css("width","260px");
-            $(".sidebar").css("width","260px");
-            $(".main-panel").css("width","calc(100% - 260px)");
-            $("#mostrar").hide();
-            $("#ocultar").show();
-        }
-        </script>
 
+    <div class="content row" style="background:#ededed;">
         @if(Session::has('user_id'))
-        <!-- CONTENT ENTER-->
-        <div class="content">
-            @yield('content')
-        </div>
-        <!-- CONTENT FIN-->
+        <section class="col-md-11 row">
+            <article class="col-md-12">
+                <!-- INICIO ARTICULO -->
+                @yield('content')
+                <!-- FIN ARTICULO -->
+            </article>
+        </section>
         @else
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="header">
-                                <h4 class="title">Error de sesión, vuelve a ingresar</h4>
-                                <p class="category"><a href="/">Por favor ingresa Aqui</a></p>
-                            </div>
-                        </div>
+        <section class="col-md-12 row">
+            <article class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Error de sesión, vuelve a ingresar</h4>
+                        <p class="category"><a href="/">Por favor ingresa Aqui</a></p>
                     </div>
                 </div>
-            </div>
-        </div>
+            </article>
+        </section>
         @endif
-
-        
-
+    </div>
+    
+    <div style="position:fixed;width:100%;left:0px;z-index:100">
         <!-- FORTER ENTER-->
-        <footer class="footer">
+        <div class="footer">
             <div class="container-fluid">
                 <nav class="pull-left">
                     <ul>
@@ -207,47 +466,30 @@
                             </a>
                         </li>
                         <li>
-                        <?php $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first(); ?>
-                            <small><strong>Nombre: </strong>{{ Session::get('nombre') }}</small> <br>
-                            <small><strong>Cargo: </strong>{{ Session::get('cargo') }}</small> <br>
-                            <small><strong>Empresa: </strong>{{ $empresa->razon_social }}</small> <br>
-                            <small><strong>Sucursal: </strong>{{ Session::get('sucursalNombre') }}</small>
+                            <a href="#">
+                                <?php $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first(); ?>
+                                <small><strong>Empresa: </strong>{{ $empresa->razon_social }}</small>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <small><strong>Sucursal: </strong>{{ Session::get('sucursalNombre') }}</small>
+                            </a>
                         </li>
                     </ul>
                 </nav>
-                <img style="width: 30%;maring-left:20%" src="/assets/img/logo_intersoft1.png">
+                <img style="width: 20%;maring-left:20%" src="/assets/img/logo_intersoft1.png">
                 <p class="copyright pull-right">
                     &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://wakusoft.com">wakusoft.com</a>, derechos reservados
                 </p>
             </div>
-        </footer>
+        </div>
         <!-- FORTER FIN-->
-
-        <script type="text/javascript">
-            $('#perfil').html("<small>" + localStorage.getItem("Nombre") + " " + localStorage.getItem("Apellido") + " || " + localStorage.getItem("Cargo") + "</small>");
-        </script>
-
     </div>
-</div>
 
-<style type="text/css">
-.sidebar-wrapper::-webkit-scrollbar-track,.main-panel::-webkit-scrollbar-track
-{
-    background-color: #F5F5F5;
-}
 
-.sidebar-wrapper::-webkit-scrollbar, .main-panel::-webkit-scrollbar
-{
-    width: 5px;
-    background-color: #F5F5F5;
-}
 
-.sidebar-wrapper::-webkit-scrollbar-thumb, .main-panel::-webkit-scrollbar-thumb
-{
-    background-color: #176dca;  
-}
 
-</style>
 
 <script>
     let menu = ["inventario","index","salida","cartera","contabilidad","calendario","administrador"];
@@ -305,7 +547,7 @@
         font-weight: bold;
     }
 }
-<style>
+</style>
 
 
 

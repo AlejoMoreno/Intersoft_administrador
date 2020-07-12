@@ -8,12 +8,15 @@ use Illuminate\Support\Collection as Collection;
 use App\Referencias;
 
 use App\Lineas;
+use App\Lotes;
 use App\Tipo_presentaciones;
 use App\Marcas;
 use App\Clasificaciones;
 use App\Usuarios;
 use App\Cuentas;
 use App\Pucauxiliar;
+
+use Yajra\Datatables\Datatables;
 
 use DB;
 use Excel;
@@ -108,15 +111,20 @@ class ReferenciasController extends Controller
 				"result"=>"fail",
 				"body"=>$exception);
 		}
-    }
-    
+	}
+	    
     public function showone($id){
 		try{
 			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))
 							->where('id','=',$id)->first();
+			
+			$linea = Lineas::where('id','=',$obj->codigo_linea)->first();							
+			$lote = $lote = Lotes::where('id_referencia','=',$obj->id)->orderBy('fecha_vence_lote','desc')->get();
 			return  array(
 				"result"=>"success",
-				"body"=>$obj);
+				"body"=>$obj,
+				"lote"=>$lote,
+				"linea"=>$linea);
 		}
         catch (ModelNotFoundException $exception){
             return  array(
@@ -278,6 +286,15 @@ class ReferenciasController extends Controller
 	/**
 	 * GET
 	 */
+
+	public function updatePrecios($id,$precio1,$precio2,$precio3){
+		$obj = Referencias::where('id',$id)->first();
+		$obj->precio1 			= $precio1;
+		$obj->precio2 			= $precio2;
+		$obj->precio3 			= $precio3;
+		$obj->update();
+		return redirect('inventario/actualizacionPrecios');
+	}
 	public function actualizacionPrecios(Request $request){
 
 		$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
