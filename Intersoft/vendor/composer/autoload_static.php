@@ -467,18 +467,7 @@ class ComposerStaticInit58cafe382125876576339a44d1dd63f9
         'App\\Tipopagos' => __DIR__ . '/../..' . '/app/Tipopagos.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\Usuarios' => __DIR__ . '/../..' . '/app/Usuarios.php',
-<<<<<<< HEAD
-        'Artisaninweb\\SoapWrapper\\Client' => __DIR__ . '/..' . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Client.php',
-        'Artisaninweb\\SoapWrapper\\Exceptions\\ServiceAlreadyExists' => __DIR__ . '/..' . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Exceptions/ServiceAlreadyExists.php',
-        'Artisaninweb\\SoapWrapper\\Exceptions\\ServiceMethodNotExists' => __DIR__ . '/..' . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Exceptions/ServiceMethodNotExists.php',
-        'Artisaninweb\\SoapWrapper\\Exceptions\\ServiceNotFound' => __DIR__ . '/..' . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Exceptions/ServiceNotFound.php',
-        'Artisaninweb\\SoapWrapper\\Facade' => __DIR__ . '/..' . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Facade.php',
-        'Artisaninweb\\SoapWrapper\\Service' => __DIR__ . '/..' . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Service.php',
-        'Artisaninweb\\SoapWrapper\\ServiceProvider' => __DIR__ . '/..' . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/ServiceProvider.php',
-        'Artisaninweb\\SoapWrapper\\SoapWrapper' => __DIR__ . '/..' . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/SoapWrapper.php',
-=======
         'App\\Zonasusuarios' => __DIR__ . '/../..' . '/app/Zonasusuarios.php',
->>>>>>> 1d1ecc9066171e0ae725872e75eb5ff5fb91bdf7
         'Barryvdh\\DomPDF\\Facade' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/Facade.php',
         'Barryvdh\\DomPDF\\PDF' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/PDF.php',
         'Barryvdh\\DomPDF\\ServiceProvider' => __DIR__ . '/..' . '/barryvdh/laravel-dompdf/src/ServiceProvider.php',

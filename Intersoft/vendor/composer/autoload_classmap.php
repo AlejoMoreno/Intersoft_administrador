@@ -136,7 +136,6 @@ return array(
     'App\\Tipopagos' => $baseDir . '/app/Tipopagos.php',
     'App\\User' => $baseDir . '/app/User.php',
     'App\\Usuarios' => $baseDir . '/app/Usuarios.php',
-<<<<<<< HEAD
     'Artisaninweb\\SoapWrapper\\Client' => $vendorDir . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Client.php',
     'Artisaninweb\\SoapWrapper\\Exceptions\\ServiceAlreadyExists' => $vendorDir . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Exceptions/ServiceAlreadyExists.php',
     'Artisaninweb\\SoapWrapper\\Exceptions\\ServiceMethodNotExists' => $vendorDir . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Exceptions/ServiceMethodNotExists.php',
@@ -145,9 +144,6 @@ return array(
     'Artisaninweb\\SoapWrapper\\Service' => $vendorDir . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/Service.php',
     'Artisaninweb\\SoapWrapper\\ServiceProvider' => $vendorDir . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/ServiceProvider.php',
     'Artisaninweb\\SoapWrapper\\SoapWrapper' => $vendorDir . '/artisaninweb/laravel-soap/src/Artisaninweb/SoapWrapper/SoapWrapper.php',
-=======
-    'App\\Zonasusuarios' => $baseDir . '/app/Zonasusuarios.php',
->>>>>>> 1d1ecc9066171e0ae725872e75eb5ff5fb91bdf7
     'Barryvdh\\DomPDF\\Facade' => $vendorDir . '/barryvdh/laravel-dompdf/src/Facade.php',
     'Barryvdh\\DomPDF\\PDF' => $vendorDir . '/barryvdh/laravel-dompdf/src/PDF.php',
     'Barryvdh\\DomPDF\\ServiceProvider' => $vendorDir . '/barryvdh/laravel-dompdf/src/ServiceProvider.php',
