@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="jumbotron text-center">
+  <h1>My First Bootstrap Page</h1>
+  <p>Resize this responsive page to see the effect!</p> 
+</div>
+  
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3">
+      <h3>Descargar PDF</h3>
+      <p>Descargar pdf desde facturatech</p>
+      <input type="text" id="username" placeholder="username" class="form-control" value="900320617"> 
+      <input type="text" id="password" placeholder="password" class="form-control" value="5e5f762035dc7cf822ddb7f3365b169d3458f8982f74bc022a53e73fbda8b5b4"> 
+      <input type="text" id="prefijo" placeholder="prefijo" class="form-control" value="AGRO"> 
+      <input type="text" id="folio" placeholder="folio" class="form-control">
+      <input type="number" id="id_empresa" placeholder="id_empresa" class="form-control" value="1">
+      <div class="btn btn-success" onclick="generarfactura()">generar</div>
+    </div>
+    <div class="col-sm-9">
+      <h3>Resultado proceso</h3>
+      <p id="resultado"></p>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+function generarfactura(){
+    parametros = {
+            "username" : $('#username').val(),
+            "password" : $('#password').val(),
+            "prefijo" : $('#prefijo').val(),
+            "folio" : $('#folio').val(),
+            "id_empresa" : $('#id_empresa').val()
+        };
+        $.ajax({
+			data:  parametros,
+			url:   '/api/DownloadPDFFileSend',
+			type:  'get',
+			beforeSend: function () {
+				$('#resultado').html('<p>Espere porfavor</p>');
+			},
+			success:  function (response) {
+                var obj = JSON.parse(response);
+                //console.log(obj.resourceData);
+                var b64 = obj.resourceData;
+
+                /*console.log('File Size:', Math.round(bin.length / 1024), 'KB');
+                console.log('PDF Version:', bin.match(/^.PDF-([0-9.]+)/)[1]);
+                console.log('Create Date:', bin.match(/<xmp:CreateDate>(.+?)<\/xmp:CreateDate>/)[1]);
+                console.log('Modify Date:', bin.match(/<xmp:ModifyDate>(.+?)<\/xmp:ModifyDate>/)[1]);
+                console.log('Creator Tool:', bin.match(/<xmp:CreatorTool>(.+?)<\/xmp:CreatorTool>/)[1]);*/
+
+                // Embed the PDF into the HTML page and show it to the user
+                var obj = document.createElement('object');
+                obj.style.width = '100%';
+                obj.style.height = '842pt';
+                obj.type = 'application/pdf';
+                obj.data = 'data:application/pdf;base64,' + b64;
+                document.getElementById('resultado').appendChild(obj);
+
+                // Insert a link that allows the user to download the PDF file
+                var link = document.createElement('a');
+                link.innerHTML = 'Download PDF file';
+                link.download = 'file.pdf';
+                link.href = 'data:application/octet-stream;base64,' + b64;
+                document.getElementById('resultado').appendChild(link);
+
+			}
+        });
+}
+
+</script>
+
+</body>
+</html>

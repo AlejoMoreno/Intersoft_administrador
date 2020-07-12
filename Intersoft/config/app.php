@@ -183,6 +183,9 @@ return [
         //pdf generate
         Barryvdh\DomPDF\ServiceProvider::class,
 
+        //soap 
+        Artisaninweb\SoapWrapper\ServiceProvider::class, 
+
     ],
 
     /*
@@ -235,6 +238,8 @@ return [
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 
         'PDF' => Barryvdh\DomPDF\Facade::class,
+
+        'SoapWrapper' => Artisaninweb\SoapWrapper\Facade\SoapWrapper::class,  
 
     ],
 
