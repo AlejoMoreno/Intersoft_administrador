@@ -153,11 +153,13 @@ Route::get('/facturacion/zonadelete/{id}', 'UsuariosController@deleteZonas');
 Route::get('/facturacion/liquidacionventas', 'UsuariosController@liquidacionVentas');
 Route::get('/facturacion/liquidacionventas/{id}/{valor}', 'UsuariosController@liquidacionVentas1');
 Route::get('/facturacion/estadisticaventas', 'UsuariosController@estadisticaVentas');
-Route::get('/facturacion/pedidos', 'FacturasController@pedidos');
-Route::post('/facturacion/pedidosUpdate', 'FacturasController@updatePedidos');
-Route::get('/facturacion/devoluciones', 'FacturasController@devoluciones');
-Route::post('/facturacion/devolucionesUpdate', 'FacturasController@updateDevoluciones');
+Route::get('/facturacion/pedidos/{id_factura}', 'FacturasController@pedidos');
+Route::get('/facturacion/pedidos', 'FacturasController@pedidosIndex');
 Route::get('/facturacion/venta/{id_documento}', 'FacturasController@venta');
+Route::post('/facturacion/pedidosUpdate', 'FacturasController@updateEstado');
+Route::get('/facturacion/devoluciones/{id_factura}', 'FacturasController@devoluciones');
+Route::get('/facturacion/devoluciones', 'FacturasController@devolucionesIndex');
+Route::get('/facturacion/alistamiento', 'FacturasController@alistamiento');
 
 
 /*

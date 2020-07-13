@@ -237,7 +237,6 @@ class FacturasController extends Controller
         $tercero = null;
         if($signo == '+'){
             $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','1')->
                                     where('id_empresa','=',Session::get('id_empresa'))->first();
         }
         //nada con el inventario o Salida de inventario
@@ -406,38 +405,80 @@ class FacturasController extends Controller
     /**
      * PEDIDOS FACTURA
      */
-    public function pedidos(){
+    public function pedidos($id_factura){
         $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
-        $pedidos = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','=')->whereNotIn('estado',['FACTURADO','RECHAZADO'])->get(); //estado=FACTURADO
+        $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
+        $facturas = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('id',$id_factura)->get(); //estado=FACTURADO
+        foreach($facturas as $factura){
+            $factura->id_documento = Documentos::where('id','=',$factura->id_documento)->first();
+            $factura->id_cliente = Directorios::where('id','=',$factura->id_cliente)->first();
+            $factura->id_vendedor = Usuarios::where('id','=',$factura->id_vendedor)->first();
+        }
+        $documento = Documentos::where('id','=',$facturas[0]->id_documento)->first();
+        $documento_dev = Documentos::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','-')->first();
+        $kardex = Kardex::where('id_factura','=',$facturas[0]->id)->get();
+        return view('facturacion.pedidos',array(
+            "referencias"=>$referencias,
+            "documento"=>$documento,
+            "ciudades"=>$ciudades,
+            "facturas"=>$facturas,
+            "kardex"=>$kardex,
+            "documento_dev"=>$documento_dev
+        ));
+    }
+    public function pedidosIndex(){
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $pedidos = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','=')->whereNotIn('estado',['FACTURADO','RECHAZADO','DEVUELTO'])->get(); //estado=FACTURADO
         foreach($pedidos as $pedido){
             $pedido->id_documento = Documentos::where('id','=',$pedido->id_documento)->first();
             $pedido->id_cliente = Directorios::where('id','=',$pedido->id_cliente)->first();
             $pedido->id_vendedor = Usuarios::where('id','=',$pedido->id_vendedor)->first();
         }
-        return view('facturacion.pedidos',array(
+        return view('facturacion.pedidosIndex',array(
             "referencias"=>$referencias,
             "pedidos"=>$pedidos
         ));
     }
 
-    public function updatePedidos(Request $request){
+    public function updateEstado(Request $request){
         $pedido = Facturas::where('id','=',$request->id_documento)->first();
-        $pedido->estado = $request->estado; //FACTURADO / RECHAZADO
+        $pedido->estado = $request->estado; //FACTURADO / RECHAZADO / DEVUELTO
         $pedido->save();
     }
 
     /**
      * DEVOLUCIONES FACTURA
      */
-    public function devoluciones(){
+    public function devoluciones($id_factura){
         $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
-        $facturas = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','-')->whereNotIn('estado',['FACTURADO','RECHAZADO'])->get(); //estado=FACTURADO
+        $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
+        $facturas = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('id',$id_factura)->get(); //estado=FACTURADO
         foreach($facturas as $factura){
             $factura->id_documento = Documentos::where('id','=',$factura->id_documento)->first();
             $factura->id_cliente = Directorios::where('id','=',$factura->id_cliente)->first();
             $factura->id_vendedor = Usuarios::where('id','=',$factura->id_vendedor)->first();
         }
+        $documento = Documentos::where('id','=',$facturas[0]->id_documento)->first();
+        $documento_dev = Documentos::where('id_empresa','=',Session::get('id_empresa'))->where('nombre','=','DEVOLUCION VENTAS')->first();
+        $kardex = Kardex::where('id_factura','=',$facturas[0]->id)->get();
         return view('facturacion.devoluciones',array(
+            "referencias"=>$referencias,
+            "documento"=>$documento,
+            "ciudades"=>$ciudades,
+            "facturas"=>$facturas,
+            "kardex"=>$kardex,
+            "documento_dev"=>$documento_dev
+        ));
+    }
+    public function devolucionesIndex(){
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $facturas = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','-')->whereNotIn('estado',['FACTURADO','RECHAZADO','DEVUELTO'])->get(); //estado=FACTURADO
+        foreach($facturas as $factura){
+            $factura->id_documento = Documentos::where('id','=',$factura->id_documento)->first();
+            $factura->id_cliente = Directorios::where('id','=',$factura->id_cliente)->first();
+            $factura->id_vendedor = Usuarios::where('id','=',$factura->id_vendedor)->first();
+        }
+        return view('facturacion.devolucionesIndex',array(
             "referencias"=>$referencias,
             "facturas"=>$facturas
         ));
@@ -461,6 +502,27 @@ class FacturasController extends Controller
             "referencias"=>$referencias,
             "documento"=>$documento,
             "ciudades"=>$ciudades
+        ));
+    }
+    /**
+     * ALISTAMIENTO 
+     */
+    public function alistamiento(){
+        $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $kardex = Kardex::join('directorios','kardexes.id_cliente','directorios.id')
+                        ->join('usuarios','kardexes.id_vendedor','usuarios.id')
+                        ->where('kardexes.id_empresa','=',Session::get('id_empresa'))
+                        ->where('kardexes.signo','=','=')
+                        ->where('kardexes.created_at', '>',date('yy/m/d'))
+                        ->orderBy('kardexes.id_referencia')->get();
+        foreach($kardex as $obj){
+            $obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
+            $obj->id_factura = Facturas::where('id','=',$obj->id_factura)->first();
+        }
+        
+        return view('facturacion.alistamiento',array(
+            "documento"=>$documentos,
+            "kardex"=>$kardex
         ));
     }
 }

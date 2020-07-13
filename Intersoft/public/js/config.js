@@ -13,7 +13,7 @@
 //namespace
 //var HOST = "http://localhost:8000"; //pruebas
 var HOST = ""; //produccion
-var HOST = "http://intersoft.wakusoft.com"; //produccion
+//var HOST = "http://intersoft.wakusoft.com"; //produccion
 
 var config = new Config();
 

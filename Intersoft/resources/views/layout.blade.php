@@ -174,7 +174,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
     if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
         $lista = ["Inicio", "Directorio", "Inventario", "Producción", "Facturación", "Tesorería", "Contabilidad", "Parámetros", "Salida"];
         $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
-        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario'];
+        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
         $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
         $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES'];
         $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
@@ -185,7 +185,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
     }
     else if(Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario"){
         $lista = ["Inicio", "Inventario", "Producción", "Facturación", "Salida"];
-        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario'];
+        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
         $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
         $Facturacion = ['Estadistica Ventas'];
     }
@@ -252,6 +252,7 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
                             <?php if(in_array("Actualización y Lista de Precios",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/actualizacionPrecios');">Actualización y Lista de Precios</a></li><?php } ?>
                             <?php if(in_array("Presupuestos de Reposición",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Presupuestos de Reposición</a></li><?php } ?>
                             <?php if(in_array("Cierre de Inventario",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/cierreInventario');">Cierre de Inventario</a></li><?php } ?>
+                            <?php if(in_array("Alistamiento",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/alistamiento');">Alistamiento</a></li><?php } ?>
                             <li role="separator" class="divider"></li>
                             @foreach ($documentos as $obj)
                                 <?php 
