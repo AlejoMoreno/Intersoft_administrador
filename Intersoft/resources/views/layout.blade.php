@@ -180,8 +180,10 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
         $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
     }
     else if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
-        $lista = ["Inicio", "Facturación", "Salida"];
+        $lista = ["Inicio", "Directorio", "Facturación", "Salida"];
         $Facturacion = ['Estadistica Ventas'];
+        $Directorio = ['Creación, Consulta, Directorio'];
+        
     }
     else if(Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario"){
         $lista = ["Inicio", "Inventario", "Producción", "Facturación", "Salida"];
