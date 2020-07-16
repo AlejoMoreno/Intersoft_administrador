@@ -64,7 +64,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Bogota',
 
     /*
     |--------------------------------------------------------------------------
@@ -239,7 +239,7 @@ return [
 
         'PDF' => Barryvdh\DomPDF\Facade::class,
 
-        'SoapWrapper' => Artisaninweb\SoapWrapper\Facade\SoapWrapper::class,  
+        'SoapWrapper' => Artisaninweb\SoapWrapper\Facade\SoapWrapper::class, 
 
     ],
 

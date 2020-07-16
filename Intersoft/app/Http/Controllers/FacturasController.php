@@ -36,18 +36,6 @@ class FacturasController extends Controller
         $documento->save();
         //verificar el clinete/proveedor/tercero
         $tercero = FacturasController::Tercero($documento->signo,$request);
-        //verificar si es en efectivo - credito o no aplica (como ajustes)
-        $banderaTipoPago = true; // si tiene un tipo de pago, de lo contrario no se tiene en cuenta en contabilidad
-        if($request->tipo_pago != 0){
-            $tipopago = Tipopagos::where('id','=',$request->tipo_pago)->first();
-            if($tipopago->nombre == 'EFECTIVO'){
-                $request->saldo = 0;
-            }
-        }
-        else{
-            $banderaTipoPago = false;
-            $request->saldo = 0;
-        }
         
         //creacion de factura 
         $obj = new Facturas();
@@ -76,131 +64,7 @@ class FacturasController extends Controller
 		$obj->saldo             = $request->saldo;
 		$obj->id_empresa	 	= Session::get('id_empresa');
         if($obj->save()){ //si guarda correctamente la factura
-            if($banderaTipoPago == true){ //true= guarda en contabilidad (11050501-caja)
-                if($request->signo == '+'){
-                    $obj->asiento_contable = FacturasController::AsientoContableCaja($obj,$documento,'C',$tipopago->puc_cuenta);   
-                }
-                else if($request->signo == '-'){
-                    $obj->asiento_contable = FacturasController::AsientoContableCaja($obj,$documento,'D',$tipopago->puc_cuenta);
-                }
-            }
-            //registro de cada saldo y movimientos contables porcada producto
-            if($banderaTipoPago == true){
-                $obj->kardex = KardexController::saveDocument($request->productosArr,$obj,$obj->asiento_contable);
-            }
-            else{
-                $obj->kardex = KardexController::saveDocumentSinContabilidad($request->productosArr,$obj,$obj->asiento_contable);
-            }
-            
-            if(sizeOf($obj->kardex)>0){
-                //registrar el pago
-                $numero = 1;
-                $tipocartera = "";
-                if($request->tipo_pago != 0){
-                    $tipopago = Tipopagos::where('id','=',$request->tipo_pago)->first();
-                    if($tipopago->nombre == 'EFECTIVO'){
-                        if($request->signo == '+'){
-                            $carteras = Carteras::where('tipoCartera','=','EGRESO')->
-                                                where('id_empresa','=',Session::get('id_empresa'))->
-                                                orderBy('numero','DESC')->first();
-                            if($carteras){
-                            $numero = $carteras->numero +1; 
-                            }
-                            $tipocartera = "EGRESO";
-                            $tipo_documento = 1; //egreso
-                            $tipo_transaccion = "C";
-                            //revisar
-                            $tipo_transaccion_2 = "D";
-                        }
-                        else{
-                            $carteras = Carteras::where('tipoCartera','=','INGRESO')->
-                                                where('id_empresa','=',Session::get('id_empresa'))->
-                                                orderBy('numero','DESC')->first();
-                            if($carteras){
-                                $numero = $carteras->numero +1;
-                            }
-                            $tipocartera = "INGRESO";
-                            $tipo_documento = 2; //recibo de caja
-                            $tipo_transaccion = "D";
-                            //revisar
-                            $tipo_transaccion_2 = "C";
-                        }
-                        $obj_c = new Carteras();
-                        $obj_c->reteiva       = $request->otro_impuesto1;
-                        $obj_c->reteica       = $request->otro_impuesto;
-                        $obj_c->efectivo      = $obj->total;
-                        $obj_c->sobrecosto    = 0;
-                        $obj_c->descuento     = $request->descuento;
-                        $obj_c->retefuente    = $request->retefuente;
-                        $obj_c->otros         = 0;
-                        $obj_c->id_sucursal   = Session::get('sucursal');
-                        $obj_c->numero        = ( $numero + 1 );
-                        $obj_c->prefijo       = "NA";
-                        $obj_c->id_cliente    = $tercero->id;
-                        $obj_c->id_vendedor   = $request->id_vendedor;
-                        $obj_c->fecha         = $request->fecha;
-                        $obj_c->tipoCartera   = $tipocartera;         
-                        $obj_c->subtotal      = $request->subtotal;
-                        $obj_c->total         = $request->total;
-                        $obj_c->id_modificado = $request->id_modificado;
-                        $obj_c->observaciones = $request->observaciones;
-                        $obj_c->id_empresa = Session::get('id_empresa');
-                        $obj_c->estado        = $request->estado;
-                        if($obj_c->save()){
-                            $obj_1 = new KardexCarteras();
-                            $obj_1->id_cartera    = $obj_c->id;
-                            $obj_1->id_factura    = $obj->id;
-                            $obj_1->fechaFactura  = $obj->fecha;
-                            $obj_1->numeroFactura = $obj->numero;
-                            $obj_1->descuentos    = $obj_c->descuento;
-                            $obj_1->sobrecostos   = 0;
-                            $obj_1->fletes        = $obj->fletes;
-                            $obj_1->retefuente    = $obj_c->retefuente;
-                            $obj_1->efectivo      = $obj_c->efectivo;
-                            $obj_1->reteiva       = $obj_c->reteiva;
-                            $obj_1->reteica       = $obj_c->reteica;
-                            $obj_1->id_empresa    = Session::get('id_empresa');
-                            $obj_1->total         = $obj_c->total;
-                            $obj_1->id_auxiliar	  = 1; //arreglar
-                            $obj_1->save();
-
-                            //registro contable egreso/ingreso
-                            $contabilidad = new Contabilidades();
-                            $contabilidad->tipo_documento = $tipo_documento;
-                            $contabilidad->id_sucursal = $obj_c->id_sucursal;
-                            $contabilidad->id_documento = $obj_c->id;
-                            $contabilidad->numero_documento = $obj_c->numero;
-                            $contabilidad->prefijo = $obj_c->prefijo; 
-                            $contabilidad->fecha_documento = $obj_c->fecha;
-                            $contabilidad->tercero = $obj_c->id_cliente;
-                            $contabilidad->id_empresa = Session::get('id_empresa');	
-
-                            $contabilidad->tipo_transaccion = $tipo_transaccion;
-                            //$contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
-                            $contabilidad->valor_transaccion = $obj_c->total;
-                            //$asiento_contable = ContabilidadesController::register($contabilidad);
-                            $asiento_contable = $contabilidad->save();
-
-                            //registro contable egreso/ingreso contrapartida
-                            $contabilidad = new Contabilidades();
-                            $contabilidad->tipo_documento = $tipo_documento;
-                            $contabilidad->id_sucursal = $obj_c->id_sucursal;
-                            $contabilidad->id_documento = $obj_c->id;
-                            $contabilidad->numero_documento = $obj_c->numero;
-                            $contabilidad->prefijo = $obj_c->prefijo; 
-                            $contabilidad->fecha_documento = $obj_c->fecha;
-                            $contabilidad->tercero = $obj_c->id_cliente;
-                            $contabilidad->id_empresa = Session::get('id_empresa');	
-
-                            $contabilidad->tipo_transaccion = $tipo_transaccion_2;
-                            //$contabilidad->id_auxiliar = $obj->asiento_contable->id_auxiliar;
-                            $contabilidad->valor_transaccion = $obj_c->total;
-                            //$asiento_contable = ContabilidadesController::register($contabilidad);
-                            $asiento_contable = $contabilidad->save();
-                        }
-                    }
-                }
-            }
+            $obj->kardex = KardexController::saveDocumentSinContabilidad($request->productosArr,$obj,$obj->asiento_contable);
         }
         //entradas de inventarios
         
@@ -210,28 +74,6 @@ class FacturasController extends Controller
         );
     }
     
-
-    static function AsientoContableCaja($factura,$documento,$tipo_transaccion,$id_auxiliar){
-        //registrar asiento contable
-        $contabilidad = new Contabilidades();
-        $contabilidad->tipo_documento = $documento->documento_contable;
-        $contabilidad->id_sucursal = $factura->id_sucursal;
-        $contabilidad->id_documento = $factura->id;
-        $contabilidad->numero_documento = $factura->numero;
-        $contabilidad->prefijo = $factura->prefijo; 
-        $contabilidad->fecha_documento = $factura->fecha;
-        $contabilidad->valor_transaccion = $factura->total;
-        $contabilidad->tipo_transaccion = $tipo_transaccion;
-        $contabilidad->tercero = $factura->id_cliente;
-        $contabilidad->id_auxiliar = $id_auxiliar;
-        $contabilidad->id_empresa = Session::get('id_empresa');
-        $contabilidad->save();
-        return $contabilidad;
-    }
-
-    static function AsientoContablePago(){
-
-    }
 
     static function Tercero($signo,$request){
         $tercero = null;
@@ -266,10 +108,7 @@ class FacturasController extends Controller
                                                get()[0];
         }
 
-        /*$pdf = PDF::loadView('documentos.impresionFactura', compact('factura','kardex'));
-        $pdf->setPaper('letter','landscape');
-        return $pdf->download('Factura_'.$factura->prefijo.'_'.$factura->numero.'.pdf');
-*/
+
     	return view('documentos.impresionFactura', [
             'factura' => $factura,
         	'kardex' => $kardex]);

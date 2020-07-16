@@ -381,6 +381,10 @@ class UsuariosController extends Controller
     }
 
     public function estadisticaVentas(){
-        return view('facturacion.estadisticaventas');
+        $facturas = Facturas::where('id_vendedor','=',Session::get('user_id'))
+                    ->get();
+        return view('facturacion.estadisticaventas',array(
+            "facturas"=>$facturas
+        ));
     }
 }

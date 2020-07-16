@@ -447,6 +447,8 @@ Route::post('/cartera/causar/guardar', 'CarterasController@saveCausar'); //pendi
 
 Route::get('/cartera/gastos', 'CarterasController@gastosindex');
 
+Route::post('/cartera/FormaPagos','CarterasController@saveFormaPagos');
+
 
 /*
 |--------------------------------------------------------------------------

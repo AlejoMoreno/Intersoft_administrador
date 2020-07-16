@@ -12,6 +12,7 @@ use App\Empresas;
 use App\Documentos;
 use App\Usuarios;
 use App\Ciudades;
+use App\FormaPagos;
 
 use Session;
 
@@ -19,6 +20,8 @@ class CarterasController extends Controller
 {
     
 	public function save(Request $request){
+
+		$cartera = Carteras::where('id_empresa','=',Session::get('id_empresa'))->orderBy('numero','desc')->first();
 
 		$obj = new Carteras();
 		$obj->reteiva 		= $request->reteiva;
@@ -29,26 +32,39 @@ class CarterasController extends Controller
 		$obj->retefuente 	= $request->retefuente;
 		$obj->otros 		= $request->otros;
 		$obj->id_sucursal 	= Session::get('sucursal');
-		$obj->numero 		= $request->numero;
-		$obj->prefijo 		= $request->prefijo;
+		$obj->numero 		= $cartera->numero + 1;
+		$obj->prefijo 		= $cartera->prefijo;
 		$obj->id_cliente 	= $request->id_cliente;
 		$obj->id_vendedor 	= $request->id_vendedor;
 		$obj->fecha 		= $request->fecha;
 		$obj->tipoCartera 	= $request->tipoCartera;
 		$obj->subtotal 		= $request->subtotal;
 		$obj->total 		= $request->total;
-		$obj->id_modificado = $request->id_modificado;
+		$obj->id_modificado = Session::get('user_id');
 		$obj->observaciones = $request->observaciones;
 		$obj->id_empresa = Session::get('id_empresa');
 		$obj->estado 		= $request->estado;
 		$obj->save();
-
 
 		return array(
 			"result"=>"success",
             "body"=>$obj
 		);
 
+	}
+
+	public function saveFormaPagos(Request $request){
+		$obj = new FormaPagos();
+		$obj->id_empresa = Session::get('id_empresa');
+		$obj->formaPago = $request->formaPago;
+		$obj->id_cartera = $request->id_cartera;
+		$obj->valor = $request->valor;
+		$obj->observacion = $request->observacion;
+		$obj->save();
+		return array(
+			"reault"=>"success",
+			"body"=>$obj
+		);
 	}
 
 	public function imprimir($id){

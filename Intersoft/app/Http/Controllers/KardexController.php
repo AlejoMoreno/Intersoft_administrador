@@ -36,7 +36,6 @@ class KardexController extends Controller
 		//recorrer los productos
 		foreach($productosArr as $producto){
 			$obj_pro = KardexController::AddProducto($producto,$factura);
-			//$asiento = KardexController::AsientoContable($obj_pro,$asiento_contable,$factura->signo);
 			//asientp contable
 			array_push($productos_insertados, $obj_pro);
 		}
@@ -177,86 +176,6 @@ class KardexController extends Controller
 		return  $obj;
 	}
 	
-	static function AsientoContable($obj_pro,$asiento_contable,$signo){
-		$referencia = (object)$obj_pro->referencia;
-		//verificar auxiliar contable apartir de la clasificacion del producto
-		$clasificacion = Clasificaciones::where('id','=',$referencia->id_clasificacion)->first();
-		//registrar asiento contable
-		$tipo_transaccion = '';
-		//buscar la referencia 
-		$linea = Lineas::where('id','=',$referencia->codigo_linea)->first();
-		if($signo == '-'){ //va  ala contrapartida
-			$tipo_transaccion = "C";
-			$puc = $linea->puc_venta;
-			$puc_val = $obj_pro->total;
-			$iva = $linea->v_puc_iva;
-			$iva_val = $puc_val * ($linea->iva_porcentaje/100);
-			$reteica = $linea->v_puc_reteica;
-			$reteica_val = $puc_val * ($linea->reteica_porcentaje/100);
-			$reteiva = $linea->v_puc_reteiva;
-			$reteiva_val = $puc_val * ($linea->reteiva_porcentaje/100);
-			$retefuente = $linea->v_puc_retefuente;
-			$retefuente_val = $puc_val * ($linea->retefuente_porcentaje/100);
-		}
-		else if($signo == '+'){ //va  ala partida
-			$tipo_transaccion = "D";
-			$puc = $linea->puc_compra;
-			$puc_val = $obj_pro->total;
-			$iva = $linea->c_puc_iva;
-			$iva_val = $puc_val * ($linea->iva_porcentaje/100);
-			$reteica = $linea->c_puc_reteica;
-			$reteica_val = $puc_val * ($linea->reteica_porcentaje/100);
-			$reteiva = $linea->c_puc_reteiva;
-			$reteiva_val = $puc_val * ($linea->reteiva_porcentaje/100);
-			$retefuente = $linea->c_puc_retefuente;
-			$retefuente_val = $puc_val * ($linea->retefuente_porcentaje/100);
-		}        
-		
-		//trgistro del movimiento contable
-		$contabilidad = new Contabilidades();
-		
-        $contabilidad->tipo_documento = (string)$asiento_contable->tipo_documento;
-        $contabilidad->id_sucursal = $asiento_contable->id_sucursal;
-        $contabilidad->id_documento = $asiento_contable->id_documento;
-        $contabilidad->numero_documento = $asiento_contable->numero_documento;
-        $contabilidad->prefijo = $asiento_contable->prefijo; 
-        $contabilidad->fecha_documento = $asiento_contable->fecha_documento;
-        $contabilidad->tercero = $asiento_contable->tercero;
-		$contabilidad->id_empresa = Session::get('id_empresa');	
-		$contabilidad->tipo_transaccion = $tipo_transaccion;
-		$contabilidad->id_auxiliar = $puc;
-		$contabilidad->valor_transaccion = $puc_val;
-
-		$contabilidad1 = $contabilidad; //copiar el registro
-		$contabilidad1->tipo_transaccion = $tipo_transaccion;
-		$contabilidad1->id_auxiliar = $iva;
-		$contabilidad1->valor_transaccion = $iva_val;
-
-		$contabilidad2 = $contabilidad; //copiar el registro
-		$contabilidad2->tipo_transaccion = $tipo_transaccion;
-		$contabilidad2->id_auxiliar = $reteica;
-		$contabilidad2->valor_transaccion = $reteica_val;
-
-		$contabilidad3 = $contabilidad; //copiar el registro
-		$contabilidad3->tipo_transaccion = $tipo_transaccion;
-		$contabilidad3->id_auxiliar = $reteiva;
-		$contabilidad3->valor_transaccion = $reteiva_val;
-
-		$contabilidad4 = $contabilidad; //copiar el registro
-		$contabilidad4->tipo_transaccion = $tipo_transaccion;
-		$contabilidad4->id_auxiliar = $retefuente;
-		$contabilidad4->valor_transaccion = $retefuente_val;
-
-		//dd($puc_val);
-
-		$asiento_contable1 = $contabilidad->save();//ContabilidadesController::register($contabilidad);
-		$asiento_contable1 = $contabilidad1->save();//ContabilidadesController::register($contabilidad1);
-		$asiento_contable1 = $contabilidad2->save();//ContabilidadesController::register($contabilidad2);
-		$asiento_contable1 = $contabilidad3->save();//ContabilidadesController::register($contabilidad3);
-		$asiento_contable1 = $contabilidad4->save();//ContabilidadesController::register($contabilidad4);
-		
-        return $asiento_contable1;
-    }
 
     public function showid($id){
 

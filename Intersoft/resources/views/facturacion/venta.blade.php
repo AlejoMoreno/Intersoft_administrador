@@ -109,7 +109,7 @@
         Nota: <br>
         Para <strong>agregar productos</strong> dirijase al boton más.<br>
         Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
-        <div class="btn btn-danger" onclick="documentos.eliminar();">Eliminar</div><br>
+        <div class="btn btn-danger">X</div><br>
         Si ha <strong>terminado de registrar</strong> los productos dirijase al boton Guardar.<br><br><br>
     </div>
 
@@ -140,64 +140,305 @@
         
         </div>
         <div class="col-sm-12">
-        <div class="row titulo">
-        <label>Tipo Pago: </label>
-                <select id="tipo_pago" name="tipo_pago" class="form-control">                      
-                  @foreach ($tipo_pagos as $obj)
-                  <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
-                  @endforeach
-                </select>
-            <div class="col-sm-3">
-            <label>SUB.TOTAL</label>
-            <input type="number" id="subtotal" class="form-control" disabled="">
+            <div class="row titulo">
+                <div class="col-sm-3">
+                    <label>Tipo Pago: </label>
+                    <select id="tipo_pago" name="tipo_pago" onchange="banderaefectivo()" class="form-control">                      
+                    @foreach ($tipo_pagos as $obj)
+                    <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                    @endforeach
+                    </select>
+                </div>
+                <div class="col-sm-9">
+                    <p style="font-size:10px;color:black;">De ser necesario agrega diferentes tipos de pago, puesto que por defecto el sistema registra pago en efectivo, sin embargo puede ser con baucher, cheques o transacciones.</p>
+                    <button type="button" class="btn form-control" id="btnSiCaja"  data-toggle="modal" onclick="tomarDatosCartera()" data-target="#myModal">Abrir Pago personalizado</button>
+                    <button type="button" class="btn form-control" id="btnNoCaja" style="color: red;">Pago en credito (No se reciben abonos en este tipo de pago)</button>
+                </div>
+                <div class="col-sm-3">
+                    <label>SUB.TOTAL</label>
+                    <input type="number" id="subtotal" class="form-control" disabled="">
+                </div>
+                <div class="col-sm-3">
+                    <label>IVA</label>
+                    <input type="number" id="iva" class="form-control" disabled="">
+                </div>
+                <div class="col-sm-3">
+                    <label>DESCUENTO</label>
+                    <input type="number" id="descuento" class="form-control">
+                </div>
+                <div class="col-sm-3">
+                    <label>FLETES</label>
+                    <input type="number"  value="0" id="fletes" onkeyup="recorrerTotal();" class="form-control">
+                </div>
+                <div class="col-sm-3">
+                    <label>RETEFUENTE</label>
+                    <input type="number" value="0" id="retefuente" class="form-control" onkeyup="recorrerTotal();">
+                </div>
+                <div class="col-sm-3">
+                    <label>IMPOCONSUMO</label>
+                    <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerTotal();">
+                </div>
+                <div class="col-sm-3">
+                    <label>Otro Impuesto</label>
+                    <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerTotal();">
+                </div>
+                <div class="col-sm-3">
+                    <label>TOTAL</label>
+                    <input type="number"  id="total" class="form-control" disabled="">
+                </div>
+                <div class="col-sm-12" style="height: 20px;"></div>
+                <div class="col-sm-12">
+                    <label>CONDICIONES DE Documento</label>
+                    <input id="observaciones" name="observaciones" class="form-control" onkeyup="documentos.enterObser(event);" value="SIN OBSERVACIONES" >
+                </div>
+                <div class="col-sm-12" style="height: 20px;"></div>
+                <div class="col-sm-12">
+                    <div id="Guardar" class="btn btn-success form-control" onclick="save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
+                    <div id="imprimirPOST" onclick="documentos.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
+                    <div id="imprimirDOC" onclick="documentos.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
+                </div>
+                <div class="col-sm-12" style="height: 20px;"></div>
             </div>
-            <div class="col-sm-3">
-            <label>IVA</label>
-            <input type="number" id="iva" class="form-control" disabled="">
-            </div>
-            <div class="col-sm-3">
-            <label>DESCUENTO</label>
-            <input type="number" id="descuento" class="form-control">
-            </div>
-            <div class="col-sm-3">
-            <label>FLETES</label>
-            <input type="number"  value="0" id="fletes" onkeyup="recorrerTotal();" class="form-control">
-            </div>
-            <div class="col-sm-3">
-            <label>RETEFUENTE</label>
-            <input type="number" value="0" id="retefuente" class="form-control" onkeyup="recorrerTotal();">
-            </div>
-            <div class="col-sm-3">
-            <label>IMPOCONSUMO</label>
-            <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerTotal();">
-            </div>
-            <div class="col-sm-3">
-            <label>Otro Impuesto</label>
-            <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerTotal();">
-            </div>
-            <div class="col-sm-3">
-            <label>TOTAL</label>
-            <input type="number"  id="total" class="form-control" disabled="">
-            </div>
-            <div class="col-sm-12" style="height: 20px;"></div>
-            <div class="col-sm-12">
-            <label>CONDICIONES DE Documento</label>
-            <input id="observaciones" name="observaciones" class="form-control" onkeyup="documentos.enterObser(event);" value="SIN OBSERVACIONES" >
-            </div>
-            <div class="col-sm-12" style="height: 20px;"></div>
-            <div class="col-sm-12">
-            <div id="Guardar" class="btn btn-success form-control" onclick="save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
-            <div id="imprimirPOST" onclick="documentos.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
-            <div id="imprimirDOC" onclick="documentos.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
-            </div>
-            <div class="col-sm-12" style="height: 20px;"></div>
-        </div>
         </div>
     </div>
     
 </div>
 
 
+
+<!-- Modal CARTERTA -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cartera</h4>
+      </div>
+      <div class="modal-body" style="font-size: 10px;color:black;">
+        <div style="margin:1%;padding:3%; background:#eee">
+            <p>Estos son los datos de pago a la factura adicionales</p>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>sobrecostos</label>
+                    <input type="number" class="form-control" id="Carteraxsobrecostos">
+                </div>
+                <div class="col-md-4">
+                    <label>reteiva</label>
+                    <input type="number" class="form-control" id="Carteraxreteiva">
+                </div>
+                <div class="col-md-4">
+                    <label>reteica</label>
+                    <input type="number" class="form-control" id="Carteraxreteica">
+                </div>
+            </div>
+            <div class="row" >
+                <div class="col-md-12">
+                    <br>
+                    <input type="hidden" id="idFactura">
+                    <input type="hidden" id="numeroFactrua">
+                    <input type="hidden" id="Carteraxdescuentos">
+                    <input type="hidden" id="Carteraxfletes">
+                    <input type="hidden" id="Carteraxretefuente">
+                    <input type="hidden" id="Carteraxefectivo">
+                    <input type="hidden" id="Carteraxtotal">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered" id="tabla_forma_pagos">
+                        <thead>
+                            <th>Forma de pago</th>
+                            <th>Valor</th>
+                            <th>Observación</th>
+                            <th style="background: white;"><button class="btn btn-success" onclick="addFormaPago();">+</button></th>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <input type="hidden" id="Carterasreteiva">
+                <input type="hidden" id="Carterasreteica">
+                <input type="hidden" id="Carterasefectivo">
+                <input type="hidden" id="Carterassobrecosto">
+                <input type="hidden" id="Carterasdescuento">
+                <input type="hidden" id="Carterasretefuente">
+                <input type="hidden" id="Carterasotros">
+                <input type="hidden" id="Carterasid_cliente">
+                <input type="hidden" id="Carterasid_vendedor">
+                <input type="hidden" id="CarterastipoCartera">
+                <input type="hidden" id="Carterassubtotal">
+                <label>Total</label>
+                <input type="number" class="form-control" style="text-align: right;" id="Carterastotal" disabled>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" onclick="saveCartera();" data-dismiss="modal">Guardar</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+//funciones script para carteras
+
+$(document).ready(function(){
+    $('#btnNoCaja').hide();
+});
+
+function saveCartera(){
+    var parametros = {
+        "reteiva":$('#Carterasreteiva').val(),
+		"reteica": $('#Carterasreteica').val(),
+		"efectivo":$('#Carterasefectivo').val(),
+		"sobrecosto":$('#Carterassobrecosto').val(),
+		"descuento":$('#Carterasdescuento').val(),
+		"retefuente":$('#Carterasretefuente').val(),
+		"otros":$('#Carterasotros').val(),
+		"numero":"0",
+		"prefijo":"NA",
+		"id_cliente":$('#Carterasid_cliente').val(),
+		"id_vendedor":$('#Carterasid_vendedor').val(),
+		"fecha":$('#fecha').val(),
+		"tipoCartera":$('#CarterastipoCartera').val(),
+		"subtotal":$('#Carterassubtotal').val(),
+		"total":$('#Carterastotal').val(),
+		"id_modificado":$('#Carterasid_vendedor').val(),
+		"observaciones":"SIN OBSERVACIONES",
+		"estado":"CANCELADO"
+    };
+    $.ajax({
+        data:  parametros,
+        url:   '/cartera/egresos/guardar',
+        type:  'post',
+        success:  function (response) {
+            console.log(response);
+            setTimeout(function(){ 
+                var parametros1 = {
+                    'id_cartera':response.body.id,
+                    'id_factura':$('#idFactura').val(),
+                    'fechaFactura':response.body.fecha,
+                    'numeroFactura':$('#numeroFactrua').val(),
+                    'descuentos':$('#Carteraxdescuentos').val(),
+                    'sobrecostos':$('#Carteraxsobrecostos').val(),
+                    'fletes':$('#Carteraxfletes').val(),
+                    'retefuente':$('#Carteraxretefuente').val(),
+                    'efectivo':$('#Carteraxefectivo').val(),
+                    'reteiva':$('#Carteraxreteiva').val(),
+                    'reteica':$('#Carteraxreteica').val(),
+                    'total':$('#Carteraxtotal').val(),
+                    'id_auxiliar':1
+                };
+                $.ajax({
+                    data:  parametros1,
+                    url:   '/cartera/kardex/guardar',
+                    type:  'post',
+                    success:  function (response1) {
+                        console.log(response1);
+                    }
+                });
+             }, 1000);
+            
+            //guardar formas de pago
+            CarteraformaPago = document.getElementsByName("CarteraformaPago");
+            Carteravalor = document.getElementsByName("Carteravalor");
+            Carteraobservacion = document.getElementsByName("Carteraobservacion");
+
+            setTimeout(function(){ 
+                for(i=0;i<CarteraformaPago.length;i++){ 
+                    formaPago = CarteraformaPago[i];
+                    valor = Carteravalor[i];
+                    observacion = Carteraobservacion[i];
+                    var parametros2 = {
+                        'formaPago':formaPago.value,
+                        'id_cartera':response.body.id,
+                        'valor':valor.value,
+                        'observacion':observacion.value
+                    };
+                    $.ajax({
+                        data:  parametros2,
+                        url:   '/cartera/FormaPagos',
+                        type:  'post',
+                        success:  function (response1) {
+                            console.log(response1);
+                        }
+                    });
+                }
+            }, 1000);
+        }
+    });
+}
+
+function banderaefectivo(){
+    var tipo_pago = $('#tipo_pago option:selected').html();
+    if(tipo_pago == "EFECTIVO" || tipo_pago == "CAJA"){
+        $('#btnNoCaja').hide();
+        $('#btnSiCaja').show();
+    }
+    else{
+        $('#btnNoCaja').show();
+        $('#btnSiCaja').hide();
+    }
+}
+function tomarDatosCartera(){
+    $('#Carterasxtotal').val($('#total').val());
+    $('#Carteraxdescuentos').val($('#descuento').val());
+    $('#Carteraxsobrecostos').val(0);
+    $('#Carteraxfletes').val($('#fletes').val());
+    $('#Carteraxretefuente').val($('#retefuente').val());
+    $('#Carteraxefectivo').val($('#total').val());
+    $('#Carteraxreteiva').val(0);
+    $('#Carteraxreteica').val(0);
+    $('#Carteraxtotal').val($('#total').val());
+
+    $('#Carterasreteiva').val($('#Carteraxreteiva').val());
+    $('#Carterasreteica').val($('#Carteraxreteica').val());
+    $('#Carterasefectivo').val($('#Carteraxefectivo').val());
+    $('#Carterassobrecosto').val($('#Carteraxsobrecostos').val());
+    $('#Carterasdescuento').val($('#Carteraxdescuentos').val());
+    $('#Carterasretefuente').val($('#Carteraxretefuente').val());
+    $('#Carterasotros').val($('#Carteraxsobrecostos').val());
+    $('#Carterasid_vendedor').val($('#id_modificado').val());
+    $('#CarterastipoCartera').val("INGRESO");
+    $('#Carterassubtotal').val($('#Carteraxtotal').val());
+    $('#Carterastotal').val($('#Carteraxtotal').val());
+
+}
+
+function addFormaPago(){
+    var total = $('#total').val();
+    var tipo_pago = $('#tipo_pago option:selected').html();
+    
+    var table = document.getElementById("tabla_forma_pagos");
+    var row = table.insertRow(1);
+    var cell0 = row.insertCell(0);
+    var cell1 = row.insertCell(1);
+    var cell2 = row.insertCell(2);
+    var cell3 = row.insertCell(3);
+    cell0.innerHTML = '<input class="form-control" type="text" value="'+tipo_pago+'" name="CarteraformaPago">';
+    cell1.innerHTML = '<input class="form-control" type="text" value="'+total+'" name="Carteravalor">';
+    cell2.innerHTML = '<input class="form-control" type="text" value="NA" name="Carteraobservacion">';
+    cell3.innerHTML = '<button class="btn btn-danger deleteformapagobtn" onclick="deleteFormaPago();">x</button>';
+    
+}
+
+$(document).on('click', 'button.deleteformapagobtn', function () {
+    var mensaje;
+    var opcion = confirm("¿Desea eliminar la fila?");
+    if (opcion == true) {
+        $(this).closest('tr').remove();
+	}   
+    return false;
+});
+
+</script>
 
 
 <script>
@@ -319,15 +560,25 @@ function saveFactura(){
         },
         success:  function (response) {
             console.log(response);
+
+            factura = response.body;
+            
+            //datos para generar la cartera
+            $('#idFactura').val(factura.id);
+            $('#numeroFactrua').val(factura.numero);
+            setTimeout(function(){ saveCartera(); }, 1000);
+            //fin de cartera
+
             $('#resultado').hide();
             //si la respuesta es correcta 
             if(response.result == "success"){
-                factura = response.body;
-
+                
                 localStorage.setItem("factura",factura.id);
+                
                 $('#resultado').hide();
                 console.log("Guardado exitoso");
-                swal({
+                setTimeout(function(){ 
+                    swal({
                     title: "Imprimir",
                     text: "¿Deseas imprimir el documento?",
                     icon: "warning",
@@ -340,7 +591,9 @@ function saveFactura(){
                     } else {
                         swal("Guardado exitoso. En otra ocación podrás imprmir.");
                     }
-                    });    
+                    }); 
+                 }, 7000);
+                   
             }
             else{
                 console.log("Error interno fila ");
@@ -518,6 +771,17 @@ function recorrerTotal(){
     $('#total').val(subtot);
     $('#iva').val(iva);
     $('#descuento').val(0);
+
+    /** cartera verificar y recorrer **/
+    var table = document.getElementById("tabla_forma_pagos");
+    if(table.rows.length >= 1 ){
+        if(table.rows.length == 1){
+            addFormaPago();
+        }
+        elemento = document.getElementsByName("Carteravalor");
+        elemento[0].value = $('#total').val();
+        tomarDatosCartera();
+    }
 }
 
 
@@ -598,7 +862,9 @@ function buscarcliente(texto){
                     $('#correo').prop( "disabled", true );    
                     $('#id_ciudad').prop("disabled", true);
                     $('#guardarCliente').hide();   
-                    $('#resCliente').text("Cliente existe");               
+                    $('#resCliente').text("Cliente existe");    
+                    //cartera
+                    $('#Carterasid_cliente').val(cliente.id);           
                 }  
                 else{
                     $('#nombre').val("");
