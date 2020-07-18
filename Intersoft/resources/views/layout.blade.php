@@ -519,6 +519,82 @@
             document.getElementById(menu[i]).classList.add("active");
         }
     }
+
+    $(document).ready(function(){
+        getLocation();
+    });
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, positionError, { enableHighAccuracy: true, maximumAge: 60000, timeout: 10000 });        
+        } 
+        else { 
+            if (Modernizr.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, positionError, { enableHighAccuracy: true, maximumAge: 60000, timeout: 10000 });
+            } else {
+                console.log("ERROR. Ocurrio algo con la geolocalización");
+            }
+        }
+    }
+
+    function showPosition(position) {
+      console.log(position.coords);
+      
+      var urls = "/gps/trakingmaps";
+        parametros = {
+            "longitud" : position.coords.longitude,
+            "latitud" : position.coords.latitude,
+            "accuracy" : "0"
+        };
+        $.ajax({
+            data:  parametros,
+            url:   urls,
+            type:  'post',
+            beforeSend: function () {
+                $('#resultado').html('<p>Espere porfavor</p>');
+            },
+            success:  function (response) {
+                console.log(response);
+            },
+            error: function(){
+                console.log("error");
+            }
+        });
+    }
+
+    function positionError(error)
+    {
+        var message = "";
+
+        // Check for known errors
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                message = "This website does not have your permission to use the Geolocation API";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                message = "Your current position could not be determined.";
+                break;
+            case error.PERMISSION_DENIED_TIMEOUT:
+                message = "Your current position could not be determined within the specified timeout period.";
+                break;
+        }
+
+        // If it's an unknown error, build a message that includes 
+        // information that helps identify the situation, so that 
+        // the error handler can be updated.
+        if (message == "") {
+            var strErrorCode = error.code.toString();
+            message = "Your position could not be determined due to " +
+                      "an unknown error (Code: " + strErrorCode + ").";
+        }
+
+        swal({
+            title: "Algo anda mal",
+            text: message,
+            icon: "error",
+            button: "Aceptar",
+          });
+    }
     
 </script>
 

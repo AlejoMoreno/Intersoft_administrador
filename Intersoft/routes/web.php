@@ -494,6 +494,7 @@ Route::post('/contabilidad/comprobantes/createComprobantes', 'ContabilidadesCont
 */
 Route::get('/gps/directoriomaps', 'DirectoriomapsController@index');
 Route::post('/gps/directoriomaps', 'DirectoriomapsController@save');
+Route::post('/gps/trakingmaps', 'TrakingmapsController@save');
 
 
 
