@@ -58,10 +58,19 @@
     
     function getLocation() {
       if (navigator.geolocation) {
-        coords = navigator.geolocation.getCurrentPosition(showPosition);
+        navigator.geolocation.getCurrentPosition(showPosition, positionError, { enableHighAccuracy: true, maximumAge: 60000, timeout: 10000 });
         
       } else { 
-        x.innerHTML = "Geolocation is not supported by this browser.";
+        if (Modernizr.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, positionError, { enableHighAccuracy: true, maximumAge: 60000, timeout: 10000 });
+        } else {
+            swal({
+                  title: "Algo anda mal",
+                  text: "Verifique conexión a internet y/o diligencie completamente los campos del encabezado",
+                  icon: "error",
+                  button: "Aceptar",
+                });
+        }
       }
     }
     
@@ -70,6 +79,40 @@
       "<br>Longitude: " + position.coords.longitude;
       console.log(position.coords);
       cargar_mapa(position.coords.latitude, position.coords.longitude);
+    }
+
+    function positionError(error)
+    {
+        var message = "";
+
+        // Check for known errors
+        switch (error.code) {
+            case error.PERMISSION_DENIED:
+                message = "This website does not have your permission to use the Geolocation API";
+                break;
+            case error.POSITION_UNAVAILABLE:
+                message = "Your current position could not be determined.";
+                break;
+            case error.PERMISSION_DENIED_TIMEOUT:
+                message = "Your current position could not be determined within the specified timeout period.";
+                break;
+        }
+
+        // If it's an unknown error, build a message that includes 
+        // information that helps identify the situation, so that 
+        // the error handler can be updated.
+        if (message == "") {
+            var strErrorCode = error.code.toString();
+            message = "Your position could not be determined due to " +
+                      "an unknown error (Code: " + strErrorCode + ").";
+        }
+
+        swal({
+            title: "Algo anda mal",
+            text: message,
+            icon: "error",
+            button: "Aceptar",
+          });
     }
 </script>
 

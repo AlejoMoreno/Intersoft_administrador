@@ -65,6 +65,8 @@
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+<script>try{Modernizr} catch(e) {document.write('<script src="./assets/js/vendor/modernizr-2.8.3.min.js"><\/script>')}</script>
     <!-- https://leafletjs.com/examples.html GOOGLE MAPS API LEAFLETSJS-->
     <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
@@ -73,6 +75,8 @@
 
 
     <style>
+        .no-geolocation .box { color: red; }
+        .geolocation .box { color: green; }
         .navbar-default .navbar-nav > li > a:not(.btn) {
             color: white;
         }
