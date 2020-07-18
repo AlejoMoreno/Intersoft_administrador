@@ -68,6 +68,8 @@
             </div>
             <div class="col-md-12" style="margin-bottom:2%;">
                 <label><br></label>
+                <a href="/gps/directoriomaps" target="_blank" style="background:white;" class="btn btn-warning">Agregar al mapa</a>
+                <label><br></label>
                 <div class="btn btn-success" style="background:#3c763d;color:white;" id="guardarCliente" onclick="guardarCliente();">Guardar Cliente</div>
             </div>
             <div class="col-md-6" style="margin-bottom:2%;">

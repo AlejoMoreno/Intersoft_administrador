@@ -149,63 +149,59 @@
 </head>
 
 
-
-
-<?php 
-
-use App\Documentos;
-$documentos = Documentos::where('ubicacion','=','ENTRADA')
-                        ->where('id_empresa','=',Session::get('id_empresa'))->get();
-
-$documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
-                        where('id_empresa','=',Session::get('id_empresa'))->get();
-
-?>
-
-
 <body onbeforeunload="config.leave_page()" style="background:#ededed;overflow-x:hidden;">
 
     <div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;top:0px;left:0px;"><div class="loader"></div></div>
 
     <?php 
-
-    date_default_timezone_set('America/Bogota');
-    $hora = date('Hi');
-    $hora_limite = date('1600');
-    $dif = $hora_limite - $hora;
-
-    $lista = null;
-    if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
-        $lista = ["Inicio", "Directorio", "Inventario", "Producción", "Facturación", "Tesorería", "Contabilidad", "Parámetros", "Salida"];
-        $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
-        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
-        $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
-        $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES'];
-        $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
-    }
-    else if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
-        $lista = ["Inicio", "Directorio", "Facturación", "Salida"];
-        $Facturacion = ['Estadistica Ventas'];
-        $Directorio = ['Creación, Consulta, Directorio'];
+    use App\Documentos;
+    if(Session::has('cargo')){
         
-    }
-    else if(Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario"){
-        $lista = ["Inicio", "Inventario", "Producción", "Facturación", "Salida"];
-        $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
-        $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
-        $Facturacion = ['Estadistica Ventas'];
-    }
-    else if(Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos"){
-        $lista = ["Inicio", "Directorio", "Facturación", "Tesorería", "Salida"];
-        $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
-        $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
-        $Facturacion = ['Estadistica Ventas','Zonas Asingada'];
+        $documentos = Documentos::where('ubicacion','=','ENTRADA')
+                                ->where('id_empresa','=',Session::get('id_empresa'))->get();
+
+        $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
+                                where('id_empresa','=',Session::get('id_empresa'))->get();
+
+        date_default_timezone_set('America/Bogota');
+        $hora = date('Hi');
+        $hora_limite = date('1600');
+        $dif = $hora_limite - $hora;
+
+        $lista = null;
+        if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
+            $lista = ["Inicio", "Directorio", "Inventario", "Producción", "Facturación", "Tesorería", "Contabilidad", "Parámetros", "Salida"];
+            $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
+            $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
+            $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
+            $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES'];
+            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
+        }
+        else if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
+            $lista = ["Inicio", "Directorio", "Facturación", "Salida"];
+            $Facturacion = ['Estadistica Ventas'];
+            $Directorio = ['Creación, Consulta, Directorio'];
+            
+        }
+        else if(Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario"){
+            $lista = ["Inicio", "Inventario", "Producción", "Facturación", "Salida"];
+            $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
+            $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
+            $Facturacion = ['Estadistica Ventas'];
+        }
+        else if(Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos"){
+            $lista = ["Inicio", "Directorio", "Facturación", "Tesorería", "Salida"];
+            $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
+            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
+            $Facturacion = ['Estadistica Ventas','Zonas Asingada'];
+        }
     }
     
 
     ?>
 
     <!-- Fixed navbar -->
+    @if(Session::has('cargo'))
     <nav class="navbar navbar-default fondo-dinamico">
       <div class="container">
         <div class="navbar-header">
@@ -431,8 +427,9 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
         </div><!--/.nav-collapse -->
       </div>
     </nav>
+    @endif
 
-
+    @if(Session::has('cargo'))
     <div class="content row" style="background:#ededed;">
         @if(Session::has('user_id'))
         <section class="col-md-11 row">
@@ -493,6 +490,19 @@ $documentosSalida = Documentos::where('ubicacion','=','SALIDA')->
         </div>
         <!-- FORTER FIN-->
     </div>
+    @else
+    <section class="col-md-12 row">
+        <article class="col-md-12">
+            <div class="card">
+                <div class="header">
+                    <h4 class="title">Error de sesión, vuelve a ingresar</h4>
+                    <p class="category"><a href="/">Por favor ingresa Aqui para volver a iniciar sesion</a></p>
+                </div>
+            </div>
+        </article>
+    </section>
+    @endif
+
 
 
 

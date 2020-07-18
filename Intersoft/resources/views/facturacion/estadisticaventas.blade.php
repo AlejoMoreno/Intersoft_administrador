@@ -3,7 +3,6 @@
 @section('content')
 
 
-
   <style>
     #map { 
       width: 80%;
@@ -24,6 +23,11 @@
                     <div class="row">
                         
                         <div class="container">
+                            <h1>Mi Ubicación: </h1>
+                            <button onclick="getLocation()">Try It</button> 
+                            <p id="demo"></p>
+                            <input id="latitud">
+                            <input id="Longitude">
                             <div id="map"></div>
                         </div>
 
@@ -48,32 +52,59 @@
     </div>
 </div>
 
+
+<script>
+    var x = document.getElementById("demo");
+    
+    function getLocation() {
+      if (navigator.geolocation) {
+        coords = navigator.geolocation.getCurrentPosition(showPosition);
+        
+      } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+    
+    function showPosition(position) {
+      x.innerHTML = "Latitude: " + position.coords.latitude + 
+      "<br>Longitude: " + position.coords.longitude;
+      console.log(position.coords);
+      cargar_mapa(position.coords.latitude, position.coords.longitude);
+    }
+</script>
+
   <script>
-    var map = L.map('map').
-       setView([4.5921339, -74.1260522],
-       15);
+      function cargar_mapa(Llatitude, Llongitude){
+        var map = L.map('map').
+        setView([Llatitude, Llongitude],
+        15);
 
 
-    L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
-    maxZoom: 18
-    }).addTo(map);
+        L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>',
+        maxZoom: 18
+        }).addTo(map);
 
-    L.control.scale().addTo(map);
-
-
-    L.marker([41.66, -4.71],{draggable: true}).addTo(map);
+        L.control.scale().addTo(map);
 
 
-    L.Routing.control({
-    waypoints: [
-        L.latLng(4.5921339, -74.1260522),
-        L.latLng(4.5922997, -74.1469305)
-    ]
-    }).addTo(map);
+        L.marker([Llatitude, Llongitude],{draggable: true}).addTo(map);
+
+
+        /*L.Routing.control({
+        waypoints: [
+            L.latLng(Llatitude, Llongitude),
+            L.latLng(4.5922997, -74.1469305)
+        ]
+        }).addTo(map);*/
+      }
+    
 
 
   </script>
+
+
+
 
 @endsection()
 

@@ -486,6 +486,20 @@ Route::post('/contabilidad/comprobantes/createComprobantes', 'ContabilidadesCont
 
 /*
 |--------------------------------------------------------------------------
+| Web Routes GPS
+|--------------------------------------------------------------------------
+|
+| Get de datos para graficos
+|
+*/
+Route::get('/gps/directoriomaps', 'DirectoriomapsController@index');
+Route::post('/gps/directoriomaps', 'DirectoriomapsController@save');
+
+
+
+
+/*
+|--------------------------------------------------------------------------
 | Web Routes GRAFICAS
 |--------------------------------------------------------------------------
 |
