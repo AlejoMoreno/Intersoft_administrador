@@ -9,6 +9,7 @@ use App\Sessions;
 use App\Sucursales;
 use App\Zonasusuarios;
 use App\Directorios;
+use App\Empresas;
 use DB;
 use App\Facturas;
 use App\Http\Controllers\SessionsController;
@@ -218,7 +219,6 @@ class UsuariosController extends Controller
             //envio mail
             Mail::send('mail.welcome', ['usuario' => $usuario], function ($m) use ($usuario) {
                 $m->from('intersoft@wakusoft.com', 'Intersoft');
-    
                 $m->to($usuario->correo, $usuario->nombre)->subject('Bienvenida');
             });
             //Mail::to($usuario->correo)->send(new Welcome($usuario));
@@ -351,6 +351,12 @@ class UsuariosController extends Controller
         $usuario = Usuarios::where('id','=',Session::get('user_id'))->first();
         $usuario->password = $request->password;
         $usuario->save();
+        $usuario->id_empresa = Empresas::where('id','=',Session::get('id_empresa'))->first();
+        //envio mail
+        Mail::send('mail.welcome', ['usuario' => $usuario], function ($m) use ($usuario) {
+            $m->from('intersoft@wakusoft.com', 'Intersoft');
+            $m->to($usuario->correo, $usuario->nombre)->subject('Bienvenida');
+        });
         return view('contrasena');
     }
 

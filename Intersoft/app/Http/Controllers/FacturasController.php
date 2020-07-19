@@ -25,6 +25,7 @@ use App\Tipopagos;
 use PDF;
 
 use Session;
+use Mail;
 
 class FacturasController extends Controller
 {
@@ -68,6 +69,18 @@ class FacturasController extends Controller
         }
         //entradas de inventarios
         
+        //envio mail
+        $obj->id_documento = Documentos::where('id',$obj->id_documento)->first();
+        $obj->id_vendedor = Usuarios::where('id',$obj->id_vendedor)->first();
+        $obj->id_cliente = Directorios::where('id',$obj->id_cliente)->first();
+
+        $obj->id_empresa = Empresas::where('id','=',Session::get('id_empresa'))->first();
+        
+        Mail::send('mail.venta', ['facturas' => $obj], function ($m) use ($obj) {
+            $m->from('intersoft@wakusoft.com', 'Intersoft');
+            $m->to(["wakusoft@gmail.com",$obj->id_empresa->correo])->subject('Documento generado '.$obj->id_documento->nombre.' #'.$obj->numero  );
+        });
+
         return array(
             "result" => "success",
             "body" => $obj 
@@ -108,10 +121,10 @@ class FacturasController extends Controller
                                                get()[0];
         }
 
-
     	return view('documentos.impresionFactura', [
-            'factura' => $factura,
-        	'kardex' => $kardex]);
+            'factura' => $obj,
+            'kardex' => $kardex
+        ]);
     }
 
     public function imprimirpost($id){

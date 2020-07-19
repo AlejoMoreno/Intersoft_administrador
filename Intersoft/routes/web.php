@@ -33,7 +33,6 @@ Route::get('/layout', function(){
     return view('layout');
 });
 Route::get('/index', function(){
-    date_default_timezone_set('America/Bogota');
     $day = date("l");
     $dia = 1;
     switch ($day) {
@@ -430,6 +429,7 @@ Route::get('/inventario/actualizacionPrecios/{id}/{precio1}/{precio2}/{precio3}'
 |
 */
 Route::get('/cartera/egresos', 'CarterasController@egresos');
+
 Route::get('/cartera/egresos/submenu', 'CarterasController@menuegresos');
 Route::get('/cartera/ingresos/submenu', 'CarterasController@menuingresos');
 Route::get('/cartera/ingresos', 'CarterasController@ingresos');
@@ -446,6 +446,8 @@ Route::get('/cartera/causar', 'CarterasController@causar'); //pendiente
 Route::post('/cartera/causar/guardar', 'CarterasController@saveCausar'); //pendiente
 
 Route::get('/cartera/gastos', 'CarterasController@gastosindex');
+Route::get('/cartera/otrosingresos', 'CarterasController@otrosingresosindex');
+Route::get('/cartera/extracto', 'CarterasController@extracto');
 
 Route::post('/cartera/FormaPagos','CarterasController@saveFormaPagos');
 

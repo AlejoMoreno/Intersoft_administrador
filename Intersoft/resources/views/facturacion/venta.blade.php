@@ -19,6 +19,7 @@
     animation: pantallain 100s infinite;
     animation-direction: alternate;
 }
+
 </style>
 
 <div class="enc-article">
@@ -287,12 +288,16 @@
   </div>
 </div>
 
+<div style="position:fixed;top:0;left:0;background:#999;opacity:0.7;width: 100%;height: 800px;" id="cargando">
+ <div style="margin-top:27%;margin-left:45%;" class="preloader"></div>
+</div>
 
 <script>
 //funciones script para carteras
 
 $(document).ready(function(){
     $('#btnNoCaja').hide();
+    $('#cargando').hide();
 });
 
 function saveCartera(){
@@ -465,13 +470,14 @@ $(document).on('click', 'button.deletebtn', function () {
 });
 
 function save_documento(){
-        
+    $('#cargando').show();
     //validaciones
     if(documentos.verificar() == true){ //todo esta correcto
         saveFactura();
         //$('#Guardar').hide();
         $('#imprimirPOST').show(100);
         $('#imprimirDOC').show(100);
+        $('#cargando').hide();
     }
     else{
         swal({
@@ -480,7 +486,9 @@ function save_documento(){
             icon: "error",
             button: "Aceptar",
         });
+        $('#cargando').hide();
     }
+    
     
     
 }
@@ -579,6 +587,7 @@ function saveFactura(){
                 
                 $('#resultado').hide();
                 console.log("Guardado exitoso");
+                $('#cargando').hide();
                 setTimeout(function(){ 
                     swal({
                     title: "Imprimir",

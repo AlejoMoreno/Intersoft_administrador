@@ -60,13 +60,15 @@
 
     <script type="text/javascript" src="/js/contabilidad/cuentas.js"></script>
 
+    <script type="text/javascript" src="/js/cartera/index.js"></script>
+
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-<script>try{Modernizr} catch(e) {document.write('<script src="./assets/js/vendor/modernizr-2.8.3.min.js"><\/script>')}</script>
+    <script>try{Modernizr} catch(e) {document.write('<script src="./assets/js/vendor/modernizr-2.8.3.min.js"><\/script>')}</script>
     <!-- https://leafletjs.com/examples.html GOOGLE MAPS API LEAFLETSJS-->
     <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
@@ -147,6 +149,26 @@
             position: absolute;
             bottom: 0;
             width: 100%;
+        }
+
+        .preloader {
+            width: 70px;
+            height: 70px;
+            border: 10px solid #eee;
+            border-top: 10px solid #666;
+            border-radius: 50%;
+            animation-name: girar;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            }
+            @keyframes girar {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
     </style>
 
@@ -357,11 +379,7 @@
                             <?php if(in_array("Otros Ingresos",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/otrosingresos');">Otros Ingresos</a></li><?php } ?>
                             <?php if(in_array("Pago a Proveedores",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/egresos');">Pago a Proveedores</a></li><?php } ?>
                             <?php if(in_array("Cobro Cartera",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Cobro Cartera</a></li><?php } ?>
-                            <?php if(in_array("Cheques",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/cheques');">Cheques</a></li><?php } ?>
-                            <?php if(in_array("Pago Importaciones",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/Importaciones');">Pago Importaciones</a></li><?php } ?>
-                            <?php if(in_array("Retefuente, Iva, Reteica",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/pagoobligaciones');">Retefuente, Iva, Reteica</a></li><?php } ?>
                             <?php if(in_array("Extracto y Cuentas de Cobro",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto y Cuentas de Cobro</a></li><?php } ?>
-                            <?php if(in_array("Causaciones",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/Causaciones');">Causaciones</a></li><?php } ?>
                         </ul>
                     </a>
                 </li>
@@ -551,7 +569,7 @@
             url:   urls,
             type:  'post',
             beforeSend: function () {
-                $('#resultado').html('<p>Espere porfavor</p>');
+                $('#resultado').html('<div style="margin-top:27%;margin-left:45%;" class="preloader"></div>');
             },
             success:  function (response) {
                 console.log(response);
@@ -588,12 +606,6 @@
                       "an unknown error (Code: " + strErrorCode + ").";
         }
 
-        swal({
-            title: "Algo anda mal",
-            text: message,
-            icon: "error",
-            button: "Aceptar",
-          });
     }
     
 </script>

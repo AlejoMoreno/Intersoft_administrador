@@ -172,7 +172,7 @@ function Carteras(){
         cel10.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
         cel11.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
         cel12.innerHTML = "<input type='text' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled>";
-        cel13.innerHTML = "<select type='text' style='width: 80px;' class='form-control' id='"+lista_seleccionados.length+"_id_auxiliar'></select>";
+        cel13.innerHTML = "";
         carteras.calcular(lista_seleccionados.length);
         //desaparecer el boton pagar
         $('#pagarbtn').hide();
@@ -395,7 +395,6 @@ function Carteras(){
                         numero = document.getElementById(i+"_numero").value;
                         fecha = document.getElementById(i+"_fecha").value;
                         total = document.getElementById(i+"_total").value;
-                        id_auxiliar = document.getElementById(i+"_id_auxiliar").value;
                         id_factura = document.getElementById(i+"_id_factura").value;
                         
 
@@ -411,8 +410,7 @@ function Carteras(){
                             'efectivo' : efectivo,
                             'reteiva' : reteiva,
                             'reteica' : reteica,
-                            'total' : total,
-                            'id_auxiliar' : id_auxiliar
+                            'total' : total
                         };
                         $.ajax({
                             data:  parametros,
@@ -487,9 +485,7 @@ function Carteras(){
         numero = $('#in_factura').val();
         fecha = $('#in_fecha').val();
         saldo = $('#in_total').val();
-        id_auxiliar = $('#in_auxiliar').val();
-        auxiliar = $('#in_auxiliar option:selected').text();
-		lista_seleccionados.push(id);
+        lista_seleccionados.push(id);
 		var tabla = document.getElementById("tabla_facturas_seleccionadas");
         var row = tabla.insertRow(tabla.rows.length);
         var cel0 = row.insertCell(0);
@@ -520,7 +516,7 @@ function Carteras(){
         cel10.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
         cel11.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
         cel12.innerHTML = "<input type='text' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled>";
-        cel13.innerHTML = "<input type='hidden' style='width: 80px;' class='form-control' value='"+id_auxiliar+"' id='"+lista_seleccionados.length+"_id_auxiliar' disabled>"+auxiliar;
+        cel13.innerHTML = "";
         carteras.calcular(lista_seleccionados.length);
         //desaparecer el boton pagar
         $('#pagarbtn').hide();
