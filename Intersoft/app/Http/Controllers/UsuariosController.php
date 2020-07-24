@@ -141,7 +141,7 @@ class UsuariosController extends Controller
             $usuario->id_empresa  = Session::get('id_empresa');
             $usuario->save();
             //envio mail
-            Mail::to($usuario->correo)->send(new Welcome($usuario));
+            //Mail::to($usuario->correo)->send(new Welcome($usuario));
             return redirect('/administrador/usuarios');
         }
         catch (ModelNotFoundException $exception){

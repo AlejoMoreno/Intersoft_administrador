@@ -57,16 +57,14 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
             <tbody>
                 @if($zona!=null)
                     @foreach($zona as $obj)
-                        @foreach($obj['id_tercero'] as $objo)
-                        <tr>
-                            <td>{{ $obj['id_usuario']['ncedula'] }}-{{ $obj['id_usuario']['nombre'] }}</td>
-                            <td>{{ $obj['zona'] }}</td>
-                            <td><a href="/facturacion/venta/37?nit={{ $objo['nit'] }}">{{ $objo['nit'] }}</a></td>
-                            <td>{{ $objo['razon_social'] }}</td>
-                            <td>{{ $objo['direccion'] }}</td>
-                            <td>{{ $objo['telefono'] }}</td>
-                        </tr>
-                        @endforeach
+                    <tr>
+                        <td>{{ $obj['ncedula'] }}-{{ $obj['nombre'] }}</td>
+                        <td>{{ $obj['zona'] }}</td>
+                        <td><a href="/facturacion/venta/37?nit={{ $obj['nit'] }}">{{ $obj['nit'] }}</a></td>
+                        <td>{{ $obj['razon_social'] }}</td>
+                        <td>{{ $obj['direccion'] }}</td>
+                        <td>{{ $obj['telefono'] }}</td>
+                    </tr>
                     @endforeach
                 @endif
             </tbody>
@@ -156,11 +154,11 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
                 @if($lotes!=null)
                     @foreach($lotes as $obj)
                     <tr>
-                        <td>{{ $obj['id_referencia']['codigo_linea'] }}{{ $obj['id_referencia']['codigo_letras'] }}{{ $obj['id_referencia']['codigo_consecutivo'] }}</td>
-                        <td>{{ $obj['id_referencia']['descripcion'] }}</td>
+                        <td>{{ $obj['codigo_linea'] }}{{ $obj['codigo_letras'] }}{{ $obj['codigo_consecutivo'] }}</td>
+                        <td>{{ $obj['descripcion'] }}</td>
                         <td>{{ $obj['fecha_vence_lote'] }}</td>
                         <td>{{ $obj['numero_lote'] }}</td>
-                        <td>{{ $obj['id_sucursal']['nombre'] }}</td>
+                        <td>{{ $obj['nombre'] }}</td>
                     </tr>
                     @endforeach
                 @endif
@@ -175,10 +173,26 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
 <script>
 $(document).ready( function () {
     zona = {!! json_encode($zona) !!};
-    $('#datos').DataTable({});
-    $('#facturas').DataTable({});
-    $('#lotes').DataTable({});
+    $('#datos').DataTable({ 
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ] });
+    $('#facturas').DataTable({ 
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ] });
+    $('#lotes').DataTable({ 
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ] });
     $('#referencias').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
         'rowCallback': function(row, data, index){
             if(data[8] <= 0){
                 $(row).find('td:eq(8)').css('color', 'red');

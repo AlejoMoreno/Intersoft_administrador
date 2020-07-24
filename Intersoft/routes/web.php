@@ -58,20 +58,29 @@ Route::get('/index', function(){
             $dia = 6;
         break;
     }
-    $zonas = App\Zonasusuarios::where('id_empresa','=',Session::get('id_empresa'))->where('id_usuario','=',Session::get('user_id'))->where('estado','=',$dia)->get();
-    foreach($zonas as $zona){
-        $zona->id_usuario = App\Usuarios::where('id','=',$zona->id_usuario)->first();
-        $zona->id_tercero = App\Directorios::where('zona_venta','=',$zona->zona)->get();
-    }
-    $facturas = App\Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('id_vendedor','=',Session::get('user_id'))->get();
-    $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+    $zonas = App\Zonasusuarios::select('ncedula','nombre','zona','nit','razon_social','direccion','directorios.telefono')
+            ->where('zonasusuarios.id_empresa','=',Session::get('id_empresa'))
+            ->join('usuarios','zonasusuarios.id_usuario','=','usuarios.id')
+            ->join('directorios','zonasusuarios.zona','=','directorios.zona_venta')
+            ->where('zonasusuarios.id_usuario','=',Session::get('user_id'))
+            ->where('zonasusuarios.estado','=',$dia)
+            ->get();
+    
+    $facturas = App\Facturas::where('id_empresa','=',Session::get('id_empresa'))
+            ->where('id_vendedor','=',Session::get('user_id'))
+            ->get();
+    $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))
+            ->get();
+    
     $to = date("Y-m-d");
     $from = date("Y-m-d",strtotime($to."- 2 month"));
-    $lotes = App\Lotes::where('fecha_vence_lote','<=',$from)->where('id_empresa','=',Session::get('id_empresa'))->get();
-    foreach($lotes as $lote){
-        $lote->id_referencia = App\Referencias::where('id','=',$lote->id_referencia)->first();
-        $lote->id_sucursal = App\Sucursales::where('id','=',$lote->id_sucursal)->first();
-    }
+    $lotes = App\Lotes::select('codigo_linea','codigo_letras','codigo_consecutivo','descripcion','fecha_vence_lote','numero_lote','nombre')
+            ->join('referencias','referencias.id','=','lotes.id_referencia')
+            ->join('sucursales','sucursales.id','=','lotes.id_sucursal')
+            ->where('fecha_vence_lote','<=',$from)
+            ->where('lotes.id_empresa','=',Session::get('id_empresa'))
+            ->get();
+
     return view('index', array(
         "zona"=>$zonas,
         "facturas"=>$facturas,

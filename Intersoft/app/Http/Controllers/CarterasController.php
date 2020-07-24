@@ -191,12 +191,19 @@ class CarterasController extends Controller
 
 	function extracto(){
 		$carteraproveedor = Directorios::where('id_directorio_tipo_tercero', '=', '1')
-							->join('facturas', 'directorio.id', '=', 'facturas.id_cliente')
+							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
+							->where('facturas.id_empresa','=',Session::get('id_empresa'))
+							->where('saldo','>','0')
+							->get();
+		$carteracliente = Directorios::where('id_directorio_tipo_tercero', '=', '2')
+							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
+							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
 							->where('facturas.id_empresa','=',Session::get('id_empresa'))
 							->where('saldo','>','0')
 							->get();
 		return view('cartera.extracto', array(
-			"carteraproveedor"=>$carteraproveedor
+			"carteraproveedor"=>$carteraproveedor,
+			"carteracliente"=>$carteracliente
 		));
 	}
 	
