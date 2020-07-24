@@ -541,7 +541,7 @@
     }
 
     $(document).ready(function(){
-        getLocation();
+        //getLocation();
     });
 
     function getLocation() {
