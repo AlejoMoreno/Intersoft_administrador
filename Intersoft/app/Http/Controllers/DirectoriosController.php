@@ -200,21 +200,25 @@ class DirectoriosController extends Controller
         if($request->nit != ''){
             $directorios = Directorios::where('nit','=',$request->nit)
                                       ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->take(100)
                                       ->get();
         }
         else if($request->razon_social != ''){
             $directorios = Directorios::where('razon_social','LIKE','%'.$request->razon_social.'%')
                                       ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->take(100)
                                       ->get();
         }
         else if($request->correo != ''){
             $directorios = Directorios::where('correo','LIKE','%'.$request->correo.'%')
                                       ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->take(100)
                                       ->get();
         }
         else{
             $directorios = Directorios::where('nit','>','0')
                                       ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->take(100)
                                       ->get();
         }
         foreach ($directorios as $directorio) {
@@ -231,6 +235,7 @@ class DirectoriosController extends Controller
             $directorios = Directorios::where('nit','=',$request->nit)
                                       ->where('id_empresa','=',Session::get('id_empresa'))
                                       ->where('id_directorio_tipo_tercero', '=', '2')
+                                      ->take(100)
                                       ->get();
         }
         else{

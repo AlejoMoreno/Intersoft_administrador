@@ -17,14 +17,13 @@ function Directorios(){
 			url:   '/administrador/diretorios/search/search',
 			type:  'post',
 			beforeSend: function () {
-				$('#resultado').html('<p>Espere porfavor</p>');
+				$('#resultado').css('display','inline');
 			},
 			success:  function (response) {
                 console.log(response.body);
                 $('#clientes_encontrados').append('<table class="table table-hover table-striped" id="tabla" >'+
 		              '<thead>'+
 		                  '<tr>'+
-		                  	'<th>Acción</th>'+
 		                    '<th>Nit</th>'+
 		                    '<th>Razón social</th>'+
 		                    '<th>Direccion</th>'+
@@ -35,8 +34,7 @@ function Directorios(){
 		                  '</tr>'+
 		              '</thead><tbody>');
                 $.each( response.body, function( key, value ) {
-					$('#tabla').append('<tr>'+
-						'<td><a href="javascript:;" onclick="directorios.update(`'+value.id+'`);"><button class="btn btn-warning">Traer</button></a></td>'+
+					$('#tabla').append('<tr onclick="directorios.update(`'+value.id+'`);">'+
 						'<td>'+value.nit+'</td>'+
 	                    '<td>'+value.razon_social+'</td>'+
 	                    '<td>'+value.direccion+'</td>'+
@@ -47,6 +45,13 @@ function Directorios(){
 	                  '</tr>');
 				});
 				$('#tabla').append('</tbody></table>');
+				$('#tabla').DataTable( {
+					dom: 'Bfrtip',
+					buttons: [
+						'copy', 'csv', 'excel', 'pdf', 'print'
+					]
+				} );
+				$('#resultado').css('display','none');
 			}
         });
 	}
@@ -56,7 +61,7 @@ function Directorios(){
 			url:   '/administrador/directorios/'+data,
 			type:  'get',
 			beforeSend: function () {
-				$('#resultado').html('<p>Espere porfavor</p>');
+				$('#resultado').css('display','inline');
 			},
 			success:  function (response) {
 				console.log(response);
@@ -90,6 +95,7 @@ function Directorios(){
 				$('#id_directorio_tipo_tercero').val(response.body.id_directorio_tipo_tercero);
 				//desaparecer modal 
 				$('#butonmodal').trigger('click');
+				$('#resultado').css('display','none');
 			}
         });
 	}
