@@ -174,18 +174,80 @@ class FacturasController extends Controller
             'kardex' => $kardex]);   
     }
 
-    public function consultar_documento($documento){
-        $factura = Facturas::where('id_documento','=',$documento)->
-                             where('id_empresa','=',Session::get('id_empresa'))->paginate(5);
-        
-        foreach ($factura as $obj) {
-            $obj->id_sucursal = Sucursales::where('id','=',$obj->id_sucursal)->first();
-            
-            $obj->id_documento = Documentos::where('id','=',$obj->id_documento)->first();
-            $obj->id_cliente = Directorios::where('id','=',$obj->id_cliente)->first();
-            $obj->id_cliente ->id_ciudad = Ciudades::where('id',$obj->id_cliente ->id_ciudad)->first();
-            $obj->id_sucursal ->id_empresa = Empresas::where('id',$obj->id_sucursal ->id_empresa)->first();
+    public function consultar_documento($documento, Request $request){
+        if(isset($request->nit)){
+            $factura = Facturas::select(
+                ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
+                'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
+                'facturas.created_at as creado','facturas.id as idfactura',
+                'directorios.razon_social as nombrecliente'])
+                        ->where('facturas.id_documento','=',$documento)
+                        ->join('documentos','documentos.id','=','facturas.id_documento')            
+                        ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
+                        ->join('directorios','directorios.id','=','facturas.id_cliente')
+                        ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
+                        ->join('empresas','empresas.id','=','facturas.id_empresa')
+                        ->where('id_tercero','=',$request->nit)
+                        ->where('facturas.id_empresa','=',Session::get('id_empresa'))
+                        ->orderBy('id_documento','desc')
+                        ->take(100)
+                        ->get();
         }
+        else if(isset($request->razonsocial)){
+            $factura = Facturas::select(
+                ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
+                'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
+                'facturas.created_at as creado','facturas.id as idfactura',
+                'directorios.razon_social as nombrecliente'])
+                        ->where('facturas.id_documento','=',$documento)
+                        ->join('documentos','documentos.id','=','facturas.id_documento')            
+                        ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
+                        ->join('directorios','directorios.id','=','facturas.id_cliente')
+                        ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
+                        ->where('directorios.razon_social','=',$request->razonsocial)
+                        ->where('facturas.id_empresa','=',Session::get('id_empresa'))
+                        ->orderBy('id_documento','desc')
+                        ->take(100)
+                        ->get();
+        }
+        else if(isset($request->fechainicio)){
+            $factura = Facturas::select(
+                ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
+                'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
+                'facturas.created_at as creado','facturas.id as idfactura',
+                'directorios.razon_social as nombrecliente'])
+                        ->where('facturas.id_documento','=',$documento)
+                        ->join('documentos','documentos.id','=','facturas.id_documento')            
+                        ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
+                        ->join('directorios','directorios.id','=','facturas.id_cliente')
+                        ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
+                        ->join('empresas','empresas.id','=','facturas.id_empresa')
+                        ->whereBetween('fecha', [$request->fechainicio, $request->fechafinal])
+                        ->where('facturas.id_empresa','=',Session::get('id_empresa'))
+                        ->orderBy('id_documento','desc')
+                        ->take(100)
+                        ->get();
+        }
+        else{
+            $factura = Facturas::select(
+                ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
+                'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
+                'facturas.created_at as creado','facturas.id as idfactura',
+                'directorios.razon_social as nombrecliente'])
+                        ->where('facturas.id_documento','=',$documento)
+                        ->join('documentos','documentos.id','=','facturas.id_documento')            
+                        ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
+                        ->join('directorios','directorios.id','=','facturas.id_cliente')
+                        ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
+                        ->join('empresas','empresas.id','=','facturas.id_empresa')
+                        ->where('facturas.id_empresa','=',Session::get('id_empresa'))
+                        ->orderBy('id_documento','desc')
+                        ->take(100)
+                        ->get();
+        }
+        
+        
+
         return view('documentos.consultar', [
             'factura' => $factura
         ]);

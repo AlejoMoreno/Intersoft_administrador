@@ -22,7 +22,7 @@
 </style>
 
 <div class="enc-article">
-    <h4 class="title">Devoluciones</h4>
+    <h4 class="title">Alistamiento de mercancia</h4>
 </div>
 
 <div class="row top-11-w">
@@ -65,7 +65,12 @@
 
 <script>
 $(document).ready( function () {
-    $('#datos').DataTable({});
+    $('#datos').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ] 
+    });
 } );
 
 
