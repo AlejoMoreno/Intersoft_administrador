@@ -30,6 +30,7 @@
 	}
 	</style>
 	
+	
  	<section>
 		<div>
 			<img style="width:100px;" src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['id'] }}.jpeg">

@@ -118,11 +118,11 @@ class FacturasController extends Controller
         foreach ($kardex as $obj) {
             $obj->id_referencia = Referencias::where('id',$obj->id_referencia)->
                                                where('id_empresa','=',Session::get('id_empresa'))->
-                                               get()[0];
+                                            first();
         }
 
     	return view('documentos.impresionFactura', [
-            'factura' => $obj,
+            'factura' => $factura,
             'kardex' => $kardex
         ]);
     }
