@@ -15,6 +15,7 @@ use App\Clasificaciones;
 use App\Usuarios;
 use App\Cuentas;
 use App\Pucauxiliar;
+use App\Kardex;
 
 use Yajra\Datatables\Datatables;
 
@@ -225,16 +226,52 @@ class ReferenciasController extends Controller
 
     public function catalogo(){
 		try{
-			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
-			foreach ($obj as $value) {
-				$value->codigo_linea = Lineas::where('id', $value->codigo_linea)->get();
-				$value->id_presentacion = Tipo_presentaciones::where('id', $value->id_presentacion)->get();
-				$value->id_marca = Marcas::where('id', $value->id_marca)->get();
-				$value->id_clasificacion = Clasificaciones::where('id', $value->id_clasificacion)->get();
-				$value->usuario_creador = Usuarios::where('id', $value->usuario_creador)->get();
+			$referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
+					->orderBy('saldo','desc')
+					->get();
+
+
+			$referenciasmasvendidas = Kardex::select('id_referencia',
+				'id_referencia',DB::raw('sum(cantidad) as total'))
+					->where('id_empresa','=',Session::get('id_empresa'))
+					->where('signo','=','-')
+					->groupBy('id_referencia','signo')
+					->orderBy('total','desc')
+					->take(12)
+					->get();
+			
+			$referenciasmaspedidos = Kardex::select('id_referencia',
+				'id_referencia',DB::raw('sum(cantidad) as total'))
+					->where('id_empresa','=',Session::get('id_empresa'))
+					->where('signo','=','=')
+					->groupBy('id_referencia','signo')
+					->orderBy('total','asc')
+					->take(12)
+					->get();
+			
+			$referenciasmenosvendidos = Kardex::select('id_referencia',
+				'id_referencia',DB::raw('sum(cantidad) as total'))
+					->where('id_empresa','=',Session::get('id_empresa'))
+					->where('signo','=','-')
+					->groupBy('id_referencia','signo')
+					->orderBy('total','desc')
+					->take(12)
+					->get();
+			foreach($referenciasmenosvendidos as $obj){
+				$obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
 			}
+			foreach($referenciasmasvendidas as $obj){
+				$obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
+			}
+			foreach($referenciasmaspedidos as $obj){
+				$obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
+			}
+			
 			return view('inventario.catalogo', [
-				'referencias' => $obj
+				'referencias' => $referencias,
+				'referenciasmasvendidas'=>$referenciasmasvendidas,
+				'referenciasmaspedidos'=>$referenciasmaspedidos,
+				'referenciasmenosvendidos'=>$referenciasmenosvendidos
 			]);
 		}
 		catch (ModelNotFoundException $exception){

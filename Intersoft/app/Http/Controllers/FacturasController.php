@@ -180,13 +180,14 @@ class FacturasController extends Controller
                 ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
                 'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
                 'facturas.created_at as creado','facturas.id as idfactura',
-                'directorios.razon_social as nombrecliente'])
+                'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor'])
                         ->where('facturas.id_documento','=',$documento)
                         ->join('documentos','documentos.id','=','facturas.id_documento')            
                         ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
                         ->join('directorios','directorios.id','=','facturas.id_cliente')
                         ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
                         ->join('empresas','empresas.id','=','facturas.id_empresa')
+                        ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
                         ->where('id_tercero','=',$request->nit)
                         ->where('facturas.id_empresa','=',Session::get('id_empresa'))
                         ->orderBy('id_documento','desc')
@@ -198,12 +199,13 @@ class FacturasController extends Controller
                 ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
                 'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
                 'facturas.created_at as creado','facturas.id as idfactura',
-                'directorios.razon_social as nombrecliente'])
+                'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor'])
                         ->where('facturas.id_documento','=',$documento)
                         ->join('documentos','documentos.id','=','facturas.id_documento')            
                         ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
                         ->join('directorios','directorios.id','=','facturas.id_cliente')
                         ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
+                        ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
                         ->where('directorios.razon_social','=',$request->razonsocial)
                         ->where('facturas.id_empresa','=',Session::get('id_empresa'))
                         ->orderBy('id_documento','desc')
@@ -215,12 +217,13 @@ class FacturasController extends Controller
                 ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
                 'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
                 'facturas.created_at as creado','facturas.id as idfactura',
-                'directorios.razon_social as nombrecliente'])
+                'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor'])
                         ->where('facturas.id_documento','=',$documento)
                         ->join('documentos','documentos.id','=','facturas.id_documento')            
                         ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
                         ->join('directorios','directorios.id','=','facturas.id_cliente')
                         ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
+                        ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
                         ->join('empresas','empresas.id','=','facturas.id_empresa')
                         ->whereBetween('fecha', [$request->fechainicio, $request->fechafinal])
                         ->where('facturas.id_empresa','=',Session::get('id_empresa'))
@@ -233,23 +236,25 @@ class FacturasController extends Controller
                 ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
                 'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
                 'facturas.created_at as creado','facturas.id as idfactura',
-                'directorios.razon_social as nombrecliente'])
+                'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor'])
                         ->where('facturas.id_documento','=',$documento)
                         ->join('documentos','documentos.id','=','facturas.id_documento')            
                         ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
                         ->join('directorios','directorios.id','=','facturas.id_cliente')
                         ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
                         ->join('empresas','empresas.id','=','facturas.id_empresa')
+                        ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
                         ->where('facturas.id_empresa','=',Session::get('id_empresa'))
                         ->orderBy('id_documento','desc')
                         ->take(100)
                         ->get();
         }
         
-        
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->orderBy('nombre','desc')->get();
 
         return view('documentos.consultar', [
-            'factura' => $factura
+            'factura' => $factura,
+            'usuarios'=> $usuarios
         ]);
     }
 

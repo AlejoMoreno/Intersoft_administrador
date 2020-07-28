@@ -12,12 +12,25 @@
     <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Filtros de busqueda:</p>
     <div class="col-md-12"> 
         <form method="GET" class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <input type="text" name="nit" placeholder="Nit" class="form-control">
             </div>
-            <div class="col-md-3">
-                <input type="text" name="razonsocial" placeholder="Razón social" class="form-control">
+            <div class="col-md-4">
+                <div class="col-md-12 row">
+                    <div class="col-md-8">
+                        <input type="text" name="razonsocial" placeholder="Razón social" class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-control" name="vendedor"> 
+                            <option value="">Vendedor</option>
+                            @foreach ($usuarios as $obj)
+                            <option value="{{ $obj['id'] }}">{{ $obj['nombre'] }} {{ $obj['apellido'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </div>
+            
             <div class="col-md-4 row">
                 <div class="col-md-6">
                     <input type="date" name="fechainicio" class="form-control">
@@ -52,6 +65,7 @@
                 <th>total</th>
                 <th>Saldo Cartera</th>
                 <th>Estado</th>
+                <th>Vendedor</th>
                 <th>Fecha creado</th>
                 <th></th>
                 <th></th>
@@ -77,6 +91,7 @@
                     <td>{{ number_format($obj['total']) }}</td>
                     <td>{{ number_format($obj['saldo']) }}</td>
                     <td>{{ $obj['estado'] }}</td>
+                    <td>{{ $obj['nombrevendedor'] }} {{ $obj['apellido'] }}</td>
                     <td><div style="width: 150px;">{{ $obj['creado'] }}</div></td>
                     <td><div onclick="config.anular('factura','{{ $obj }}')" href="/documentos/anular/{{ $obj['idfactura'] }}" class="btn btn-warning"><i style="font-size: 12px;" class="fas fa-ban"></i></div></td>
                     <td><div onclick="config.eliminar('factura','{{ $obj }}')" href="/documentos/eliminar/{{ $obj['idfactura'] }}" class="btn btn-danger"><i style="font-size: 12px;" class="fas fa-trash"></i></div></td>
