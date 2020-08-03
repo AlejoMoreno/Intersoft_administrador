@@ -25,8 +25,9 @@
     <h4 class="title">Alistamiento de mercancia</h4>
 </div>
 
-<div class="row top-11-w">
-    <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Lista de referencias para alistar</p>
+<div class="row top-5-w">
+<p style="font-size:10pt;font-family:Poppins;margin-left:2%">En esta sección usted podrá ver los pedidos creados el día {{ date('Y-m-d') }}, con el fin
+de poderlos alistar. Se detalla tambien el número de documento para poder reimprimir el pedido.</p>
     <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
         <table class="table table-sm  table-striped" id="datos">
             <thead>

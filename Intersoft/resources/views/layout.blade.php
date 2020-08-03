@@ -324,9 +324,7 @@
                             <?php if(in_array("Maestro de Lotes",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/lotes');">Maestro de Lotes</a></li><?php } ?>
                             <?php if(in_array("Catálogo",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/catalogo');">Catálogo</a></li><?php } ?>
                             <?php if(in_array("Tarjeta Kardex",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Tarjeta Kardex</a></li><?php } ?>
-                            <?php if(in_array("Costo Promedio Ponderado",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Costo Promedio Ponderado</a></li><?php } ?>
                             <?php if(in_array("Actualización y Lista de Precios",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/actualizacionPrecios');">Actualización y Lista de Precios</a></li><?php } ?>
-                            <?php if(in_array("Presupuestos de Reposición",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Presupuestos de Reposición</a></li><?php } ?>
                             <?php if(in_array("Cierre de Inventario",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/cierreInventario');">Cierre de Inventario</a></li><?php } ?>
                             <?php if(in_array("Alistamiento",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/alistamiento');">Alistamiento</a></li><?php } ?>
                             <li role="separator" class="divider"></li>

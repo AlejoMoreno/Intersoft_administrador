@@ -18,7 +18,7 @@ class CuentasController extends Controller
 {
 	public function index(){
         $pucsubcuentas = Pucsubcuentas::all();
-        $auxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->paginate(5);
+        $auxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->take(200)->get();
         //foreach ($auxiliares as $auxiliar){
           //  $auxiliar->id_subcuenta = Pucsubcuentas::where('id','=',$auxiliar->id_subcuenta)->first();
             /*$auxiliar->id_subcuenta->id_cuenta = Puccuentas::where('id','=',$auxiliar->id_subcuenta->id_cuenta)->fisrt();

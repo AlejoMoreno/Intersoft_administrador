@@ -15,103 +15,120 @@
         opacity: 0.8;
     }
 </style>
-<div class="container-fluid">
-    <div class="row">
+<style>
+    .title{
+        margin-left: 2%;
+        font-weight: bold;
+        font-family: Poppins;
+    }
+    .top-5-w{
+        margin-top:5%;
+    }
+    .table > thead th {
+        -webkit-animation: pantallain 100s infinite; /* Safari 4.0 - 8.0 */
+        -webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+        animation: pantallain 100s infinite;
+        animation-direction: alternate;
+    }
+</style>
 
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">Orden # <span id="orden_text"></span></h4>
-                    <p>Muestra de las fichas de esta orden</p>
-                </div>
-                <div class="content">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="orden">Ficha tecnica</th>
-                                <th class="orden">Etapa</th>
-                                <th class="orden">Unidades</th>
-                                <th class="ficha">Materia Prima</th>
-                                <th class="ficha">Unidad</th>
-                                <th class="ficha">Total</th>
-                                <th class="referencia">Saldo</th>
-                                <th class="referencia">costo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabla"></tbody>
-                    </table>
-                    <div id="select_etapa">
-                        
-                    </div>
+<div class="enc-article">
+    <h4 class="title">Ingreso por producción</h4>
+</div>
+
+<div class="row top-5-w" style="padding:2%;">
+    <p>Para realizar el ingreso por producción se debe contar con una orden de producción, al momento de 
+        seleccionar una orden se debe ir al boton de actualizar, allí mostrará una tabla detallando la orden 
+        a partir de la ficha tecnica creada, el sistema nos indicará si contamos con saldo para realizar 
+        el proceso, de lo contrario nunca podremos seleccionar la etapa final. Además podrá realizar un 
+        historial por orden y sus diferentes etapas.
+    </p>
+
+    <div class="panel panel-default col-md-7" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Orden # <span id="orden_text"></span></h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">A continuación se muestran las fichas de esta orden
+            </p>
+            <div class="content" style="overflow-x: scroll">
+                <table class="table" id="table">
+                    <thead>
+                        <tr>
+                            <th class="orden">Ficha tecnica</th>
+                            <th class="orden">Etapa</th>
+                            <th class="orden">Unidades</th>
+                            <th class="ficha">Materia Prima</th>
+                            <th class="ficha">Unidad</th>
+                            <th class="ficha">Total</th>
+                            <th class="referencia">Saldo</th>
+                            <th class="referencia">costo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla"></tbody>
+                </table>
+                <div id="select_etapa">
                     
                 </div>
-            </div>
-        </div>
-
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">Ordenes de producción pendientes</h4>
-                    <p class="category">Cambio de estado de ordenes de producción</p><br>
-                </div>
-                <div class="content">
-                    <div style="overflow-x:scroll;overflow-y:scroll;height:500px;">
-                        <table class="table table-hover table-striped" id="datos">
-                            <thead>
-                                <tr>
-                                    <th>Orden de produccion</th>
-                                    <th>Cliente</th>
-                                    <th>Cantidad Items</th>
-                                    <th>Etapa</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php 
-                                foreach ($produccioningresos1 as $value) {
-                                    if($value->etapa == 10){ //cancelado
-                                        $clase = "red";
-                                        $boton = "<td><div class='btn btn-danger'>PDF</div></td>";
-                                        $nombre = "Cancelado";
-                                    }
-                                    else if($value->etapa == 11){ //producto terminado
-                                        $clase = "naranja";
-                                        $boton = "<td><div class='btn btn-danger'>PDF</div></td>";
-                                        $nombre = "Orden Finalizada";
-                                    }
-                                    else{
-                                        $clase = "";
-                                        $boton = "<td><div class='btn btn-warning' onclick='ing.Ver2(".$value->orden_produccion.")'>></div></td>";
-                                        $nombre = $value->etapa;
-                                    }
-                                    echo "<tr class='".$clase."'>";
-                                        echo "<td>".$value->orden_produccion."</td>";
-                                        echo "<td>".$value->id_cliente['razon_social']."</td>";
-                                        echo "<td>".$value->total."</td>";
-                                        echo "<td>".$nombre."</td>";
-                                        echo $boton;
-                                    echo "</tr>";
-                                }
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="footer">
-                        <div class="legend">
-                            <i class="fa fa-circle text-info"></i> 
-                            <i class="fa fa-circle text-danger"></i> 
-                            <i class="fa fa-circle text-warning"></i>
-                        </div>
-                        <hr>
-                        <div class="stats">
-                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/submenu/produccion');"> ir atras.</a>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
+
+    <div class="col-md-5 row">
+        <div class="panel panel-warning col-md-12" >
+            <!-- Default panel contents -->
+            <div class="panel-heading row" >
+                <h5 class="col-md-12">Ordenes de producción pendientes</h5>         
+            </div>
+            <div class="panel-body" style="overflow-x: scroll">
+                <p style="font-size: 10pt;">Cambio de estado de ordenes de producción</p>
+                <table class="table table-hover table-striped" id="datos">
+                    <thead>
+                        <tr>
+                            <th>Orden de produccion</th>
+                            <th>Cliente</th>
+                            <th>Cantidad Items</th>
+                            <th>Etapa</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                        foreach ($produccioningresos1 as $value) {
+                            if($value->etapa == 10){ //cancelado
+                                $clase = "red";
+                                $boton = "<td><div class='btn btn-danger' style='background:white'><i class='fas fa-print'></i></div></td>";
+                                $nombre = "Cancelado";
+                            }
+                            else if($value->etapa == 11){ //producto terminado
+                                $clase = "naranja";
+                                $boton = "<td><div class='btn btn-danger' style='background:white'><i class='fas fa-print'></i></div></td>";
+                                $nombre = "Orden Finalizada";
+                            }
+                            else{
+                                $clase = "";
+                                $boton = "<td><div class='btn btn-warning' onclick='ing.Ver2(".$value->orden_produccion.")'><i class='fas fa-pen-square'></i></div></td>";
+                                $nombre = $value->etapa;
+                            }
+                            echo "<tr class='".$clase."'>";
+                                echo "<td>Orden#".$value->orden_produccion."</td>";
+                                echo "<td>".$value->id_cliente['razon_social']."</td>";
+                                echo "<td>".$value->total."</td>";
+                                echo "<td>".$nombre."</td>";
+                                echo $boton;
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    
 </div>
+
+
 
 <script>
 var ing = new IngresosProduccion();
@@ -262,5 +279,16 @@ function IngresosProduccion(){
         opacity: 0.7 !important;
     }
 </style>
+
+<script>
+$(document).ready(function() {
+    var table = $('#datos').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+});
+</script>
 
 @endsection()
