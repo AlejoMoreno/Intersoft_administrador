@@ -19,6 +19,10 @@
     animation: pantallain 100s infinite;
     animation-direction: alternate;
 }
+.red{
+    background: #ff4a55;
+    color: white;
+}
 </style>
 
 <div class="enc-article">
@@ -26,9 +30,36 @@
 </div>
 
 <div class="row top-5-w">
-<p style="font-size:10pt;font-family:Poppins;margin-left:2%">En esta sección usted podrá ver los pedidos creados el día {{ date('Y-m-d') }}, con el fin
-de poderlos alistar. Se detalla tambien el número de documento para poder reimprimir el pedido.</p>
+<p style="font-size:10pt;font-family:Poppins;margin-left:2%">Aliste sus productos de forma rápida y efectíva</p>
     <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
+        <table class="table table-sm  table-striped" id="datos1">
+            <thead>
+                <tr>
+                    <th>Referencia</th>
+                    <th>Descripción</th>
+                    <th>Unidades para alistar</th>
+                    <th>Saldo en bodega</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if($kardex1!=null)
+                    @foreach($kardex1 as $obj)
+                    <?php $color = (($obj['total'] - $obj['id_referencia']['saldo'] ) > 0)? "red":""; ?>
+                    <tr>
+                        <td>{{ $obj['id_referencia']['codigo_interno'] }}</td>
+                        <td>{{ $obj['id_referencia']['descripcion'] }}</td>
+                        <td>{{ $obj['total'] }}</td>
+                        <td class="{{ $color }}">{{ $obj['id_referencia']['saldo']  }}</td>
+                    </tr>
+                    @endforeach
+                @endif
+            </tbody>
+        </table>
+        <br>
+        <hr>
+        <br>
+        <p style="font-size:10pt;font-family:Poppins;margin-left:2%">En esta sección usted podrá ver los pedidos creados el día {{ date('Y-m-d') }}, con el fin
+            de poderlos alistar. Se detalla tambien el número de documento para poder reimprimir el pedido.</p>
         <table class="table table-sm  table-striped" id="datos">
             <thead>
                 <tr>
@@ -57,6 +88,8 @@ de poderlos alistar. Se detalla tambien el número de documento para poder reimp
                 @endif
             </tbody>
         </table>
+
+        
     </div>
     
 </div>
@@ -67,6 +100,12 @@ de poderlos alistar. Se detalla tambien el número de documento para poder reimp
 <script>
 $(document).ready( function () {
     $('#datos').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ] 
+    });
+    $('#datos1').DataTable({
         dom: 'Bfrtip',
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'

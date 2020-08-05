@@ -486,13 +486,28 @@ Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
 
 Route::get('/contabilidad/librosauxiliares', 'ContabilidadesController@librosauxiliaresIndex');
-Route::get('/contabilidad/comprobantesdiario', function(){ return view('contabilidad.comprobantesdiario'); });
+Route::get('/contabilidad/comprobantesdiario', function(){ 
+    $documentos = App\Documentos::select(['id','nombre'])
+                ->where('id_empresa','=',Session::get('id_empresa'))
+                ->get();
+    return view('contabilidad.comprobantesdiario',[
+        "documentos"=>$documentos
+    ]); 
+});
 Route::get('/contabilidad/doc/{id}', 'ContabilidadesController@getDocumentos');
 
 Route::post('/contabilidad/comprobantes/viewComprobantes', 'ContabilidadesController@viewComprobantes');
 Route::post('/contabilidad/comprobantes/deleteComprobantes', 'ContabilidadesController@deleteComprobantes');
 Route::post('/contabilidad/comprobantes/updateComprobantes', 'ContabilidadesController@updateComprobantes');
 Route::post('/contabilidad/comprobantes/createComprobantes', 'ContabilidadesController@createComprobantes');
+
+Route::get('/contabilidad/generarfactura/{doc}','ContabilidadesController@generarfactura');
+Route::get('/contabilidad/generaregreso/{doc}','ContabilidadesController@generaregreso');
+Route::get('/contabilidad/generarrecibos/{doc}','ContabilidadesController@generarrecibos');
+Route::get('/contabilidad/generarcompra/{doc}','ContabilidadesController@generarcompra');
+Route::get('/contabilidad/generarnotadb/{doc}','ContabilidadesController@generarnotadb');
+Route::get('/contabilidad/generarnotacr/{doc}','ContabilidadesController@generarnotacr');
+Route::get('/contabilidad/generarnotacontable/{doc}','ContabilidadesController@generarnotacontable');
 
 
 /*

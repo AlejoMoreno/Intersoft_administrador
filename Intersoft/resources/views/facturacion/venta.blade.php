@@ -51,6 +51,8 @@
                 <label>Dirección:</label>
                 <input type="text" name="direccion"  id="direccion" placeholder="Dirección" class="form-control" >
             </div>
+        </div>
+        <div class="header row" style="background:#dbdbdb">
             <div class="col-md-4">
                 <label>Teléfono:</label>
                 <input type="text" name="telefono"  id="telefono" placeholder="Teléfono" class="form-control" >
@@ -67,6 +69,12 @@
                     @endforeach
                 </select>
             </div>
+            <div class="col-md-4">
+                <label>Nombre Zona:</label>
+                <input type="text" name="zona"  id="zona" placeholder="Zona" class="form-control" >
+            </div>
+        </div>
+        <div class="header row" style="background:#dbdbdb">
             <div class="col-md-12" style="margin-bottom:2%;">
                 <label><br></label>
                 <a href="/gps/directoriomaps" target="_blank" style="background:white;" class="btn btn-warning">Agregar al mapa</a>
@@ -811,6 +819,7 @@ function guardarCliente(){
         "direccion" : $('#direccion').val(),
         "correo" : $('#correo').val(),
         "telefono" : $('#telefono').val(),
+        "zona_venta" : $('#zona').val(),
         "id_directorio_tipo_tercero" : "2"
     };
     if(parametros.razon_social == "" || parametros.direccion == "" || parametros.correo == "" || parametros.telefono == ""   ){
@@ -867,12 +876,14 @@ function buscarcliente(texto){
                     $('#telefono').val(cliente.telefono);
                     $('#correo').val(cliente.correo); 
                     $('#id_ciudad').val(cliente.id_ciudad);
-                    $('#nombre').prop( "disabled", true );  
-                    $('#direccion').prop( "disabled", true );  
-                    $('#telefono').prop( "disabled", true );  
-                    $('#correo').prop( "disabled", true );    
-                    $('#id_ciudad').prop("disabled", true);
-                    $('#guardarCliente').hide();   
+                    $('#zona').val(cliente.zona_venta);
+                    $('#nombre').prop( "disabled", false );  
+                    $('#direccion').prop( "disabled", false );  
+                    $('#telefono').prop( "disabled", false );  
+                    $('#correo').prop( "disabled", false );    
+                    $('#id_ciudad').prop("disabled", false);
+                    $('#zona').prop("disabled", false);
+                    //$('#guardarCliente').hide();   
                     $('#resCliente').text("Cliente existe");    
                     //cartera
                     $('#Carterasid_cliente').val(cliente.id);           
@@ -882,12 +893,14 @@ function buscarcliente(texto){
                     $('#direccion').val("");
                     $('#telefono').val("");
                     $('#correo').val("");
+                    $('#zona').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
                     $('#correo').prop( "disabled", false ); 
                     $('#id_ciudad').prop("disabled", false);
-                    $('#guardarCliente').show();
+                    $('#zona').prop("disabled", false);
+                    //$('#guardarCliente').show();
                     $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
                 }              
             },

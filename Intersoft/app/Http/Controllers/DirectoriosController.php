@@ -250,32 +250,49 @@ class DirectoriosController extends Controller
     }
 
     public function addTercero(Request $request){
-        $directorios = new Directorios();
-        $directorios->nit       = $request->nit;
-        $directorios->id_ciudad = $request->id_ciudad;
-        $directorios->razon_social= $request->razon_social;
-        $directorios->direccion = $request->direccion;
-        $directorios->correo    = $request->correo;
-        $directorios->telefono  = $request->telefono;
-        $directorios->telefono1 = $request->telefono;
-        $directorios->telefono2 = $request->telefono;
-        $directorios->digito    = "0";
-        $directorios->financiacion= "0";
-        $directorios->descuento = "0";
-        $directorios->cupo_financiero= "0";
-        $directorios->rete_ica  = "0";
-        $directorios->porcentaje_rete_iva= "0";
-        $directorios->actividad_economica= "0";
-        $directorios->calificacion= "2";
-        $directorios->nivel     = "NACIONAL";
-        $directorios->zona_venta= "0";
-        $directorios->transporte= "NO";
-        $directorios->estado    = "1";
-        $directorios->id_retefuente= "1";
-        $directorios->id_regimen= "1";
-        $directorios->id_usuario= "1";
-        $directorios->id_directorio_tipo= "1";
-        $directorios->id_directorio_clase= "1";
+        $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('nit','=',$request->nit)
+                        ->first();
+        if(sizeof($directorios) == 0){
+            $directorios = new Directorios();
+            $directorios->nit       = $request->nit;
+            $directorios->id_ciudad = $request->id_ciudad;
+            $directorios->razon_social= $request->razon_social;
+            $directorios->direccion = $request->direccion;
+            $directorios->correo    = $request->correo;
+            $directorios->telefono  = $request->telefono;
+            $directorios->telefono1 = $request->telefono;
+            $directorios->telefono2 = $request->telefono;
+            $directorios->digito    = "0";
+            $directorios->financiacion= "0";
+            $directorios->descuento = "0";
+            $directorios->cupo_financiero= "0";
+            $directorios->rete_ica  = "0";
+            $directorios->porcentaje_rete_iva= "0";
+            $directorios->actividad_economica= "0";
+            $directorios->calificacion= "2";
+            $directorios->nivel     = "NACIONAL";
+            $directorios->zona_venta= $request->zona_venta;
+            $directorios->transporte= "NO";
+            $directorios->estado    = "1";
+            $directorios->id_retefuente= "1";
+            $directorios->id_regimen= "1";
+            $directorios->id_usuario= "1";
+            $directorios->id_directorio_tipo= "1";
+            $directorios->id_directorio_clase= "1";
+        }
+        else{
+            $directorios->nit       = $request->nit;
+            $directorios->id_ciudad = $request->id_ciudad;
+            $directorios->razon_social= $request->razon_social;
+            $directorios->direccion = $request->direccion;
+            $directorios->correo    = $request->correo;
+            $directorios->telefono  = $request->telefono;
+            $directorios->telefono1 = $request->telefono;
+            $directorios->telefono2 = $request->telefono;
+            $directorios->zona_venta= $request->zona_venta;
+        }
+        
         if(isset($request->id_directorio_tipo_tercero)){
             $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
         }

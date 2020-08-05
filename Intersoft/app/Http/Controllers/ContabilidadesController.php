@@ -13,6 +13,7 @@ use App\Pucsubcuentas;
 use App\Directorios;
 use App\Sucursales;
 use App\Facturas;
+use App\Documentos;
 
 use App\Empresas;
 use App\Contabilidades;
@@ -86,20 +87,31 @@ class ContabilidadesController extends Controller
         return view('contabilidad.librosauxiliares', ['data' => $data]);
     }
 
-    public function getDocumentos($id){
+    public function getDocumentos($id, Request $request){
         $obj = DB::select("SELECT 
             count(id) as cantidad,
             contabilidades.id_empresa,
             (select nombre from sucursales where id = contabilidades.id_sucursal) as id_sucursal,
             contabilidades.tipo_documento,
             contabilidades.numero_documento,
-            contabilidades.fecha_documento
+            contabilidades.fecha_documento,
+            (select nit from directorios where id = contabilidades.tercero) as id_tercero,
+            (select razon_social from directorios where id = contabilidades.tercero) as tercero
             FROM `contabilidades` 
-            WHERE contabilidades.tipo_documento = ".$id."
-            and contabilidades.id_empresa = ".Session::get("id_empresa").
-            " GROUP BY id_empresa,id_sucursal,tipo_documento,numero_documento,fecha_documento"
+            WHERE contabilidades.tipo_documento = ".$id.
+            " AND contabilidades.id_empresa = ".Session::get("id_empresa").
+            " AND contabilidades.fecha_documento BETWEEN '".$request->desde."' AND '".$request->hasta."'".
+            " GROUP BY id_empresa,id_sucursal,tipo_documento,numero_documento,fecha_documento,id_tercero,tercero"
         );
         $data= json_decode( json_encode($obj), true);
+
+        $documentos = Documentos::select(['id','nombre'])
+                ->where('id_empresa','=',Session::get('id_empresa'))
+                ->get();
+        
+        $auxiliares = Pucauxiliar::select(['id','codigo','descripcion'])
+                ->where('id_empresa','=',Session::get('id_empresa'))
+                ->get();
 
         if($id == 1){$nombre = "EGRESO";} if($id == 2){$nombre = "RECIBOS DE CAJA";}  
         if($id == 3){$nombre = "FACTURAS DE VENTA";} if($id == 4){$nombre = "FACTURAS DE COMPRA";}  
@@ -112,14 +124,19 @@ class ContabilidadesController extends Controller
 
         return view('contabilidad.doc.index',[
             'data' => (object)$data,
-            'nombre_tipo_documento' => $nombre
+            'nombre_tipo_documento' => $nombre,
+            'documentos'=>$documentos,
+            'auxiliares'=>$auxiliares
         ]);
     }
 
     public function viewComprobantes(Request $request){
         
-        $contabilidades = Contabilidades::where('id_empresa','=',Session::get('id_empresa'))->
-                                          where('numero_documento','=',$request->numero_documento)->get();
+        $contabilidades = Contabilidades::where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                        ->where('numero_documento','=',$request->numero_documento)
+                        ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                        ->join('directorios','directorios.id','=','contabilidades.tercero')
+                        ->get();
         return array(
             "contabilidades"=>$contabilidades
         );
@@ -165,7 +182,7 @@ class ContabilidadesController extends Controller
         $respuesta = "ERROR";
         $contabilidad = new Contabilidades();
         $contabilidad->tipo_documento = $request->tipo_documento;
-        $contabilidad->id_sucursal = $request->id_sucursal;
+        $contabilidad->id_sucursal = Session::get('sucursal');
         $contabilidad->id_documento = $request->id_documento;
         $contabilidad->numero_documento = $request->numero_documento;
         $contabilidad->prefijo = $request->prefijo;
@@ -173,7 +190,7 @@ class ContabilidadesController extends Controller
         $contabilidad->valor_transaccion = $request->valor_transaccion;
         $contabilidad->tipo_transaccion = $request->tipo_transaccion;
         $contabilidad->tercero = $request->tercero;
-        $contabilidad->id_auxiliar = Session::get('sucursal');
+        $contabilidad->id_auxiliar = $request->id_axiliar;
         $contabilidad->id_empresa = Session::get('id_empresa');
         $contabilidad->save();
         $respuesta = "Ok";

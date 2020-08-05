@@ -47,6 +47,23 @@ class CuentasController extends Controller
         return redirect('/contabilidad/cuentas');
     }
 
+    public function update(Request $request){
+      $auxiliar = Pucauxiliar::where('id','=',$request->id)->first();
+      $auxiliar->id_pucsubcuentas = $request->pucsubcuentas;
+      $auxiliar->tipo             = $request->tipo;
+      $auxiliar->naturaleza       = $request->naturaleza;
+      $auxiliar->clase            = $request->clase;
+      $auxiliar->codigo           = $request->codigo;
+      $auxiliar->descripcion      = $request->descripcion;
+      $auxiliar->homologo         = $request->codigo;
+      $auxiliar->id_empresa       = Session::get('id_empresa');
+      $auxiliar->exogena          = $request->exogena;
+      $auxiliar->na               = $request->na;
+      $auxiliar->save();
+
+      return redirect('/contabilidad/cuentas');
+  }
+
     public function copiarPrimeraVez(){
         
     }

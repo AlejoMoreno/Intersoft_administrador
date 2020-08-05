@@ -23,7 +23,7 @@ use App\Pucauxiliar;
 use App\Tipopagos;
 
 use PDF;
-
+use DB;
 use Session;
 use Mail;
 
@@ -434,14 +434,27 @@ class FacturasController extends Controller
                         ->where('kardexes.signo','=','=')
                         ->where('kardexes.created_at', '>',date('yy/m/d'))
                         ->orderBy('kardexes.id_referencia')->get();
+
+        $kardex1 = Kardex::select('id_referencia',DB::raw('SUM(kardexes.cantidad) as total'))
+                        ->where('kardexes.id_empresa','=',Session::get('id_empresa'))
+                        ->where('kardexes.signo','=','=')
+                        ->where('kardexes.created_at', '>',date('yy/m/d'))
+                        ->groupBy('id_referencia')
+                        ->orderBy('kardexes.id_referencia')
+                        ->get();
         foreach($kardex as $obj){
+            $obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
+            $obj->id_factura = Facturas::where('id','=',$obj->id_factura)->first();
+        }
+        foreach($kardex1 as $obj){
             $obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
             $obj->id_factura = Facturas::where('id','=',$obj->id_factura)->first();
         }
         
         return view('facturacion.alistamiento',array(
             "documento"=>$documentos,
-            "kardex"=>$kardex
+            "kardex"=>$kardex,
+            "kardex1"=>$kardex1
         ));
     }
 }

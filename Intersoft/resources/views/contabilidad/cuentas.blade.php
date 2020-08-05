@@ -57,7 +57,7 @@
                         <td>{{ $auxiliar->descripcion }}</td>
                         <td>{{ $auxiliar->exogena }}</td>
                         <td>{{ $auxiliar->na }}</td>
-                        <td><div class="btn btn-warning" onclick="cuentas.update('{{ $auxiliares }}');"><i class="fas fa-pen-square"></i></div></td>
+                        <td><div class="btn btn-warning" onclick="cuentaContable.update('{{ $auxiliar }}');"><i class="fas fa-pen-square"></i></div></td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -74,7 +74,7 @@
                     <h5 class="col-md-4">Creación de cuenta </h5>
                     <div class="col-md-8 row">
                         <button type="submit" id="btnguardar" class="btn btn-success col-md-3 btn-guardar"><i class="fas fa-save"></i> Guardar</button>
-                        <div id="actualizar" onclick="cuentas.sendUpdate();" class="btn btn-warning col-md-3 btn-actualizar"><i class="fas fa-pen-square"></i> Actualizar</div>
+                        <div id="actualizar" onclick="cuentaContable.sendUpdate();" class="btn btn-warning col-md-3 btn-actualizar"><i class="fas fa-pen-square"></i> Actualizar</div>
                         <div onclick="config.Redirect('/contabilidad/cuentas');" class="btn btn-danger col-md-3 btn-nuevo"><i class="fas fa-plus-circle"></i> Nuevo</div>
                     </div>                
                 </div>

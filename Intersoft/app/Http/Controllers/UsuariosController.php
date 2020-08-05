@@ -373,9 +373,10 @@ class UsuariosController extends Controller
         ));
     }
 
-    public function liquidacionVentas1($id,$valor){
+    public function liquidacionVentas1($id,$valor, Request $request){
         $facturas = Facturas::where('id_modificado',$id)->
                              where('saldo','=',0)->
+                             where('estado','=',$request->estado)->
                              where('id_empresa','=',Session::get('id_empresa'))->get();
 
         $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();

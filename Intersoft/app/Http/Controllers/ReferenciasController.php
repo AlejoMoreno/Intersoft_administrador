@@ -363,7 +363,7 @@ class ReferenciasController extends Controller
 			referencias.saldo 
 		from referencias 
 		INNER JOIN marcas ON marcas.id = referencias.id_marca 
-		where 1=1 
+		where referencias.id_empresa = ".Session::get('id_empresa')."
 			".$sql." 
 		order by referencias.descripcion");
 		$objs= Collection::make($objs);
