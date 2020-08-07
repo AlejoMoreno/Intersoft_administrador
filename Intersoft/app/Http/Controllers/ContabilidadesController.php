@@ -13,6 +13,7 @@ use App\Pucsubcuentas;
 use App\Directorios;
 use App\Sucursales;
 use App\Facturas;
+use App\Kardex;
 use App\Documentos;
 
 use App\Empresas;
@@ -263,4 +264,94 @@ class ContabilidadesController extends Controller
         $pdf = PDF::loadView('pdfs.pdfcomprobanteDiario', compact('data'));
         return $pdf->download('invoice.pdf');
     }
+
+
+
+    /**
+     *  CREACION DE COMPROBANTES CONTABLES A PARTIR DE CADA UNO DE LOS DOCUMENTOS.
+     */
+    public function generarfactura($doc){
+
+        $respuesta = "";
+        //primero traer los datos de la factura
+        $factura = Facturas::where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('id','=',$doc)
+                        ->first();
+        //segundo traer los datos del kardex de los productos
+        $kardex = Kardex::where('kardexes.id_empresa','=',Session::get('id_empresa'))
+                        ->join('referencias','kardexes.id_referencia','=','referencias.id')
+                        ->join('lineas','referencias.codigo_linea','=','lineas.id')
+                        ->join('directorios','kardexes.id_cliente','=','directorios.id')
+                        ->where('kardexes.id_factura','=',$factura->id)
+                        ->get();
+        //verificar si el documento ya se contabilizo
+        $contabilidad = Contabilidades::where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('id_documento','=',$factura->id)
+                        ->get();
+        if(sizeof($contabilidad) == 0){ //no existe
+            $respuesta = "No existe contabilizacion para este documento";
+        }
+        else{ //existe
+            $respuesta = "Documento ya se encuentra contabilidazado";
+        }
+        //asignar el tipo de documento contable
+        
+        
+        //agrupar tambien por tipo de producto (materia prima, mercancia, etc).
+        //agrupar las lineas con los totales sin iva
+        //verificar impuestos y demas 
+        //verificar saldo de la factura si es igual a 0 se debe realizar la contabilidad del recibo
+            //buscar el recibo generado
+            //hacer la contabilidad del recibo
+            
+
+        return array(
+            "respuesta"=>$respuesta,
+            "factura"=>$factura,
+            "kardex"=>$kardex
+        );
+    }
+
+    public function generaregreso($doc){
+        
+        return array(
+            "respuesta"=>"OK"
+        );
+    }
+
+    public function generarrecibos($doc){
+        
+        return array(
+            "respuesta"=>"OK"
+        );
+    }
+
+    public function generarcompra($doc){
+        
+        return array(
+            "respuesta"=>"OK"
+        );
+    }
+
+    public function generarnotadb($doc){
+        
+        return array(
+            "respuesta"=>"OK"
+        );
+    }
+
+    public function generarnotacr($doc){
+        
+        return array(
+            "respuesta"=>"OK"
+        );
+    }
+
+    public function generarnotacontable($doc){
+        
+        return array(
+            "respuesta"=>"OK"
+        );
+    }
+
 }

@@ -266,12 +266,16 @@ class ReferenciasController extends Controller
 			foreach($referenciasmaspedidos as $obj){
 				$obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
 			}
+
+			$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
+			
 			
 			return view('inventario.catalogo', [
 				'referencias' => $referencias,
 				'referenciasmasvendidas'=>$referenciasmasvendidas,
 				'referenciasmaspedidos'=>$referenciasmaspedidos,
-				'referenciasmenosvendidos'=>$referenciasmenosvendidos
+				'referenciasmenosvendidos'=>$referenciasmenosvendidos,
+				'lineas'=>$lineas
 			]);
 		}
 		catch (ModelNotFoundException $exception){
@@ -500,5 +504,68 @@ class ReferenciasController extends Controller
 
         $pdf = PDF::loadView('pdfs.pdfreferencias1', compact('data'));
         return $pdf->download('Referencias.pdf');
+	}
+	
+	public function catalogoPrecio($numero, Request $request){
+		
+		$sql = " WHERE 1=1 ";
+		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+		if($request->linea != '' ){
+			if($request->linea !=0){
+				$sql .= " AND codigo_linea = ".$request->linea."";
+			}
+		}
+		if($request->tipo_reporte != ''){
+			if($request->tipo_reporte == 'exitencia'){
+				$sql .= " AND saldo > 0 ";
+			}
+		}
+		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+		
+		if($numero==1){
+			$objs = DB::select("
+				SELECT 
+				codigo_linea,
+				codigo_barras,
+				descripcion,
+				precio1 as precio,
+				(SELECT nombre FROM lineas where id = codigo_linea) as linea
+				FROM `referencias` 
+			".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
+		}
+		else if($numero==2){
+			$objs = DB::select("
+				SELECT 
+				codigo_linea,
+				codigo_barras,
+				descripcion,
+				precio2 as precio,
+				(SELECT nombre FROM lineas where id = codigo_linea) as linea
+				FROM `referencias` 
+			".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
+		}
+		else if($numero==3){
+			$objs = DB::select("
+				SELECT 
+				codigo_linea,
+				codigo_barras,
+				descripcion,
+				precio3 as precio,
+				id_empresa
+				(SELECT nombre FROM lineas where id = codigo_linea) as linea
+				FROM `referencias` 
+			".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
+		}
+		
+		$objs= Collection::make($objs);
+		
+        
+        $data= json_decode( json_encode($objs), true);
+
+        $pdf = PDF::loadView('pdfs.pdflistaprecios', compact('data'));
+		return $pdf->download('Listaprecios.pdf');
+		/*return view('pdfs.pdflistaprecios', [
+			'objs' => $objs
+		]);*/
     }
 }

@@ -9,6 +9,50 @@
 
 <br><br>
 <div class="row top-11-w">
+  <div class="col-md-12">
+      <h4 class="title">Referencias</h4>
+      <p class="category">Diferentes referencias</p>
+  </div>
+  <div class="col-md-2">
+      <p>Ordenar:</p>
+      <select name="orden" id="orden" class="form-control">
+          <option value="codigo">Por Código</option>
+          <option value="nombre">Por Nombre</option>
+          <option value="codigo_linea">Por Linea</option>
+          <option value="id_marca">Por Marca</option>
+          <option value="costo">Por Costo</option>
+          <option value="saldo">Por Saldo</option>
+      </select>
+  </div>
+  <div class="col-md-2">
+      <p>Tipo Reporte:</p>
+      <select name="tipo_reporte" id="tipo_reporte" class="form-control">
+          <option value="total">Total</option>
+          <option value="exitencia">Con Existencia</option>
+      </select>
+  </div>
+  <div class="col-md-2">
+      <p>Linea</p>
+      <select name="linea" id="linea" class="form-control" >
+          <option value="0">TODAS</option>
+          @foreach ($lineas as $linea)
+          <option value="{{ $linea->id }}">{{ $linea->id }} - {{ $linea->nombre }}</option>
+          @endforeach
+      </select>
+  </div>
+  <div class="col-md-2">
+    <div onclick="referencias.envioPDFlistaprecios(1)" style="background: white;" class="btn btn-danger">(PDF) Precios 1</div>
+  </div>
+  <div class="col-md-2">
+    <div onclick="referencias.envioPDFlistaprecios(2)" style="background: white;" class="btn btn-danger">(PDF) Precios 2</div>
+  </div>
+  <div class="col-md-2">
+    <div onclick="referencias.envioPDFlistaprecios(3)" style="background: white;" class="btn btn-danger">(PDF) Precios 3</div>
+  </div>
+</div>
+
+<br><br>
+<div class="row top-11-w">
   <h6 style="margin-left: 2%;">12 Productos más vendidos</h6>
   <div class="col-md-11 row" style="overflow-x:scroll;margin-left:2%">
     

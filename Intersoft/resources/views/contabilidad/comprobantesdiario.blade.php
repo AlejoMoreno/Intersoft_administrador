@@ -5,9 +5,7 @@
 <?php 
 
 
-$auxiliars = App\Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->get();
 
-$directorios = App\Directorios::where('id_empresa','=',Session::get('id_empresa'))->get();
 
 ?>
 
@@ -262,9 +260,7 @@ $directorios = App\Directorios::where('id_empresa','=',Session::get('id_empresa'
                                 <div class="col-md-6"><label>Tercero</label></div>
                                 <div class="col-md-6">
                                     <select class="form-control" id="tercerp" name="tercero">
-                                    @foreach($directorios as $obj)
-                                    <option value="{{ $obj['id'] }}">{{ $obj['nit'] }}-{{ $obj['razon_social'] }}</option>
-                                    @endforeach
+                                    
                                     </select>
                                 </div>
                             </div>

@@ -82,7 +82,6 @@ function Config(){
 	//redireccionar a otra pagina
 	this.Redirect = function(url){
 		console.log("ir a:"+url);
-		$('#cargando').show();
         window.location=url;
 	};
 

@@ -402,7 +402,7 @@ Route::post('/inventario/documentos/update', 'DocumentosController@update');
 
 //Catalogo
 Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
-
+Route::get('/inventario/catalogo/precio/{numero}', 'ReferenciasController@catalogoPrecio');
 //ordenes de produccion (ficha "receta")
 Route::get('/inventario/fichatecnica', 'FichatecnicasController@index');
 Route::post('/inventario/fichatecnica', 'FichatecnicasController@index');
@@ -490,8 +490,11 @@ Route::get('/contabilidad/comprobantesdiario', function(){
     $documentos = App\Documentos::select(['id','nombre'])
                 ->where('id_empresa','=',Session::get('id_empresa'))
                 ->get();
+
+    $auxiliars = App\Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->get();
     return view('contabilidad.comprobantesdiario',[
-        "documentos"=>$documentos
+        "documentos"=>$documentos,
+        "auxiliars"=>$auxiliars
     ]); 
 });
 Route::get('/contabilidad/doc/{id}', 'ContabilidadesController@getDocumentos');
