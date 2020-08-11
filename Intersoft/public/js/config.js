@@ -293,7 +293,7 @@ function Config(){
 	this.anular = function(_tipo,_data){
 		var data = JSON.parse(_data);
 		if(_tipo == 'factura'){
-			var url = '/documentos/anular/'+data.id;
+			var url = '/documentos/anular/'+data.idfactura;
 		}
 		if(_tipo == 'cartera'){
 			var url = '/cartera/anular/'+data.id;
@@ -326,7 +326,7 @@ function Config(){
 	this.eliminar = function(_tipo,_data){
 		var data = JSON.parse(_data);
 		if(_tipo == 'factura'){
-			var url = '/documentos/eliminar/'+data.id;
+			var url = '/documentos/eliminar/'+data.idfactura;
 		}
 		if(_tipo == 'cartera'){
 			var url = '/cartera/eliminar/'+data.id;

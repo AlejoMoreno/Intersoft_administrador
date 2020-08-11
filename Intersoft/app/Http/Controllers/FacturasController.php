@@ -175,80 +175,39 @@ class FacturasController extends Controller
     }
 
     public function consultar_documento($documento, Request $request){
-        if(isset($request->nit)){
-            $factura = Facturas::select(
-                ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
-                'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
-                'facturas.created_at as creado','facturas.id as idfactura',
-                'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor'])
-                        ->where('facturas.id_documento','=',$documento)
-                        ->join('documentos','documentos.id','=','facturas.id_documento')            
-                        ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
-                        ->join('directorios','directorios.id','=','facturas.id_cliente')
-                        ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
-                        ->join('empresas','empresas.id','=','facturas.id_empresa')
-                        ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
-                        ->where('id_tercero','=',$request->nit)
-                        ->where('facturas.id_empresa','=',Session::get('id_empresa'))
-                        ->orderBy('id_documento','desc')
-                        ->take(100)
-                        ->get();
-        }
-        else if(isset($request->razonsocial)){
-            $factura = Facturas::select(
-                ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
-                'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
-                'facturas.created_at as creado','facturas.id as idfactura',
-                'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor'])
-                        ->where('facturas.id_documento','=',$documento)
-                        ->join('documentos','documentos.id','=','facturas.id_documento')            
-                        ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
-                        ->join('directorios','directorios.id','=','facturas.id_cliente')
-                        ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
-                        ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
-                        ->where('directorios.razon_social','=',$request->razonsocial)
-                        ->where('facturas.id_empresa','=',Session::get('id_empresa'))
-                        ->orderBy('id_documento','desc')
-                        ->take(100)
-                        ->get();
-        }
-        else if(isset($request->fechainicio)){
-            $factura = Facturas::select(
-                ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
-                'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
-                'facturas.created_at as creado','facturas.id as idfactura',
-                'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor'])
-                        ->where('facturas.id_documento','=',$documento)
-                        ->join('documentos','documentos.id','=','facturas.id_documento')            
-                        ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
-                        ->join('directorios','directorios.id','=','facturas.id_cliente')
-                        ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
-                        ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
-                        ->join('empresas','empresas.id','=','facturas.id_empresa')
-                        ->whereBetween('fecha', [$request->fechainicio, $request->fechafinal])
-                        ->where('facturas.id_empresa','=',Session::get('id_empresa'))
-                        ->orderBy('id_documento','desc')
-                        ->take(100)
-                        ->get();
-        }
-        else{
-            $factura = Facturas::select(
-                ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
-                'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
-                'facturas.created_at as creado','facturas.id as idfactura',
-                'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor'])
-                        ->where('facturas.id_documento','=',$documento)
-                        ->join('documentos','documentos.id','=','facturas.id_documento')            
-                        ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
-                        ->join('directorios','directorios.id','=','facturas.id_cliente')
-                        ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
-                        ->join('empresas','empresas.id','=','facturas.id_empresa')
-                        ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
-                        ->where('facturas.id_empresa','=',Session::get('id_empresa'))
-                        ->orderBy('id_documento','desc')
-                        ->take(100)
-                        ->get();
-        }
+        $factura = Facturas::select(
+            ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
+            'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
+            'facturas.created_at as creado','facturas.id as idfactura',
+            'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor',
+            'facturas.estado as estadofactura'])
+                    ->where('facturas.id_documento','=',$documento)
+                    ->join('documentos','documentos.id','=','facturas.id_documento')            
+                    ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
+                    ->join('directorios','directorios.id','=','facturas.id_cliente')
+                    ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
+                    ->join('empresas','empresas.id','=','facturas.id_empresa')
+                    ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
+                    ->where('facturas.id_empresa','=',Session::get('id_empresa'))
+                    ->where(function ($q) use ($request) {
+                        if(isset($request->nit)){
+                            $q->where('id_tercero','=',$request->nit);
+                        }
+                        if(isset($request->razonsocial)){
+                            $q->where('directorios.razon_social','like','%'.$request->razonsocial.'%');                  
+                        }
+                        if(isset($request->fechainicio)){
+                            $q->whereBetween('fecha', [$request->fechainicio, $request->fechafinal]);
+                        }
+                        if(isset($request->vendedor)){
+                            $q->where('id_vendedor','=',$request->vendedor);
+                        }
+                    })
+                    ->orderBy('id_documento','desc')
+                    ->take(100)
+                    ->get();
+        
+        
         
         $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->orderBy('nombre','desc')->get();
 
@@ -261,47 +220,59 @@ class FacturasController extends Controller
     public function anular($id){ 
         $factura = Facturas::where('id', '=', $id)->
                              where('id_empresa','=',Session::get('id_empresa'))->first();
-        if($factura->saldo != $factura->total){
-            return array(
-                "result" => "Alerta",
-                "mensaje" => "No se puede realizar la anulación ya que tiene un abono, se debe anhular el abono para ejecutar la anulacion del documento"
-            );
-        }
+        
+        if($factura->signo != "="){
+            if($factura->saldo != $factura->total){
+                return array(
+                    "result" => "Alerta",
+                    "mensaje" => "No se puede realizar la anulación ya que tiene un abono, se debe anhular el abono para ejecutar la anulacion del documento"
+                );
+            }
+        }  
         else{
             $factura->estado = "ANULADO";
             $factura->id_modificado = Session::get('user_id');
-            $kardex = Kardex::where('id_factura',$factura->id)->
-                              where('id_empresa','=',Session::get('id_empresa'))->get();
-            foreach ($kardex as $obj) {
-                $referencia = Referencias::where('id', '=', $obj->id_referencia)->
-                                           where('id_empresa','=',Session::get('id_empresa'))->
-                                           first();
-                if($factura->signo == '-'){
-                    $referencia->saldo = $referencia->saldo + $obj->cantidad;
-                }
-                else if($factura->signo == '+'){
-                    $referencia->saldo = $referencia->saldo - $obj->cantidad;
-                }
-                $referencia->save();
-                $obj->delete();           
-            }
             $factura->save();
-
             return array(
                 "result" => "Correcto",
-                "mensaje" => "El documento fue anulado en su totalidad"
+                "mensaje" => "El documento = fue anulado en su totalidad"
             );
+        }                   
+        $factura->estado = "ANULADO";
+        $factura->id_modificado = Session::get('user_id');
+        $kardex = Kardex::where('id_factura',$factura->id)->
+                            where('id_empresa','=',Session::get('id_empresa'))->get();
+        foreach ($kardex as $obj) {
+            $referencia = Referencias::where('id', '=', $obj->id_referencia)->
+                                        where('id_empresa','=',Session::get('id_empresa'))->
+                                        first();
+            if($factura->signo == '-'){
+                $referencia->saldo = $referencia->saldo + $obj->cantidad;
+            }
+            else if($factura->signo == '+'){
+                $referencia->saldo = $referencia->saldo - $obj->cantidad;
+            }
+            $referencia->save();
+            $obj->delete();           
         }
+        $factura->save();
+
+        return array(
+            "result" => "Correcto",
+            "mensaje" => "El documento + - fue anulado en su totalidad"
+        );
     }
 
     public function eliminar($id){ 
         $factura = Facturas::where('id', '=', $id)->
                              where('id_empresa','=',Session::get('id_empresa'))->first();
-        if($factura->saldo != $factura->total || $factura->estado != "ANULADO"){
-            return array(
-                "result" => "Alerta",
-                "mensaje" => "No se puede realizar la eliminación ya que tiene un abono, se debe anhular el abono para ejecutar la anulacion del documento, ó el documento no se encuentra anulado"
-            );
+        if($factura->signo != "="){
+            if($factura->saldo != $factura->total || $factura->estado != "ANULADO"){
+                return array(
+                    "result" => "Alerta",
+                    "mensaje" => "No se puede realizar la eliminación ya que tiene un abono, se debe anhular el abono para ejecutar la anulacion del documento, ó el documento no se encuentra anulado"
+                );
+            }                 
         }
         else{
             $factura->estado = "ELIMINADO";
@@ -345,17 +316,44 @@ class FacturasController extends Controller
             "documento_dev"=>$documento_dev
         ));
     }
-    public function pedidosIndex(){
-        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
-        $pedidos = Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('signo','=','=')->whereNotIn('estado',['FACTURADO','RECHAZADO','DEVUELTO'])->get(); //estado=FACTURADO
-        foreach($pedidos as $pedido){
-            $pedido->id_documento = Documentos::where('id','=',$pedido->id_documento)->first();
-            $pedido->id_cliente = Directorios::where('id','=',$pedido->id_cliente)->first();
-            $pedido->id_vendedor = Usuarios::where('id','=',$pedido->id_vendedor)->first();
-        }
+    public function pedidosIndex(Request $request){
+        $pedidos = Facturas::select(
+            ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
+            'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
+            'facturas.created_at as creado','facturas.id as idfactura','usuarios.*',
+            'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor',
+            'facturas.estado as estadofactura','facturas.id as id_factura'])
+                    ->join('documentos','documentos.id','=','facturas.id_documento')            
+                    ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
+                    ->join('directorios','directorios.id','=','facturas.id_cliente')
+                    ->join('ciudades','ciudades.id','=','directorios.id_ciudad')
+                    ->join('empresas','empresas.id','=','facturas.id_empresa')
+                    ->join('usuarios','usuarios.id','=','facturas.id_vendedor')
+                    ->where('facturas.id_empresa','=',Session::get('id_empresa'))
+                    ->where('facturas.signo','=','=')
+                    ->whereNotIn('facturas.estado',['FACTURADO','RECHAZADO','DEVUELTO'])
+                    ->where(function ($q) use ($request) {
+                        if(isset($request->nit)){
+                            $q->where('id_tercero','=',$request->nit);
+                        }
+                        if(isset($request->razonsocial)){
+                            $q->where('directorios.razon_social','like','%'.$request->razonsocial.'%');                  
+                        }
+                        if(isset($request->fechainicio)){
+                            $q->whereBetween('fecha', [$request->fechainicio, $request->fechafinal]);
+                        }
+                        if(isset($request->vendedor)){
+                            $q->where('id_vendedor','=',$request->vendedor);
+                        }
+                    })
+                    ->orderBy('id_documento','desc')
+                    ->take(100)
+                    ->get();
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+        
         return view('facturacion.pedidosIndex',array(
-            "referencias"=>$referencias,
-            "pedidos"=>$pedidos
+            "pedidos"=>$pedidos,
+            "usuarios"=>$usuarios
         ));
     }
 
@@ -363,6 +361,7 @@ class FacturasController extends Controller
         $pedido = Facturas::where('id','=',$request->id_documento)->first();
         $pedido->estado = $request->estado; //FACTURADO / RECHAZADO / DEVUELTO
         $pedido->save();
+        return $pedido;
     }
 
     /**

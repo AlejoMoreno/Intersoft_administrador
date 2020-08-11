@@ -197,7 +197,23 @@ class DirectoriosController extends Controller
     }
     //buscar por cualquier input y retornar las listas de ellos
     public function search(Request $request){
-        if($request->nit != ''){
+
+        $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                    ->where(function ($q) use ($request){
+                        if($request->nit != ''){
+                            $q->where('nit','=',$request->nit);
+                        }
+                        if($request->razon_social != ''){
+                            $q->where('razon_social','LIKE','%'.$request->razon_social.'%');
+                        }
+                        if($request->correo != ''){
+                            $q->where('correo','LIKE','%'.$request->correo.'%');
+                        }
+                    })
+                    ->take(100)
+                    ->get();
+
+        /*if($request->nit != ''){
             $directorios = Directorios::where('nit','=',$request->nit)
                                       ->where('id_empresa','=',Session::get('id_empresa'))
                                       ->take(100)
@@ -220,7 +236,7 @@ class DirectoriosController extends Controller
                                       ->where('id_empresa','=',Session::get('id_empresa'))
                                       ->take(100)
                                       ->get();
-        }
+        }*/
         foreach ($directorios as $directorio) {
             $directorio->id_regimen = Regimenes::find($directorio->id_regimen);
             $directorio->id_directorio_tipo_tercero = Directorio_tipo_terceros::find($directorio->id_directorio_tipo_tercero);

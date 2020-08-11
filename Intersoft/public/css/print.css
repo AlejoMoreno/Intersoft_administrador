@@ -1,0 +1,20 @@
+* { -webkit-print-color-adjust: exact; }
+
+@media print {
+    *{
+        font-size: 9px;
+    }
+    h3, thead tr{
+        background: #207ce5;
+        color:white;
+        padding:2%;
+    }
+    
+}
+
+
+@page { padding: 10%; }
+@page {size: landscape}
+@page {size: A4 landscape}
+* { page-break-after: always; }
+

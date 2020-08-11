@@ -168,7 +168,7 @@ class ReferenciasController extends Controller
 			$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
 			if($request->linea != '' ){
 				if($request->linea !=0){
-					$sql .= " AND codigo_linea = ".$request->linea."";
+					$sql .= " AND codigo_linea in (".$request->linea.")";
 				}
 			}
 			if($request->tipo_reporte != ''){
@@ -399,7 +399,7 @@ class ReferenciasController extends Controller
 		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
 		if($request->linea != '' ){
 			if($request->linea !=0){
-				$sql .= " AND codigo_linea = ".$request->linea."";
+				$sql .= " AND codigo_linea in (".$request->linea.")";
 			}
 		}
 		if($request->tipo_reporte != ''){
@@ -469,7 +469,7 @@ class ReferenciasController extends Controller
 		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
 		if($request->linea != '' ){
 			if($request->linea !=0){
-				$sql .= " AND codigo_linea = ".$request->linea."";
+				$sql .= " AND codigo_linea in (".$request->linea.")";
 			}
 		}
 		if($request->tipo_reporte != ''){
@@ -510,10 +510,9 @@ class ReferenciasController extends Controller
 		
 		$sql = " WHERE 1=1 ";
 		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+		
 		if($request->linea != '' ){
-			if($request->linea !=0){
-				$sql .= " AND codigo_linea = ".$request->linea."";
-			}
+			$sql .= " AND codigo_linea in (".$request->linea.")";
 		}
 		if($request->tipo_reporte != ''){
 			if($request->tipo_reporte == 'exitencia'){
@@ -521,6 +520,8 @@ class ReferenciasController extends Controller
 			}
 		}
 		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+
+		
 		
 		if($numero==1){
 			$objs = DB::select("
@@ -557,15 +558,17 @@ class ReferenciasController extends Controller
 			".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
 		}
 		
+		
 		$objs= Collection::make($objs);
 		
         
         $data= json_decode( json_encode($objs), true);
 
-        $pdf = PDF::loadView('pdfs.pdflistaprecios', compact('data'));
-		return $pdf->download('Listaprecios.pdf');
-		/*return view('pdfs.pdflistaprecios', [
-			'objs' => $objs
-		]);*/
+        /*$pdf = PDF::loadView('pdfs.pdflistaprecios', compact('data'));
+		return $pdf->download('Listaprecios.pdf');*/
+		return view('pdfs.pdflistaprecios', [
+			'data' => $data,
+			'vistalineas'=>explode(',',$request->linea)
+		]);
     }
 }

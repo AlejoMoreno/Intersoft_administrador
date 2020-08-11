@@ -66,8 +66,11 @@ Route::get('/index', function(){
             ->where('zonasusuarios.estado','=',$dia)
             ->get();
     
-    $facturas = App\Facturas::where('id_empresa','=',Session::get('id_empresa'))
+    $facturas = App\Facturas::where('facturas.id_empresa','=',Session::get('id_empresa'))
             ->where('id_vendedor','=',Session::get('user_id'))
+            ->where('fecha','=',date("Y-m-d"))
+            ->join('directorios','id_cliente','=','directorios.id')
+            ->join('documentos','id_documento','=','documentos.id')
             ->get();
     $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))
             ->get();

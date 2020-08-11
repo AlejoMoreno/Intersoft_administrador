@@ -39,13 +39,14 @@
             <h4 class="title col-md-12" style="color:black;">Datos Cliente<hr></h4>
             <div class="col-md-4">
                 <label>Nit:</label>
-                <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onkeyup="buscarcliente(this.value)">
-                <p style="font-size:10px;color:black;" id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
+                <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value)">
+                <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
                 
             </div>
             <div class="col-md-4">
                 <label>Razón Social:</label>
-                <input type="text" name="nombre"  id="nombre" placeholder="Razón Social" class="form-control" >
+                <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control"  >
+                <datalist id="listaclientes"></datalist>
             </div>
             <div class="col-md-4">
                 <label>Dirección:</label>
@@ -63,11 +64,12 @@
             </div>
             <div class="col-md-2">
                 <label>Ciudad:</label>
-                <select name="id_ciudad" class="form-control"  id="id_ciudad">
+                <input name="id_ciudad" class="form-control"  id="id_ciudad" list="ciudades">
+                <datalist id="ciudades">    
                     @foreach ( $ciudades as $ciudad)
                     <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
                     @endforeach
-                </select>
+                </datalist>
             </div>
             <div class="col-md-4">
                 <label>Nombre Zona:</label>
@@ -83,11 +85,11 @@
             </div>
             <div class="col-md-6" style="margin-bottom:2%;">
                 <label>Fecha:</label>
-                  <input type="date" name="fecha" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
             </div>
             <div class="col-md-6" style="margin-bottom:2%;">
                 <label>Fecha vencimiento:</label>
-                  <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                  <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
             </div>    
             <input type="hidden" name="id_modificado" id="id_modificado" class="form-control" value="{{ Session::get('user_id') }}" placeholder="Esciba el nombre del vendedor">        
             
@@ -462,6 +464,13 @@ $(document).on('click', 'button.deleteformapagobtn', function () {
 $('#cedula_tercero').on('keydown', function(e) {
     if (e.key === "Enter") {
         buscarcliente($('#cedula_tercero').val());
+        return false;
+    }
+});
+
+$('#nombre').on('keydown', function(e) {
+    if (e.key === "Enter") {
+        buscarcliente2($('#nombre').val());
         return false;
     }
 });
@@ -889,6 +898,76 @@ function buscarcliente(texto){
                     $('#Carterasid_cliente').val(cliente.id);           
                 }  
                 else{
+                    $('#nombre').val("");
+                    $('#direccion').val("");
+                    $('#telefono').val("");
+                    $('#correo').val("");
+                    $('#zona').val("");
+                    $('#nombre').prop( "disabled", false );  
+                    $('#direccion').prop( "disabled", false );  
+                    $('#telefono').prop( "disabled", false );  
+                    $('#correo').prop( "disabled", false ); 
+                    $('#id_ciudad').prop("disabled", false);
+                    $('#zona').prop("disabled", false);
+                    //$('#guardarCliente').show();
+                    $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
+                }              
+            },
+            error: function(){
+                swal({
+                  title: "Algo anda mal",
+                  text: "Verifique conexión a internet y/o diligencie completamente los campos del encabezado",
+                  icon: "error",
+                  button: "Aceptar",
+                });
+            }
+        });
+    }
+}
+
+function buscarcliente2(texto){
+    console.log(texto);
+    if(texto.length > 3){
+        var urls = "/administrador/diretorios/search/search";
+        parametros = {
+            "razon_social" : texto.trim()
+        };
+        $.ajax({
+            data:  parametros,
+            url:   urls,
+            type:  'post',
+            beforeSend: function () {
+                $('#resultado').html('<p>Espere porfavor</p>');
+            },
+            success:  function (response) {
+                console.log(response);
+                if(response.body.length != 0){ // existe
+                    cliente = response.body[0];
+                    $('#listaclientes').find('option').remove();
+                    for(i=0;response.body.length > i;i++){
+                        $('#listaclientes').append('<option value="'+response.body[i].razon_social+'">"'+response.body[i].razon_social+'"</option>');
+                    }
+                    $('#cedula_tercero').val(cliente.nit);
+                    //$('#nombre').val(cliente.razon_social);
+                    $('#direccion').val(cliente.direccion);
+                    $('#telefono').val(cliente.telefono);
+                    $('#correo').val(cliente.correo); 
+                    $('#id_ciudad').val(cliente.id_ciudad);
+                    $('#zona').val(cliente.zona_venta);
+                    $('#nombre').prop( "disabled", false );  
+                    $('#direccion').prop( "disabled", false );  
+                    $('#telefono').prop( "disabled", false );  
+                    $('#correo').prop( "disabled", false );    
+                    $('#id_ciudad').prop("disabled", false);
+                    $('#zona').prop("disabled", false);
+                    //$('#guardarCliente').hide();   
+                    $('#resCliente').text("Cliente existe");    
+                    //cartera
+                    $('#Carterasid_cliente').val(cliente.id);           
+                }  
+                else{
+                    $('#listaclientes').find('option').remove();
+                    $('#cedula_tercero').val("");
                     $('#nombre').val("");
                     $('#direccion').val("");
                     $('#telefono').val("");

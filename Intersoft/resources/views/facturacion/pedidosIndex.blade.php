@@ -40,7 +40,39 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
     <h4 class="title">Pedidos</h4>
 </div>
 
-<div class="row top-11-w">
+<div class="row top-5-w">
+    <form method="GET" class="row">
+        <div class="col-md-2">
+            <input type="text" name="nit" placeholder="Nit" value="{{ isset($_GET['nit'])?$_GET['nit']:'' }}" class="form-control">
+        </div>
+        <div class="col-md-4">
+            <div class="col-md-12 row">
+                <div class="col-md-8">
+                    <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control" name="vendedor" id="vendedor"> 
+                        <option value="">Vendedor</option>
+                        @foreach ($usuarios as $obj)
+                        <option value="{{ $obj['id'] }}">{{ $obj['nombre'] }} {{ $obj['apellido'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 row">
+            <div class="col-md-6">
+                <input type="date" name="fechainicio" value="{{ isset($_GET['fechainicio'])?$_GET['fechainicio']:date('Y-m-d') }}" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:date('Y-m-d') }}" class="form-control">
+            </div>
+        </div>
+        <div class="col-md-2">
+            <input type="submit" value="Consultar" class="btn btn-success">
+        </div>
+    </form><br><br>
     <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Seleccione el pedido</p>
     <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
         <table class="table table-sm  table-striped" id="datos">
@@ -59,13 +91,13 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
                 @if($pedidos!=null)
                     @foreach($pedidos as $obj)
                     <tr>
-                        <td><a href="javascript:;" onclick="actualizardocumento({{$obj['id']}})" style="color:red">Rechazar</a> <a href="/facturacion/pedidos/{{$obj['id']}}">Pasar a Factura</a> </td>
-                        <td>{{ $obj['id_documento']['nombre'] }} {{ $obj['prefijo'] }} {{ $obj['numero'] }}</td>
-                        <td>{{ number_format($obj['id_cliente']['nit'], 0, ",", ".") }} - {{ $obj['id_cliente']['razon_social'] }}</td>
+                        <td><a href="javascript:;" onclick="actualizardocumento('{{$obj}}')" style="color:red">Rechazar</a> <a href="/facturacion/pedidos/{{$obj['id_factura']}}">Pasar a Factura</a> </td>
+                        <td>{{ $obj['documentos.nombre'] }} {{ $obj['prefijo'] }} {{ $obj['numero'] }}</td>
+                        <td>{{ number_format($obj['nit'], 0, ",", ".") }} - {{ $obj['razon_social'] }}</td>
                         <td>{{ $obj['fecha'] }}</td>
                         <td>{{ number_format($obj['subtotal'], 0, ",", ".") }}</td>
                         <td>{{ number_format($obj['total'], 0, ",", ".") }}</td>
-                        <td>{{ $obj['id_vendedor']['ncedula'] }} - {{ $obj['id_vendedor']['nombre'] }}</td>
+                        <td>{{ $obj['ncedula'] }} - {{ $obj['nombrevendedor'] }}</td>
                     </tr>
                     @endforeach
                 @endif
@@ -85,9 +117,11 @@ $(document).ready( function () {
 
 
 function actualizardocumento(id_documento){
+    var data = JSON.parse(id_documento);
+    console.log(data);
     var parametros = {
         "estado":"RECHAZADO",
-        "id_documento":id_documento
+        "id_documento":data.id_factura
     };
     $.ajax({
         data:  parametros,
@@ -95,6 +129,12 @@ function actualizardocumento(id_documento){
         type:  'post',
         success:  function (response) {
             console.log(response);
+            swal({
+                title: "Correcto",
+                text: "El documento fue rechazado",
+                icon: "success",
+                button: "Aceptar",
+            });
             config.Redirect('/facturacion/pedidos');
         }
     });

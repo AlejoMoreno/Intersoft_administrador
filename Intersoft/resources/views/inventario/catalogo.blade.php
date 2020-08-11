@@ -15,7 +15,7 @@
   </div>
   <div class="col-md-2">
       <p>Ordenar:</p>
-      <select name="orden" id="orden" class="form-control">
+      <select name="orden" id="orden" class="form-control" >
           <option value="codigo">Por Código</option>
           <option value="nombre">Por Nombre</option>
           <option value="codigo_linea">Por Linea</option>
@@ -33,7 +33,7 @@
   </div>
   <div class="col-md-2">
       <p>Linea</p>
-      <select name="linea" id="linea" class="form-control" >
+      <select name="linea" id="linea" class="form-control" multiple>
           <option value="0">TODAS</option>
           @foreach ($lineas as $linea)
           <option value="{{ $linea->id }}">{{ $linea->id }} - {{ $linea->nombre }}</option>

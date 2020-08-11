@@ -71,7 +71,7 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
         </table>
     </div>
     <div class="col-md-6" style="overflow-x:scroll;margin-left:2%">
-        <p style="font-size:10pt;font-family:Poppins">Facturas realizadas</p>
+        <p style="font-size:10pt;font-family:Poppins">Facturas realizadas {{ date("Y-m-d") }}</p>
         <table class="table table-sm  table-striped" id="facturas">
             <thead>
                 <tr>
@@ -86,8 +86,8 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
                 @if($facturas!=null)
                     @foreach($facturas as $obj)
                     <tr>
-                        <td>{{ $obj['numero'] }} - {{ $obj['prefijo'] }}</td>
-                        <td>{{ $obj['id_cliente'] }} </td>
+                        <td>{{ $obj['nombre'] }} - {{ $obj['numero'] }} - {{ $obj['prefijo'] }}</td>
+                        <td>{{ $obj['nit'] }} {{ $obj['razon_social'] }} </td>
                         <td>{{ $obj['fecha'] }}</td>
                         <td>{{ $obj['fecha_vencimiento'] }}</td>
                         <td>{{ $obj['saldo'] }}</td>

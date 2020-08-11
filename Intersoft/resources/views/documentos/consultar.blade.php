@@ -13,15 +13,15 @@
     <div class="col-md-12"> 
         <form method="GET" class="row">
             <div class="col-md-2">
-                <input type="text" name="nit" placeholder="Nit" class="form-control">
+                <input type="text" name="nit" placeholder="Nit" value="{{ isset($_GET['nit'])?$_GET['nit']:'' }}" class="form-control">
             </div>
             <div class="col-md-4">
                 <div class="col-md-12 row">
                     <div class="col-md-8">
-                        <input type="text" name="razonsocial" placeholder="Razón social" class="form-control">
+                        <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
                     </div>
                     <div class="col-md-4">
-                        <select class="form-control" name="vendedor"> 
+                        <select class="form-control" name="vendedor" id="vendedor"> 
                             <option value="">Vendedor</option>
                             @foreach ($usuarios as $obj)
                             <option value="{{ $obj['id'] }}">{{ $obj['nombre'] }} {{ $obj['apellido'] }}</option>
@@ -33,10 +33,10 @@
             
             <div class="col-md-4 row">
                 <div class="col-md-6">
-                    <input type="date" name="fechainicio" class="form-control">
+                    <input type="date" name="fechainicio" value="{{ isset($_GET['fechainicio'])?$_GET['fechainicio']:date('Y-m-d') }}" class="form-control">
                 </div>
                 <div class="col-md-6">
-                    <input type="date" name="fechafinal" class="form-control">
+                    <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:date('Y-m-d') }}" class="form-control">
                 </div>
             </div>
             <div class="col-md-2">
@@ -90,7 +90,7 @@
                     <td>{{ number_format($obj['retefuente']) }}</td>
                     <td>{{ number_format($obj['total']) }}</td>
                     <td>{{ number_format($obj['saldo']) }}</td>
-                    <td>{{ $obj['estado'] }}</td>
+                    <td>{{ $obj['estadofactura'] }}</td>
                     <td>{{ $obj['nombrevendedor'] }} {{ $obj['apellido'] }}</td>
                     <td><div style="width: 150px;">{{ $obj['creado'] }}</div></td>
                     <td><div onclick="config.anular('factura','{{ $obj }}')" href="/documentos/anular/{{ $obj['idfactura'] }}" class="btn btn-warning"><i style="font-size: 12px;" class="fas fa-ban"></i></div></td>

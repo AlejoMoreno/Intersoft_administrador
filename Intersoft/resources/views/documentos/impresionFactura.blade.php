@@ -172,3 +172,10 @@ strong{
 <script>
 window.print();
 </script>
+
+<script>
+	window.onunload = refreshParent;
+	function refreshParent() {
+		window.opener.location.reload();
+	}
+</script>
