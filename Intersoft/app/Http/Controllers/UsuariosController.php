@@ -133,7 +133,7 @@ class UsuariosController extends Controller
             $usuario->arl                 = $request->arl;
             $usuario->eps                 = $request->eps;
             $usuario->cesantias           = $request->cesantias;
-            $usuario->pension             = $request->pension;
+            $usuario->pension             = implode(',',$request->pension);
             $usuario->caja_compensacion   = $request->caja_compensacion;
             $usuario->id_contrato         = $request->id_contrato;
             $usuario->referencia_personal = $request->referencia_personal;
@@ -171,7 +171,7 @@ class UsuariosController extends Controller
                 $usuario->arl                 = 'N/A';
                 $usuario->eps                 = 'N/A';
                 $usuario->cesantias           = 'N/A';
-                $usuario->pension             = 'N/A';
+                $usuario->pension             = '1,2,3';
                 $usuario->caja_compensacion   = 'N/A';
                 $usuario->id_contrato         = '1';
                 $usuario->referencia_personal = 'N/A';
@@ -209,7 +209,7 @@ class UsuariosController extends Controller
             $usuario->arl                 = $request->arl;
             $usuario->eps                 = $request->eps;
             $usuario->cesantias           = $request->cesantias;
-            $usuario->pension             = $request->pension;
+            $usuario->pension             = implode(',',$request->pension);
             $usuario->caja_compensacion   = $request->caja_compensacion;
             $usuario->id_contrato         = $request->id_contrato;
             $usuario->referencia_personal = $request->referencia_personal;
@@ -217,10 +217,10 @@ class UsuariosController extends Controller
             $usuario->id_empresa  = Session::get('id_empresa');
             $usuario->save();
             //envio mail
-            Mail::send('mail.welcome', ['usuario' => $usuario], function ($m) use ($usuario) {
+            /*Mail::send('mail.welcome', ['usuario' => $usuario], function ($m) use ($usuario) {
                 $m->from('intersoft@wakusoft.com', 'Intersoft');
                 $m->to($usuario->correo, $usuario->nombre)->subject('Bienvenida');
-            });
+            });*/
             //Mail::to($usuario->correo)->send(new Welcome($usuario));
             return $usuario;
         }

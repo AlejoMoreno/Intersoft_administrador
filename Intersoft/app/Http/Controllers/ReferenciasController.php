@@ -116,7 +116,9 @@ class ReferenciasController extends Controller
 	    
     public function showone($id){
 		try{
-			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))
+			$usuario = Usuarios::where('id','=',Session::get('user_id'))->first();
+			$precios = str_replace(',','',$usuario->pension);
+			$obj = Referencias::select('referencias.*',DB::raw(' '.$precios.' as precioasignado'))->where('id_empresa','=',Session::get('id_empresa'))
 							->where('id','=',$id)->first();
 			
 			$linea = Lineas::where('id','=',$obj->codigo_linea)->first();							

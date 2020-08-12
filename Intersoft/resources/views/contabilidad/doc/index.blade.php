@@ -74,14 +74,14 @@ al tipo de documento seleccionado anteriormente.</p>
 
 <div class="row top-5-w">
     <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Muestra del comprobante contable</p>
-    <div class="col-md-3"></div>
-    <div class="col-md-6" style="overflow-x:scroll;margin-left:2%;">
+    <div class="col-md-2"></div>
+    <div class="col-md-8" style="overflow-x:scroll;margin-left:2%;">
         <table class="table table-hover table-striped" id="tablecont">
             <thead>
                 <tr>
-                    <th>Id</th>
                     <th># doc</th>
-                    <th colspan="2">auxiliar</th>
+                    <th>Auxiliar</th>
+                    <th>Descripción</th>
                     <th>Debito</th>
                     <th>Credito</th>
                     <th colspan="2">tercero</th>
@@ -92,7 +92,7 @@ al tipo de documento seleccionado anteriormente.</p>
             </tbody>
         </table>
     </div>
-    <div class="col-md-3"></div>
+    <div class="col-md-2"></div>
 </div>
 
 <div class="container-fluid">
@@ -204,7 +204,6 @@ function Obj(){
                 for(var i=0; i<response.contabilidades.length; i++){
                     var id = response.contabilidades[i].id;
                     var tr = `<tr>
-                    <td>`+response.contabilidades[i].id+`</td>
                     <td>`+response.contabilidades[i].numero_documento+` `+response.contabilidades[i].prefijo+`</td>
                     <td>`+response.contabilidades[i].id_auxiliar+`</td>`;
                     if(response.contabilidades[i].tipo_transaccion == 'D'){
@@ -267,7 +266,6 @@ function Obj(){
         for(var i=0; i<response.contabilidades.length; i++){
             var id = response.contabilidades[i].id;
             var tr = `<tr>
-            <td>`+response.contabilidades[i].id+`</td>
             <td>`+response.contabilidades[i].numero_documento+` `+response.contabilidades[i].prefijo+`</td>
             <td>`+response.contabilidades[i].codigo+`</td>
             <td>`+response.contabilidades[i].descripcion+`</td>`;
@@ -297,7 +295,8 @@ function Obj(){
             dom: 'Bfrtip',
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
-            ] 
+            ], 
+            "paging": false
         });
     }
 

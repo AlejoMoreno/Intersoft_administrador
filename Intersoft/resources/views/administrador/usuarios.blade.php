@@ -44,7 +44,8 @@
                         <th>ncedula</th>
                         <th>nombre</th>                                 
                         <th>apellido</th> 
-                        <th>cargo</th> 
+                        <th>cargo</th>
+                        <th>Lista Precio</th> 
                         <th>telefono</th> 
                         <th>correo</th> 
                         <th>estado</th> 
@@ -61,6 +62,7 @@
                                 <td>{{ $usuario['nombre'] }}</td>                                    
                                 <td>{{ $usuario['apellido'] }}</td>
                                 <td>{{ $usuario['cargo'] }}</td>
+                                <td>{{ $usuario['pension'] }}</td>
                                 <td>{{ $usuario['telefono'] }}</td>
                                 <td>{{ $usuario['correo'] }}</td>
                                 <td>{{ $usuario['estado'] }}</td>
@@ -148,7 +150,12 @@
                         <label>Cesantias</label><input placeholder="ej.(CESANTIAS)" type="text" class="form-control" name="cesantias" id="cesantias"></td>
                     </div>
                     <div class="col-md-3">
-                        <label>Pensión</label><input placeholder="ej.(PENSION)" type="text" class="form-control" name="pension" id="pension">
+                        <label>Lista de Precios</label>
+                        <select id="pension" name="pension[]" class="form-control" multiple="multiple" >
+                            <option value="1">Precios # 1</option>
+                            <option value="2">Precios # 2</option>
+                            <option value="3">Precios # 3</option>
+                        </select>
                     </div>
                 </div>
                 <hr>

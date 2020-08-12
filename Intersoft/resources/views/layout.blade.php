@@ -224,6 +224,7 @@
 
 
 <body onbeforeunload="config.leave_page()" style="background:#ededed;overflow-x:hidden;">
+    
 
     <div id="resultado" style="display:none;position:fixed;width: 100%;height: 100%;background:black;opacity:0.5;z-index:1000;top:0px;left:0px;"><div class="loader"></div></div>
 

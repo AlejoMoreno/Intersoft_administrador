@@ -37,7 +37,18 @@ class FacturasController extends Controller
         $documento->save();
         //verificar el clinete/proveedor/tercero
         $tercero = FacturasController::Tercero($documento->signo,$request);
-        
+
+        $facturas = Facturas::where('id_tercero','=',$request->id_tercero)
+                ->where('subtotal','=',$request->subtotal)
+                ->where('signo','=',$request->signo)
+                ->where('fecha','=',$request->fecha)
+                ->get();
+        if(sizeof($facturas)>0){
+            return array(
+                "result" => "false",
+                "body" => "" 
+            );
+        }
         //creacion de factura 
         $obj = new Facturas();
     	$obj->id_sucursal		= Session::get('sucursal');

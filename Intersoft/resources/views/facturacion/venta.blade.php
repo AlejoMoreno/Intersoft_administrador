@@ -109,9 +109,9 @@
                         <th>id</th>
                         <th>codigo interno</th>
                         <th>descripcion</th>
-                        <th>precio1</th>
-                        <th>precio2</th>
-                        <th>precio3</th>
+                        <th>precio #1</th>
+                        <th>precio #2</th>
+                        <th>precio #3</th>
                         <th>costo</th>
                         <th>saldo</th>
                     </tr>
@@ -714,7 +714,19 @@ function getReferencia(id){
             referencia = response.body;
             lote = response.lote;
             linea = response.linea;
-            precios = "<select class='form-control' onchange='recorrerproductos(this)' name='valor_unidad'><option value='"+referencia.precio1+"'>"+referencia.precio1+"</option><option value='"+referencia.precio2+"'>"+referencia.precio2+"</option><option value='"+referencia.precio3+"'>"+referencia.precio3+"</option></select>";
+
+            var precioasignado = referencia.precioasignado.toString();
+            precios = "<select class='form-control' onchange='recorrerproductos(this)' name='valor_unidad'>";
+            if(precioasignado.includes("1")){  
+                precios += "<option value='"+referencia.precio1+"'>"+referencia.precio1+"</option>";
+            }
+            if(precioasignado.includes("2")){
+                precios += "<option value='"+referencia.precio2+"'>"+referencia.precio2+"</option>";
+            }
+            if(precioasignado.includes("3")){
+                precios += "<option value='"+referencia.precio3+"'>"+referencia.precio3+"</option>";
+            }
+            precios += "</select>";
             lotes = "<select class='form-control' name='lote'>";
             for(i=0;i<lote.length;i++){ 
                 lotes += "<option value='"+lote[i].id+"'>"+lote[i].numero_lote+" - "+lote[i].fecha_vence_lote+" - "+lote[i].cantidad+"</option>";

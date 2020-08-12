@@ -26,17 +26,38 @@
 </style>
 <style>
 	.page-break {
-		page-break-after: always;
+		page-break-after: auto;
 	}
 	</style>
 	
 	
+	<?php $paginas = sizeof($kardex)/5; ?>
+
+	
+
  	<section>
 		<div>
 			<img style="width:100px;" src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['id'] }}.jpeg">
 		</div>
 	</section>
-<div style="top:-30px;left:30%;position:absolute;"><div style="font-size: 7px;"><h2><strong>{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}<br>NIT. {{ $factura['id_sucursal']['id_empresa']['nit_empresa'] }}</strong></h2>{{ $factura['id_sucursal']['id_empresa']['direccion'] }}<br>Teléfono: {{ $factura['id_sucursal']['id_empresa']['telefono'] }} - {{ $factura['id_sucursal']['id_empresa']['telefono2'] }}<br>Cel. {{ $factura['id_sucursal']['id_empresa']['telefono1'] }}<br>{{ $factura['id_sucursal']['correo'] }}</div><br></div>
+<div style="top:-30px;left:30%;position:absolute;">
+	<div style="font-size: 7px;">
+		<h2>
+			<strong>{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}
+				<br>NIT. {{ $factura['id_sucursal']['id_empresa']['nit_empresa'] }}
+			</strong>
+		</h2>
+	</div>
+</div>
+
+<div style="position: absolute;top: 20px;right: 10px;">
+	{{ $factura['id_sucursal']['id_empresa']['direccion'] }}<br>
+	Teléfono: {{ $factura['id_sucursal']['id_empresa']['telefono'] }} - 
+	{{ $factura['id_sucursal']['id_empresa']['telefono2'] }}<br>
+	Cel. {{ $factura['id_sucursal']['id_empresa']['telefono1'] }}<br>
+	{{ $factura['id_sucursal']['correo'] }}<br>
+	<strong>Paginas de {{ $paginas }}</strong>
+</div>
 
 	<div id="tablas">
 <table class="table table-bordered">
@@ -56,7 +77,8 @@
 		<td><strong>CIUDAD:</strong><br> <?php echo $factura['id_cliente']['id_ciudad']['nombre'];?></td>
 	</tr>
 </table>
-<br>
+
+<div class="page-break"></div>
 <table id="productos" class="table table-striped table-sm">
 	<thead>
 		<tr>
@@ -66,14 +88,15 @@
 			<th class="tg-le8v"><strong>Precio</strong></th>
 		</tr>
 	</thead>
-	@foreach($kardex as $obj)
+	<?php for($i=0;sizeof($kardex)>$i; $i++) { ?>
 	<tr>
-		<td class="tg-yw4l">{{ $obj['id_referencia']['descripcion'] }}</td>
-		<td class="tg-yw4l">{{ $obj['cantidad'] }}</td>
-		<td class="tg-yw4l">{{ number_format($obj['precio'], 0, ",", ".") }}</td>
-		<td class="tg-yw4l"><?php $tt = $obj['precio'] * $obj['cantidad']; ?>{{ number_format(($tt), 0, ",", ".") }}</td>
+		<td class="tg-yw4l">{{ $kardex[$i]['id_referencia']['descripcion'] }}</td>
+		<td class="tg-yw4l">{{ $kardex[$i]['cantidad'] }}</td>
+		<td class="tg-yw4l">{{ number_format($kardex[$i]['precio'], 0, ",", ".") }}</td>
+		<td class="tg-yw4l"><?php $tt = $kardex[$i]['precio'] * $kardex[$i]['cantidad']; ?>{{ number_format(($tt), 0, ",", ".") }}</td>
 	</tr>
-	@endforeach
+	<?php } ?>
+	
 </table>
 
 <br><br>
@@ -170,12 +193,12 @@ strong{
 </style>
 
 <script>
-window.print();
+//window.print();
 </script>
 
 <script>
-	window.onunload = refreshParent;
+	/*window.onunload = refreshParent;
 	function refreshParent() {
 		window.opener.location.reload();
-	}
+	}*/
 </script>
