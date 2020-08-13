@@ -436,25 +436,33 @@ class FacturasController extends Controller
     /**
      * ALISTAMIENTO 
      */
-    public function alistamiento(){
+    public function alistamiento(Request $request){
+        if(isset($request->date)){
+            $date = $request->date;
+        }
+        else{
+            $date = date('Y-m-d');
+        }
         $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();
         $kardex = Kardex::join('directorios','kardexes.id_cliente','directorios.id')
                         ->join('usuarios','kardexes.id_vendedor','usuarios.id')
                         ->where('kardexes.id_empresa','=',Session::get('id_empresa'))
                         ->where('kardexes.signo','=','=')
-                        ->where('kardexes.created_at', '>',date('yy/m/d'))
+                        ->where('kardexes.fecha', '>',$date)
                         ->orderBy('kardexes.id_referencia')->get();
 
         $kardex1 = Kardex::select('id_referencia',DB::raw('SUM(kardexes.cantidad) as total'))
                         ->where('kardexes.id_empresa','=',Session::get('id_empresa'))
                         ->where('kardexes.signo','=','=')
-                        ->where('kardexes.created_at', '>',date('yy/m/d'))
+                        ->where('kardexes.fecha', '>',$date)
                         ->groupBy('id_referencia')
                         ->orderBy('kardexes.id_referencia')
                         ->get();
+        $total = 0;
         foreach($kardex as $obj){
             $obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
             $obj->id_factura = Facturas::where('id','=',$obj->id_factura)->first();
+            $total = $total + ($obj->cantidad * $obj->precio);
         }
         foreach($kardex1 as $obj){
             $obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
@@ -464,7 +472,8 @@ class FacturasController extends Controller
         return view('facturacion.alistamiento',array(
             "documento"=>$documentos,
             "kardex"=>$kardex,
-            "kardex1"=>$kardex1
+            "kardex1"=>$kardex1,
+            "total"=>$total
         ));
     }
 }

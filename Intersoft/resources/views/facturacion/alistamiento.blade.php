@@ -30,7 +30,20 @@
 </div>
 
 <div class="row top-5-w">
-<p style="font-size:10pt;font-family:Poppins;margin-left:2%">Aliste sus productos de forma rápida y efectíva</p>
+<p style="font-size:10pt;font-family:Poppins;margin-left:2%">Aliste sus productos de forma rápida y efectíva para el <label>DIA: </label></p>
+    <div style="margin-left: 49%;width: 40%;">
+        <form method="get" action="" class="row">
+            <div class="col-md-5 ">
+                <input type="date" class="form-control" value="{{ (isset($_GET['date']))? $_GET['date'] : date('Y-m-d') }}" name="date" id="date">
+            </div>
+            <div class="col-md-2 ">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+            <div class="col-md-5 ">
+                <br>
+            </div>
+        </form>
+    </div>
     <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
         <table class="table table-sm  table-striped" id="datos1">
             <thead>
@@ -58,7 +71,7 @@
         <br>
         <hr>
         <br>
-        <p style="font-size:10pt;font-family:Poppins;margin-left:2%">En esta sección usted podrá ver los pedidos creados el día {{ date('Y-m-d') }}, con el fin
+        <p style="font-size:10pt;font-family:Poppins;margin-left:2%">En esta sección usted podrá ver los pedidos creados el día {{ (isset($_GET['date']))? $_GET['date'] : date('Y-m-d') }}, con el fin
             de poderlos alistar. Se detalla tambien el número de documento para poder reimprimir el pedido.</p>
         <table class="table table-sm  table-striped" id="datos">
             <thead>
