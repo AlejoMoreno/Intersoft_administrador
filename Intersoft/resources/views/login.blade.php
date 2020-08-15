@@ -385,7 +385,7 @@ $(document).ready(function(){
 			},
 			success:  function (response) {
 				let sucursales = '';
-				console.log(response);
+				//console.log(response);
 				$('#resultado').html('');
 				if(response.result == 'Success'){
 					$('#login').show();

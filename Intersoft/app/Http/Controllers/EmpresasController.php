@@ -43,7 +43,7 @@ class EmpresasController extends Controller
         $empresa = Empresas::where('nit_empresa','=',$request->nit)->first();
         try{
             $sucursales = Sucursales::where('id_empresa','=',$empresa->id)->get();
-            $usuarios = Usuarios::where('id_empresa','=',$empresa->id)->get();
+            $usuarios = Usuarios::where('id_empresa','=',$empresa->id)->where('estado','=','ACTIVO')->get();
             return  array(
                 "result"=>"Success",
                 "body"=>$empresa,
