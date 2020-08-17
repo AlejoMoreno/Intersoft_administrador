@@ -34,7 +34,7 @@
 	<?php $paginas = sizeof($kardex)/5; ?>
 
 	
-
+	<input type="hidden" name="idFactura" id="idFactura" value="{{ $factura['id'] }}">
  	<section>
 		<div>
 			<img style="width:100px;" src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['id'] }}.jpeg">
@@ -193,6 +193,19 @@ strong{
 </style>
 
 <script>
+$(document).ready(function(){
+    saveContabilidad();
+});
+function saveContabilidad(){
+	idFactura = document.getElementById('idFactura').value;
+    $.ajax({
+        url:   '/contabilidad/generarfactura/'+idFactura,
+        type:  'get',
+        success:  function (response) {
+            console.log(response);
+        }
+    });
+}
 //window.print();
 </script>
 

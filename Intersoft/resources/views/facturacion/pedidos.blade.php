@@ -198,6 +198,17 @@ function traerKardex(){
     
 }
 
+function saveContabilidad(){
+    $.ajax({
+        data:  parametros,
+        url:   '/contabilidad/generarfactura/'+$('#idFactura').val(),
+        type:  'get',
+        success:  function (response) {
+            console.log(response);
+        }
+    });
+}
+
 function save_documento(){
         
     //validaciones

@@ -17,6 +17,37 @@
         animation: pantallain 100s infinite;
         animation-direction: alternate;
     }
+
+    .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 10px;
+}
+ 
+#dt-table_wrapper {
+  width: 35%;
+  margin-right: 2%;
+}
+ 
+#chart {
+  width: 63%;
+}
+ 
+table {
+  text-align: left;
+}
+ 
+@media screen and (max-width: 1200px) {
+  #dt-table_wrapper,
+  #chart {
+    width: 100%;
+  }
+ 
+  #dt-table_wrapper {
+    margin-right: 0;
+  }
+}
 </style>
     
 
@@ -123,6 +154,7 @@
                             @endif
                         </tbody>
                     </table>
+                    <div id="chart"></div>
                 </div>
             </div>
         </div>

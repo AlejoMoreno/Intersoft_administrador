@@ -92,6 +92,7 @@ class FacturasController extends Controller
             $m->to(["wakusoft@gmail.com",$obj->id_empresa->correo])->subject('Documento generado '.$obj->id_documento->nombre.' #'.$obj->numero  );
         });
 
+
         return array(
             "result" => "success",
             "body" => $obj 
@@ -131,6 +132,7 @@ class FacturasController extends Controller
                                                where('id_empresa','=',Session::get('id_empresa'))->
                                             first();
         }
+
 
     	return view('documentos.impresionFactura', [
             'factura' => $factura,

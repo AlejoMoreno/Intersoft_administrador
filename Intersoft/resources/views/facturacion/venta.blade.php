@@ -393,6 +393,18 @@ function saveCartera(){
     });
 }
 
+function saveContabilidad(){
+    $.ajax({
+        data:  parametros,
+        url:   '/contabilidad/generarfactura/'+$('#idFactura').val(),
+        type:  'get',
+        success:  function (response) {
+            console.log(response);
+        }
+    });
+}
+
+
 function banderaefectivo(){
     var tipo_pago = $('#tipo_pago option:selected').html();
     if(tipo_pago == "EFECTIVO" || tipo_pago == "CAJA"){
@@ -595,6 +607,7 @@ function saveFactura(){
             $('#numeroFactrua').val(factura.numero);
             setTimeout(function(){ saveCartera(); }, 1000);
             //fin de cartera
+            setTimeout(function(){ saveContabilidad(); }, 1000);
 
             $('#resultado').hide();
             //si la respuesta es correcta 
