@@ -627,7 +627,7 @@ function saveFactura(){
                 console.log("Error interno fila ");
                 swal({
                     title: "Algo anda mal",
-                    text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila  de los productos.",
+                    text: response.body,
                     icon: "error",
                     button: "Aceptar",
                 });

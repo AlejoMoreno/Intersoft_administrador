@@ -3,6 +3,10 @@
 @section('content')
 
 
+<div id="cargando" style="top:0;left:0;background: black;opacity: 0.8;z-index:100;width: 100%;position: fixed;height: 800px;"></div>
+
+
+
 <style>
 
 .title{
@@ -22,71 +26,24 @@
 </style>
 
 <div class="enc-article">
-    <h4 class="title">{{ $documento_dev['nombre'] }}</h4>
+    <h4 class="title">De Factura a {{ $documento_dev['nombre'] }}</h4>
     <input type="hidden" id="prefijo" value="{{ $documento_dev['prefijo'] }}">
     <input type="hidden" id="idDocumento" value="{{ $documento_dev['id'] }}">
     <input type="hidden" id="signoDocumento" value="{{ $documento_dev['signo'] }}">
     <input type="hidden" id="id_factura_ant" value="{{ $facturas[0]['id'] }}">
+    <input type="hidden" id="cedula_tercero" value="{{ $facturas[0]['id_tercero'] }}">
+    <input type="hidden" id="id_cliente" value="{{ $facturas[0]['id_cliente']['id'] }}">
+    <input type="hidden" id="fecha_vencimiento" value="{{ $facturas[0]['fecha_vencimiento'] }}">
+    <input type="hidden" id="fecha" value="{{ $facturas[0]['fecha'] }}">
+    <input type="hidden" id="id_modificado" value="{{ $facturas[0]['id_modificado'] }}">
+    
 </div>
+
 
 <?php $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get(); ?>
 
-<div class="row top-11-w">
-    
-    <div class="card" style="margin:3%;">
-        <div class="header row" style="background:#dbdbdb">
-            <h4 class="title col-md-12" style="color:black;">Datos Cliente<hr></h4>
-            <div class="col-md-4">
-                <label>Nit:</label>
-                <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $facturas[0]['id_cliente']['nit'] }}"  id="cedula_tercero" placeholder="nit" class="form-control" onkeyup="buscarcliente(this.value)">
-                <p style="font-size:10px;color:black;" id="resCliente">Preciona enter para traer toda la información</p>
-                
-            </div>
-            <div class="col-md-4">
-                <label>Razón Social:</label>
-                <input type="text" name="nombre"  id="nombre" placeholder="Razón Social" class="form-control" >
-            </div>
-            <div class="col-md-4">
-                <label>Dirección:</label>
-                <input type="text" name="direccion"  id="direccion" placeholder="Dirección" class="form-control" >
-            </div>
-            <div class="col-md-4">
-                <label>Teléfono:</label>
-                <input type="text" name="telefono"  id="telefono" placeholder="Teléfono" class="form-control" >
-            </div>
-            <div class="col-md-2">
-                <label>Correo:</label>
-                <input type="text" name="correo"  id="correo" placeholder="Correo" class="form-control" >
-            </div>
-            <div class="col-md-2">
-                <label>Ciudad:</label>
-                <select name="id_ciudad" class="form-control"  id="id_ciudad">
-                    @foreach ( $ciudades as $ciudad)
-                    <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="col-md-12" style="margin-bottom:2%;">
-                <label><br></label>
-                <div class="btn btn-success" style="background:#3c763d;color:white;" id="guardarCliente" onclick="guardarCliente();">Guardar Cliente</div>
-            </div>
-            <div class="col-md-6" style="margin-bottom:2%;">
-                <label>Fecha:</label>
-                  <input type="date" name="fecha" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)" >
-            </div>
-            <div class="col-md-6" style="margin-bottom:2%;">
-                <label>Fecha vencimiento:</label>
-                  <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
-            </div>    
-            <input type="hidden" name="id_modificado" id="id_modificado" class="form-control" value="{{ Session::get('user_id') }}" placeholder="Esciba el nombre del vendedor">        
-            
-        </div>
-    </div>
-    
-</div>
 
-
-<div class="row top-11-w">
+<div class="row top-5-w">
     
     <div class="card col-md-4" style="margin:3%;margin-top:0%;color:black;">
         <div class="header row " style="background:white;overflow-x:scroll;">
@@ -222,16 +179,36 @@ $(document).on('click', 'button.deletebtn', function () {
 });
 
 $(document).ready(function(){
+    $('#cargando').show();
     traerKardex();
 });
 
 function traerKardex(){
     kardex = {!! json_encode($kardex) !!};
     console.log(kardex);
+    var cargando = 0;
     kardex.forEach(element => {
+        porcentaje = (cargando*100)/kardex.length;
+        cargando += 1;
+        $('#cargando').html(`<div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="`+porcentaje+`"
+                aria-valuemin="0" aria-valuemax="100" style="width: `+porcentaje+`%;">
+                <span class="sr-only">`+porcentaje+`% completado</span>
+            </div>
+        </div>`);
         getReferencia_kardex(element.id_referencia, element.cantidad, element.precio);
     });
-    recorrerTotal();
+    if(cargando == kardex.length){
+        setTimeout(function() {
+            swal("Preciona click para saber el total del documento")
+            .then((value) => {
+                recorrerTotal();
+                $('#cargando').hide();
+            });
+        }, 7000);
+        recorrerTotal();
+    }
+    
 }
 
 function save_documento(){
@@ -362,7 +339,7 @@ function saveFactura(){
                 console.log("Error interno fila ");
                 swal({
                     title: "Algo anda mal",
-                    text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila  de los productos.",
+                    text: response.body,
                     icon: "error",
                     button: "Aceptar",
                 });
@@ -588,6 +565,7 @@ function recorrerTotal(){
     $('#iva').val(iva);
     $('#descuento').val(0);
 }
+
 
 
 </script>

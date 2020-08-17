@@ -3,6 +3,9 @@
 @section('content')
 
 
+<div id="cargando" style="top:0;left:0;background: black;opacity: 0.8;z-index:100;width: 100%;position: fixed;height: 800px;"></div>
+
+
 <style>
 
 .title{
@@ -150,8 +153,6 @@
 </div>
 
 
-
-
 <script>
 
 
@@ -174,6 +175,7 @@ $(document).on('click', 'button.deletebtn', function () {
 });
 
 $(document).ready(function(){
+    $('#cargando').show();
     traerKardex();
     
 });
@@ -181,6 +183,7 @@ $(document).ready(function(){
 function traerKardex(){
     kardex = {!! json_encode($kardex) !!};
     console.log(kardex);
+    var cargando = 1;
     kardex.forEach(element => {
         getReferencia_kardex(element.id_referencia, element.cantidad, element.precio);
     });
@@ -188,9 +191,11 @@ function traerKardex(){
         swal("Preciona click para saber el total del documento")
         .then((value) => {
             recorrerTotal();
+            $('#cargando').hide();
         });
-    }, 7000);
-    recorrerTotal();
+    }, 10000);
+    
+    
 }
 
 function save_documento(){
@@ -321,7 +326,7 @@ function saveFactura(){
                 console.log("Error interno fila ");
                 swal({
                     title: "Algo anda mal",
-                    text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila  de los productos.",
+                    text: response.body,
                     icon: "error",
                     button: "Aceptar",
                 });
@@ -395,6 +400,7 @@ $(document).ready( function () {
 } );
 
 function getReferencia_kardex(id, cantidad, precio){
+    $('#cargando').show();
     var urls = "/inventario/referencias/"+id;
     $.ajax({
         url:   urls,
@@ -434,6 +440,9 @@ function getReferencia_kardex(id, cantidad, precio){
             cell5.innerHTML = precios;
             cell6.innerHTML = "<input type='text' value='"+linea.iva_porcentaje+"' class='form-control' name='iva' disabled><input type='hidden' value='"+ivaTot+"' name='totaliva'>";
             cell7.innerHTML = "<input type='number' value='"+total+"' class='form-control' name='subtotal' disabled>";
+            
+            //resultado
+            recorrerTotal();
         },
         error: function(){
             swal({

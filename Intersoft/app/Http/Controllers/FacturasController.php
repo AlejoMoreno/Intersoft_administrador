@@ -46,7 +46,7 @@ class FacturasController extends Controller
         if(sizeof($facturas)>0){
             return array(
                 "result" => "false",
-                "body" => "" 
+                "body" => "Cedula ya esta facturada con el mismo valor en el dia de hoy" 
             );
         }
         //creacion de factura 

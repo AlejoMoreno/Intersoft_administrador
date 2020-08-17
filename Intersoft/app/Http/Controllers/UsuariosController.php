@@ -13,6 +13,9 @@ use App\Empresas;
 use DB;
 use App\Facturas;
 use App\Http\Controllers\SessionsController;
+use App\Kardex;
+use App\Documentos;
+use App\Lineas;
 
 use Mail;
 use App\Mail\Mail\Welcome;
@@ -387,11 +390,50 @@ class UsuariosController extends Controller
         ));
     }
 
-    public function estadisticaVentas(){
-        $facturas = Facturas::where('id_vendedor','=',Session::get('user_id'))
-                    ->get();
+    public function estadisticaVentas(Request $request){
+        $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->where('estado','=','ACTIVO')->get();
+        $lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $kardex = Kardex::select('kardexes.*','usuarios.*','referencias.*','lineas.*',
+                            'directorios.*','documentos.*','facturas.*',
+                            DB::raw('usuarios.nombre as usuarionombre'),
+                            DB::raw('documentos.nombre as documentosnombre'),
+                            DB::raw('lineas.descripcion as lineasdescripcion'),
+                            DB::raw('referencias.descripcion as referenciasdescripcion'),
+                            DB::raw('(kardexes.precio * kardexes.cantidad) as preciototal'))
+                        ->where('kardexes.id_empresa','=',Session::get('id_empresa'))
+                        ->join('usuarios', 'kardexes.id_vendedor', '=', 'usuarios.id')
+                        ->join('referencias','kardexes.id_referencia', '=', 'referencias.id')
+                        ->join('lineas', 'referencias.codigo_linea', '=', 'lineas.id')
+                        ->join('directorios', 'kardexes.id_cliente', '=', 'directorios.id')
+                        ->join('documentos', 'kardexes.id_documento', '=', 'documentos.id')
+                        ->join('facturas', 'kardexes.id_factura', '=', 'facturas.id')
+                        ->where(function ($q) use ($request) {
+                            if(isset($request->fecha_inicio)){
+                                $q->where('facturas.fecha','>=',$request->fecha_inicio);
+                            }
+                            if(isset($request->fecha_fin)){
+                                $q->where('facturas.fecha','<',$request->fecha_fin);                 
+                            }
+                            if(isset($request->linea)){
+                                $q->whereIn('lineas.id',$request->linea);                 
+                            }
+                            if(isset($request->usuario)){
+                                $q->whereIn('usuarios.id',$request->usuario);                 
+                            }
+                            if(isset($request->documento)){
+                                $q->whereIn('documentos.id',$request->documento);                 
+                            }
+                        })
+                        ->orderBy('preciototal','desc')
+                        ->take(500)
+                        ->get();
+
         return view('facturacion.estadisticaventas',array(
-            "facturas"=>$facturas
+            "kardex"=>$kardex,
+            "documentos"=>$documentos,
+            "usuarios"=>$usuarios,
+            "lineas"=>$lineas
         ));
     }
 }
