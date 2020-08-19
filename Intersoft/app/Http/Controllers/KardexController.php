@@ -147,6 +147,9 @@ class KardexController extends Controller
 				
 				$precio_total = $referencia->costo_promedio;
 				$cantidad_total = $referencia->saldo + $obj->cantidad;
+				if($cantidad_total == 0){
+					$cantidad_total = 0.01;
+				}
 				$referencia->costo_promedio = (($precio_total * $referencia->saldo) + ($obj->cantidad * $obj->precio))/$cantidad_total;
 				$referencia->costo 		 = 	$obj->precio;	
 			}
@@ -162,6 +165,9 @@ class KardexController extends Controller
 				
 				$precio_total = $referencia->precio_4;
 				$cantidad_total = $referencia->saldo + $obj->cantidad;
+				if($cantidad_total == 0){
+					$cantidad_total = 0.01;
+				}
 				$referencia->precio4 = (($precio_total * $referencia->saldo) + ($obj->cantidad * $obj->precio))/$cantidad_total;
 			}
 		}

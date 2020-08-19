@@ -465,13 +465,13 @@ class FacturasController extends Controller
                         ->join('usuarios','kardexes.id_vendedor','usuarios.id')
                         ->where('kardexes.id_empresa','=',Session::get('id_empresa'))
                         ->where('kardexes.signo','=','=')
-                        ->where('kardexes.fecha', '>',$date)
+                        ->where('kardexes.fecha', '=',$date)
                         ->orderBy('kardexes.id_referencia')->get();
 
         $kardex1 = Kardex::select('id_referencia',DB::raw('SUM(kardexes.cantidad) as total'))
                         ->where('kardexes.id_empresa','=',Session::get('id_empresa'))
                         ->where('kardexes.signo','=','=')
-                        ->where('kardexes.fecha', '>',$date)
+                        ->where('kardexes.fecha', '=',$date)
                         ->groupBy('id_referencia')
                         ->orderBy('kardexes.id_referencia')
                         ->get();
