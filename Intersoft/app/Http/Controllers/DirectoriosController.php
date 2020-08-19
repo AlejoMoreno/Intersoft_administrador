@@ -198,6 +198,7 @@ class DirectoriosController extends Controller
     //buscar por cualquier input y retornar las listas de ellos
     public function search(Request $request){
 
+
         $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
                     ->where(function ($q) use ($request){
                         if($request->nit != ''){
@@ -250,13 +251,13 @@ class DirectoriosController extends Controller
         if(isset($request->nit)){
             $directorios = Directorios::where('nit','=',$request->nit)
                                       ->where('id_empresa','=',Session::get('id_empresa'))
-                                      ->where('id_directorio_tipo_tercero', '=', '2')
+                                      //->where('id_directorio_tipo_tercero', '=', '2')
                                       ->take(100)
                                       ->get();
         }
         else{
             $directorios = Directorios::where('razon_social','like','%'.$request->texto.'%')
-                            ->where('id_directorio_tipo_tercero', '=', '2')
+                            //->where('id_directorio_tipo_tercero', '=', '2')
                             ->where('id_empresa','=',Session::get('id_empresa'))->get();
         }
         

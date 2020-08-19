@@ -167,6 +167,7 @@ Route::get('/facturacion/estadisticaventas', 'UsuariosController@estadisticaVent
 Route::get('/facturacion/pedidos/{id_factura}', 'FacturasController@pedidos');
 Route::get('/facturacion/pedidos', 'FacturasController@pedidosIndex');
 Route::get('/facturacion/venta/{id_documento}', 'FacturasController@venta');
+Route::get('/facturacion/compra/{id_documento}', 'FacturasController@compra');
 Route::post('/facturacion/pedidosUpdate', 'FacturasController@updateEstado');
 Route::get('/facturacion/devoluciones/{id_factura}', 'FacturasController@devoluciones');
 Route::get('/facturacion/devoluciones', 'FacturasController@devolucionesIndex');

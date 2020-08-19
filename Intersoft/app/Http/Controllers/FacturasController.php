@@ -426,10 +426,25 @@ class FacturasController extends Controller
      */
     public function venta($id_documento){
         $documento = Documentos::where('id','=',$id_documento)->first();
-        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
+                                ->where('estado','=','ACTIVO')->get();
         $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
         
         return view('facturacion.venta',array(
+            "referencias"=>$referencias,
+            "documento"=>$documento,
+            "ciudades"=>$ciudades
+        ));
+    }
+    /**
+     * FACTURAS DE COMPRA
+     */
+    public function compra($id_documento){
+        $documento = Documentos::where('id','=',$id_documento)->first();
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
+        
+        return view('facturacion.compras',array(
             "referencias"=>$referencias,
             "documento"=>$documento,
             "ciudades"=>$ciudades

@@ -368,14 +368,11 @@
 </html>
 <script>
 $(document).ready(function(){
-
 	$('#login').hide();
-
 	$('#validar_empresa').click(function (){
 		parametros = {
 			"nit" : $('#nit_empresa').val()
 		};
-
 		$.ajax({			
 			data:  parametros,
 			url:   HOST+'/empresas/search',
@@ -413,15 +410,11 @@ $(document).ready(function(){
 			}
 		});		
 	});
-
 	config.GetAllInformation();
 	$('#cedula').focus();
     //login.FocusForm(input,next,fin); asi funciona el login focus
     login.FocusForm('cedula','password','no');
     login.FocusForm('password','boton','no');
     login.FocusForm('boton','boton','si');
-
-
 });
-
 </script>

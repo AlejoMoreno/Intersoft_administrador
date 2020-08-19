@@ -140,16 +140,15 @@ class KardexController extends Controller
 			$referencia->saldo = $referencia->saldo + $obj->cantidad;
 			//costo
 			if($referencia->costo == "0"){
-				$referencia->costo_promedio = 	$obj->costo;
-				$referencia->costo 		 = 	$obj->costo;
+				$referencia->costo_promedio = 	$obj->precio;
+				$referencia->costo 		 = 	$obj->precio;
 			}
 			else{
-				$valor = $referencia->saldo - $obj->cantidad;
-				if($valor == 0){
-					$valor = 0.01;
-				}
-				$referencia->costo_promedio = 	( ($referencia->costo_promedio * $valor) + ($obj->costo * $obj->cantidad) )/($valor);
-				$referencia->costo 		 = 	$obj->costo;	
+				
+				$precio_total = $referencia->costo_promedio;
+				$cantidad_total = $referencia->saldo + $obj->cantidad;
+				$referencia->costo_promedio = (($precio_total * $referencia->saldo) + ($obj->cantidad * $obj->precio))/$cantidad_total;
+				$referencia->costo 		 = 	$obj->precio;	
 			}
 		}
 		else if($obj->signo == '-'){
@@ -160,10 +159,10 @@ class KardexController extends Controller
 			}
 			else{
 				$valor = $referencia->saldo-$obj->cantidad;
-				if($valor == 0){
-					$valor = 0.01;
-				}
-				$referencia->precio4 = 	( ($referencia->precio4 * $valor) - ( $obj->precio * $obj->cantidad) )/($valor);
+				
+				$precio_total = $referencia->precio_4;
+				$cantidad_total = $referencia->saldo + $obj->cantidad;
+				$referencia->precio4 = (($precio_total * $referencia->saldo) + ($obj->cantidad * $obj->precio))/$cantidad_total;
 			}
 		}
 		else{
