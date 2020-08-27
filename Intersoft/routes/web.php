@@ -168,6 +168,8 @@ Route::get('/facturacion/pedidos/{id_factura}', 'FacturasController@pedidos');
 Route::get('/facturacion/pedidos', 'FacturasController@pedidosIndex');
 Route::get('/facturacion/venta/{id_documento}', 'FacturasController@venta');
 Route::get('/facturacion/compra/{id_documento}', 'FacturasController@compra');
+Route::get('/facturacion/facturatech', 'FacturasController@facturatech');
+Route::get('/facturacion/facturatech/{id_documento}/xml', 'FacturasController@facturatechxml');
 Route::post('/facturacion/pedidosUpdate', 'FacturasController@updateEstado');
 Route::get('/facturacion/devoluciones/{id_factura}', 'FacturasController@devoluciones');
 Route::get('/facturacion/devoluciones', 'FacturasController@devolucionesIndex');

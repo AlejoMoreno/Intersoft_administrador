@@ -249,12 +249,12 @@
             $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
             $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
             $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
-            $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES'];
+            $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES','Facturatech'];
             $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
         }
         else if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
             $lista = ["Inicio", "Directorio", "Facturación", "Salida"];
-            $Facturacion = ['Estadistica Ventas'];
+            $Facturacion = ['Estadistica Ventas','Facturatech'];
             $Directorio = ['Creación, Consulta, Directorio'];
             
         }
@@ -262,13 +262,13 @@
             $lista = ["Inicio", "Inventario", "Producción", "Facturación", "Salida"];
             $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
             $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
-            $Facturacion = ['Estadistica Ventas'];
+            $Facturacion = ['Estadistica Ventas','Facturatech'];
         }
         else if(Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos"){
             $lista = ["Inicio", "Directorio", "Facturación", "Tesorería", "Salida"];
             $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
             $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
-            $Facturacion = ['Estadistica Ventas','Zonas Asingada'];
+            $Facturacion = ['Estadistica Ventas','Zonas Asingada','Facturatech'];
         }
     }
     
@@ -380,6 +380,7 @@
                             <?php if(in_array("Liquidación Comisiones",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/liquidacionventas');">Liquidación Comisiones</a></li><?php } ?>
                             <?php if(in_array("Estadistica Ventas",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/estadisticaventas');">Estadistica Ventas</a></li><?php } ?>
                             <?php if(in_array("Zonas Asingada",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/zona');">Zonas Asingada</a></li><?php } ?>
+                            <?php if(in_array("Facturatech",$Facturacion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/facturatech');">Facturatech</a></li><?php } ?>                            
                             <li role="separator" class="divider"></li>
                             <?php if(in_array("Pasar PEDIDOS a FACTURA",$Facturacion)){ ?><li><div><a href="javascript:;" style="margin-left:8%" onclick="config.Redirect('/facturacion/pedidos');">Pasar PEDIDOS a FACTURA</a></div></li><?php } ?>
                             <li role="separator" class="divider"></li>
