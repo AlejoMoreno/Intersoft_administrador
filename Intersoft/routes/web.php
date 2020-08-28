@@ -590,3 +590,7 @@ Route::get('/pdf/pdfreferencias1', 'ReferenciasController@pdfreferencias1');
 Route::get('/pdf/pdfDirectorio', 'DirectoriosController@pdf');
 Route::get('/pdf/fichatecnica', 'FichatecnicasController@pdf');
 
+
+//REPORTES CHARTS JS
+Route::get('/reporte', 'Reportes\usuarios@index');
+

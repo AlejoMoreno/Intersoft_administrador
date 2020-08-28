@@ -250,7 +250,7 @@
             $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
             $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
             $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES','Facturatech'];
-            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
+            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones','Reportes'];
         }
         else if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
             $lista = ["Inicio", "Directorio", "Facturación", "Salida"];
@@ -267,7 +267,7 @@
         else if(Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos"){
             $lista = ["Inicio", "Directorio", "Facturación", "Tesorería", "Salida"];
             $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
-            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones'];
+            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones','Reportes'];
             $Facturacion = ['Estadistica Ventas','Zonas Asingada','Facturatech'];
         }
     }
@@ -428,6 +428,7 @@
                             <?php if(in_array("Pago a Proveedores",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/egresos');">Pago a Proveedores</a></li><?php } ?>
                             <?php if(in_array("Cobro Cartera",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Cobro Cartera</a></li><?php } ?>
                             <?php if(in_array("Extracto y Cuentas de Cobro",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto y Cuentas de Cobro</a></li><?php } ?>
+                            <?php if(in_array("Reportes",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/reporte');">Reportes</a></li><?php } ?>
                         </ul>
                     </a>
                 </li>
