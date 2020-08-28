@@ -29,8 +29,8 @@
 <div class="row top-5-w" style="padding:2%;">
 
     <form action="" method="GET">
-        <input type="date" value="{{ $_GET['sesion_fecha_inicio'] }}" name="sesion_fecha_inicio">
-        <input type="date" value="{{ $_GET['sesion_fecha_final'] }}" name="sesion_fecha_final">
+        <input type="date" value="{{ isset($_GET['sesion_fecha_inicio'])? $_GET['sesion_fecha_inicio'] : '' }}" name="sesion_fecha_inicio">
+        <input type="date" value="{{ isset($_GET['sesion_fecha_final'])? $_GET['sesion_fecha_final'] : '' }}" name="sesion_fecha_final">
         <select name="usuarios">
             <option value="0">Seleccione vendedor</option>
             @foreach ($usuarios as $obj)
