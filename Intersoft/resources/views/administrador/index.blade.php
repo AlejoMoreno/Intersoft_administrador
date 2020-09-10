@@ -70,13 +70,13 @@
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/inventario/documentos');">
-                                            <td><img width="30" src="/assets/148912.svg"></td>
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/546/546391.svg"></td>
                                             <td>Documentos entrada y salida de mercancía</td>
                                             <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/tipopagos');">
-                                            <td><img width="30" src="/assets/148912.svg"></td>
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/747/747156.svg"></td>
                                             <td>Administración de Tipo Pagos</td>                                             
                                             <td><img width="20" src="/assets/265727.svg">
                                             </td>
@@ -101,7 +101,7 @@
                                             </td>
                                         </tr>
                                         <tr onclick="config.Redirect('/administrador/bancos');">
-                                            <td><img width="30" src="/assets/148912.svg"></td>
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/2910/2910254.svg"></td>
                                             <td>Bancos</td>                                             
                                             <td><img width="20" src="/assets/265727.svg">
                                             </td>
@@ -112,9 +112,9 @@
                                             <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
-                                        <tr onclick="config.Redirect('/administrador/mis_bancos');">
-                                            <td><img width="30" src="/assets/148912.svg"></td>
-                                            <td>Mis Bancos</td>                                             
+                                        <tr onclick="config.Redirect('/administrador/consignacion');">
+                                            <td><img width="30" src="https://image.flaticon.com/icons/svg/1087/1087117.svg"></td>
+                                            <td>Consignaciones</td>                                             
                                             <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>

@@ -332,6 +332,24 @@ Route::get('/invitados/update/{id}', 'InvitadosController@showupdate');
 Route::post('/invitados/create', 'InvitadosController@create');
 Route::post('/invitados/update', 'InvitadosController@update');
 
+//bancos
+Route::get('/administrador/bancos', 'BancosController@index');
+Route::get('/administrador/bancos/all', 'BancosController@all');
+Route::get('/administrador/bancos/{id}', 'BancosController@departamento');
+Route::get('/administrador/bancos/delete/{id}', 'BancosController@delete');
+Route::get('/administrador/bancos/update/{id}', 'BancosController@showupdate');
+Route::post('/administrador/bancos/create', 'BancosController@create');
+Route::post('/administrador/bancos/update', 'BancosController@update');
+
+//consignacion
+Route::get('/administrador/consignacion', 'ConsignacionesController@index');
+Route::get('/administrador/consignacion/all', 'ConsignacionesController@all');
+Route::get('/administrador/consignacion/{id}', 'ConsignacionesController@departamento');
+Route::get('/administrador/consignacion/delete/{id}', 'ConsignacionesController@delete');
+Route::get('/administrador/consignacion/update/{id}', 'ConsignacionesController@showupdate');
+Route::post('/administrador/consignacion/create', 'ConsignacionesController@create');
+Route::post('/administrador/consignacion/update', 'ConsignacionesController@update');
+
 
 /*
 |--------------------------------------------------------------------------

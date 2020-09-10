@@ -18,6 +18,7 @@ class TipopagosController extends Controller
             $obj = new Tipopagos();
             $obj->nombre     	= $request->nombre;
             $obj->puc_cuenta   = $request->puc_cuenta;
+            $obj->puc_compra   = $request->puc_compra;
             $obj->tercero       = $request->tercero;
             $obj->id_empresa   = Session::get('id_empresa');
             $obj->save();
@@ -35,6 +36,7 @@ class TipopagosController extends Controller
             $obj = Tipopagos::where('id',$request->id)->first();
             $obj->nombre     	= $request->nombre;
             $obj->puc_cuenta   = $request->puc_cuenta;
+            $obj->puc_compra   = $request->puc_compra;
             $obj->tercero       = $request->tercero;
             $obj->id_empresa   = Session::get('id_empresa');
             $obj->save();
@@ -98,6 +100,7 @@ class TipopagosController extends Controller
                                     ->where('id_directorio_tipo_tercero','=',3)->get();
             foreach( $objs as $obj ){
                 $obj->puc_cuenta = Pucauxiliar::where('id','=',$obj->puc_cuenta)->first();
+                $obj->puc_compra = Pucauxiliar::where('id','=',$obj->puc_compra)->first();
                 $obj->tercero = Directorios::where('id','=',$obj->tercero)->first();
             }
             return view('/administrador/tipopagos', [

@@ -218,6 +218,17 @@
             margin: 1%;
             font-size: 11px;
         }
+
+        .pregunta{
+            background: black;
+            opacity: 0.7;
+            color:white;
+            font-size: 10px;
+            padding:5px;
+            border-radius: 100%;
+            cursor: -webkit-grab; 
+            cursor: grab;
+        }
     </style>
 
 </head>
