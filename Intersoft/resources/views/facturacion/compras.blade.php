@@ -77,6 +77,7 @@
                         <th>id</th>
                         <th>codigo interno</th>
                         <th>descripcion</th>
+                        <th>Iva</th>
                         <th>precio #1</th>
                         <th>precio #2</th>
                         <th>precio #3</th>
@@ -661,6 +662,7 @@ $(document).ready( function () {
             { data: 'id' },
             { data: 'codigo_interno' },
             { data: 'descripcion' },
+            { data: 'iva' },
             { data: 'precio1' },
             { data: 'precio2' },
             { data: 'precio3' },
@@ -697,7 +699,7 @@ function getReferencia(id){
             linea = response.linea;
 
             var precioasignado = referencia.precioasignado.toString();
-            precios = "<input type='number' class='form-control' onchange='recorrerproductos(this)' name='valor_unidad'>";
+            precios = "<input type='number' class='form-control' onchange='recorrerproductos(this)' value='"+parseFloat(referencia.costo_promedio).toFixed(2)+"' name='valor_unidad'>";
             lotes = "<input class='form-control' name='lote' value='0'>";
             var table = document.getElementById("tabla_productos");
             var row = table.insertRow(1);
@@ -715,7 +717,7 @@ function getReferencia(id){
             cell3.innerHTML = lotes;
             cell4.innerHTML = "<input type='number' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
             cell5.innerHTML = precios;
-            cell6.innerHTML = "<input type='text' value='"+linea.iva_porcentaje+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
+            cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
             cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled>";
         },
         error: function(){
@@ -747,13 +749,13 @@ function recorrerproductos(element){
     subtotal = inputs[7].value;
 
     
-    inputs[7].value = parseInt(cantidad) * parseInt(valor_unidad);
+    inputs[7].value = parseFloat(cantidad) * parseFloat(valor_unidad);
 
     if(iva == 0){
         inputs[6].value = 0;    
     }
     else{
-        inputs[6].value = (parseInt(cantidad) * parseInt(valor_unidad) * parseInt(iva))/100;
+        inputs[6].value = (parseFloat(cantidad) * parseFloat(valor_unidad)) - ((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)));//totaliva
     }
 
     recorrerTotal();
@@ -765,17 +767,17 @@ function recorrerTotal(){
     subtot = 0;
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
-        subtot += parseInt(element.value);
+        subtot += parseFloat(element.value);
     }
     ivas = document.getElementsByName("totaliva");
     iva = 0;
     for(i=0;i<ivas.length;i++){ 
         element = ivas[i];
-        iva += parseInt(element.value);
+        iva += parseFloat(element.value);
     }
-    $('#subtotal').val(subtot);
-    $('#total').val(subtot);
-    $('#iva').val(iva);
+    $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
+    $('#total').val(parseFloat(subtot).toFixed(2));
+    $('#iva').val(parseFloat(iva).toFixed(2));
     $('#descuento').val(0);
 
     /** cartera verificar y recorrer **/
@@ -871,7 +873,7 @@ function buscarproveedor(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').hide();   
-                    $('#resCliente').text("Cliente existe");    
+                    $('#resCliente').text("Proveedor existe");    
                     //cartera
                     $('#Carterasid_cliente').val(cliente.id);           
                 }  
@@ -939,7 +941,7 @@ function buscarproveedor2(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').hide();   
-                    $('#resCliente').text("Cliente existe");    
+                    $('#resCliente').text("Proveedor existe");    
                     //cartera
                     $('#Carterasid_cliente').val(cliente.id);           
                 }  

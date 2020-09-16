@@ -109,6 +109,7 @@
                         <th>id</th>
                         <th>codigo interno</th>
                         <th>descripcion</th>
+                        <th>Iva</th>
                         <th>precio #1</th>
                         <th>precio #2</th>
                         <th>precio #3</th>
@@ -442,8 +443,9 @@ function tomarDatosCartera(){
 }
 
 function addFormaPago(){
+    tipoPagos = {!! json_encode($tipo_pagos) !!};
     var total = $('#total').val();
-    var tipo_pago = $('#tipo_pago option:selected').html();
+    var tipo_pago = $('#tipo_pago option:selected').val();
     
     var table = document.getElementById("tabla_forma_pagos");
     var row = table.insertRow(1);
@@ -451,7 +453,13 @@ function addFormaPago(){
     var cell1 = row.insertCell(1);
     var cell2 = row.insertCell(2);
     var cell3 = row.insertCell(3);
-    cell0.innerHTML = '<input class="form-control" type="text" value="'+tipo_pago+'" name="CarteraformaPago">';
+    tipopagoselect = '<select class="form-control" type="text" name="CarteraformaPago">';
+        for (let index = 0; index < tipoPagos.length; index++) {
+            const element = tipoPagos[index];
+            tipopagoselect += '<option value="'+element.id+'">'+element.nombre+'</option>';
+        }    
+    tipopagoselect += '</select>';
+    cell0.innerHTML = tipopagoselect;
     cell1.innerHTML = '<input class="form-control" type="text" value="'+total+'" name="Carteravalor">';
     cell2.innerHTML = '<input class="form-control" type="text" value="NA" name="Carteraobservacion">';
     cell3.innerHTML = '<button class="btn btn-danger deleteformapagobtn" onclick="deleteFormaPago();">x</button>';
@@ -693,6 +701,7 @@ $(document).ready( function () {
             { data: 'id' },
             { data: 'codigo_interno' },
             { data: 'descripcion' },
+            { data: 'iva' },
             { data: 'precio1' },
             { data: 'precio2' },
             { data: 'precio3' },
@@ -761,7 +770,7 @@ function getReferencia(id){
             cell3.innerHTML = lotes;
             cell4.innerHTML = "<input type='number' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
             cell5.innerHTML = precios;
-            cell6.innerHTML = "<input type='text' value='"+linea.iva_porcentaje+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
+            cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
             cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled>";
         },
         error: function(){
@@ -794,13 +803,13 @@ function recorrerproductos(element){
     valor_unidad = selects[1].value;
 
     
-    inputs[5].value = parseInt(cantidad) * parseInt(valor_unidad);
+    inputs[5].value = parseFloat(cantidad) * parseFloat(valor_unidad); 
 
     if(iva == 0){
         inputs[4].value = 0;    
     }
     else{
-        inputs[4].value = (parseInt(cantidad) * parseInt(valor_unidad) * parseInt(iva))/100;
+        inputs[4].value = (parseFloat(cantidad) * parseFloat(valor_unidad)) - ((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)));//totaliva
     }
 
     recorrerTotal();
@@ -812,17 +821,17 @@ function recorrerTotal(){
     subtot = 0;
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
-        subtot += parseInt(element.value);
+        subtot += parseFloat(element.value);
     }
     ivas = document.getElementsByName("totaliva");
     iva = 0;
     for(i=0;i<ivas.length;i++){ 
         element = ivas[i];
-        iva += parseInt(element.value);
+        iva += parseFloat(element.value);
     }
-    $('#subtotal').val(subtot);
-    $('#total').val(subtot);
-    $('#iva').val(iva);
+    $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
+    $('#total').val(parseFloat(subtot).toFixed(2));
+    $('#iva').val(parseFloat(iva).toFixed(2));
     $('#descuento').val(0);
 
     /** cartera verificar y recorrer **/
