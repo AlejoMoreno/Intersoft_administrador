@@ -40,7 +40,7 @@
             <h4 class="title col-md-12" style="color:black;">Datos Cliente<hr></h4>
             <div class="col-md-4">
                 <label>Nit:</label>
-                <input type="hidden" id="id_retefuente" placeholder="id_retefuente" class="form-control">
+                <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
                 <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
                 <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value)">
                 <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
@@ -755,7 +755,7 @@ function getReferencia(id){
             linea = response.linea;
 
             var precioasignado = referencia.precioasignado.toString();
-            precios = "<select class='form-control' onchange='recorrerproductos(this)' name='valor_unidad'>";
+            precios = "<select class='form-control' onchange='recorrerproductos(this)' id='preciosselect' name='valor_unidad'>";
             if(precioasignado.includes("1")){  
                 precios += "<option value='"+referencia.precio1+"'>"+new Intl.NumberFormat().format(referencia.precio1)+"</option>";
             }
@@ -765,6 +765,7 @@ function getReferencia(id){
             if(precioasignado.includes("3")){
                 precios += "<option value='"+referencia.precio3+"'>"+new Intl.NumberFormat().format(referencia.precio3)+"</option>";
             }
+            precios += "<option value='0'>Otro valor</option>";
             precios += "</select>";
             lotes = "<select class='form-control' name='lote'>";
             for(i=0;i<lote.length;i++){ 
@@ -803,12 +804,26 @@ function getReferencia(id){
 }
 
 function recorrerproductos(element){
+    
     config.createToast("info", "Intersoft esta calculando impuestos para el producto seleccionado");
     td = element.parentNode;
     tr = td.parentNode;
     
     inputs = tr.getElementsByTagName('input');
     selects = tr.getElementsByTagName('select');
+
+    if($('#preciosselect').val() == '0'){
+        swal("Escribe el valor del producto:", {
+            content: "input",
+        })
+        .then((value) => {
+            var option = document.createElement("option");
+            option.text = value;
+            option.value = value;
+            selects[1].add(option);
+            selects[1].value = value;
+        });
+    }
     
     check = inputs[0].value;
     id = inputs[1].value;
@@ -834,17 +849,24 @@ function recorrerproductos(element){
     //RETENCION
     try{
         retefuente = 0;
-        id_retefuente = JSON.parse($('#id_retefuente').val());
-        if(id_retefuente.nombre == "SOBRE TODO"){
+        if($('#id_retefuente').val() == '0'){
             retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
-        }
-        else if(id_retefuente.nombre == "SOBRE LA BASE MENSUAL"){
-            retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+            inputs[6].value = retefuente; 
         }
         else{
-            retefuente = 0;
+            id_retefuente = JSON.parse($('#id_retefuente').val());
+            if(id_retefuente.nombre == "SOBRE TODO"){
+                retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+            }
+            else if(id_retefuente.nombre == "SOBRE LA BASE MENSUAL"){
+                retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+            }
+            else{
+                retefuente = 0;
+            }
+            inputs[6].value = retefuente;
         }
-        inputs[6].value = retefuente;
+        
     }
     catch(Exception){
         retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;

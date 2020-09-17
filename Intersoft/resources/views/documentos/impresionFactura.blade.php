@@ -37,8 +37,8 @@
 		<table style="width: 100%;">
 			<tr>
 				<td style="width: 20%">
-					<img style="width:120px;" src="https://wakusoft.com/img/logo_wakusoft.png">
-					<!--<img style="width:100px;float: left;" src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['id'] }}.jpeg">-->
+					<!--<img style="width:120px;" src="https://wakusoft.com/img/logo_wakusoft.png">-->
+					<img style="width:120px;" src="http://intersoft.wakusoft.com/assets/img/empresas/{{ Session::get('id_empresa') }}.jpeg">
 				</td>
 				<td style="width: 40%">
 					<table style="width: 100%">
@@ -72,9 +72,8 @@
 			</tr>
 		</table>
 		
-		<br><br>
 
-		<table style="width: 100%;">
+		<table style="width: 100%;border:1px solid #ddd;">
 			<tr>
 				<td class="tg-yw4l" colspan="3"><strong>CLIENTE:</strong><br><?php echo $factura['id_cliente']['razon_social'];?></td>
 				<td class="tg-yw4l" colspan="2"><strong>NIT:</strong><br> <?php echo $factura['id_cliente']['nit'];?></td>
@@ -85,16 +84,16 @@
 			</tr>
 		</table>
 		
-		<br><br>
+		<br>
 
-		<table style="width: 100%;border:1px solid #ddd">
+		<table style="width: 100%;">
 			<thead>
-				<tr>
-					<th style="border:1px solid #ddd;background: #ddd"><strong>Iva</strong></th>
-					<th style="border:1px solid #ddd;background: #ddd"><strong>Descripción</strong></th>
-					<th style="border:1px solid #ddd;background: #ddd"><strong>Unidades</strong></th>
-					<th style="border:1px solid #ddd;background: #ddd"><strong>Precio Unitario</strong></th>
-					<th style="border:1px solid #ddd;background: #ddd"><strong>Precio</strong></th>
+				<tr style="background: #ddd">
+					<th><strong>Iva</strong></th>
+					<th><strong>Descripción</strong></th>
+					<th><strong>Unidades</strong></th>
+					<th><strong>Precio Unitario</strong></th>
+					<th><strong>Precio</strong></th>
 				</tr>
 			</thead>
 			<?php for($i=0;sizeof($kardex)>$i; $i++) { ?>
@@ -109,7 +108,7 @@
 			
 		</table>
 
-		<br><br>
+		<br>
 		<table style="width: 100%">
 			<tr>
 				<td style="width: 40%"><strong>OBS:</strong> <?php echo $factura['observaciones'] ?></td></td>
@@ -139,9 +138,8 @@
 					
 			</tr>
 		</table>
-		<br><br>
 		<div style="width: 100%">
-			<p>Documento impreso por software Intersoft. Calle 38 A 50 A 71 sur. Tel 3219045297. Impreso el dia </p>
+			<p>Documento impreso por software Intersoft. Calle 38 A 50 A 71 sur. Tel 3219045297. <br><strong>Impreso el dia {{ date("Y-m-d") }}</strong></p>
 		</div>
 		
 		

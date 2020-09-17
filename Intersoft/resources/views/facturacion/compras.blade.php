@@ -39,6 +39,7 @@
             <h4 class="title col-md-12" style="color:black;">Datos Proveedor<hr></h4>
             <div class="col-md-6">
                 <label>Nit:</label>
+                <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
                 <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
                 <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarproveedor(this.value)">
                 <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el proveedor debe tener un minimo de 3 caracteres</p>
@@ -763,17 +764,24 @@ function recorrerproductos(element){
     //RETENCION
     try{
         retefuente = 0;
-        id_retefuente = JSON.parse($('#id_retefuente').val());
-        if(id_retefuente.nombre == "SOBRE TODO"){
+        if($('#id_retefuente').val() == '0'){
             retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
-        }
-        else if(id_retefuente.nombre == "SOBRE LA BASE MENSUAL"){
-            retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+            inputs[8].value = retefuente; 
         }
         else{
-            retefuente = 0;
+            id_retefuente = JSON.parse($('#id_retefuente').val());
+            if(id_retefuente.nombre == "SOBRE TODO"){
+                retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+            }
+            else if(id_retefuente.nombre == "SOBRE LA BASE MENSUAL"){
+                retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+            }
+            else{
+                retefuente = 0;
+            }
+            inputs[8].value = retefuente;
         }
-        inputs[8].value = retefuente;
+        
     }
     catch(Exception){
         retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
@@ -924,6 +932,7 @@ function buscarproveedor(texto){
                     $('#id_ciudad').val(cliente.id_ciudad);
                     $('#zona').val(cliente.zona_venta);
                     $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
+                    $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -942,6 +951,7 @@ function buscarproveedor(texto){
                     $('#correo').val("");
                     $('#zona').val("");
                     $('#directorio_tipo').val("");
+                    $('#id_retefuente').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -994,6 +1004,7 @@ function buscarproveedor2(texto){
                     $('#id_ciudad').val(cliente.id_ciudad);
                     $('#zona').val(cliente.zona_venta);
                     $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
+                    $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -1014,6 +1025,7 @@ function buscarproveedor2(texto){
                     $('#correo').val("");
                     $('#zona').val("");
                     $('#directorio_tipo').val("");
+                    $('#id_retefuente').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
