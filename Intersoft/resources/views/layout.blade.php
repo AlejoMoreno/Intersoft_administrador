@@ -538,7 +538,7 @@
         @endif
     </div>
     
-    <div style="width:100%;position: fixed;bottom: 0 !important;">
+    <div style="width:100%;">
         <!-- FORTER ENTER-->
         <div class="footer">
             <div class="container-fluid">
