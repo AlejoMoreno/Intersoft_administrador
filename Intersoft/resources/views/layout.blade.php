@@ -300,7 +300,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#"><img style="width: 100px;" src="/assets/img/logo_intersoft1.png"></a>
+          <a class="navbar-brand" href="#"><img style="width: 40px;margin-top:-10px;" src="/assets/img/logo_intersot.png"></a>
           {{ $dif }}
         </div>
         <div id="navbar" class="navbar-collapse collapse">
@@ -538,7 +538,7 @@
         @endif
     </div>
     
-    <div style="position:fixed;width:100%;left:0px;z-index:100">
+    <div style="width:100%;position: fixed;bottom: 0 !important;">
         <!-- FORTER ENTER-->
         <div class="footer">
             <div class="container-fluid">
@@ -567,7 +567,8 @@
                         </li>
                     </ul>
                 </nav>
-                <img style="width: 20%;maring-left:20%" src="/assets/img/logo_intersoft1.png">
+                <img style="width: 100px;" src="/assets/img/logo_intersoft1.png">
+                <img style="width: 100px;" src="http://intersoft.wakusoft.com/assets/img/empresas/{{ Session::get('id_empresa') }}.jpeg">
                 <p class="copyright pull-right">
                     &copy; <script>document.write(new Date().getFullYear())</script> <a href="https://wakusoft.com">wakusoft.com</a>, derechos reservados
                 </p>
