@@ -241,6 +241,8 @@ class DirectoriosController extends Controller
         foreach ($directorios as $directorio) {
             $directorio->id_regimen = Regimenes::find($directorio->id_regimen);
             $directorio->id_directorio_tipo_tercero = Directorio_tipo_terceros::find($directorio->id_directorio_tipo_tercero);
+            $directorio->id_directorio_tipo = Directorio_tipos::find($directorio->id_directorio_tipo);
+            $directorio->id_retefuente = Retefuentes::find($directorio->id_retefuente);
         }
         return  array(
             "result"=>"success",

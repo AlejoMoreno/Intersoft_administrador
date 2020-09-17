@@ -33,111 +33,119 @@
 	
 	<?php $paginas = sizeof($kardex)/5; ?>
 
-	
-	<input type="hidden" name="idFactura" id="idFactura" value="{{ $factura['id'] }}">
- 	<section>
-		<div>
-			<img style="width:100px;" src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['id'] }}.jpeg">
-		</div>
-	</section>
-<div style="top:-30px;left:30%;position:absolute;">
-	<div style="font-size: 7px;">
-		<h2>
-			<strong>{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}
-				<br>NIT. {{ $factura['id_sucursal']['id_empresa']['nit_empresa'] }}
-			</strong>
-		</h2>
-	</div>
-</div>
+	<div style="width: 100%;top:0;left: 0;padding: 2%;">
+		<table style="width: 100%;">
+			<tr>
+				<td style="width: 20%">
+					<img style="width:120px;" src="https://wakusoft.com/img/logo_wakusoft.png">
+					<!--<img style="width:100px;float: left;" src="/assets/img/empresas/{{ $factura['id_sucursal']['id_empresa']['id'] }}.jpeg">-->
+				</td>
+				<td style="width: 40%">
+					<table style="width: 100%">
+						<tr><td><strong>{{ $factura['id_sucursal']['id_empresa']['razon_social'] }}</strong></td></tr>
+						<tr><td><strong>NIT. {{ $factura['id_sucursal']['id_empresa']['nit_empresa'] }}</strong></td></tr>
+						<tr><td>{{ $factura['id_sucursal']['id_empresa']['telefono'] }} - {{ $factura['id_sucursal']['id_empresa']['telefono1'] }}</td></tr>
+						<tr><td>{{ $factura['id_sucursal']['correo'] }}</td></tr>
+						<tr><td>{{ $factura['id_sucursal']['id_empresa']['direccion'] }}</td></tr>
+					</table>
+				</td>
+				<td style="width: 40%">
+					<table style="width: 100%">
+						<tr>
+							<td><strong>Factura</strong></td>
+							<td><strong>{{ $factura['id_documento']['nombre'] }} # <?php echo $factura['prefijo'].'  '.$factura['numero'];?></strong></td>
+						</tr>
+						<tr>
+							<td><strong>Fecha Emi / Ven</strong></td>
+							<td><?php echo $factura['fecha'];?> / <?php echo $factura['fecha_vencimiento'];?></td>
+						</tr>
+						<tr>
+							<td><strong>Sucursal</strong></td>
+							<td><?php echo $factura['id_sucursal']['nombre'];?></td>
+						</tr>
+						<tr>
+							<td><strong>Vendedor</strong></td>
+							<td><?php echo $factura['id_vendedor']['nombre'] . ' ' . $factura['id_vendedor']['apellido'];?></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		
+		<br><br>
 
-<div style="position: absolute;top: 20px;right: 10px;">
-	{{ $factura['id_sucursal']['id_empresa']['direccion'] }}<br>
-	Teléfono: {{ $factura['id_sucursal']['id_empresa']['telefono'] }} - 
-	{{ $factura['id_sucursal']['id_empresa']['telefono2'] }}<br>
-	Cel. {{ $factura['id_sucursal']['id_empresa']['telefono1'] }}<br>
-	{{ $factura['id_sucursal']['correo'] }}<br>
-	<strong>Paginas de {{ $paginas }}</strong>
-</div>
+		<table style="width: 100%;">
+			<tr>
+				<td class="tg-yw4l" colspan="3"><strong>CLIENTE:</strong><br><?php echo $factura['id_cliente']['razon_social'];?></td>
+				<td class="tg-yw4l" colspan="2"><strong>NIT:</strong><br> <?php echo $factura['id_cliente']['nit'];?></td>
+				<td><strong>DIRECCION:</strong> <br><?php echo $factura['id_cliente']['direccion'];?></td>
+				<td><strong>TELÉFONO:</strong><br> <?php echo $factura['id_cliente']['telefono'];?></td>
+				<td><strong>CELULAR:</strong><br> <?php echo $factura['id_cliente']['telefono1'];?></td>
+				<td><strong>CIUDAD:</strong><br> <?php echo $factura['id_cliente']['id_ciudad']['nombre'];?></td>
+			</tr>
+		</table>
+		
+		<br><br>
 
-	<div id="tablas">
-<table class="table table-bordered">
-	<tr>
-		<td rowspan="2"><strong>{{ $factura['id_documento']['nombre'] }} # <?php echo $factura['prefijo'].'  '.$factura['numero'];?></strong></td>
-	    <td class="tg-le8v" colspan="3"><strong>FECHA EMISIÓN</strong><br><?php echo $factura['fecha'];?></td>
-	    <td class="tg-le8v" colspan="4"><strong>FECHA VENCIMIENTO</strong><br><?php echo $factura['fecha_vencimiento'];?></td>
-	    <td class="tg-le8v"><strong>SUCURSAL</strong><br><?php echo $factura['id_sucursal']['nombre'];?></td>
-	    <td class="tg-le8v"><strong>VENDEDOR</strong><br><?php echo $factura['id_vendedor']['ncedula'];?></td>
-	</tr>
-	<tr>
-		<td class="tg-yw4l" colspan="3"><strong>CLIENTE:</strong><br><?php echo $factura['id_cliente']['razon_social'];?></td>
-	    <td class="tg-yw4l" colspan="2"><strong>NIT:</strong><br> <?php echo $factura['id_cliente']['nit'];?></td>
-		<td><strong>DIRECCION:</strong> <br><?php echo $factura['id_cliente']['direccion'];?></td>
-		<td><strong>TELÉFONO:</strong><br> <?php echo $factura['id_cliente']['telefono'];?></td>
-		<td><strong>CELULAR:</strong><br> <?php echo $factura['id_cliente']['telefono1'];?></td>
-		<td><strong>CIUDAD:</strong><br> <?php echo $factura['id_cliente']['id_ciudad']['nombre'];?></td>
-	</tr>
-</table>
-
-<div class="page-break"></div>
-<table id="productos" class="table table-striped table-sm">
-	<thead>
-		<tr>
-			<th class="tg-le8v"><strong>Descripción</strong></th>
-			<th class="tg-le8v"><strong>Unidades</strong></th>
-			<th class="tg-le8v"><strong>Precio Unitario</strong></th>
-			<th class="tg-le8v"><strong>Precio</strong></th>
-		</tr>
-	</thead>
-	<?php for($i=0;sizeof($kardex)>$i; $i++) { ?>
-	<tr>
-		<td class="tg-yw4l">{{ $kardex[$i]['id_referencia']['descripcion'] }}</td>
-		<td class="tg-yw4l">{{ $kardex[$i]['cantidad'] }}</td>
-		<td class="tg-yw4l">{{ number_format($kardex[$i]['precio'], 0, ",", ".") }}</td>
-		<td class="tg-yw4l"><?php $tt = $kardex[$i]['precio'] * $kardex[$i]['cantidad']; ?>{{ number_format(($tt), 0, ",", ".") }}</td>
-	</tr>
-	<?php } ?>
-	
-</table>
-
-<br><br>
-<table class="table">
-	<tr>
-		<td style="width: 65%"><strong>OBS:</strong> <?php echo $factura['observaciones'] ?></td></td>
-		<td>
-			<table class="">
+		<table style="width: 100%;border:1px solid #ddd">
+			<thead>
 				<tr>
-					<td><strong>Total parcial: </strong></td>
-					<td>$ <?php echo number_format($factura['subtotal'], 0, ",", ".");?></td>
+					<th style="border:1px solid #ddd;background: #ddd"><strong>Iva</strong></th>
+					<th style="border:1px solid #ddd;background: #ddd"><strong>Descripción</strong></th>
+					<th style="border:1px solid #ddd;background: #ddd"><strong>Unidades</strong></th>
+					<th style="border:1px solid #ddd;background: #ddd"><strong>Precio Unitario</strong></th>
+					<th style="border:1px solid #ddd;background: #ddd"><strong>Precio</strong></th>
 				</tr>
-				<tr>
-					<td><strong>IVA: </strong></td>
-					<td>$ <?php echo number_format($factura['iva'], 0, ",", ".");?></td>
-				</tr>
-				<tr>
-					<td><strong>Impoconsumo: </strong></td>
-					<td>$ <?php echo number_format($factura['impoconsumo'], 0, ",", ".");?></td>
-				</tr>
-				<tr>
-					<td><strong>Descuento:</strong></td>
-					<td>$ <?php echo number_format($factura['descuento'], 0, ",", ".");?></td>
-				</tr>
-				<tr>
-					<td><strong>Flete:</strong></td>
-					<td>$ <?php echo number_format($factura['fletes'], 0, ",", ".");?></td>
-				</tr>
-				<tr>
-					<td><strong>Retefuente:</strong></td>
-					<td>$ <?php echo number_format($factura['retefuente'], 0, ",", ".");?></td>
-				</tr>
-				<tr style="background:#ddd">
-					<td><strong>TOTAL FACTURA: </strong></td>
-					<td><strong>$ <?php echo number_format($factura['total'], 0, ",", ".");?></strong></td>
-				</tr>
-			</table>
+			</thead>
+			<?php for($i=0;sizeof($kardex)>$i; $i++) { ?>
+			<tr>
+				<td>{{ $kardex[$i]['id_referencia']['iva'] }}</td>
+				<td>{{ $kardex[$i]['id_referencia']['descripcion'] }}</td>
+				<td>{{ $kardex[$i]['cantidad'] }}</td>
+				<td>{{ number_format($kardex[$i]['precio'], 0, ",", ".") }}</td>
+				<td><?php $tt = $kardex[$i]['precio'] * $kardex[$i]['cantidad']; ?>{{ number_format(($tt), 0, ",", ".") }}</td>
+			</tr>
+			<?php } ?>
 			
-	</tr>
-</table>
+		</table>
 
+		<br><br>
+		<table style="width: 100%">
+			<tr>
+				<td style="width: 40%"><strong>OBS:</strong> <?php echo $factura['observaciones'] ?></td></td>
+				<td style="width: 60%">
+					<table style="width: 100%;">
+						<tr>
+							<td><strong>Total parcial: </strong></td>
+							<td>$ <?php echo number_format($factura['subtotal'], 0, ",", ".");?></td>
+							<td><strong>IVA: </strong></td>
+							<td>$ <?php echo number_format($factura['iva'], 0, ",", ".");?></td>
+							<td><strong>Impoconsumo: </strong></td>
+							<td>$ <?php echo number_format($factura['impoconsumo'], 0, ",", ".");?></td>
+						</tr>
+						<tr>
+							<td><strong>Descuento:</strong></td>
+							<td>$ <?php echo number_format($factura['descuento'], 0, ",", ".");?></td>
+							<td><strong>Flete:</strong></td>
+							<td>$ <?php echo number_format($factura['fletes'], 0, ",", ".");?></td>
+							<td><strong>Retefuente:</strong></td>
+							<td>$ <?php echo number_format($factura['retefuente'], 0, ",", ".");?></td>
+						</tr>
+						<tr style="background:#ddd">
+							<td colspan="3"><strong>TOTAL FACTURA: </strong></td>
+							<td colspan="3" style="text-align: right"><strong>$ <?php echo number_format($factura['total'], 0, ",", ".");?></strong></td>
+						</tr>
+					</table>
+					
+			</tr>
+		</table>
+		<br><br>
+		<div style="width: 100%">
+			<p>Documento impreso por software Intersoft. Calle 38 A 50 A 71 sur. Tel 3219045297. Impreso el dia </p>
+		</div>
+		
+		
+	</div>
 	
 <style type="text/css">
 .tg  {border-collapse:collapse;border-spacing:0;background-color: white;border: 1px solid;color: black;}

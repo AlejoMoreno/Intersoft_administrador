@@ -482,7 +482,7 @@ function getReferencia(id){
             referencia = response.body;
             lote = response.lote;
             linea = response.linea;
-            precios = "<select class='form-control' onchange='recorrerproductos(this)' name='valor_unidad'><option value='"+referencia.precio1+"'>"+referencia.precio1+"</option><option value='"+referencia.precio2+"'>"+referencia.precio2+"</option><option value='"+referencia.precio3+"'>"+referencia.precio3+"</option></select>";
+            precios = "<select class='form-control' onchange='recorrerproductos(this)' name='valor_unidad'><option value='"+referencia.precio1+"'>"+new Intl.NumberFormat().format(referencia.precio1)+"</option><option value='"+referencia.precio2+"'>"+new Intl.NumberFormat().format(referencia.precio2)+"</option><option value='"+referencia.precio3+"'>"+new Intl.NumberFormat().format(referencia.precio3)+"</option></select>";
             lotes = "<select class='form-control' name='lote'>";
             for(i=0;i<lote.length;i++){ 
                 lotes += "<option value='"+lote[i].id+"'>"+lote[i].numero_lote+" - "+lote[i].fecha_vence_lote+" - "+lote[i].cantidad+"</option>";
@@ -554,6 +554,8 @@ function recorrerproductos(element){
 function recorrerTotal(){
     subtotales = document.getElementsByName("subtotal");
     subtot = 0;
+    descuento = parseFloat($('#descuento').val());
+    fletes = parseFloat($('#fletes').val());
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
         subtot += parseFloat(element.value);
@@ -565,9 +567,10 @@ function recorrerTotal(){
         iva = iva  + parseFloat(element.value);
     }
     $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
-    $('#total').val(parseFloat(subtot).toFixed(2));
     $('#iva').val(parseFloat(iva).toFixed(2));
-    $('#descuento').val(0);
+    cree = $('#otro_impuesto').val();
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree).toFixed(2) );
+
 }
 
 

@@ -360,6 +360,42 @@ function Config(){
 		$('#resultado').css("display","inline");
 	}
 
+	this.createToast = function(type, ToastText){
+		if(type == "success"){
+			toastada.success(ToastText, {
+				lifeSpan: 4000, // timeout
+				position: 'top-right',
+				animate: false, // enable animation
+				animateDuration: 0
+			});
+		}
+		if(type == "info"){
+			toastada.info(ToastText, {
+				lifeSpan: 4000, // timeout
+				position: 'top-right',
+				animate: false, // enable animation
+				animateDuration: 0
+			});
+		}
+		if(type == "warning"){
+			toastada.warning(ToastText, {
+				lifeSpan: 4000, // timeout
+				position: 'top-right',
+				animate: false, // enable animation
+				animateDuration: 0
+			});
+		}
+		if(type == "error"){
+			toastada.error(ToastText, {
+				lifeSpan: 4000, // timeout
+				position: 'top-right',
+				animate: false, // enable animation
+				animateDuration: 0
+			});
+		}
+		
+	}
+
 }
 
 

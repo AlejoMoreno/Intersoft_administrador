@@ -1,0 +1,23 @@
+{
+  "name": "toastada",
+  "version": "0.1.0",
+  "description": "Vanilla Javascript lightweight notifications.",
+  "main": "index.js",
+  "scripts": {
+    "demo": "browser-sync start -s demo -f demo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamkarb/Toastada.git"
+  },
+  "keywords": ["javascript", "notification", "toastr", "toast"],
+  "author": "Adam Karbiener",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/adamkarb/Toastada/issues"
+  },
+  "homepage": "https://github.com/adamkarb/Toastada#readme",
+  "devDependencies": {
+    "browser-sync": "2.18.8"
+  }
+}

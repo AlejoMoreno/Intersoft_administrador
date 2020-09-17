@@ -29,6 +29,7 @@
     <input type="hidden" id="signoDocumento" value="{{ $documento['signo'] }}">
 </div>
 
+
 <?php $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get(); ?>
 <?php if(isset($_GET['nit'])){ $nit = $_GET['nit']; }else{ $nit="";} ?>
 
@@ -39,6 +40,8 @@
             <h4 class="title col-md-12" style="color:black;">Datos Cliente<hr></h4>
             <div class="col-md-4">
                 <label>Nit:</label>
+                <input type="hidden" id="id_retefuente" placeholder="id_retefuente" class="form-control">
+                <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
                 <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value)">
                 <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
                 
@@ -178,23 +181,23 @@
                 </div>
                 <div class="col-sm-3">
                     <label>DESCUENTO</label>
-                    <input type="number" id="descuento" class="form-control">
+                    <input type="number" value="0" id="descuento" class="form-control" onkeyup="recorrerCree()">
                 </div>
                 <div class="col-sm-3">
                     <label>FLETES</label>
-                    <input type="number"  value="0" id="fletes" onkeyup="recorrerTotal();" class="form-control">
+                    <input type="number"  value="0" id="fletes" onkeyup="recorrerCree();" class="form-control">
                 </div>
                 <div class="col-sm-3">
                     <label>RETEFUENTE</label>
-                    <input type="number" value="0" id="retefuente" class="form-control" onkeyup="recorrerTotal();">
+                    <input type="number" value="0" id="retefuente" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>IMPOCONSUMO</label>
-                    <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerTotal();">
+                    <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
-                    <label>Otro Impuesto</label>
-                    <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerTotal();">
+                    <label>CREE</label>
+                    <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>TOTAL</label>
@@ -292,7 +295,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" onclick="saveCartera();" data-dismiss="modal">Guardar</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Guardar</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
@@ -337,7 +340,9 @@ function saveCartera(){
         url:   '/cartera/egresos/guardar',
         type:  'post',
         success:  function (response) {
+            config.createToast("success", "Tesoreria ha guardado este registro como comprobante de cancelado");
             console.log(response);
+            ///TENGO UN PROBLEMA ACA............................................
             setTimeout(function(){ 
                 var parametros1 = {
                     'id_cartera':response.body.id,
@@ -400,6 +405,7 @@ function saveContabilidad(){
         url:   '/contabilidad/generarfactura/'+$('#idFactura').val(),
         type:  'get',
         success:  function (response) {
+            config.createToast("success", "Contabilidad generada y guardada con exito");
             console.log(response);
         }
     });
@@ -475,6 +481,8 @@ $(document).on('click', 'button.deleteformapagobtn', function () {
     return false;
 });
 
+var cantidadxdias = 0;
+
 </script>
 
 
@@ -507,13 +515,14 @@ $(document).on('click', 'button.deletebtn', function () {
 });
 
 function save_documento(){
-    $('#cargando').show();
+    //$('#cargando').show();
     //validaciones
     if(documentos.verificar() == true){ //todo esta correcto
+        config.createToast("info", "Preparando documento");
+        $('#Guardar').hide();
         saveFactura();
-        //$('#Guardar').hide();
-        $('#imprimirPOST').show(100);
-        $('#imprimirDOC').show(100);
+        //$('#imprimirPOST').show(100);
+        //$('#imprimirDOC').show(100);
         $('#cargando').hide();
     }
     else{
@@ -540,6 +549,7 @@ function saveFactura(){
     //poner los datos de la tabla de productos en un json 
     var jsonArr = [];
     var tabla = document.getElementById("tabla_productos");
+    config.createToast("info", "Cargando Productos");
     for (var i=1;i < tabla.rows.length; i++){  
 
         var cantidad, descuento, valor, total;
@@ -606,6 +616,7 @@ function saveFactura(){
             $('#resultado').html('<center><div id="cargando" style="position: absolute;width: 100%;height: 100%;background: black;top: 0px;left: 0px;opacity: 0.8;z-index:100"><img src="http://pa1.narvii.com/6598/aa4c454ca15cbd104315d00a5590246f8b8dbbda_00.gif" style="margin-top: 20%;"></div></center>');
         },
         success:  function (response) {
+            config.createToast("info", "Encabezado Guardado exitosamente");
             console.log(response);
 
             factura = response.body;
@@ -626,6 +637,7 @@ function saveFactura(){
                 $('#resultado').hide();
                 console.log("Guardado exitoso");
                 $('#cargando').hide();
+                //$('#Guardar').show();
                 setTimeout(function(){ 
                     swal({
                     title: "Imprimir",
@@ -645,13 +657,16 @@ function saveFactura(){
                    
             }
             else{
-                console.log("Error interno fila ");
+                config.createToast("error", response.body);
+                $('#cargando').hide();
+                $('#resultado').hide();
                 swal({
                     title: "Algo anda mal",
                     text: response.body,
                     icon: "error",
                     button: "Aceptar",
                 });
+                
             }
         },
         error: function (request, status, error) {
@@ -663,6 +678,7 @@ function saveFactura(){
                 icon: "error",
                 button: "Aceptar",
             });
+            $('#cargando').hide();
         }
     });
 }
@@ -732,6 +748,7 @@ function getReferencia(id){
             $('#resultado').html('<p>Espere porfavor</p>');
         },
         success:  function (response) {
+            config.createToast("success", "Producto cargado de forma exitosa");
             console.log(response);
             referencia = response.body;
             lote = response.lote;
@@ -740,13 +757,13 @@ function getReferencia(id){
             var precioasignado = referencia.precioasignado.toString();
             precios = "<select class='form-control' onchange='recorrerproductos(this)' name='valor_unidad'>";
             if(precioasignado.includes("1")){  
-                precios += "<option value='"+referencia.precio1+"'>"+referencia.precio1+"</option>";
+                precios += "<option value='"+referencia.precio1+"'>"+new Intl.NumberFormat().format(referencia.precio1)+"</option>";
             }
             if(precioasignado.includes("2")){
-                precios += "<option value='"+referencia.precio2+"'>"+referencia.precio2+"</option>";
+                precios += "<option value='"+referencia.precio2+"'>"+new Intl.NumberFormat().format(referencia.precio2)+"</option>";
             }
             if(precioasignado.includes("3")){
-                precios += "<option value='"+referencia.precio3+"'>"+referencia.precio3+"</option>";
+                precios += "<option value='"+referencia.precio3+"'>"+new Intl.NumberFormat().format(referencia.precio3)+"</option>";
             }
             precios += "</select>";
             lotes = "<select class='form-control' name='lote'>";
@@ -771,7 +788,7 @@ function getReferencia(id){
             cell4.innerHTML = "<input type='number' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
             cell5.innerHTML = precios;
             cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
-            cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled>";
+            cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'>";
         },
         error: function(){
             swal({
@@ -786,6 +803,7 @@ function getReferencia(id){
 }
 
 function recorrerproductos(element){
+    config.createToast("info", "Intersoft esta calculando impuestos para el producto seleccionado");
     td = element.parentNode;
     tr = td.parentNode;
     
@@ -805,6 +823,7 @@ function recorrerproductos(element){
     
     inputs[5].value = parseFloat(cantidad) * parseFloat(valor_unidad); 
 
+    //IVA 
     if(iva == 0){
         inputs[4].value = 0;    
     }
@@ -812,13 +831,56 @@ function recorrerproductos(element){
         inputs[4].value = (parseFloat(cantidad) * parseFloat(valor_unidad)) - ((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)));//totaliva
     }
 
-    recorrerTotal();
+    //RETENCION
+    try{
+        retefuente = 0;
+        id_retefuente = JSON.parse($('#id_retefuente').val());
+        if(id_retefuente.nombre == "SOBRE TODO"){
+            retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+        }
+        else if(id_retefuente.nombre == "SOBRE LA BASE MENSUAL"){
+            retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+        }
+        else{
+            retefuente = 0;
+        }
+        inputs[6].value = retefuente;
+    }
+    catch(Exception){
+        retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+        inputs[6].value = retefuente;
+        console.log("No ha seleccionado al cliente");
+    }
+    
+    if($('#signoDocumento').val()=="-"){
+        recorrerTotal();
+    }    
+    else{
+        recorrerSinImpuestos();
+    }
+
+    
 }
 
+function recorrerCree(){
+    descuento = parseFloat($('#descuento').val());
+    fletes = parseFloat($('#fletes').val());
+    cree = $('#otro_impuesto').val();
+    retefuente = $('#retefuente').val();
+    impoconsumo = $('#impoconsumo').val();
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente).toFixed(2) );
+}
 
-function recorrerTotal(){
+function recorrerSinImpuestos(){
+    config.createToast("info", "Intersoft esta calculando el total del pedido");
     subtotales = document.getElementsByName("subtotal");
     subtot = 0;
+    descuento = parseFloat($('#descuento').val());
+    fletes = parseFloat($('#fletes').val());
+    cree = $('#otro_impuesto').val();
+    retefuente = $('#retefuente').val();
+    impoconsumo = $('#impoconsumo').val();
+
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
         subtot += parseFloat(element.value);
@@ -829,10 +891,73 @@ function recorrerTotal(){
         element = ivas[i];
         iva += parseFloat(element.value);
     }
+
     $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
-    $('#total').val(parseFloat(subtot).toFixed(2));
     $('#iva').val(parseFloat(iva).toFixed(2));
-    $('#descuento').val(0);
+    $('#retefuente').val(parseFloat(retefuente).toFixed(2));
+    directorio_tipo = $('#directorio_tipo').val();
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo).toFixed(2) );
+    
+
+    /** cartera verificar y recorrer **/
+    var table = document.getElementById("tabla_forma_pagos");
+    if(table.rows.length >= 1 ){
+        if(table.rows.length == 1){
+            addFormaPago();
+        }
+        elemento = document.getElementsByName("Carteravalor");
+        elemento[0].value = $('#total').val();
+        tomarDatosCartera();
+    }
+}
+
+function recorrerTotal(){
+    config.createToast("info", "Intersoft esta calculando el Total de la factura");
+    subtotales = document.getElementsByName("subtotal");
+    subtot = 0;
+    descuento = parseFloat($('#descuento').val());
+    fletes = parseFloat($('#fletes').val());
+    impoconsumo = $('#impoconsumo').val();
+
+    for(i=0;i<subtotales.length;i++){ 
+        element = subtotales[i];
+        subtot += parseFloat(element.value);
+    }
+    ivas = document.getElementsByName("totaliva");
+    iva = 0;
+    for(i=0;i<ivas.length;i++){ 
+        element = ivas[i];
+        iva += parseFloat(element.value);
+    }
+    //SABER SI LA RETENCION PASA LA BASE
+    id_retefuente = JSON.parse($('#id_retefuente').val());
+    if( (parseFloat(subtot) - parseFloat(iva)) >= id_retefuente.valor){
+        retefuentestotal = document.getElementsByName("totalretefuente");
+        retefuente = 0;
+        for(i=0;i<retefuentestotal.length;i++){ 
+            element = retefuentestotal[i];
+            retefuente += parseFloat(element.value);
+        }
+    }
+    else{
+        retefuente = 0;
+    }
+    
+
+    $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
+    $('#iva').val(parseFloat(iva).toFixed(2));
+    $('#retefuente').val(parseFloat(retefuente).toFixed(2));
+    directorio_tipo = $('#directorio_tipo').val();
+    //VERIFICAR TIPO DE TERCERO (CREE)
+    if(directorio_tipo == "JURIDICA"){
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.25).toFixed(2)); //CREE
+    }
+    else{
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.09).toFixed(2)); //CREE
+    }
+    cree = $('#otro_impuesto').val();
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo).toFixed(2) );
+    
 
     /** cartera verificar y recorrer **/
     var table = document.getElementById("tabla_forma_pagos");
@@ -883,12 +1008,13 @@ function guardarCliente(){
             },
             success:  function (response) {
                 console.log(response);
+                config.createToast("success", "El tercero se ha creado en la base de datos satisfactoriamente");
                 buscarcliente(response.body.nit);
             },
             error: function(){
                 swal({
                   title: "Algo anda mal",
-                  text: "Verifique conexión a internet y/o diligencie completamente los campos del encabezado",
+                  text: "Los datos para la creación del cliente no son soficientes. Verifique la información.",
                   icon: "error",
                   button: "Aceptar",
                 });
@@ -920,6 +1046,8 @@ function buscarcliente(texto){
                     $('#correo').val(cliente.correo); 
                     $('#id_ciudad').val(cliente.id_ciudad);
                     $('#zona').val(cliente.zona_venta);
+                    $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
+                    $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -927,6 +1055,7 @@ function buscarcliente(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').hide();   
+                    config.createToast("success", "Cliente existe");
                     $('#resCliente').text("Cliente existe");    
                     //cartera
                     $('#Carterasid_cliente').val(cliente.id);           
@@ -937,6 +1066,8 @@ function buscarcliente(texto){
                     $('#telefono').val("");
                     $('#correo').val("");
                     $('#zona').val("");
+                    $('#directorio_tipo').val("");
+                    $('#id_retefuente').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -944,6 +1075,7 @@ function buscarcliente(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').show();
+                    config.createToast("error", "Cliente no existe, si desea crearlo, diligencie los datos restantes");
                     $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
                 }              
             },
@@ -988,6 +1120,8 @@ function buscarcliente2(texto){
                     $('#correo').val(cliente.correo); 
                     $('#id_ciudad').val(cliente.id_ciudad);
                     $('#zona').val(cliente.zona_venta);
+                    $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
+                    $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -995,6 +1129,7 @@ function buscarcliente2(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').hide();   
+                    config.createToast("success", "Cliente existe");
                     $('#resCliente').text("Cliente existe");    
                     //cartera
                     $('#Carterasid_cliente').val(cliente.id);           
@@ -1007,6 +1142,8 @@ function buscarcliente2(texto){
                     $('#telefono').val("");
                     $('#correo').val("");
                     $('#zona').val("");
+                    $('#directorio_tipo').val("");
+                    $('#id_retefuente').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -1014,6 +1151,7 @@ function buscarcliente2(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').show();
+                    config.createToast("error", "Cliente no existe, si desea crearlo, diligencie los datos restantes");
                     $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
                 }              
             },

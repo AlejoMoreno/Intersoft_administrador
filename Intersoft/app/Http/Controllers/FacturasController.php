@@ -136,10 +136,18 @@ class FacturasController extends Controller
         }
 
 
-    	return view('documentos.impresionFactura', [
+        //$customPaper = array(0,0,595.28,420.94); //Carta
+        $customPaper = array(0,0,820/2,620); //media Carta
+        $pdf = PDF::loadView('documentos.impresionFactura', [
             'factura' => $factura,
             'kardex' => $kardex
-        ]);
+        ])->setPaper($customPaper, 'landscape');
+        return $pdf->download($factura->id_documento->nombre.'-'.$factura->prefijo.'-'.$factura->numero.'.pdf');
+
+    	/*return view('documentos.impresionFactura', [
+            'factura' => $factura,
+            'kardex' => $kardex
+        ]);*/
     }
 
     public function imprimirpost($id){

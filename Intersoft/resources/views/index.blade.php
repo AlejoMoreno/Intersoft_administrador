@@ -79,6 +79,7 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
                     <th>Cliente</th>
                     <th>Fecha</th>
                     <th>Vencimiento</th>
+                    <th>Total</th>
                     <th>Saldo</th>
                 </tr>
             </thead>
@@ -90,6 +91,7 @@ if(Session::get('cargo') == "Obrero" || Session::get('cargo') == "obrero" || Ses
                         <td>{{ $obj['nit'] }} {{ $obj['razon_social'] }} </td>
                         <td>{{ $obj['fecha'] }}</td>
                         <td>{{ $obj['fecha_vencimiento'] }}</td>
+                        <td>{{ $obj['total'] }}</td>
                         <td>{{ $obj['saldo'] }}</td>
                     </tr>
                     @endforeach

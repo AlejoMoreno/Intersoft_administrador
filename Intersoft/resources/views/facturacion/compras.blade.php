@@ -39,6 +39,7 @@
             <h4 class="title col-md-12" style="color:black;">Datos Proveedor<hr></h4>
             <div class="col-md-6">
                 <label>Nit:</label>
+                <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
                 <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarproveedor(this.value)">
                 <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el proveedor debe tener un minimo de 3 caracteres</p>
                 
@@ -146,23 +147,23 @@
                 </div>
                 <div class="col-sm-3">
                     <label>DESCUENTO</label>
-                    <input type="number" id="descuento" class="form-control">
+                    <input type="number" value="0" id="descuento" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>FLETES</label>
-                    <input type="number"  value="0" id="fletes" onkeyup="recorrerTotal();" class="form-control">
+                    <input type="number"  value="0" id="fletes" onkeyup="recorrerCree();" class="form-control">
                 </div>
                 <div class="col-sm-3">
                     <label>RETEFUENTE</label>
-                    <input type="number" value="0" id="retefuente" class="form-control" onkeyup="recorrerTotal();">
+                    <input type="number" value="0" id="retefuente" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>IMPOCONSUMO</label>
-                    <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerTotal();">
+                    <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
-                    <label>Otro Impuesto</label>
-                    <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerTotal();">
+                    <label>CREE</label>
+                    <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>TOTAL</label>
@@ -718,7 +719,7 @@ function getReferencia(id){
             cell4.innerHTML = "<input type='number' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
             cell5.innerHTML = precios;
             cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
-            cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled>";
+            cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'>";
         },
         error: function(){
             swal({
@@ -751,6 +752,7 @@ function recorrerproductos(element){
     
     inputs[7].value = parseFloat(cantidad) * parseFloat(valor_unidad);
 
+    //IVA
     if(iva == 0){
         inputs[6].value = 0;    
     }
@@ -758,13 +760,45 @@ function recorrerproductos(element){
         inputs[6].value = (parseFloat(cantidad) * parseFloat(valor_unidad)) - ((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)));//totaliva
     }
 
+    //RETENCION
+    try{
+        retefuente = 0;
+        id_retefuente = JSON.parse($('#id_retefuente').val());
+        if(id_retefuente.nombre == "SOBRE TODO"){
+            retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+        }
+        else if(id_retefuente.nombre == "SOBRE LA BASE MENSUAL"){
+            retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+        }
+        else{
+            retefuente = 0;
+        }
+        inputs[8].value = retefuente;
+    }
+    catch(Exception){
+        retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+        inputs[8].value = retefuente;
+        console.log("No ha seleccionado al cliente");
+    }
+
     recorrerTotal();
 }
 
+function recorrerCree(){
+    descuento = parseFloat($('#descuento').val());
+    fletes = parseFloat($('#fletes').val());
+    cree = $('#otro_impuesto').val();
+    retefuente = $('#retefuente').val();
+    impoconsumo = $('#impoconsumo').val();
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente).toFixed(2) );
+}
 
 function recorrerTotal(){
     subtotales = document.getElementsByName("subtotal");
     subtot = 0;
+    descuento = parseFloat($('#descuento').val());
+    fletes = parseFloat($('#fletes').val());
+    impoconsumo = $('#impoconsumo').val();
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
         subtot += parseFloat(element.value);
@@ -775,10 +809,33 @@ function recorrerTotal(){
         element = ivas[i];
         iva += parseFloat(element.value);
     }
+    //SABER SI LA RETENCION PASA LA BASE
+    id_retefuente = JSON.parse($('#id_retefuente').val());
+    if( (parseFloat(subtot) - parseFloat(iva)) >= id_retefuente.valor){
+        retefuentestotal = document.getElementsByName("totalretefuente");
+        retefuente = 0;
+        for(i=0;i<retefuentestotal.length;i++){ 
+            element = retefuentestotal[i];
+            retefuente += parseFloat(element.value);
+        }
+    }
+    else{
+        retefuente = 0;
+    }
+
     $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
-    $('#total').val(parseFloat(subtot).toFixed(2));
     $('#iva').val(parseFloat(iva).toFixed(2));
-    $('#descuento').val(0);
+    $('#retefuente').val(parseFloat(retefuente).toFixed(2));
+    directorio_tipo = $('#directorio_tipo').val();
+    //VERIFICAR TIPO DE TERCERO PARA (CREE)
+    if(directorio_tipo == "JURIDICA"){
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.25).toFixed(2)); //CREE
+    }
+    else{
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.09).toFixed(2)); //CREE
+    }
+    cree = $('#otro_impuesto').val();
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo).toFixed(2) );
 
     /** cartera verificar y recorrer **/
     var table = document.getElementById("tabla_forma_pagos");
@@ -866,6 +923,7 @@ function buscarproveedor(texto){
                     $('#correo').val(cliente.correo); 
                     $('#id_ciudad').val(cliente.id_ciudad);
                     $('#zona').val(cliente.zona_venta);
+                    $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -883,6 +941,7 @@ function buscarproveedor(texto){
                     $('#telefono').val("");
                     $('#correo').val("");
                     $('#zona').val("");
+                    $('#directorio_tipo').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -934,6 +993,7 @@ function buscarproveedor2(texto){
                     $('#correo').val(cliente.correo); 
                     $('#id_ciudad').val(cliente.id_ciudad);
                     $('#zona').val(cliente.zona_venta);
+                    $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -953,6 +1013,7 @@ function buscarproveedor2(texto){
                     $('#telefono').val("");
                     $('#correo').val("");
                     $('#zona').val("");
+                    $('#directorio_tipo').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  

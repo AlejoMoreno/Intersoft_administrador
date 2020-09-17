@@ -74,6 +74,9 @@
     <link rel="stylesheet" href="/assets/leafletjs/leaflet-routing-machine.css">
     <script src="/assets/leafletjs/leaflet-routing-machine.js"></script>
 
+    <link rel="stylesheet" href="/js/Toastada-master/demo/index.css" media="screen">
+    
+
 
     <style>
         i{
@@ -718,6 +721,8 @@
 }
 </style>
 
+<script src="/js/Toastada-master/demo/index.js"></script>
+<script src="/js/Toastada-master/demo/script.js"></script>
 
 <script src="/assets/js/sweetalert.min.js"></script>
 
