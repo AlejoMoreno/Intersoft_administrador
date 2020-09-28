@@ -48,7 +48,7 @@
             </div>
             <div class="col-md-4">
                 <label>Razón Social:</label>
-                <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control"  >
+                <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" onchange="buscarcliente(this.value)" >
                 <datalist id="listaclientes"></datalist>
             </div>
             <div class="col-md-4">
@@ -169,7 +169,7 @@
                 <div class="col-sm-9">
                     <p style="font-size:10px;color:black;">De ser necesario agrega diferentes tipos de pago, puesto que por defecto el sistema registra pago en efectivo, sin embargo puede ser con baucher, cheques o transacciones.</p>
                     <button type="button" class="btn form-control" id="btnSiCaja"  data-toggle="modal" onclick="tomarDatosCartera()" data-target="#myModal">Abrir Pago personalizado</button>
-                    <button type="button" class="btn form-control" id="btnNoCaja" style="color: red;">Pago en credito (No se reciben abonos en este tipo de pago)</button>
+                    <button type="button" class="btn form-control" id="btnNoCaja" style="color: red;">Pago en credito </button>
                 </div>
                 <div class="col-sm-3">
                     <label>SUB.TOTAL</label>
@@ -648,7 +648,8 @@ function saveFactura(){
                     })
                     .then((willDelete) => {
                     if (willDelete) {
-                        window.location.replace("/documentos/imprimir/"+factura.id);
+                        window.open("/documentos/imprimir/"+factura.id);
+                        location.reload();
                     } else {
                         swal("Guardado exitoso. En otra ocación podrás imprmir.");
                     }
@@ -1048,9 +1049,16 @@ function buscarcliente(texto){
     console.log(texto);
     if(texto.length > 3){
         var urls = "/administrador/diretorios/search/search";
-        parametros = {
-            "nit" : texto.trim()
-        };
+        if($('#nombre').val()==""){
+            parametros = {
+                "nit" : texto.trim()
+            };
+        }
+        else{
+            parametros = {
+                "razon_social" : $('#nombre').val()
+            };
+        }
         $.ajax({
             data:  parametros,
             url:   urls,
@@ -1062,6 +1070,7 @@ function buscarcliente(texto){
                 console.log(response);
                 if(response.body.length != 0){ // existe
                     cliente = response.body[0];
+                    $('#cedula_tercero').val(cliente.nit);
                     $('#nombre').val(cliente.razon_social);
                     $('#direccion').val(cliente.direccion);
                     $('#telefono').val(cliente.telefono);
@@ -1083,6 +1092,7 @@ function buscarcliente(texto){
                     $('#Carterasid_cliente').val(cliente.id);           
                 }  
                 else{
+                    $('#cedula_tercero').val("");
                     $('#nombre').val("");
                     $('#direccion').val("");
                     $('#telefono').val("");
