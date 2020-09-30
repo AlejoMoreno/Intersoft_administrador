@@ -960,8 +960,8 @@ class FacturasController extends Controller
             $obj->id_cliente 		= $tercero->id;
             $obj->id_tercero 		= $request->nit_tercero;
             $obj->id_vendedor 		= $vendedor->id;
-            $obj->fecha 			= $request->fecha;
-            $obj->fecha_vencimiento = $request->fecha_vencimiento;
+            $obj->fecha 			= substr($request->fecha,0,4).'-'.substr($request->fecha,4,2).'-'.substr($request->fecha,6,2);
+            $obj->fecha_vencimiento = substr($request->fecha,0,4).'-'.substr($request->fecha,4,2).'-'.substr($request->fecha,6,2);
             $obj->id_documento 		= $documento->id;
             $obj->signo 			= $documento->signo;
             $obj->subtotal 			= $request->subtotal;
@@ -974,7 +974,7 @@ class FacturasController extends Controller
             $obj->retefuente 		= $request->retefuente;
             $obj->total 			= ($request->subtotal + $request->iva - $request->impoconsumo - $request->otro_impuesto - $request->otro_impuesto1 - $request->descuento - $request->fletes - $request->retefuente);
             $obj->id_modificado 	= Session::get('user_id');
-            $obj->observaciones 	= "ANTERIOR";
+            $obj->observaciones 	= "INTERCON";
             $obj->estado 			= $request->estado;
             $obj->saldo             = ($obj->total - $request->saldo);
             $obj->id_empresa	 	= Session::get('id_empresa');

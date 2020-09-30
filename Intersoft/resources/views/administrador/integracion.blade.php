@@ -40,6 +40,133 @@
 
 <div class="row top-11-w" style="padding:2%;">
 
+
+    <div class="panel panel-default col-md-12" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Integración de Vendedores</h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">Debe subir el archivo plano VENDEDOR.LIS generado por el software INTERCON. 
+            </p>
+        </div>
+        <div class="row" style="padding: 2%;">
+            <div class="col-md-10 col-md-offset-1">
+                <form method="POST" action="/administrador/integracion/vendedor" accept-charset="UTF-8" enctype="multipart/form-data">
+                                          
+                    <div class="form-group" >
+                      <label class="col-md-4 control-label">Archivo .LIS Intercon</label>
+                      <div class="col-md-4">
+                        <input type="file" class="form-control" name="file" >
+                      </div>
+                      <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Validar</button>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="btn btn-primary" id="recorrerVendedor">Recorrer</div>
+                      </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-md-12" style="overflow-x: scroll">
+                
+                @if(isset($vendedores))
+                <table class="table" id="vendedor">
+                    @foreach ($vendedores as $linea)
+                    <tbody>
+                        <tr>
+                            <td>{{ $linea[0] }}</td>
+                            <td>{{ $linea[1] }}</td>
+                            <td>{{ $linea[2] }}</td>
+                            <td>{{ $linea[3] }}</td>
+                            <td>{{ $linea[4] }}</td>
+                            <td>Resultado</td>
+                        </tr>
+                    </tbody>
+                    @endforeach
+                </table>
+                @endif
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel panel-default col-md-12" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Integración de Tercero/proveedor/cliente</h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">Debe subir el archivo plano CLIENTE.LIS generado por el software INTERCON, Sin carcareres especiales hay que revisar Ñ ñ y demás caracteres que puedan generar un error. 
+                <br>TIPO;IDENTIFICACION;D;NOMBRE O RAZON SOCIAL;DIRECCION;CORREO ELECTRONICO;CIUDAD;NOM CIUDAD;TELEFONO;CELULAR;FINGRESO;F.ULTIMO;RTFTE;REGIM;NIVEL;COD VENDEDOR;NOMBRE VENDEDOR;IND;%;RTIVA;EST;TIPIFICA;CALI;ZONA;CUPO ENDE
+            </p>
+        </div>
+        <div class="row" style="padding: 2%;">
+            <div class="col-md-10 col-md-offset-1">
+                <form method="POST" action="/administrador/integracion/terceros" accept-charset="UTF-8" enctype="multipart/form-data">
+                                          
+                    <div class="form-group" >
+                      <label class="col-md-4 control-label">Archivo .LIS Intercon</label>
+                      <div class="col-md-4">
+                        <input type="file" class="form-control" name="file" >
+                      </div>
+                      <div class="col-md-4">
+                        <select name="id_directorio_tipo_tercero" class="form-control"   id="id_directorio_tipo_tercero">
+                            <option value="PROVEEDOR">PROVEEDOR</option>
+                            <option value="CLIENTE">CLIENTE</option>
+                            <option value="TERCERO">TERCERO</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Validar</button>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="btn btn-primary" id="recorrerTercero">Recorrer</div>
+                      </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-md-12" style="overflow-x: scroll">
+                
+                @if(isset($terceros))
+                <table class="table" id="terceros">
+                    @foreach ($terceros as $linea)
+                    <tbody>
+                        <tr>
+                            <td>{{ $linea[0] }}</td>
+                            <td>{{ str_replace('.','',$linea[1]) }}</td>
+                            <td>{{ $linea[2] }}</td>
+                            <td>{{ $linea[3] }}</td>
+                            <td>{{ $linea[4] }}</td>
+                            <td>{{ $linea[5] }}</td>
+                            <td>{{ $linea[6] }}</td>
+                            <td>{{ $linea[7] }}</td>
+                            <td>{{ $linea[8] }}</td>
+                            <td>{{ $linea[9] }}</td>
+                            <td>{{ $linea[10] }}</td>
+                            <td>{{ $linea[11] }}</td>
+                            <td>{{ $linea[12] }}</td>
+                            <td>{{ $linea[13] }}</td>
+                            <td>{{ $linea[14] }}</td>
+                            <td>{{ $linea[15] }}</td>
+                            <td>{{ $linea[16] }}</td>
+                            <td>{{ $linea[17] }}</td>
+                            <td>{{ $linea[18] }}</td>
+                            <td>{{ $linea[19] }}</td>
+                            <td>{{ $linea[20] }}</td>
+                            <td>{{ $linea[21] }}</td>
+                            <td>{{ $linea[22] }}</td>
+                            <td>{{ $linea[23] }}</td>
+                            <td>{{ $linea[24] }}</td>
+                            <td>Resultado</td>
+                        </tr>
+                    </tbody>
+                    @endforeach
+                </table>
+                @endif
+            </div>
+        </div>
+
+    </div>
+
     <div class="panel panel-default col-md-12" >
         <!-- Default panel contents -->
         <div class="panel-heading row"><h5>Integración de Facturas</h5></div>
@@ -103,108 +230,6 @@
         </div>
     </div>
 
-    <div class="panel panel-default col-md-12" >
-        <!-- Default panel contents -->
-        <div class="panel-heading row"><h5>Integración de Vendedores</h5></div>
-        <div class="panel-body" >
-            <p style="font-size: 10pt;">Debe subir el archivo plano VENDEDOR.LIS generado por el software INTERCON. 
-            </p>
-        </div>
-        <div class="row" style="padding: 2%;">
-            <div class="col-md-10 col-md-offset-1">
-                <form method="POST" action="/administrador/integracion/vendedor" accept-charset="UTF-8" enctype="multipart/form-data">
-                                          
-                    <div class="form-group" >
-                      <label class="col-md-4 control-label">Archivo .LIS Intercon</label>
-                      <div class="col-md-4">
-                        <input type="file" class="form-control" name="file" >
-                      </div>
-                      <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Validar</button>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="btn btn-primary" id="recorrerVendedor">Recorrer</div>
-                      </div>
-                    </div>
-
-                </form>
-            </div>
-            <div class="col-md-12" style="overflow-x: scroll">
-                
-                @if(isset($vendedores))
-                <table class="table" id="vendedor">
-                    @foreach ($vendedores as $linea)
-                    <tbody>
-                        <tr>
-                            <td>{{ $linea[0] }}</td>
-                            <td>{{ $linea[1] }}</td>
-                            <td>{{ $linea[2] }}</td>
-                            <td>{{ $linea[3] }}</td>
-                            <td>{{ $linea[4] }}</td>
-                            <td>Resultado</td>
-                        </tr>
-                    </tbody>
-                    @endforeach
-                </table>
-                @endif
-            </div>
-        </div>
-
-    </div>
-
-    <div class="panel panel-default col-md-12" >
-        <!-- Default panel contents -->
-        <div class="panel-heading row"><h5>Integración de Tercero/proveedor/cliente</h5></div>
-        <div class="panel-body" >
-            <p style="font-size: 10pt;">Debe subir el archivo plano CLIENTE.LIS generado por el software INTERCON. 
-            </p>
-        </div>
-        <div class="row" style="padding: 2%;">
-            <div class="col-md-10 col-md-offset-1">
-                <form method="POST" action="/administrador/integracion/terceros" accept-charset="UTF-8" enctype="multipart/form-data">
-                                          
-                    <div class="form-group" >
-                      <label class="col-md-4 control-label">Archivo .LIS Intercon</label>
-                      <div class="col-md-4">
-                        <input type="file" class="form-control" name="file" >
-                      </div>
-                      <div class="col-md-4">
-                        <select name="id_directorio_tipo_tercero" class="form-control"   id="id_directorio_tipo_tercero">
-                            <option value="PROVEEDOR">PROVEEDOR</option>
-                            <option value="CIENTE">CLIENTE</option>
-                            <option value="TERCERO">TERCERO</option>
-                        </select>
-                      </div>
-                      <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary">Validar</button>
-                      </div>
-                      <div class="col-md-2">
-                        <div class="btn btn-primary" id="recorrerTercero">Recorrer</div>
-                      </div>
-                    </div>
-
-                </form>
-            </div>
-            <div class="col-md-12" style="overflow-x: scroll">
-                
-                @if(isset($terceros))
-                <table class="table" id="terceros">
-                    @foreach ($terceros as $linea)
-                    <tbody>
-                        <tr>
-                            <td><?php print_r(sizeof($linea)); ?></td>
-                            
-                            <td>Resultado</td>
-                        </tr>
-                    </tbody>
-                    @endforeach
-                </table>
-                @endif
-            </div>
-        </div>
-
-    </div>
-
     <script>
         $('#recorrerFacturas').click(function (){
             var table = document.getElementById("mytab1"); 
@@ -252,22 +277,22 @@
                         row.classList.remove("esperando");
                         if(response.result == "Correcto"){
                             row.classList.add("correcto");
-                            row.cells[20].innerHTML = "CARGO";
+                            row.cells[20].innerHTML = response.body;
                         }
                         else if(response.result == "Existe"){
                             row.classList.add("correcto");
-                            row.cells[20].innerHTML = "Ya existe";
+                            row.cells[20].innerHTML = response.body;
                         }
                         else{
                             row.classList.add("incorrecto");
-                            row.cells[20].innerHTML = "FALLO";
+                            row.cells[20].innerHTML = response.body;
                         }
                         console.log("respuesta index: "+index, response);
                         recursivoTablaFactura( document.getElementById("mytab1"), index );
                     },
                     error: function (error) {
                         row.classList.add("incorrecto");
-                        row.cells[20].innerHTML = "FALLO";
+                        row.cells[20].innerHTML = response.body;
                         recursivoTablaFactura( document.getElementById("mytab1"), index );
                     }
                 });
@@ -321,22 +346,22 @@
                         row.classList.remove("esperando");
                         if(response.result == "Correcto"){
                             row.classList.add("correcto");
-                            row.cells[5].innerHTML = "CARGO";
+                            row.cells[5].innerHTML = response.body;
                         }
                         else if(response.result == "Existe"){
                             row.classList.add("correcto");
-                            row.cells[5].innerHTML = "Ya existe";
+                            row.cells[5].innerHTML = response.body;
                         }
                         else{
                             row.classList.add("incorrecto");
-                            row.cells[5].innerHTML = "FALLO";
+                            row.cells[5].innerHTML = response.body;
                         }
                         console.log("respuesta index: "+index, response);
                         recursivoTablaVendedor( document.getElementById("vendedor"), index );
                     },
                     error: function (error) {
                         row.classList.add("incorrecto");
-                        row.cells[5].innerHTML = "FALLO";
+                        row.cells[5].innerHTML = response.body;
                         recursivoTablaVendedor( document.getElementById("vendedor"), index );
                     }
                 });
@@ -346,59 +371,83 @@
         
     </script>
 
-<script>
-    $('#recorrerTercero').click(function (){
-        var table = document.getElementById("tercero"); 
-        recursivoTablaTercero( table, 0 );
-    });
+    <script>
+        $('#recorrerTercero').click(function (){
+            var table = document.getElementById("terceros"); 
+            recursivoTablaTercero( table, 1 );
+        });
 
-    function recursivoTablaTercero( table, index){
-        var row = table.rows[index];
-        console.log(index);
-        index = index + 1;
-        if(index >= table.rows.length + 1){
-        return true; 
-        }
-        else{
-            parametros = {
-                'ncedula': row.cells[0].innerHTML,
-                'id_directorio_tipo_tercero': $('#id_directorio_tipo_tercero').val()
+        function recursivoTablaTercero( table, index){
+            //console.log(table);
+            var row = table.rows[index];
+            console.log(index);
+            index = index + 1;
+            if(index >= table.rows.length + 1){
+            return true; 
             }
-            $.ajax({
-                data:  parametros,
-                url:   '/administrador/saveTercero',
-                type:  'post',
-                beforeSend: function () {
-                    row.classList.add("esperando");
-                },
-                success:  function (response) {
-                    row.classList.remove("esperando");
-                    if(response.result == "Correcto"){
-                        row.classList.add("correcto");
-                        row.cells[5].innerHTML = "CARGO";
-                    }
-                    else if(response.result == "Existe"){
-                        row.classList.add("correcto");
-                        row.cells[5].innerHTML = "Ya existe";
-                    }
-                    else{
-                        row.classList.add("incorrecto");
-                        row.cells[5].innerHTML = "FALLO";
-                    }
-                    console.log("respuesta index: "+index, response);
-                    recursivoTablaTercero( document.getElementById("tercero"), index );
-                },
-                error: function (error) {
-                    row.classList.add("incorrecto");
-                    row.cells[5].innerHTML = "FALLO";
-                    recursivoTablaTercero( document.getElementById("tercero"), index );
+            else{
+                parametros = {
+                    'nit': row.cells[1].innerHTML,
+                    'digito': row.cells[2].innerHTML,
+                    'razon_social': row.cells[3].innerHTML,
+                    'direccion': row.cells[4].innerHTML,
+                    'correo': row.cells[5].innerHTML,
+                    'telefono': row.cells[8].innerHTML,
+                    'telefono1': row.cells[9].innerHTML,
+                    'telefono2': row.cells[8].innerHTML,
+                    'financiacion': 0,
+                    'descuento': 0,
+                    'cupo_financiero': row.cells[24].innerHTML,
+                    'rete_ica': row.cells[18].innerHTML,
+                    'porcentaje_rete_iva': 0,
+                    'actividad_economica': 0000,
+                    'nivel': row.cells[14].innerHTML,
+                    'zona_venta': row.cells[23].innerHTML,
+                    'estado': row.cells[20].innerHTML,
+                    'id_retefuente': row.cells[12].innerHTML,
+                    'id_ciudad': row.cells[6].innerHTML,
+                    'id_regimen': row.cells[13].innerHTML,
+                    'id_usuario': row.cells[15].innerHTML,
+                    'id_directorio_tipo_tercero': $('#id_directorio_tipo_tercero').val(),
+                    'calificacion': 2,
+                    'transporte': "NO",
+                    'id_directorio_clase': row.cells[0].innerHTML
                 }
-            });
+                $.ajax({
+                    data:  parametros,
+                    url:   '/administrador/saveTercero',
+                    type:  'post',
+                    beforeSend: function () {
+                        row.classList.add("esperando");
+                    },
+                    success:  function (response) {
+                        row.classList.remove("esperando");
+                        if(response.result == "Correcto"){
+                            row.classList.add("correcto");
+                            row.cells[25].innerHTML = response.body;
+                        }
+                        else if(response.result == "Existe"){
+                            row.classList.add("correcto");
+                            row.cells[25].innerHTML = response.body;
+                        }
+                        else{
+                            row.classList.add("incorrecto");
+                            row.cells[25].innerHTML = response.body;
+                        }
+                        console.log("respuesta index: "+index, response);
+                        recursivoTablaTercero( document.getElementById("terceros"), index );
+                    },
+                    error: function (error) {
+                        row.classList.add("incorrecto");
+                        row.cells[25].innerHTML = response.body;
+                        recursivoTablaTercero( document.getElementById("terceros"), index );
+                    }
+                });
+            }
         }
-    }
 
-    
-</script>
+        
+    </script>
 
 
     

@@ -13,6 +13,7 @@ use App\Usuarios;
 use App\Directorio_tipos;
 use App\Directorio_clases;
 use App\Directorio_tipo_terceros;
+use App\Clasificaciones;
 
 use DB;
 use Excel;
@@ -416,9 +417,7 @@ class DirectoriosController extends Controller
             $archivo = fopen($url,'r');
             //recorrer cada linea
             while ($linea = fgets($archivo)) {
-                if($numlinea!=0){
-                    $lineas[] = str_replace("  ","",explode(';',$linea)); 
-                }
+                $lineas[] = str_replace("  ","",explode(';',$linea)); 
                 $numlinea++;
             }
             fclose($archivo);
@@ -435,15 +434,15 @@ class DirectoriosController extends Controller
 
         try{
 
-            /*$usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))
-                ->where('ncedula','=',$request->ncedula)
+            $tercero = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                ->where('nit','=',$request->nit)
                 ->get();
-            if(sizeof($usuarios)>0){
+            if(sizeof($tercero)>0){
                 return array(
                     "result" => "Existe",
                     "body" => "El Tercero ya existe en la base de datos"
                 );
-            }*/
+            }
 
             $directorios = new Directorios();
             $directorios->nit       = (string)$request->nit;
@@ -460,20 +459,78 @@ class DirectoriosController extends Controller
             $directorios->rete_ica  = (double)$request->rete_ica;
             $directorios->porcentaje_rete_iva= (double)$request->porcentaje_rete_iva;
             $directorios->actividad_economica= $request->actividad_economica;
-            $directorios->calificacion= $request->calificacion;
-            $directorios->nivel     = (string)$request->nivel;
             $directorios->zona_venta= (string)$request->zona_venta;
-            $directorios->transporte= (string)$request->transporte;
-            $directorios->estado    = (string)$request->estado;
-            $directorios->id_retefuente= $request->id_retefuente;
-            $directorios->id_ciudad = $request->id_ciudad;
-            $directorios->id_regimen= $request->id_regimen;
-            $directorios->id_usuario= $request->id_usuario;
-            $directorios->id_directorio_tipo= $request->id_directorio_tipo;
-            $directorios->id_directorio_clase= $request->id_directorio_clase;
-            $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
             $directorios->id_empresa	 	= Session::get('id_empresa');
-            //$directorios->save();
+            $directorios->calificacion= $request->calificacion;
+            $directorios->transporte= (string)$request->transporte;
+            $directorios->id_directorio_clase= $request->id_directorio_clase;
+
+            if($request->id_directorio_tipo_tercero == "CLIENTE"){
+                $directorios->id_directorio_tipo_tercero= 2;
+            }
+            else if($request->id_directorio_tipo_tercero == "PROVEEDOR"){
+                $directorios->id_directorio_tipo_tercero= 1;
+            }
+            else{
+                $directorios->id_directorio_tipo_tercero= 3;
+            }
+
+            if($request->digito!="" || $request->digito != " "){
+                $directorios->id_directorio_tipo= 2; //JURIDICA
+            }
+            else{
+                $directorios->id_directorio_tipo= 1;//NATURAL
+            }
+            $vendedor = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->where('ncedula','=',$request->id_usuario)->get();
+            if(sizeof($vendedor)==0){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "El Vendedor no existe "
+                );
+            }
+            $directorios->id_usuario= $vendedor[0]->id;
+
+            if($request->estado == "I"){
+                $directorios->estado    = "INACTIVO";
+            }
+            else{
+                $directorios->estado    = "ACTIVO";
+            }
+
+            if($request->nivel == "NACIO"){
+                $directorios->nivel     = "NACIONAL";
+            }
+            else{
+                $directorios->nivel     = "INTERNACIONAL";
+            }
+            
+            if($request->id_regimen == "SIMPL"){
+                $directorios->id_regimen= 1; //Régimen Único Simplificado
+            }
+            else{
+                $directorios->id_regimen= 2; //Régimen Común
+            }
+            
+            if($request->id_retefuente == "T"){
+                $directorios->id_retefuente= 1; //SOBRE TODO
+            }
+            else if($request->id_retefuente == "B"){
+                $directorios->id_retefuente= 2; //SOBRE LA BASE MENSUAL
+            }
+            else{
+                $directorios->id_retefuente= 3; //NO PRESENTA
+            }
+            
+            $ciudades = Ciudades::where('codigo','=',$request->id_ciudad)->get();
+            if(sizeof($ciudades)==0){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "La ciudades no existe "
+                );
+            }
+            $directorios->id_ciudad = $ciudades[0]->id;
+
+            $directorios->save();
             
             return array(
                 "result" => "Correcto",
