@@ -436,4 +436,95 @@ class UsuariosController extends Controller
             "lineas"=>$lineas
         ));
     }
+
+
+    //INTERGRACION INTERCON
+    public function subirVendedor(Request $request){
+        //GUARDAR ARCHIVO EN EL STORAGE
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('file');
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('local')->put($nombre,  \File::get($file));
+
+        //RECORRER EL ARCHIVO EN EL STORAGE
+        $public_path = public_path();
+        $url = $public_path.'/storage/'.$nombre;
+        //verificamos si el archivo existe y lo retornamos
+        if (\Storage::exists($nombre))
+        {
+            $numlinea = 0;
+            $archivo = fopen($url,'r');
+            //recorrer cada linea
+            while ($linea = fgets($archivo)) {
+                if($numlinea>8){
+                    $lineas[] = [
+                        explode('-',str_replace('.','',substr($linea, 0, 18)))[0],
+                        substr($linea, 18, 40),
+                        substr($linea, 59, 27),
+                        substr($linea, 86, 11),
+                        substr($linea, 97, 10)
+                    ];
+                }
+                $numlinea++;
+            }
+            fclose($archivo);
+        }
+
+ 
+        return view('administrador.integracion',[
+            "vendedores"=>$lineas
+        ]);
+    }
+
+    public function saveVendedor(Request $request){
+
+        try{
+
+            $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))
+                ->where('ncedula','=',$request->ncedula)
+                ->get();
+            if(sizeof($usuarios)>0){
+                return array(
+                    "result" => "Existe",
+                    "body" => "El usuario ya existe en la base de datos"
+                );
+            }
+
+            $contratos = Contrato_laborals::where('id_empresa','=',Session::get('id_empresa'))->first();
+            
+            $usuario = new Usuarios();
+            $usuario->ncedula             = $request->ncedula;
+            $usuario->nombre              = $request->nombre;
+            $usuario->apellido            = $request->apellido;
+            $usuario->cargo               = $request->cargo;
+            $usuario->telefono            = ($request->telefono=="")?"0":$request->telefono;
+            $usuario->password            = $request->password;
+            $usuario->correo              = $request->correo;
+            $usuario->estado              = $request->estado;
+            $usuario->token               = $request->token;
+            $usuario->arl                 = $request->arl;
+            $usuario->eps                 = $request->eps;
+            $usuario->cesantias           = $request->cesantias;
+            $usuario->pension             = $request->pension;
+            $usuario->caja_compensacion   = $request->caja_compensacion;
+            $usuario->id_contrato         = $contratos->id;
+            $usuario->referencia_personal = $request->referencia_personal;
+            $usuario->telefono_referencia = ($request->telefono=="")?"0":$request->telefono;
+            $usuario->id_empresa  = Session::get('id_empresa');
+            $usuario->save();
+            
+            return array(
+                "result" => "Correcto",
+                "body" => "El usuario fue registrado"
+            );
+        }
+        catch(Exception $exce){
+            return array(
+                "result" => "Incorrecto",
+                "body" => $exce
+            );
+        }
+    }
 }

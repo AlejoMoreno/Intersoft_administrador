@@ -394,4 +394,97 @@ class DirectoriosController extends Controller
         $pdf = PDF::loadView('pdfs.pdfDirectorio', compact('data'));
         return $pdf->download('Directorio.pdf');
     }
+
+
+    //INTERGRACION INTERCON
+    public function subirTercero(Request $request){
+        //GUARDAR ARCHIVO EN EL STORAGE
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('file');
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('local')->put($nombre,  \File::get($file));
+
+        //RECORRER EL ARCHIVO EN EL STORAGE
+        $public_path = public_path();
+        $url = $public_path.'/storage/'.$nombre;
+        //verificamos si el archivo existe y lo retornamos
+        if (\Storage::exists($nombre))
+        {
+            $numlinea = 0;
+            $archivo = fopen($url,'r');
+            //recorrer cada linea
+            while ($linea = fgets($archivo)) {
+                if($numlinea!=0){
+                    $lineas[] = str_replace("  ","",explode(';',$linea)); 
+                }
+                $numlinea++;
+            }
+            fclose($archivo);
+        }
+
+        //dd($lineas);
+ 
+        return view('administrador.integracion',[
+            "terceros"=>$lineas
+        ]);
+    }
+
+    public function saveTercero(Request $request){
+
+        try{
+
+            /*$usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))
+                ->where('ncedula','=',$request->ncedula)
+                ->get();
+            if(sizeof($usuarios)>0){
+                return array(
+                    "result" => "Existe",
+                    "body" => "El Tercero ya existe en la base de datos"
+                );
+            }*/
+
+            $directorios = new Directorios();
+            $directorios->nit       = (string)$request->nit;
+            $directorios->digito    = (string)$request->digito;
+            $directorios->razon_social= (string)$request->razon_social;
+            $directorios->direccion = (string)$request->direccion;
+            $directorios->correo    = (string)$request->correo;
+            $directorios->telefono  = (string)$request->telefono;
+            $directorios->telefono1 = (string)$request->telefono1;
+            $directorios->telefono2 = (string)$request->telefono2;
+            $directorios->financiacion= (double)$request->financiacion;
+            $directorios->descuento = (double)$request->descuento;
+            $directorios->cupo_financiero= (double)$request->cupo_financiero;
+            $directorios->rete_ica  = (double)$request->rete_ica;
+            $directorios->porcentaje_rete_iva= (double)$request->porcentaje_rete_iva;
+            $directorios->actividad_economica= $request->actividad_economica;
+            $directorios->calificacion= $request->calificacion;
+            $directorios->nivel     = (string)$request->nivel;
+            $directorios->zona_venta= (string)$request->zona_venta;
+            $directorios->transporte= (string)$request->transporte;
+            $directorios->estado    = (string)$request->estado;
+            $directorios->id_retefuente= $request->id_retefuente;
+            $directorios->id_ciudad = $request->id_ciudad;
+            $directorios->id_regimen= $request->id_regimen;
+            $directorios->id_usuario= $request->id_usuario;
+            $directorios->id_directorio_tipo= $request->id_directorio_tipo;
+            $directorios->id_directorio_clase= $request->id_directorio_clase;
+            $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
+            $directorios->id_empresa	 	= Session::get('id_empresa');
+            //$directorios->save();
+            
+            return array(
+                "result" => "Correcto",
+                "body" => "El Tercero fue registrado"
+            );
+        }
+        catch(Exception $exce){
+            return array(
+                "result" => "Incorrecto",
+                "body" => $exce
+            );
+        }
+    }
 }

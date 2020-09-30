@@ -351,6 +351,15 @@ Route::post('/administrador/consignacion/create', 'ConsignacionesController@crea
 Route::post('/administrador/consignacion/update', 'ConsignacionesController@update');
 
 
+//integracion INTERCON
+Route::get('/administrador/integracion','FacturasController@indexIntegracion');
+Route::post('/administrador/integracion/facturacion','FacturasController@subirFacturas');
+Route::post('/administrador/saveFactura','FacturasController@saveFactura');
+Route::post('/administrador/integracion/vendedor','UsuariosController@subirVendedor');
+Route::post('/administrador/saveVendedor','UsuariosController@saveVendedor');
+Route::post('/administrador/integracion/terceros','DirectoriosController@subirTercero');
+Route::post('/administrador/saveTercero','DirectoriosController@saveTercero');
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes ENTRADAS

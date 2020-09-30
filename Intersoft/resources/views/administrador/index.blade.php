@@ -244,6 +244,12 @@
                                             <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
+                                        <tr onclick="config.Redirect('/administrador/integracion');">
+                                            <td>Intercon</td>
+                                            <td>Integración Intercon</td>
+                                            <td><img width="20" src="/assets/265727.svg">
+                                            </td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

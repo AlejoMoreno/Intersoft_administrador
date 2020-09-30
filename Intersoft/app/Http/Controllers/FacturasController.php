@@ -21,6 +21,7 @@ use App\Http\Controllers\ContabilidadesController;
 use App\Http\Controllers\KardexController;
 use App\Pucauxiliar;
 use App\Tipopagos;
+use App\Directorio_tipo_terceros;
 
 use App\Insumo_x_m_ls;
 
@@ -858,4 +859,137 @@ class FacturasController extends Controller
             "factura" => $xml->asXML()
         );*/ 
     }
+
+
+    /**
+     * FUNCIONES PARA SUBIR ARCHIVO PLANO
+    */
+    public function indexIntegracion(){
+        $directorio_tipo_terceros = Directorio_tipo_terceros::all();
+        return view('administrador.integracion',[
+            "directorio_tipo_terceros"=>$directorio_tipo_terceros
+        ]);
+    }
+
+    public function subirFacturas(Request $request){
+        //GUARDAR ARCHIVO EN EL STORAGE
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('file');
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('local')->put($nombre,  \File::get($file));
+
+        //RECORRER EL ARCHIVO EN EL STORAGE
+        $public_path = public_path();
+        $url = $public_path.'/storage/'.$nombre;
+        //verificamos si el archivo existe y lo retornamos
+        if (\Storage::exists($nombre))
+        {
+            $numlinea = 0;
+            $archivo = fopen($url,'r');
+            //recorrer cada linea
+            while ($linea = fgets($archivo)) {
+                if($numlinea!=0){
+                    $lineas[] = explode(',',$linea);    
+                }
+                $numlinea++;
+            }
+            fclose($archivo);
+        }
+
+ 
+        return view('administrador.integracion',[
+            "archivo"=>$lineas
+        ]);
+    }
+
+    public function saveFactura(Request $request){
+
+        try{
+            $facturas = Facturas::where('id_sucursal','=',Session::get('sucursal'))
+                ->where('id_empresa','=',Session::get('id_empresa'))
+                ->where('numero','=',$request->numero)
+                ->where('prefijo','=',$request->prefijo)
+                ->where('id_cliente','=',$request->id_cliente)
+                ->where('id_documento','=',$request->id_documento)
+                ->get();
+            if(sizeof($facturas)>0){
+                return array(
+                    "result" => "Existe",
+                    "body" => "La factura ya existe en la base de datos"
+                );
+            }
+
+            $tercero = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                            ->where('nit','=',$request->nit_tercero)
+                            ->first();
+            if($tercero==null){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "Tercero no existe"
+                );
+            }
+            $vendedor = Usuarios::where('id_empresa','=',Session::get('id_empresa'))
+                            ->where('ncedula','=',$request->nit_vendedor)
+                            ->first();
+            if($vendedor==null){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "vendedor no existe"
+                );
+            }
+            //buscar el tipo de documento
+            if($request->tipo_documento == "FC"){ //factura de compra
+                $documento = Documentos::where('id_empresa','=',Session::get('id_empresa'))
+                            ->where('nombre','like','COMPRA')
+                            ->first();
+            }
+            else if($request->tipo_documento == "FV"){ //factura de venta
+                $documento = Documentos::where('id_empresa','=',Session::get('id_empresa'))
+                            ->where('nombre','like','VENTA')
+                            ->first();
+            }
+            
+            
+            
+            $obj = new Facturas();
+            $obj->id_sucursal		= Session::get('sucursal');
+            $obj->numero 			= $request->numero;
+            $obj->prefijo 			= $request->prefijo;
+            $obj->id_cliente 		= $tercero->id;
+            $obj->id_tercero 		= $request->nit_tercero;
+            $obj->id_vendedor 		= $vendedor->id;
+            $obj->fecha 			= $request->fecha;
+            $obj->fecha_vencimiento = $request->fecha_vencimiento;
+            $obj->id_documento 		= $documento->id;
+            $obj->signo 			= $documento->signo;
+            $obj->subtotal 			= $request->subtotal;
+            $obj->iva 				= $request->iva;
+            $obj->impoconsumo 		= $request->impoconsumo;
+            $obj->otro_impuesto 	= $request->otro_impuesto;
+            $obj->otro_impuesto1 	= $request->otro_impuesto1;
+            $obj->descuento 		= $request->descuento;
+            $obj->fletes 			= $request->fletes;
+            $obj->retefuente 		= $request->retefuente;
+            $obj->total 			= ($request->subtotal + $request->iva - $request->impoconsumo - $request->otro_impuesto - $request->otro_impuesto1 - $request->descuento - $request->fletes - $request->retefuente);
+            $obj->id_modificado 	= Session::get('user_id');
+            $obj->observaciones 	= "ANTERIOR";
+            $obj->estado 			= $request->estado;
+            $obj->saldo             = ($obj->total - $request->saldo);
+            $obj->id_empresa	 	= Session::get('id_empresa');
+            $obj->save();
+            return array(
+                "result" => "Correcto",
+                "body" => "El documento fue ELIMINADO en su totalidad"
+            );
+        }
+        catch(Exception $exce){
+            return array(
+                "result" => "Incorrecto",
+                "body" => $exce
+            );
+        }
+    }
+
 }
