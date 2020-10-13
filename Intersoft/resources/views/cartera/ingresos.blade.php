@@ -299,7 +299,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           parametros = {
               "nit" : texto.trim()
           };
-          $.ajax({
+          $.ajax({   
               data:  parametros,
               url:   urls,
               type:  'post',

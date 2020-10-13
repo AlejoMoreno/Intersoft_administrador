@@ -175,7 +175,7 @@ class CarterasController extends Controller
 								  where('nit','=',$id)->first();
 			$facturas = Facturas::where('id_cliente',$tercero->id)->
 								  where('signo','=','-')->
-								  where('saldo','>','0')->orderBy('fecha_vencimiento', 'asc')->get();
+								  where('saldo','>','0')->orderBy('fecha_vencimiento', 'asc')->get();  
 		}
 		//dd($tercero);
 
