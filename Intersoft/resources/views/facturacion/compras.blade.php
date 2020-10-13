@@ -912,7 +912,8 @@ function buscarproveedor(texto){
     if(texto.length > 3){
         var urls = "/administrador/diretorios/search/search";
         parametros = {
-            "nit" : texto.trim()
+            "nit" : texto.trim(),
+            "tipo": "PROVEEDOR"
         };
         $.ajax({
             data:  parametros,
@@ -979,7 +980,8 @@ function buscarproveedor2(texto){
     if(texto.length > 3){
         var urls = "/administrador/diretorios/search/search";
         parametros = {
-            "razon_social" : texto.trim()
+            "razon_social" : texto.trim(),
+            "tipo": "PROVEEDOR"
         };
         $.ajax({
             data:  parametros,

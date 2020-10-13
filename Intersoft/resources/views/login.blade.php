@@ -290,6 +290,7 @@
 		<article class="row" style="background:#022c76;color:white;padding-bottom:5%;">
 			<div class="col-md-12">
 				<h1 style="margin-left:5%;font-size:40pt;"><br>Modulos</h1>
+				
 				<p style="margin-left:5%;font-size:20pt;">Intersoft presenta a su disposición varios módulos como lo son:</a>.<p>
 				<div class="row" style="width:100%;margin-left:5%;">
 					<div class="card col-md-3" >

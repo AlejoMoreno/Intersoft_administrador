@@ -13,6 +13,9 @@ use App\Documentos;
 use App\Usuarios;
 use App\Ciudades;
 use App\FormaPagos;
+use App\Tipopagos;
+
+use PDF;
 
 use Session;
 
@@ -23,6 +26,7 @@ class CarterasController extends Controller
 
 		$cartera = Carteras::where('id_empresa','=',Session::get('id_empresa'))->orderBy('numero','desc')->first();
 
+		$id_cliente = Directorios::where('nit',$request->id_cliente)->first();
 		$obj = new Carteras();
 		$obj->reteiva 		= $request->reteiva;
 		$obj->reteica 		= $request->reteica;
@@ -34,7 +38,7 @@ class CarterasController extends Controller
 		$obj->id_sucursal 	= Session::get('sucursal');
 		$obj->numero 		= $cartera->numero + 1;
 		$obj->prefijo 		= $cartera->prefijo;
-		$obj->id_cliente 	= $request->id_cliente;
+		$obj->id_cliente 	= $id_cliente->id;
 		$obj->id_vendedor 	= $request->id_vendedor;
 		$obj->fecha 		= $request->fecha;
 		$obj->tipoCartera 	= $request->tipoCartera;
@@ -69,24 +73,26 @@ class CarterasController extends Controller
 
 	public function imprimir($id){
 		$carteras = Carteras::where('id',$id)->
-							  where('id_empresa','=',Session::get('id_empresa'))->get()[0];
+							  where('id_empresa','=',Session::get('id_empresa'))->first();
 		$kardexCarteras = KardexCarteras::where('id_cartera','=',$carteras->id)->
 										  where('id_empresa','=',Session::get('id_empresa'))->get();
 
-    	$carteras->id_sucursal = Sucursales::where('id',$carteras->id_sucursal)->get();
-    	foreach ($carteras->id_sucursal as $sucursal) {
-    		$sucursal->id_empresa = Empresas::where('id',$sucursal->id_empresa)->get()[0];
-    	}
-        $carteras->id_vendedor = Usuarios::where('id',$carteras->id_vendedor)->get()[0];
-    	$carteras->id_cliente = Directorios::where('id',$carteras->id_cliente)->get();
-    	foreach($carteras->id_cliente as $cliente){
-    		$cliente->id_ciudad = Ciudades::where('id',$cliente->id_ciudad)->get()[0];
-    	}
+    	$carteras->id_sucursal = Sucursales::where('id',$carteras->id_sucursal)->first();
+    	$carteras->id_sucursal->id_empresa = Empresas::where('id',$carteras->id_sucursal->id_empresa)->first();
+        $carteras->id_vendedor = Usuarios::where('id',$carteras->id_vendedor)->first();
+    	$carteras->id_cliente = Directorios::where('id',$carteras->id_cliente)->first();
+		$carteras->id_cliente->id_ciudad = Ciudades::where('id',$carteras->id_cliente->id_ciudad)->first();
+		//dd($carteras->id_sucursal->id_empresa);
+		$pdf = PDF::loadView('cartera.imprimir', [
+            "carteras"=>$carteras,
+			"kardexCarteras"=>$kardexCarteras
+        ]);//->setPaper($customPaper, 'landscape');
+        return $pdf->download($carteras->tipoCartera.'-'.$carteras->prefijo.'-'.$carteras->numero.'.pdf');
 
-		return view('cartera.imprimir',[
+		/*return view('cartera.imprimir',[
 			"carteras"=>$carteras,
 			"kardexCarteras"=>$kardexCarteras
-		]);
+		]);*/
 	}
 
 	public function consultar_documentos(Request $request){
@@ -155,7 +161,9 @@ class CarterasController extends Controller
 
 	public function allDocumentos($id,Request $request){
 		if($request->tipo == "egreso"){
-			$facturas = Facturas::where('id_cliente',$id)->
+			$tercero = Directorios::where('id_directorio_tipo_tercero', '=', '1')->
+								  where('nit','=',$id)->first();
+			$facturas = Facturas::where('id_cliente',$tercero->id)->
 								  where('signo','=','+')->
 								  where('saldo','>','0')->
 								  where('id_empresa','=',Session::get('id_empresa'))->
@@ -163,13 +171,13 @@ class CarterasController extends Controller
 								  where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
 		}
 		else{
-			$facturas = Facturas::where('id_cliente',$id)->
+			$tercero = Directorios::where('id_directorio_tipo_tercero', '!=', '1')->
+								  where('nit','=',$id)->first();
+			$facturas = Facturas::where('id_cliente',$tercero->id)->
 								  where('signo','=','-')->
-								  where('saldo','>','0')->
-								  where('id_empresa','=',Session::get('id_empresa'))->
-								  where('estado','!=','ANULADO')->
-								  where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
+								  where('saldo','>','0')->orderBy('fecha_vencimiento', 'asc')->get();
 		}
+		//dd($tercero);
 
 		/*foreach ($facturas as $factura) {
 			$factura->id_cliente = Directorios::where('id',$factura->id_cliente)->get()[0];
@@ -182,11 +190,17 @@ class CarterasController extends Controller
 	}
 
 	function gastosindex(){
-		return view('cartera.gastos');
+		$tipo_pagos = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get();
+		return view('cartera.gastos',[
+			"tipo_pagos"=>$tipo_pagos
+		]);
 	}
 
 	function otrosingresosindex(){
-		return view('cartera.otrosingresos');
+		$tipo_pagos = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get();
+		return view('cartera.otrosingresos',[
+			"tipo_pagos"=>$tipo_pagos
+		]);
 	}
 
 	function extracto(){

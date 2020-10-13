@@ -155,11 +155,10 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
       <thead>
         <tr>
           <th>
-            <select id="forma_pago" name="" class="form-control">
-              <option value="EFECTIVO">EFECTIVO</option>
-              <option value="CHEQUE">CHEQUE</option>
-              <option value="CONSIGNACION">CONSIGNACION</option>
-              <option value="TRANSFERENCIA">TRANSFERENCIA</option>
+            <select id="forma_pago" name="forma_pago" class="form-control">                      
+              @foreach ($tipo_pagos as $obj)
+              <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+              @endforeach
             </select>
           </th>
           <th>
@@ -235,7 +234,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
       <div class="col-sm-12">
-        <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('EGRESO');" style="background-color: #28a745;color:white;">GUARDAR</div>
+        <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('GASTOS');" style="background-color: #28a745;color:white;">GUARDAR</div>
         <div id="imprimirPOST" onclick="carteras.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
         <div id="imprimirDOC" onclick="carteras.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
       </div>
@@ -272,7 +271,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
 </script>
 
 <script type="text/javascript">
-  document.getElementById('prefijo').focus();
+  //document.getElementById('prefijo').focus();
 </script>
 
 

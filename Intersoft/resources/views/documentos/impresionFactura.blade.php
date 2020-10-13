@@ -38,7 +38,7 @@
 			<tr>
 				<td style="width: 20%">
 					<!--<img style="width:120px;" src="https://wakusoft.com/img/logo_wakusoft.png">-->
-					<img style="width:120px;" src="http://intersoft.wakusoft.com/assets/img/empresas/{{ Session::get('id_empresa') }}.jpeg">
+					<img style="width:120px;" src="/assets/img/empresas/{{ Session::get('id_empresa') }}.jpeg">
 				</td>
 				<td style="width: 40%">
 					<table style="width: 100%">

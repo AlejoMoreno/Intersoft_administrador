@@ -107,12 +107,13 @@ class FacturasController extends Controller
         $tercero = null;
         if($signo == '+'){
             $tercero = Directorios::where('nit',$request->id_cliente)->
+                                    where('id_directorio_tipo_tercero','=','1')->
                                     where('id_empresa','=',Session::get('id_empresa'))->first();
         }
         //nada con el inventario o Salida de inventario
         else{
             $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','!=','1')->
+                                    where('id_directorio_tipo_tercero','=','2')->
                                     where('id_empresa','=',Session::get('id_empresa'))->first();
         }
         return $tercero;
@@ -942,12 +943,12 @@ class FacturasController extends Controller
             //buscar el tipo de documento
             if($request->tipo_documento == "FC"){ //factura de compra
                 $documento = Documentos::where('id_empresa','=',Session::get('id_empresa'))
-                            ->where('nombre','like','COMPRA')
+                            ->where('nombre','like','COMPRAS')
                             ->first();
             }
             else if($request->tipo_documento == "FV"){ //factura de venta
                 $documento = Documentos::where('id_empresa','=',Session::get('id_empresa'))
-                            ->where('nombre','like','VENTA')
+                            ->where('nombre','like','MAYORISTA')
                             ->first();
             }
             

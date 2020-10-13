@@ -18,7 +18,7 @@ function Carteras(){
         };
         $.ajax({
         	data:  parametros,
-			url:   '/cartera/allDocumentos/' + $('#cedula_tercero').val() + '/',
+			url:   '/cartera/allDocumentos/' + $('#cedula_tercero').val(),
 			type:  'get',
 			beforeSend: function () {
 				$('#tabla_facturas').html('<p>Espere porfavor</p>');
