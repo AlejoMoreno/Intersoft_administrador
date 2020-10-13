@@ -171,11 +171,12 @@ class CarterasController extends Controller
 								  where('estado','!=','ELIMINADO')->orderBy('fecha_vencimiento', 'asc')->get();
 		}
 		else{
-			$tercero = Directorios::where('id_directorio_tipo_tercero', '!=', '1')->
+			$tercero = Directorios::where('id_directorio_tipo_tercero', '=', '2')->
 								  where('nit','=',$id)->first();
 			$facturas = Facturas::where('id_cliente',$tercero->id)->
 								  where('signo','=','-')->
-								  where('saldo','>','0')->orderBy('fecha_vencimiento', 'asc')->get();  
+								  where('saldo','>','0')->orderBy('fecha_vencimiento', 'asc')->
+								  get();  
 		}
 		//dd($tercero);
 

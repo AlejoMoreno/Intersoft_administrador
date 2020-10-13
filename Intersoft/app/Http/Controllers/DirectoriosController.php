@@ -214,6 +214,9 @@ class DirectoriosController extends Controller
                         if($request->tipo == "PROVEEDOR"){
                             $q->where('id_directorio_tipo_tercero','=',1);
                         }
+                        else{
+                            $q->where('id_directorio_tipo_tercero','=',2);
+                        }
                     })
                     ->take(100)
                     ->get();

@@ -113,7 +113,7 @@ class FacturasController extends Controller
         //nada con el inventario o Salida de inventario
         else{
             $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','!=','1')->
+                                    where('id_directorio_tipo_tercero','=','2')->
                                     where('id_empresa','=',Session::get('id_empresa'))->first();
         }
         return $tercero;

@@ -46,25 +46,32 @@
                         <th>RAZÓN SOCIAL</th>
                         <th>TELÉFONO</th>
                         <th>ZONA VENTA</th>
-                        <th>FECHA FACTURA</th>
-                        <th>FECHA VENCIMIENTO</th>
-                        <th>NUMERO</th>
-                        <th>PREFIJO</th>
+                        <th>PLAZO DE </th>
+                        <th>DIAS MORA</th>
+                        <th>DOCUMENTO</th>
                         <th>VENDEDOR</th>
                         <th>SALDO</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($carteracliente as $obj)
+                    <?php $datetime1 = new DateTime($obj->fecha);
+                    $datetime2 = new DateTime($obj->fecha_vencimiento); 
+                    $interval = $datetime1->diff($datetime2);
+                    $plazo = $interval->format('%R%a días');
+                    
+                    $datetime3 = new DateTime(date("Y-m-d"));
+                    $datetime4 = new DateTime($obj->fecha_vencimiento); 
+                    $interval = $datetime3->diff($datetime4);
+                    $mora = $interval->format('%R%a días');?>
                     <tr>
                         <td>{{ number_format($obj->nit, 0, ",", ".") }}</td>
                         <td>{{ $obj->razon_social }}</td>
                         <td>{{ $obj->telefono }}</td>
                         <td>{{ $obj->zona_venta }}</td>
-                        <td>{{ $obj->fecha }}</td>
-                        <td>{{ $obj->fecha_vencimiento }}</td>
-                        <td>{{ $obj->numero }}</td>
-                        <td>{{ $obj->prefijo }}</td>
+                        <td>{{ $plazo }}</td>
+                        <td>{{ $mora }}</td>
+                        <td>{{ $obj->prefijo }} {{ $obj->numero }}</td>
                         <td>{{ number_format($obj->ncedula, 0, ",", ".") }}</td>
                         <td>{{ $obj->saldo }}</td>
                     </tr>
@@ -94,24 +101,33 @@
                         <th>RAZÓN SOCIAL</th>
                         <th>TELÉFONO</th>
                         <th>ZONA VENTA</th>
-                        <th>FECHA COMPRA</th>
-                        <th>FECHA VENCIMIENTO</th>
-                        <th>NUMERO</th>
-                        <th>PREFIJO</th>
+                        <th>PLAZO DE </th>
+                        <th>DIAS MORA</th>
+                        <th>DOCUMENTO</th>
+                        <th>VENDEDOR</th>
                         <th>SALDO</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($carteraproveedor as $obj)
+                    <?php $datetime1 = new DateTime($obj->fecha);
+                    $datetime2 = new DateTime($obj->fecha_vencimiento); 
+                    $interval = $datetime1->diff($datetime2);
+                    $plazo = $interval->format('%R%a días');
+                    
+                    $datetime3 = new DateTime(date("Y-m-d"));
+                    $datetime4 = new DateTime($obj->fecha_vencimiento); 
+                    $interval = $datetime3->diff($datetime4);
+                    $mora = $interval->format('%R%a días');?>
                     <tr>
                         <td>{{ number_format($obj->nit, 0, ",", ".") }}</td>
                         <td>{{ $obj->razon_social }}</td>
                         <td>{{ $obj->telefono }}</td>
                         <td>{{ $obj->zona_venta }}</td>
-                        <td>{{ $obj->fecha }}</td>
-                        <td>{{ $obj->fecha_vencimiento }}</td>
-                        <td>{{ $obj->numero }}</td>
-                        <td>{{ $obj->prefijo }}</td>
+                        <td>{{ $plazo }}</td>
+                        <td>{{ $mora }}</td>
+                        <td>{{ $obj->prefijo }} {{ $obj->numero }}</td>
+                        <td>{{ number_format($obj->ncedula, 0, ",", ".") }}</td>
                         <td>{{ $obj->saldo }}</td>
                     </tr>
                     @endforeach
@@ -159,18 +175,18 @@ function totalclientes(table){
     var total = 0;
     var data = table.rows().data();
     data.each(function (value, index){
-        total = total + parseInt(value[9]);
+        total = total + parseInt(value[8]);
     });
-    $('#total_cliente').text(total);
+    $('#total_cliente').html(new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP"}).format(total));
 }
 
 function totalproveedor(table){
     var total = 0;
     var data = table.rows().data();
     data.each(function (value, index){
-        total = total + value[9];
+        total = total + value[8];
     });
-    $('#total_proveedor').text(total);
+    $('#total_proveedor').html(new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP"}).format(total));
 }
 
 </script>
