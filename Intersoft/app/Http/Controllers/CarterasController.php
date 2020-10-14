@@ -16,6 +16,7 @@ use App\FormaPagos;
 use App\Tipopagos;
 
 use PDF;
+use DB;
 
 use Session;
 
@@ -206,11 +207,18 @@ class CarterasController extends Controller
 
 	function extracto(){
 		$carteraproveedor = Directorios::where('id_directorio_tipo_tercero', '=', '1')
+							->select('facturas.*','directorios.*','usuarios.*',
+								DB::raw('facturas.id as idfactura'),
+								DB::raw('directorios.id as idcliente'))
 							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
+							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
 							->where('facturas.id_empresa','=',Session::get('id_empresa'))
 							->where('saldo','>','0')
 							->get();
 		$carteracliente = Directorios::where('id_directorio_tipo_tercero', '=', '2')
+							->select('facturas.*','directorios.*','usuarios.*',
+								DB::raw('facturas.id as idfactura'),
+								DB::raw('directorios.id as idcliente'))
 							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
 							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
 							->where('facturas.id_empresa','=',Session::get('id_empresa'))
@@ -219,6 +227,32 @@ class CarterasController extends Controller
 		return view('cartera.extracto', array(
 			"carteraproveedor"=>$carteraproveedor,
 			"carteracliente"=>$carteracliente
+		));
+	}
+
+	function historial($idtercero){
+		$carteracliente = Directorios::where('id_directorio_tipo_tercero', '=', '2')
+							->select('facturas.*','directorios.*','usuarios.*',DB::raw('facturas.id as idfactura'))
+							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
+							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
+							->where('facturas.id_empresa','=',Session::get('id_empresa'))
+							->where('directorios.id','=',$idtercero)
+							->where('saldo','>','0')
+							->get();
+		$cartera = KardexCarteras::select('carteras.*','kardex_carteras.*',
+								DB::raw('facturas.numero as numfactura'),
+								DB::raw('facturas.id as idfactura'),
+								DB::raw('carteras.id as idcartera'),
+								DB::raw('kardex_carteras.total as carteratotal'),
+								DB::raw('facturas.prefijo as prefijofactura'))
+							->join('carteras', 'carteras.id', '=', 'kardex_carteras.id_cartera')
+							->join('facturas', 'facturas.id', '=', 'kardex_carteras.id_factura')
+							->where('carteras.id_empresa','=',Session::get('id_empresa'))
+							->where('carteras.id_cliente','=',$idtercero)
+							->get();
+		return view('cartera.historial', array(
+			"carteracliente"=>$carteracliente,
+			"cartera"=>$cartera
 		));
 	}
 	

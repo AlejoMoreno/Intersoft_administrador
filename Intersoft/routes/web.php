@@ -490,6 +490,7 @@ Route::post('/cartera/causar/guardar', 'CarterasController@saveCausar'); //pendi
 Route::get('/cartera/gastos', 'CarterasController@gastosindex');
 Route::get('/cartera/otrosingresos', 'CarterasController@otrosingresosindex');
 Route::get('/cartera/extracto', 'CarterasController@extracto');
+Route::get('/cartera/historial/{idtercero}', 'CarterasController@historial');
 
 Route::post('/cartera/FormaPagos','CarterasController@saveFormaPagos');
 
