@@ -230,6 +230,83 @@
         </div>
     </div>
 
+    <div class="panel panel-default col-md-12" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Integración de Kardex Facturas</h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">Debe subir el archivo plano KARDEX.LIS generado por el software INTERCON. 
+            </p>
+        </div>
+
+        <div class="row" style="padding: 2%;">
+            <div class="col-md-10 col-md-offset-1">
+                <form method="POST" action="/administrador/integracion/kardex" accept-charset="UTF-8" enctype="multipart/form-data">
+                                          
+                    <div class="form-group" >
+                      <label class="col-md-4 control-label">Archivo .LIS Intercon</label>
+                      <div class="col-md-4">
+                        <input type="file" class="form-control" name="file" >
+                      </div>
+                      <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Validar</button>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="btn btn-primary" id="recorrerKardex">Recorrer</div>
+                      </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-md-12" style="overflow-x: scroll">
+                @if(isset($kardex))
+                <table class="table" id="kardex">
+                    @foreach ($kardex as $linea)
+                    <tbody>
+                        <tr>
+                            <td>{{ $linea[0] }}</td>
+                            <td>{{ $linea[1] }}</td>
+                            <td>{{ $linea[2] }}</td>
+                            <td>{{ $linea[3] }}</td>
+                            <td>{{ $linea[4] }}</td>
+                            <td>{{ $linea[5] }}</td>
+                            <td>{{ $linea[6] }}</td>
+                            <td>{{ $linea[7] }}</td>
+                            <td>{{ $linea[8] }}</td>
+                            <td>{{ $linea[9] }}</td>
+                            <td>{{ $linea[10] }}</td>
+                            <td>{{ $linea[11] }}</td>
+                            <td>{{ $linea[12] }}</td>
+                            <td>{{ $linea[13] }}</td>
+                            <td>{{ $linea[14] }}</td>
+                            <td>{{ $linea[15] }}</td>
+                            <td>{{ $linea[16] }}</td>
+                            <td>{{ $linea[17] }}</td>
+                            <td>{{ $linea[18] }}</td>
+                            <td>{{ $linea[19] }}</td>
+                            <td>{{ $linea[20] }}</td>
+                            <td>{{ $linea[21] }}</td>
+                            <td>{{ $linea[22] }}</td>
+                            <td>{{ $linea[23] }}</td>
+                            <td>{{ $linea[24] }}</td>
+                            <td>{{ $linea[25] }}</td>
+                            <td>{{ $linea[26] }}</td>
+                            <td>{{ $linea[27] }}</td>
+                            <td>{{ $linea[28] }}</td>
+                            <td>{{ $linea[29] }}</td>
+                            <td>{{ $linea[30] }}</td>
+                            <td>{{ $linea[31] }}</td>
+                            <td>{{ $linea[32] }}</td>
+                            <td>{{ $linea[33] }}</td>
+                            <td>Resultado</td>
+                        </tr>
+                    </tbody>
+                    @endforeach
+                </table>
+                @endif
+            </div>
+        </div>
+    </div>
+
     <script>
         $('#recorrerFacturas').click(function (){
             var table = document.getElementById("mytab1"); 
@@ -441,6 +518,83 @@
                         row.classList.add("incorrecto");
                         row.cells[25].innerHTML = response.body;
                         recursivoTablaTercero( document.getElementById("terceros"), index );
+                    }
+                });
+            }
+        }
+
+        
+    </script>
+
+
+    <script>
+        $('#recorrerKardex').click(function (){
+            var table = document.getElementById("kardex"); 
+            recursivoTablaKardex( table, 1 );
+        });
+
+        function recursivoTablaKardex( table, index){
+            var row = table.rows[index];
+            console.log(index);
+            index = index + 1;
+            if(index >= table.rows.length + 1){
+               return true; 
+            }
+            else{
+                if(row.cells[14].innerHTML==""){
+                    row.cells[14].innerHTML = 0;
+                }
+                cantidad = row.cells[9].innerHTML.substr(0, (row.cells[9].innerHTML.length - 2));
+                precio = row.cells[10].innerHTML.substr(0, (row.cells[10].innerHTML.length - 2));
+                decimalesCantidad = (row.cells[9].innerHTML.substr(row.cells[9].innerHTML.length, -2)!=0)?row.cells[9].innerHTML.substr(row.cells[9].innerHTML.length, -2):'0';
+                decimalesPrecio = (row.cells[10].innerHTML.substr(row.cells[10].innerHTML.length, -2)!=0)?row.cells[10].innerHTML.substr(row.cells[10].innerHTML.length, -2):'0';
+                parametros = {
+                    'nit_tercero' :     row.cells[4].innerHTML,
+                    'tipo_documento' :  row.cells[1].innerHTML,
+                    'numero' :          row.cells[3].innerHTML,
+                    'prefijo' :         row.cells[2].innerHTML,
+                    'sucursal' :        row.cells[0].innerHTML,
+                    'codigo' :          row.cells[7].innerHTML,
+                    'cantidad' :        parseFloat(cantidad + '.' + decimalesCantidad),
+                    'precio' :          parseFloat(precio + '.' + decimalesPrecio),
+                    'costo' :           row.cells[10].innerHTML,
+                    'subtotal' :        (parseFloat(cantidad + '.' + decimalesCantidad) * parseFloat(precio + '.' + decimalesPrecio)),
+                    'iva' :             row.cells[14].innerHTML,
+                    'reteica' :         row.cells[17].innerHTML,
+                    'reteiva' :         row.cells[18].innerHTML,
+                    'retefuente' :      row.cells[16].innerHTML,
+                    'fecha_vence_lote': row.cells[33].innerHTML,
+                    'serie':            row.cells[25].innerHTML,
+                }
+                console.log(parametros);
+                $.ajax({
+                    data:  parametros,
+                    url:   '/administrador/saveKardex',
+                    type:  'post',
+                    beforeSend: function () {
+                        row.classList.add("esperando");
+                    },
+                    success:  function (response) {
+                        row.classList.remove("esperando");
+                        if(response.result == "Correcto"){
+                            row.classList.add("correcto");
+                            row.cells[34].innerHTML = response.body;
+                        }
+                        else if(response.result == "Existe"){
+                            row.classList.add("correcto");
+                            row.cells[34].innerHTML = response.body;
+                        }
+                        else{
+                            row.classList.add("incorrecto");
+                            row.cells[34].innerHTML = response.body;
+                        }
+                        console.log("respuesta index: "+index, response);
+                        recursivoTablaKardex( document.getElementById("kardex"), index );
+                    },
+                    error: function (error) {
+                        row.classList.add("incorrecto");
+                        row.cells[34].innerHTML = response.body;
+                        recursivoTablaKardex( document.getElementById("kardex"), index );
                     }
                 });
             }

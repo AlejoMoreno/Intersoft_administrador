@@ -982,7 +982,7 @@ class FacturasController extends Controller
             $obj->save();
             return array(
                 "result" => "Correcto",
-                "body" => "El documento fue ELIMINADO en su totalidad"
+                "body" => "El documento fue SUBIDO en su totalidad"
             );
         }
         catch(Exception $exce){

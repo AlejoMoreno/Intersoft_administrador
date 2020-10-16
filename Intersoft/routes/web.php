@@ -359,6 +359,8 @@ Route::post('/administrador/integracion/vendedor','UsuariosController@subirVende
 Route::post('/administrador/saveVendedor','UsuariosController@saveVendedor');
 Route::post('/administrador/integracion/terceros','DirectoriosController@subirTercero');
 Route::post('/administrador/saveTercero','DirectoriosController@saveTercero');
+Route::post('/administrador/integracion/kardex','KardexController@subirKardex');
+Route::post('/administrador/saveKardex','KardexController@saveKardex');
 
 /*
 |--------------------------------------------------------------------------
