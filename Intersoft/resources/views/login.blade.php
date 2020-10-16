@@ -290,6 +290,7 @@
 		<article class="row" style="background:#022c76;color:white;padding-bottom:5%;">
 			<div class="col-md-12">
 				<h1 style="margin-left:5%;font-size:40pt;"><br>Modulos</h1>
+				
 				<p style="margin-left:5%;font-size:20pt;">Intersoft presenta a su disposición varios módulos como lo son:</a>.<p>
 				<div class="row" style="width:100%;margin-left:5%;">
 					<div class="card col-md-3" >
@@ -368,14 +369,11 @@
 </html>
 <script>
 $(document).ready(function(){
-
 	$('#login').hide();
-
 	$('#validar_empresa').click(function (){
 		parametros = {
 			"nit" : $('#nit_empresa').val()
 		};
-
 		$.ajax({			
 			data:  parametros,
 			url:   HOST+'/empresas/search',
@@ -385,7 +383,7 @@ $(document).ready(function(){
 			},
 			success:  function (response) {
 				let sucursales = '';
-				console.log(response);
+				//console.log(response);
 				$('#resultado').html('');
 				if(response.result == 'Success'){
 					$('#login').show();
@@ -413,15 +411,11 @@ $(document).ready(function(){
 			}
 		});		
 	});
-
 	config.GetAllInformation();
 	$('#cedula').focus();
     //login.FocusForm(input,next,fin); asi funciona el login focus
     login.FocusForm('cedula','password','no');
     login.FocusForm('password','boton','no');
     login.FocusForm('boton','boton','si');
-
-
 });
-
 </script>

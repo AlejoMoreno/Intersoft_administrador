@@ -33,7 +33,6 @@ Route::get('/layout', function(){
     return view('layout');
 });
 Route::get('/index', function(){
-    date_default_timezone_set('America/Bogota');
     $day = date("l");
     $dia = 1;
     switch ($day) {
@@ -59,20 +58,32 @@ Route::get('/index', function(){
             $dia = 6;
         break;
     }
-    $zonas = App\Zonasusuarios::where('id_empresa','=',Session::get('id_empresa'))->where('id_usuario','=',Session::get('user_id'))->where('estado','=',$dia)->get();
-    foreach($zonas as $zona){
-        $zona->id_usuario = App\Usuarios::where('id','=',$zona->id_usuario)->first();
-        $zona->id_tercero = App\Directorios::where('zona_venta','=',$zona->zona)->get();
-    }
-    $facturas = App\Facturas::where('id_empresa','=',Session::get('id_empresa'))->where('id_vendedor','=',Session::get('user_id'))->get();
-    $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+    $zonas = App\Zonasusuarios::select('ncedula','nombre','zona','nit','razon_social','direccion','directorios.telefono')
+            ->where('zonasusuarios.id_empresa','=',Session::get('id_empresa'))
+            ->join('usuarios','zonasusuarios.id_usuario','=','usuarios.id')
+            ->join('directorios','zonasusuarios.zona','=','directorios.zona_venta')
+            ->where('zonasusuarios.id_usuario','=',Session::get('user_id'))
+            ->where('zonasusuarios.estado','=',$dia)
+            ->get();
+    
+    $facturas = App\Facturas::where('facturas.id_empresa','=',Session::get('id_empresa'))
+            ->where('id_vendedor','=',Session::get('user_id'))
+            ->where('fecha','=',date("Y-m-d"))
+            ->join('directorios','id_cliente','=','directorios.id')
+            ->join('documentos','id_documento','=','documentos.id')
+            ->get();
+    $referencias = App\Referencias::where('id_empresa','=',Session::get('id_empresa'))
+            ->get();
+    
     $to = date("Y-m-d");
     $from = date("Y-m-d",strtotime($to."- 2 month"));
-    $lotes = App\Lotes::where('fecha_vence_lote','<=',$from)->where('id_empresa','=',Session::get('id_empresa'))->get();
-    foreach($lotes as $lote){
-        $lote->id_referencia = App\Referencias::where('id','=',$lote->id_referencia)->first();
-        $lote->id_sucursal = App\Sucursales::where('id','=',$lote->id_sucursal)->first();
-    }
+    $lotes = App\Lotes::select('codigo_linea','codigo_letras','codigo_consecutivo','descripcion','fecha_vence_lote','numero_lote','nombre')
+            ->join('referencias','referencias.id','=','lotes.id_referencia')
+            ->join('sucursales','sucursales.id','=','lotes.id_sucursal')
+            ->where('fecha_vence_lote','<=',$from)
+            ->where('lotes.id_empresa','=',Session::get('id_empresa'))
+            ->get();
+
     return view('index', array(
         "zona"=>$zonas,
         "facturas"=>$facturas,
@@ -153,11 +164,16 @@ Route::get('/facturacion/zonadelete/{id}', 'UsuariosController@deleteZonas');
 Route::get('/facturacion/liquidacionventas', 'UsuariosController@liquidacionVentas');
 Route::get('/facturacion/liquidacionventas/{id}/{valor}', 'UsuariosController@liquidacionVentas1');
 Route::get('/facturacion/estadisticaventas', 'UsuariosController@estadisticaVentas');
-Route::get('/facturacion/pedidos', 'FacturasController@pedidos');
-Route::post('/facturacion/pedidosUpdate', 'FacturasController@updatePedidos');
-Route::get('/facturacion/devoluciones', 'FacturasController@devoluciones');
-Route::post('/facturacion/devolucionesUpdate', 'FacturasController@updateDevoluciones');
+Route::get('/facturacion/pedidos/{id_factura}', 'FacturasController@pedidos');
+Route::get('/facturacion/pedidos', 'FacturasController@pedidosIndex');
 Route::get('/facturacion/venta/{id_documento}', 'FacturasController@venta');
+Route::get('/facturacion/compra/{id_documento}', 'FacturasController@compra');
+Route::get('/facturacion/facturatech', 'FacturasController@facturatech');
+Route::get('/facturacion/facturatech/{id_documento}/xml', 'FacturasController@facturatechxml');
+Route::post('/facturacion/pedidosUpdate', 'FacturasController@updateEstado');
+Route::get('/facturacion/devoluciones/{id_factura}', 'FacturasController@devoluciones');
+Route::get('/facturacion/devoluciones', 'FacturasController@devolucionesIndex');
+Route::get('/facturacion/alistamiento', 'FacturasController@alistamiento');
 
 
 /*
@@ -316,6 +332,33 @@ Route::get('/invitados/update/{id}', 'InvitadosController@showupdate');
 Route::post('/invitados/create', 'InvitadosController@create');
 Route::post('/invitados/update', 'InvitadosController@update');
 
+//bancos
+Route::get('/administrador/bancos', 'BancosController@index');
+Route::get('/administrador/bancos/all', 'BancosController@all');
+Route::get('/administrador/bancos/{id}', 'BancosController@departamento');
+Route::get('/administrador/bancos/delete/{id}', 'BancosController@delete');
+Route::get('/administrador/bancos/update/{id}', 'BancosController@showupdate');
+Route::post('/administrador/bancos/create', 'BancosController@create');
+Route::post('/administrador/bancos/update', 'BancosController@update');
+
+//consignacion
+Route::get('/administrador/consignacion', 'ConsignacionesController@index');
+Route::get('/administrador/consignacion/all', 'ConsignacionesController@all');
+Route::get('/administrador/consignacion/{id}', 'ConsignacionesController@departamento');
+Route::get('/administrador/consignacion/delete/{id}', 'ConsignacionesController@delete');
+Route::get('/administrador/consignacion/update/{id}', 'ConsignacionesController@showupdate');
+Route::post('/administrador/consignacion/create', 'ConsignacionesController@create');
+Route::post('/administrador/consignacion/update', 'ConsignacionesController@update');
+
+
+//integracion INTERCON
+Route::get('/administrador/integracion','FacturasController@indexIntegracion');
+Route::post('/administrador/integracion/facturacion','FacturasController@subirFacturas');
+Route::post('/administrador/saveFactura','FacturasController@saveFactura');
+Route::post('/administrador/integracion/vendedor','UsuariosController@subirVendedor');
+Route::post('/administrador/saveVendedor','UsuariosController@saveVendedor');
+Route::post('/administrador/integracion/terceros','DirectoriosController@subirTercero');
+Route::post('/administrador/saveTercero','DirectoriosController@saveTercero');
 
 /*
 |--------------------------------------------------------------------------
@@ -392,7 +435,7 @@ Route::post('/inventario/documentos/update', 'DocumentosController@update');
 
 //Catalogo
 Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');
-
+Route::get('/inventario/catalogo/precio/{numero}', 'ReferenciasController@catalogoPrecio');
 //ordenes de produccion (ficha "receta")
 Route::get('/inventario/fichatecnica', 'FichatecnicasController@index');
 Route::post('/inventario/fichatecnica', 'FichatecnicasController@index');
@@ -428,6 +471,7 @@ Route::get('/inventario/actualizacionPrecios/{id}/{precio1}/{precio2}/{precio3}'
 |
 */
 Route::get('/cartera/egresos', 'CarterasController@egresos');
+
 Route::get('/cartera/egresos/submenu', 'CarterasController@menuegresos');
 Route::get('/cartera/ingresos/submenu', 'CarterasController@menuingresos');
 Route::get('/cartera/ingresos', 'CarterasController@ingresos');
@@ -444,6 +488,11 @@ Route::get('/cartera/causar', 'CarterasController@causar'); //pendiente
 Route::post('/cartera/causar/guardar', 'CarterasController@saveCausar'); //pendiente
 
 Route::get('/cartera/gastos', 'CarterasController@gastosindex');
+Route::get('/cartera/otrosingresos', 'CarterasController@otrosingresosindex');
+Route::get('/cartera/extracto', 'CarterasController@extracto');
+Route::get('/cartera/historial/{idtercero}', 'CarterasController@historial');
+
+Route::post('/cartera/FormaPagos','CarterasController@saveFormaPagos');
 
 
 /*
@@ -471,13 +520,46 @@ Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
 
 Route::get('/contabilidad/librosauxiliares', 'ContabilidadesController@librosauxiliaresIndex');
-Route::get('/contabilidad/comprobantesdiario', function(){ return view('contabilidad.comprobantesdiario'); });
+Route::get('/contabilidad/comprobantesdiario', function(){ 
+    $documentos = App\Documentos::select(['id','nombre'])
+                ->where('id_empresa','=',Session::get('id_empresa'))
+                ->get();
+
+    $auxiliars = App\Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->get();
+    return view('contabilidad.comprobantesdiario',[
+        "documentos"=>$documentos,
+        "auxiliars"=>$auxiliars
+    ]); 
+});
 Route::get('/contabilidad/doc/{id}', 'ContabilidadesController@getDocumentos');
 
 Route::post('/contabilidad/comprobantes/viewComprobantes', 'ContabilidadesController@viewComprobantes');
 Route::post('/contabilidad/comprobantes/deleteComprobantes', 'ContabilidadesController@deleteComprobantes');
 Route::post('/contabilidad/comprobantes/updateComprobantes', 'ContabilidadesController@updateComprobantes');
 Route::post('/contabilidad/comprobantes/createComprobantes', 'ContabilidadesController@createComprobantes');
+
+Route::get('/contabilidad/generarfactura/{doc}','ContabilidadesController@generarfactura');
+Route::get('/contabilidad/generaregreso/{doc}','ContabilidadesController@generaregreso');
+Route::get('/contabilidad/generarrecibos/{doc}','ContabilidadesController@generarrecibos');
+Route::get('/contabilidad/generarcompra/{doc}','ContabilidadesController@generarcompra');
+Route::get('/contabilidad/generarnotadb/{doc}','ContabilidadesController@generarnotadb');
+Route::get('/contabilidad/generarnotacr/{doc}','ContabilidadesController@generarnotacr');
+Route::get('/contabilidad/generarnotacontable/{doc}','ContabilidadesController@generarnotacontable');
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes GPS
+|--------------------------------------------------------------------------
+|
+| Get de datos para graficos
+|
+*/
+Route::get('/gps/directoriomaps', 'DirectoriomapsController@index');
+Route::post('/gps/directoriomaps', 'DirectoriomapsController@save');
+Route::post('/gps/trakingmaps', 'TrakingmapsController@save');
+
+
 
 
 /*
@@ -535,4 +617,8 @@ Route::get('/pdf/pdf_comprobanteDiario', 'ContabilidadesController@pdf_comproban
 Route::get('/pdf/pdfreferencias1', 'ReferenciasController@pdfreferencias1');
 Route::get('/pdf/pdfDirectorio', 'DirectoriosController@pdf');
 Route::get('/pdf/fichatecnica', 'FichatecnicasController@pdf');
+
+
+//REPORTES CHARTS JS
+Route::get('/reporte', 'Reportes\usuarios@index');
 

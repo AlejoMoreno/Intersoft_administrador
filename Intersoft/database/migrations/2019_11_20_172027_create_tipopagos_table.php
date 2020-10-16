@@ -16,7 +16,8 @@ class CreateTipopagosTable extends Migration
         Schema::create('tipopagos', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre');
-            $table->integer('puc_cuenta');
+            $table->integer('puc_cuenta'); //venta
+            $table->integer('puc_compra');
             $table->string('tercero');
             $table->integer('id_empresa');
             $table->timestamps();

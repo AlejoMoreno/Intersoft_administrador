@@ -395,7 +395,6 @@ function Config(){
 		}
 		
 	}
-
 }
 
 

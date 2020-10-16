@@ -2,173 +2,203 @@
 
 @section('content')
 
+<style>
+    .title{
+        margin-left: 2%;
+        font-weight: bold;
+        font-family: Poppins;
+    }
+    .top-5-w{
+        margin-top:5%;
+    }
+    .table > thead th {
+        -webkit-animation: pantallain 100s infinite; /* Safari 4.0 - 8.0 */
+        -webkit-animation-direction: alternate; /* Safari 4.0 - 8.0 */
+        animation: pantallain 100s infinite;
+        animation-direction: alternate;
+    }
+</style>
+    
 
-<div class="container-fluid">
-    <div class="row">
+<div class="enc-article">
+    <h4 class="title">Usuarios</h4>
+</div>
 
-        <div class="col-md-12">
-            <div class="card" id="tabla">
-                <div class="header">
-                    <h4 class="title">Usuarios</h4>
-                    <p class="category">Diferentes Usuarios de la aplicación</p>
-                </div>
-                <div class="content">
-                    <div style="width:100%;overflow-x:scroll;">
-                        <table class="table table-bordered table-striped" id="datos">
-                            <thead>
-                                <tr>
-                                    <th>ID</th> 
-                                    <th>ncedula</th>
-                                    <th>nombre</th>                                 
-                                    <th>apellido</th> 
-                                    <th>cargo</th> 
-                                    <th>telefono</th> 
-                                    <th>correo</th> 
-                                    <th>estado</th> 
-                                    <th>Contrato</th>
-                                    <th></th> 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($usuarios as $usuario)
-                                    <tr>
-                                        <td>{{ $usuario['id'] }}</td>
-                                        <td>{{ $usuario['ncedula'] }}</td>
-                                        <td>{{ $usuario['nombre'] }}</td>                                    
-                                        <td>{{ $usuario['apellido'] }}</td>
-                                        <td>{{ $usuario['cargo'] }}</td>
-                                        <td>{{ $usuario['telefono'] }}</td>
-                                        <td>{{ $usuario['correo'] }}</td>
-                                        <td>{{ $usuario['estado'] }}</td>
-                                        <td>Contrato No.{{ $usuario['id_contrato']['id'] }}</td>
-                                        <td><a href="javascript:;" onclick="usuarios.update('{{ $usuario }}');"><button class="btn btn-warning">></button></a></td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="footer">
-                        <div class="legend">
-                            <i class="fa fa-circle text-info"></i> 
-                            <i class="fa fa-circle text-danger"></i> 
-                            <i class="fa fa-circle text-warning"></i>
-                        </div>
-                        <hr>
-                        <div class="stats">
-                            <i class="pe-7s-angle-left-circle"></i> <a href="#" onclick="config.Redirect('/administrador/index');"> ir atras.</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<div class="row top-11-w" style="padding:2%;">
+
+    <div class="panel panel-default col-md-5" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Vista de usuarios</h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">A contiuación se describe la lista de usuarios, aqui usted puede realizar la actualización de cada uno de los usuarios con el boton <a href="javascript:;" ><button class="btn btn-warning">></button></a>.<br>
+                Además podrá adicionar un usuario en el formulario que continua con la lista de usuarios.
+            </p>
         </div>
 
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h4 class="title">Crear usuarios</h4>
-                    <p class="category">Formulario para creacion de usuarios</p>
-                </div>
-                <div class="content">
-                    <form action='/administrador/usuarios/create' method="POST" name="formulario" id="formulario">
-                        <input type="hidden" name="id" id="id">
-                        <div class="row">
-                            <div class="col-md-4" >
-                                <div class="card" style="box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);">
-                                    <div class="header">
-                                        <h6 class="title">Datos 1</h6>
-                                    </div>
-                                    <div class="content">
-                                        
-                                        <label>ncedula</label><input type="text" class="form-control" name="ncedula" id="ncedula">
-                                        <label>nombres</label><input type="text" class="form-control" name="nombre" id="nombre">
-                                        <label>apellidos</label><input type="text" class="form-control" name="apellido" id="apellido">
-                                        <label>cargo</label><input type="text" class="form-control" name="cargo" id="cargo">
-
-                                        
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4" >
-                                <div class="card" style="box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);">
-                                    <div class="header">
-                                        <h6 class="title">Datos 2</h6>
-                                    </div>
-                                    <div class="content">
-                                        
-                                        <label>teléfono</label><input type="text" class="form-control" name="telefono" id="telefono">
-                                        <label>contraseña</label><input type="text" class="form-control" name="password" id="password">
-                                        <label>correo</label><input type="text" class="form-control" name="correo" id="correo">
-                                        <label>estado</label><select class="form-control" name="estado" id="estado">
-                                            <option value="ACTIVO">ACTIVO</option>
-                                            <option value="INACTIVO">INACTIVO</option>
-                                            <option value="SUSPENDIDO">SUSPENDIDO</option>
-                                        </select>
-
-                                        
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4" >
-                                <div class="card" style="box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);">
-                                    <div class="header">
-                                        <h6 class="title">Datos 3</h6>
-                                    </div>
-                                    <div class="content">
-                                        
-                                        <label>Token</label><input type="text" class="form-control" value="NA" name="token" id="token"></td>
-                                        <label>arl</label><input type="text" class="form-control" name="arl" id="arl"></td>
-                                        <label>eps</label><input type="text" class="form-control" name="eps" id="eps"></td>
-                                        <label>Cesantias</label><input type="text" class="form-control" name="cesantias" id="cesantias"></td>
-
-                                        
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4" >
-                                <div class="card" style="box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);">
-                                    <div class="header">
-                                        <h6 class="title">Datos 3</h6>
-                                    </div>
-                                    <div class="content">
-                                        
-                                        <label>Pensión</label><input type="text" class="form-control" name="pension" id="pension">
-                                        <label>Caja compensación</label><input type="text" class="form-control" name="caja_compensacion" id="caja_compensacion">
-                                        <label>Contrato</label><select class="form-control" name="id_contrato" id="id_contrato">
-                                        @foreach ($contratos as $contrato)
-                                            <option value="{{ $contrato['id'] }}">Contrato No {{ $contrato['id']}}</option>
-                                        @endforeach
-                                        </select>
-                                        <LABEL>teléfono referencia</LABEL><input type="text" class="form-control" name="telefono_referencia" id="telefono_referencia">
-                                        <label>Nombre referencia</label><input type="text" class="form-control" name="referencia_personal" id="referencia_personal">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6" >
-                                <div class="card" style="box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);background: white;">
-                                    <div class="header">
-                                        <h6 class="title">Acciones/botónes</h6>
-                                    </div>
-                                    <div class="content">
-                                        <input type="submit" value="Guardar" id="btnguardar" class="btn btn-success">
-                                        <div id="actualizar" onclick="config.send_post('#formulario', '/administrador/usuarios/update', '/administrador/usuarios');" class="btn btn-warning">Actualizar</div>
-                                        <div class="btn btn-danger" onclick="config.printDiv('tabla');">Imprimir usuarios</div>
-                                        <div class="btn btn-default">Subir Imagen</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <!-- Table -->
+        <div style="overflow-x:scroll;">
+            <table class="table table-hover" id="tabla">
+                <thead>
+                    <tr>
+                        <th>ID</th> 
+                        <th>ncedula</th>
+                        <th>nombre</th>                                 
+                        <th>apellido</th> 
+                        <th>cargo</th>
+                        <th>Lista Precio</th> 
+                        <th>telefono</th> 
+                        <th>correo</th> 
+                        <th>estado</th> 
+                        <th>Contrato</th>
+                        <th></th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    @if($usuarios!=null)
+                        @foreach ($usuarios as $usuario)
+                            <tr onclick="usuarios.update('{{ $usuario }}');">
+                                <td>{{ $usuario['id'] }}</td>
+                                <td>{{ $usuario['ncedula'] }}</td>
+                                <td>{{ $usuario['nombre'] }}</td>                                    
+                                <td>{{ $usuario['apellido'] }}</td>
+                                <td>{{ $usuario['cargo'] }}</td>
+                                <td>{{ $usuario['pension'] }}</td>
+                                <td>{{ $usuario['telefono'] }}</td>
+                                <td>{{ $usuario['correo'] }}</td>
+                                <td>{{ $usuario['estado'] }}</td>
+                                <td>Contrato No.{{ $usuario['id_contrato']['id'] }}</td>
+                                <td><a href="javascript:;" onclick="usuarios.update('{{ $usuario }}');"><button class="btn btn-warning">></button></a></td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
+
+
+    <div class="col-md-7 row">
+        <div class="panel panel-warning col-md-12" >
+            <!-- Default panel contents -->
+            <form action='/administrador/usuarios/create' method="POST" name="formulario" id="formulario">
+                <div class="panel-heading row" >
+                    <h5 class="col-md-4">Creación usuarios </h5>
+                    <div class="col-md-8 row">
+                        <button type="submit" id="btnguardar" class="btn btn-success col-md-3 btn-guardar"><i class="fas fa-save"></i> Guardar</button>
+                        <div id="actualizar" onclick="config.send_post('#formulario', '/administrador/usuarios/update', '/administrador/usuarios');" class="btn btn-warning col-md-3 btn-actualizar"><i class="fas fa-pen-square"></i> Actualizar</div>
+                        <div onclick="config.Redirect('/administrador/usuarios');" class="btn btn-danger col-md-3 btn-nuevo"><i class="fas fa-plus-circle"></i> Nuevo</div>
+                    </div>                
+                </div>
+                <div class="panel-body" >
+                    <p style="font-size: 10pt;">Diligencie cada uno de los datos relacionados con el usuario a crear.
+                    </p>
+                </div>
+                <input type="hidden" name="id" id="id">
+                <div class="row" style="margin-left:1%;">
+                    <div class="col-md-3">
+                        <label>ncedula</label><input placeholder="ej.(1030570356)" type="text" class="form-control" name="ncedula" id="ncedula">
+                    </div>
+                    <div class="col-md-3">
+                        <label>nombres</label><input placeholder="ej.(Alejandro)" type="text" class="form-control" name="nombre" id="nombre">
+                    </div>
+                    <div class="col-md-3">
+                        <label>apellidos</label><input placeholder="ej.(Moreno)" type="text" class="form-control" name="apellido" id="apellido">
+                    </div>
+                    <div class="col-md-3">
+                        <label>cargo</label><select class="form-control" name="cargo" id="cargo">
+                            <option value="Administrador">Administrador</option>
+                            <option value="Ventas">Ventas</option>
+                            <option value="Inventario">Inventario</option>
+                            <option value="Recursos Humanos">Recursos Humanos</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="row" style="margin-left:1%;">
+                    <div class="col-md-3">
+                        <label>teléfono</label><input placeholder="ej.(3219045297)" type="text" class="form-control" name="telefono" id="telefono">
+                    </div>
+                    <div class="col-md-3">
+                        <label>contraseña</label><input placeholder="ej.(adminsitracion1234)" type="text" class="form-control" name="password" id="password">
+                    </div>
+                    <div class="col-md-3">
+                        <label>correo</label><input type="text" placeholder="ej.(admin@admin.com)" class="form-control" name="correo" id="correo">
+                    </div>
+                    <div class="col-md-3">
+                        <label>estado</label><select class="form-control" name="estado" id="estado">
+                            <option value="ACTIVO">ACTIVO</option>
+                            <option value="INACTIVO">INACTIVO</option>
+                            <option value="SUSPENDIDO">SUSPENDIDO</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="row" style="margin-left:1%;">
+                    <div class="col-md-12">
+                        <label>Token</label><input type="text" class="form-control" value="NA" name="token" id="token"></td>
+                    </div>
+                </div>
+                <hr>
+                <div class="row" style="margin-left:1%;">
+                    <div class="col-md-3">
+                        <label>arl</label><input placeholder="ej.(ARL)" type="text" class="form-control" name="arl" id="arl"></td>
+                    </div>
+                    <div class="col-md-3">
+                        <label>eps</label><input placeholder="ej.(EPS)" type="text" class="form-control" name="eps" id="eps"></td>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Cesantias</label><input placeholder="ej.(CESANTIAS)" type="text" class="form-control" name="cesantias" id="cesantias"></td>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Lista de Precios</label>
+                        <select id="pension" name="pension[]" class="form-control" multiple="multiple" >
+                            <option value="1">Precios # 1</option>
+                            <option value="2">Precios # 2</option>
+                            <option value="3">Precios # 3</option>
+                        </select>
+                    </div>
+                </div>
+                <hr>
+                <div class="row" style="margin-left:1%;">
+                    <div class="col-md-3">
+                        <label>Caja compensación</label><input placeholder="ej.(Caja compensación)" type="text" class="form-control" name="caja_compensacion" id="caja_compensacion">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Contrato</label><select class="form-control" name="id_contrato" id="id_contrato">
+                            @foreach ($contratos as $contrato)
+                                <option value="{{ $contrato['id'] }}">Contrato No {{ $contrato['id']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <LABEL>teléfono referencia</LABEL><input type="text" class="form-control" name="telefono_referencia" id="telefono_referencia">
+                    </div>
+                    <div class="col-md-3">
+                        <label>Nombre referencia</label><input type="text" class="form-control" name="referencia_personal" id="referencia_personal">
+                    </div>
+                </div>
+                <hr>
+                <div class="row" style="margin-left:1%;padding-bottom:5%;">
+                    <div class="col-md-12 content">
+                        <br>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
 </div>
+
+<script>
+$(document).ready(function() {
+    var table = $('#tabla').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ]
+    } );
+});
+</script>
 
 
 @endsection()

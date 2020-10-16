@@ -16,3 +16,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('credenciales', 'Api\Facturatech@crearCredencial');
+Route::get('credenciales', 'Api\Facturatech@selectCredencial');
+
+Route::get('DownloadPDFFileSend', 'Api\Facturatech@DownloadPDFFileSend');

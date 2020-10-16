@@ -15,6 +15,7 @@ use App\Clasificaciones;
 use App\Usuarios;
 use App\Cuentas;
 use App\Pucauxiliar;
+use App\Kardex;
 
 use Yajra\Datatables\Datatables;
 
@@ -115,7 +116,9 @@ class ReferenciasController extends Controller
 	    
     public function showone($id){
 		try{
-			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))
+			$usuario = Usuarios::where('id','=',Session::get('user_id'))->first();
+			$precios = str_replace(',','',$usuario->pension);
+			$obj = Referencias::select('referencias.*',DB::raw(' '.$precios.' as precioasignado'))->where('id_empresa','=',Session::get('id_empresa'))
 							->where('id','=',$id)->first();
 			
 			$linea = Lineas::where('id','=',$obj->codigo_linea)->first();							
@@ -167,7 +170,7 @@ class ReferenciasController extends Controller
 			$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
 			if($request->linea != '' ){
 				if($request->linea !=0){
-					$sql .= " AND codigo_linea = ".$request->linea."";
+					$sql .= " AND codigo_linea in (".$request->linea.")";
 				}
 			}
 			if($request->tipo_reporte != ''){
@@ -225,16 +228,56 @@ class ReferenciasController extends Controller
 
     public function catalogo(){
 		try{
-			$obj = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
-			foreach ($obj as $value) {
-				$value->codigo_linea = Lineas::where('id', $value->codigo_linea)->get();
-				$value->id_presentacion = Tipo_presentaciones::where('id', $value->id_presentacion)->get();
-				$value->id_marca = Marcas::where('id', $value->id_marca)->get();
-				$value->id_clasificacion = Clasificaciones::where('id', $value->id_clasificacion)->get();
-				$value->usuario_creador = Usuarios::where('id', $value->usuario_creador)->get();
+			$referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
+					->orderBy('saldo','desc')
+					->get();
+
+
+			$referenciasmasvendidas = Kardex::select('id_referencia',
+				'id_referencia',DB::raw('sum(cantidad) as total'))
+					->where('id_empresa','=',Session::get('id_empresa'))
+					->where('signo','=','-')
+					->groupBy('id_referencia','signo')
+					->orderBy('total','desc')
+					->take(12)
+					->get();
+			
+			$referenciasmaspedidos = Kardex::select('id_referencia',
+				'id_referencia',DB::raw('sum(cantidad) as total'))
+					->where('id_empresa','=',Session::get('id_empresa'))
+					->where('signo','=','=')
+					->groupBy('id_referencia','signo')
+					->orderBy('total','asc')
+					->take(12)
+					->get();
+			
+			$referenciasmenosvendidos = Kardex::select('id_referencia',
+				'id_referencia',DB::raw('sum(cantidad) as total'))
+					->where('id_empresa','=',Session::get('id_empresa'))
+					->where('signo','=','-')
+					->groupBy('id_referencia','signo')
+					->orderBy('total','desc')
+					->take(12)
+					->get();
+			foreach($referenciasmenosvendidos as $obj){
+				$obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
 			}
+			foreach($referenciasmasvendidas as $obj){
+				$obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
+			}
+			foreach($referenciasmaspedidos as $obj){
+				$obj->id_referencia = Referencias::where('id','=',$obj->id_referencia)->first();
+			}
+
+			$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
+			
+			
 			return view('inventario.catalogo', [
-				'referencias' => $obj
+				'referencias' => $referencias,
+				'referenciasmasvendidas'=>$referenciasmasvendidas,
+				'referenciasmaspedidos'=>$referenciasmaspedidos,
+				'referenciasmenosvendidos'=>$referenciasmenosvendidos,
+				'lineas'=>$lineas
 			]);
 		}
 		catch (ModelNotFoundException $exception){
@@ -326,7 +369,7 @@ class ReferenciasController extends Controller
 			referencias.saldo 
 		from referencias 
 		INNER JOIN marcas ON marcas.id = referencias.id_marca 
-		where 1=1 
+		where referencias.id_empresa = ".Session::get('id_empresa')."
 			".$sql." 
 		order by referencias.descripcion");
 		$objs= Collection::make($objs);
@@ -358,7 +401,7 @@ class ReferenciasController extends Controller
 		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
 		if($request->linea != '' ){
 			if($request->linea !=0){
-				$sql .= " AND codigo_linea = ".$request->linea."";
+				$sql .= " AND codigo_linea in (".$request->linea.")";
 			}
 		}
 		if($request->tipo_reporte != ''){
@@ -428,7 +471,7 @@ class ReferenciasController extends Controller
 		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
 		if($request->linea != '' ){
 			if($request->linea !=0){
-				$sql .= " AND codigo_linea = ".$request->linea."";
+				$sql .= " AND codigo_linea in (".$request->linea.")";
 			}
 		}
 		if($request->tipo_reporte != ''){
@@ -463,5 +506,71 @@ class ReferenciasController extends Controller
 
         $pdf = PDF::loadView('pdfs.pdfreferencias1', compact('data'));
         return $pdf->download('Referencias.pdf');
+	}
+	
+	public function catalogoPrecio($numero, Request $request){
+		
+		$sql = " WHERE 1=1 ";
+		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+		
+		if($request->linea != '' ){
+			$sql .= " AND codigo_linea in (".$request->linea.")";
+		}
+		if($request->tipo_reporte != ''){
+			if($request->tipo_reporte == 'exitencia'){
+				$sql .= " AND saldo > 0 ";
+			}
+		}
+		$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
+
+		
+		
+		if($numero==1){
+			$objs = DB::select("
+				SELECT 
+				codigo_linea,
+				codigo_barras,
+				descripcion,
+				precio1 as precio,
+				(SELECT nombre FROM lineas where id = codigo_linea) as linea
+				FROM `referencias` 
+			".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
+		}
+		else if($numero==2){
+			$objs = DB::select("
+				SELECT 
+				codigo_linea,
+				codigo_barras,
+				descripcion,
+				precio2 as precio,
+				(SELECT nombre FROM lineas where id = codigo_linea) as linea
+				FROM `referencias` 
+			".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
+		}
+		else if($numero==3){
+			$objs = DB::select("
+				SELECT 
+				codigo_linea,
+				codigo_barras,
+				descripcion,
+				precio3 as precio,
+				id_empresa
+				(SELECT nombre FROM lineas where id = codigo_linea) as linea
+				FROM `referencias` 
+			".$sql." AND referencias.id_empresa = ".Session::get('id_empresa')." ".$orden);
+		}
+		
+		
+		$objs= Collection::make($objs);
+		
+        
+        $data= json_decode( json_encode($objs), true);
+
+        /*$pdf = PDF::loadView('pdfs.pdflistaprecios', compact('data'));
+		return $pdf->download('Listaprecios.pdf');*/
+		return view('pdfs.pdflistaprecios', [
+			'data' => $data,
+			'vistalineas'=>explode(',',$request->linea)
+		]);
     }
 }

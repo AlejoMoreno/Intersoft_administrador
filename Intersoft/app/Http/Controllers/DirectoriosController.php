@@ -13,6 +13,7 @@ use App\Usuarios;
 use App\Directorio_tipos;
 use App\Directorio_clases;
 use App\Directorio_tipo_terceros;
+use App\Clasificaciones;
 
 use DB;
 use Excel;
@@ -197,29 +198,58 @@ class DirectoriosController extends Controller
     }
     //buscar por cualquier input y retornar las listas de ellos
     public function search(Request $request){
-        if($request->nit != ''){
+
+
+        $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                    ->where(function ($q) use ($request){
+                        if($request->nit != ''){
+                            $q->where('nit','=',$request->nit);
+                        }
+                        if($request->razon_social != ''){
+                            $q->where('razon_social','LIKE','%'.$request->razon_social.'%');
+                        }
+                        if($request->correo != ''){
+                            $q->where('correo','LIKE','%'.$request->correo.'%');
+                        }
+                        if($request->tipo == "PROVEEDOR"){
+                            $q->where('id_directorio_tipo_tercero','=',1);
+                        }
+                        else{
+                            $q->where('id_directorio_tipo_tercero','=',2);
+                        }
+                    })
+                    ->take(100)
+                    ->get();
+
+        /*if($request->nit != ''){
             $directorios = Directorios::where('nit','=',$request->nit)
                                       ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->take(100)
                                       ->get();
         }
         else if($request->razon_social != ''){
             $directorios = Directorios::where('razon_social','LIKE','%'.$request->razon_social.'%')
                                       ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->take(100)
                                       ->get();
         }
         else if($request->correo != ''){
             $directorios = Directorios::where('correo','LIKE','%'.$request->correo.'%')
                                       ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->take(100)
                                       ->get();
         }
         else{
             $directorios = Directorios::where('nit','>','0')
                                       ->where('id_empresa','=',Session::get('id_empresa'))
+                                      ->take(100)
                                       ->get();
-        }
+        }*/
         foreach ($directorios as $directorio) {
             $directorio->id_regimen = Regimenes::find($directorio->id_regimen);
             $directorio->id_directorio_tipo_tercero = Directorio_tipo_terceros::find($directorio->id_directorio_tipo_tercero);
+            $directorio->id_directorio_tipo = Directorio_tipos::find($directorio->id_directorio_tipo);
+            $directorio->id_retefuente = Retefuentes::find($directorio->id_retefuente);
         }
         return  array(
             "result"=>"success",
@@ -230,12 +260,13 @@ class DirectoriosController extends Controller
         if(isset($request->nit)){
             $directorios = Directorios::where('nit','=',$request->nit)
                                       ->where('id_empresa','=',Session::get('id_empresa'))
-                                      ->where('id_directorio_tipo_tercero', '=', '2')
+                                      //->where('id_directorio_tipo_tercero', '=', '2')
+                                      ->take(100)
                                       ->get();
         }
         else{
             $directorios = Directorios::where('razon_social','like','%'.$request->texto.'%')
-                            ->where('id_directorio_tipo_tercero', '=', '2')
+                            //->where('id_directorio_tipo_tercero', '=', '2')
                             ->where('id_empresa','=',Session::get('id_empresa'))->get();
         }
         
@@ -245,32 +276,49 @@ class DirectoriosController extends Controller
     }
 
     public function addTercero(Request $request){
-        $directorios = new Directorios();
-        $directorios->nit       = $request->nit;
-        $directorios->id_ciudad = $request->id_ciudad;
-        $directorios->razon_social= $request->razon_social;
-        $directorios->direccion = $request->direccion;
-        $directorios->correo    = $request->correo;
-        $directorios->telefono  = $request->telefono;
-        $directorios->telefono1 = $request->telefono;
-        $directorios->telefono2 = $request->telefono;
-        $directorios->digito    = "0";
-        $directorios->financiacion= "0";
-        $directorios->descuento = "0";
-        $directorios->cupo_financiero= "0";
-        $directorios->rete_ica  = "0";
-        $directorios->porcentaje_rete_iva= "0";
-        $directorios->actividad_economica= "0";
-        $directorios->calificacion= "2";
-        $directorios->nivel     = "NACIONAL";
-        $directorios->zona_venta= "0";
-        $directorios->transporte= "NO";
-        $directorios->estado    = "1";
-        $directorios->id_retefuente= "1";
-        $directorios->id_regimen= "1";
-        $directorios->id_usuario= "1";
-        $directorios->id_directorio_tipo= "1";
-        $directorios->id_directorio_clase= "1";
+        $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('nit','=',$request->nit)
+                        ->first();
+        if(sizeof($directorios) == 0){
+            $directorios = new Directorios();
+            $directorios->nit       = $request->nit;
+            $directorios->id_ciudad = $request->id_ciudad;
+            $directorios->razon_social= $request->razon_social;
+            $directorios->direccion = $request->direccion;
+            $directorios->correo    = $request->correo;
+            $directorios->telefono  = $request->telefono;
+            $directorios->telefono1 = $request->telefono;
+            $directorios->telefono2 = $request->telefono;
+            $directorios->digito    = "0";
+            $directorios->financiacion= "0";
+            $directorios->descuento = "0";
+            $directorios->cupo_financiero= "0";
+            $directorios->rete_ica  = "0";
+            $directorios->porcentaje_rete_iva= "0";
+            $directorios->actividad_economica= "0";
+            $directorios->calificacion= "2";
+            $directorios->nivel     = "NACIONAL";
+            $directorios->zona_venta= $request->zona_venta;
+            $directorios->transporte= "NO";
+            $directorios->estado    = "1";
+            $directorios->id_retefuente= "1";
+            $directorios->id_regimen= "1";
+            $directorios->id_usuario= "1";
+            $directorios->id_directorio_tipo= "1";
+            $directorios->id_directorio_clase= "1";
+        }
+        else{
+            $directorios->nit       = $request->nit;
+            $directorios->id_ciudad = $request->id_ciudad;
+            $directorios->razon_social= $request->razon_social;
+            $directorios->direccion = $request->direccion;
+            $directorios->correo    = $request->correo;
+            $directorios->telefono  = $request->telefono;
+            $directorios->telefono1 = $request->telefono;
+            $directorios->telefono2 = $request->telefono;
+            $directorios->zona_venta= $request->zona_venta;
+        }
+        
         if(isset($request->id_directorio_tipo_tercero)){
             $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
         }
@@ -352,5 +400,154 @@ class DirectoriosController extends Controller
 
         $pdf = PDF::loadView('pdfs.pdfDirectorio', compact('data'));
         return $pdf->download('Directorio.pdf');
+    }
+
+
+    //INTERGRACION INTERCON
+    public function subirTercero(Request $request){
+        //GUARDAR ARCHIVO EN EL STORAGE
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('file');
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('local')->put($nombre,  \File::get($file));
+
+        //RECORRER EL ARCHIVO EN EL STORAGE
+        $public_path = public_path();
+        $url = $public_path.'/storage/'.$nombre;
+        //verificamos si el archivo existe y lo retornamos
+        if (\Storage::exists($nombre))
+        {
+            $numlinea = 0;
+            $archivo = fopen($url,'r');
+            //recorrer cada linea
+            while ($linea = fgets($archivo)) {
+                $lineas[] = str_replace("  ","",explode(';',$linea)); 
+                $numlinea++;
+            }
+            fclose($archivo);
+        }
+
+        //dd($lineas);
+ 
+        return view('administrador.integracion',[
+            "terceros"=>$lineas
+        ]);
+    }
+
+    public function saveTercero(Request $request){
+
+        try{
+
+            $tercero = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                ->where('nit','=',$request->nit)
+                ->get();
+            if(sizeof($tercero)>0){
+                return array(
+                    "result" => "Existe",
+                    "body" => "El Tercero ya existe en la base de datos"
+                );
+            }
+
+            $directorios = new Directorios();
+            $directorios->nit       = (string)$request->nit;
+            $directorios->digito    = (string)$request->digito;
+            $directorios->razon_social= (string)$request->razon_social;
+            $directorios->direccion = (string)$request->direccion;
+            $directorios->correo    = (string)$request->correo;
+            $directorios->telefono  = (string)$request->telefono;
+            $directorios->telefono1 = (string)$request->telefono1;
+            $directorios->telefono2 = (string)$request->telefono2;
+            $directorios->financiacion= (double)$request->financiacion;
+            $directorios->descuento = (double)$request->descuento;
+            $directorios->cupo_financiero= (double)$request->cupo_financiero;
+            $directorios->rete_ica  = (double)$request->rete_ica;
+            $directorios->porcentaje_rete_iva= (double)$request->porcentaje_rete_iva;
+            $directorios->actividad_economica= $request->actividad_economica;
+            $directorios->zona_venta= (string)$request->zona_venta;
+            $directorios->id_empresa	 	= Session::get('id_empresa');
+            $directorios->calificacion= $request->calificacion;
+            $directorios->transporte= (string)$request->transporte;
+            $directorios->id_directorio_clase= $request->id_directorio_clase;
+
+            if($request->id_directorio_tipo_tercero == "CLIENTE"){
+                $directorios->id_directorio_tipo_tercero= 2;
+            }
+            else if($request->id_directorio_tipo_tercero == "PROVEEDOR"){
+                $directorios->id_directorio_tipo_tercero= 1;
+            }
+            else{
+                $directorios->id_directorio_tipo_tercero= 3;
+            }
+
+            if($request->digito!="" || $request->digito != " "){
+                $directorios->id_directorio_tipo= 2; //JURIDICA
+            }
+            else{
+                $directorios->id_directorio_tipo= 1;//NATURAL
+            }
+            $vendedor = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->where('ncedula','=',$request->id_usuario)->get();
+            if(sizeof($vendedor)==0){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "El Vendedor no existe "
+                );
+            }
+            $directorios->id_usuario= $vendedor[0]->id;
+
+            if($request->estado == "I"){
+                $directorios->estado    = "INACTIVO";
+            }
+            else{
+                $directorios->estado    = "ACTIVO";
+            }
+
+            if($request->nivel == "NACIO"){
+                $directorios->nivel     = "NACIONAL";
+            }
+            else{
+                $directorios->nivel     = "INTERNACIONAL";
+            }
+            
+            if($request->id_regimen == "SIMPL"){
+                $directorios->id_regimen= 1; //Régimen Único Simplificado
+            }
+            else{
+                $directorios->id_regimen= 2; //Régimen Común
+            }
+            
+            if($request->id_retefuente == "T"){
+                $directorios->id_retefuente= 1; //SOBRE TODO
+            }
+            else if($request->id_retefuente == "B"){
+                $directorios->id_retefuente= 2; //SOBRE LA BASE MENSUAL
+            }
+            else{
+                $directorios->id_retefuente= 3; //NO PRESENTA
+            }
+            
+            $ciudades = Ciudades::where('codigo','=',$request->id_ciudad)->get();
+            if(sizeof($ciudades)==0){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "La ciudades no existe "
+                );
+            }
+            $directorios->id_ciudad = $ciudades[0]->id;
+
+            $directorios->save();
+            
+            return array(
+                "result" => "Correcto",
+                "body" => "El Tercero fue registrado"
+            );
+        }
+        catch(Exception $exce){
+            return array(
+                "result" => "Incorrecto",
+                "body" => $exce
+            );
+        }
     }
 }

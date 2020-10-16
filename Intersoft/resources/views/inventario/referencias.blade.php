@@ -35,7 +35,7 @@
                         </div>
                         <div class="col-md-2">
                             <p>Linea</p>
-                            <select name="linea" id="linea" class="form-control" >
+                            <select name="linea" id="linea" class="form-control" multiple>
                                 <option value="0">TODAS</option>
                                 @foreach ($lineas as $linea)
                                 <option value="{{ $linea->id }}">{{ $linea->id }} - {{ $linea->nombre }}</option>

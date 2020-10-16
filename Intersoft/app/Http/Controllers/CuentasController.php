@@ -18,7 +18,7 @@ class CuentasController extends Controller
 {
 	public function index(){
         $pucsubcuentas = Pucsubcuentas::all();
-        $auxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->paginate(5);
+        $auxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->orderBy('codigo','asc')->take(200)->get();
         //foreach ($auxiliares as $auxiliar){
           //  $auxiliar->id_subcuenta = Pucsubcuentas::where('id','=',$auxiliar->id_subcuenta)->first();
             /*$auxiliar->id_subcuenta->id_cuenta = Puccuentas::where('id','=',$auxiliar->id_subcuenta->id_cuenta)->fisrt();
@@ -46,6 +46,23 @@ class CuentasController extends Controller
 
         return redirect('/contabilidad/cuentas');
     }
+
+    public function update(Request $request){
+      $auxiliar = Pucauxiliar::where('id','=',$request->id)->first();
+      $auxiliar->id_pucsubcuentas = $request->pucsubcuentas;
+      $auxiliar->tipo             = $request->tipo;
+      $auxiliar->naturaleza       = $request->naturaleza;
+      $auxiliar->clase            = $request->clase;
+      $auxiliar->codigo           = $request->codigo;
+      $auxiliar->descripcion      = $request->descripcion;
+      $auxiliar->homologo         = $request->codigo;
+      $auxiliar->id_empresa       = Session::get('id_empresa');
+      $auxiliar->exogena          = $request->exogena;
+      $auxiliar->na               = $request->na;
+      $auxiliar->save();
+
+      return redirect('/contabilidad/cuentas');
+  }
 
     public function copiarPrimeraVez(){
         

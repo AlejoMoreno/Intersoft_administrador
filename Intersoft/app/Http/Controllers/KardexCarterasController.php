@@ -32,12 +32,13 @@ class KardexCarterasController extends Controller
 
 		$obj->save();
 
-		$factura = Facturas::where('id',$obj->id_factura)->get()[0];
-		if($factura->saldo != 0){
-			$factura->saldo = $factura->saldo - $obj->efectivo;
-			$factura->save();
+		$factura = Facturas::where('id',$obj->id_factura)->get();
+		if(sizeof($factura)>0){
+			if($factura[0]->saldo != 0){
+				$factura[0]->saldo = $factura[0]->saldo - $obj->efectivo;
+				$factura[0]->save();
+			}
 		}
-		
 
 
 		return array(

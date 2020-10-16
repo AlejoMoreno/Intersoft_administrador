@@ -90,39 +90,30 @@ function CuentaContable(){
         console.log('Daatos Sucurusal-update:');
         var data = JSON.parse(data);
         console.log(data);
-        $('#row'+data.id).css('opacity','0.4');
         //ubicar informacion en el formulario
-        $('#cuentaClase').val(data.id);
-		$('#nombreClase').val(data.nombreClase);
-		$('#cuentaGrupo').val(data.grupo);
-		$('#nombreGrupo').val(data.nombreGrupo);
-		$('#cuentaCuenta').val(data.cuenta);
-		$('#nombreCuenta').val(data.nombreCuenta);
-		$('#cuentaSubcuenta').val(data.subcuenta);
-		$('#nombreSubcuenta').val(data.nombreSubcuenta);
-		$('#cuentaAuxiliar').val(data.auxiliar);
-		$('#nombreAuxiliar').val(data.nombreAuxiliar);
-		$('#cuentaHomologo').val(data.homologo);
-		$('#cuentaHomologo_1').val(data.homologo_1);
+		$('#na').val(data.na);
+		$('#exogena').val(data.exogena);
+		$('#descripcion').val(data.descripcion);
+		$('#codigo').val(data.codigo);
+		$('#pucsubcuentas').val(data.id_pucsubcuentas);
+		$('#clase').val(data.clase);
+		$('#naturaleza').val(data.naturaleza);
+		$('#tipo').val(data.tipo);
         $('#id').val(data.id);
-		$('input[type="submit"]').attr('disabled','disabled');
+		$('#btnguardar').attr('disabled','disabled');
     };
 
     this.sendUpdate = function(){
         parametros = {
             "id" : $('#id').val(),
-            "clase" : $('#cuentaClase').val(),
-			"nombreClase" : $('#nombreClase').val(),
-			"grupo" : $('#cuentaGrupo').val(),
-			"nombreGrupo" : $('#nombreGrupo').val(),
-			"cuenta" : $('#cuentaCuenta').val(),
-			"nombreCuenta" : $('#nombreCuenta').val(),
-			"subcuenta" : $('#cuentaSubcuenta').val(),
-			"nombreSubcuenta" : $('#nombreSubcuenta').val(),
-			"auxiliar" : $('#cuentaAuxiliar').val(),
-			"nombreAuxiliar" : $('#nombreAuxiliar').val(),
-			"homologo" : $('#homologo').val(),
-			"homologo_1" : $('#homologo_1').val()
+            "na" : $('#na').val(),
+			"exogena" : $('#exogena').val(),
+			"descripcion" : $('#descripcion').val(),
+			"codigo" : $('#codigo').val(),
+			"pucsubcuentas" : $('#pucsubcuentas').val(),
+			"clase" : $('#clase').val(),
+			"naturaleza" : $('#naturaleza').val(),
+			"tipo" : $('#tipo').val()
         };
         $.ajax({
 			data:  parametros,

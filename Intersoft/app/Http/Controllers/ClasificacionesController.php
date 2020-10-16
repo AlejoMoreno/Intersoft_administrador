@@ -94,8 +94,12 @@ class ClasificacionesController extends Controller
             $pucauxiliares = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
                                         ->where('codigo','like','14%')->get();
             $pucauxiliares1 = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
-                                        ->where('codigo','like','47%')->get();
+                                        ->where('codigo','like','41%')->get();
             $objs = Clasificaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
+            foreach($objs as $obj){
+                $obj->cuenta_contable = Pucauxiliar::where('id','=',$obj->cuenta_contable)->first();
+                $obj->cuenta_contrapartida = Pucauxiliar::where('id','=',$obj->cuenta_contrapartida)->first();
+            }
             return view('inventario.clasificaciones', [
                 'clasificaciones' => $objs,
                 'pucauxiliares' => $pucauxiliares,

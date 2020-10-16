@@ -163,6 +163,13 @@ function Referencias(){
         config.Redirect("/pdf/pdfreferencias1?orden="+orden+"&tipo_reporte="+tipo_reporte+"&linea="+linea);
 	}
 
+	this.envioPDFlistaprecios = function(numero){
+		var orden = $('#orden').val();
+		var tipo_reporte = $('#tipo_reporte').val();
+		var linea = $('#linea').val();
+        config.Redirect("/inventario/catalogo/precio/"+numero+"?orden="+orden+"&tipo_reporte="+tipo_reporte+"&linea="+linea);
+	}
+
 	this.actualizarPrecios = function (){
 		
 	}

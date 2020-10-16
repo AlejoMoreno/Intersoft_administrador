@@ -27,6 +27,18 @@ class LineasController extends Controller
             if(!isset($request->codigo_alterno)){
                 $request->codigo_alterno = $request->nombre;
             }
+            if($request->retefuente_porcentaje == '0'){
+                $request->v_puc_retefuente = 1;
+                $request->c_puc_retefuente = 1;
+            }
+            if($request->reteiva_porcentaje == '0'){
+                $request->v_puc_reteiva = 1;
+                $request->c_puc_reteiva = 1;
+            }
+            if($request->reteica_porcentaje == '0'){
+                $request->v_puc_reteica = 1;
+                $request->c_puc_reteica = 1;
+            }
             $obj->codigo_alterno        = $request->codigo_alterno;
             $obj->id_empresa            = Session::get('id_empresa');
             $obj->retefuente_porcentaje = $request->retefuente_porcentaje;

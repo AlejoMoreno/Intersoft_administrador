@@ -16,6 +16,7 @@ function TipoPagos(){
         $('#id').val(data.id);
         $('#nombre').val(data.nombre);
         $('#puc_cuenta').val(data.puc_cuenta.id);
+        $('#puc_compra').val(data.puc_compra.id);
         $('#tercero').val(data.tercero);
 		$('input[type="submit"]').attr('disabled','disabled');
     };
@@ -24,7 +25,8 @@ function TipoPagos(){
         parametros = {
             "id" : $('#id').val(),
             "nombre" : $('#nombre').val(),
-			"puc_cuenta" : $('#puc_cuenta').val(),
+            "puc_cuenta" : $('#puc_cuenta').val(),
+            "puc_compra" : $('#puc_compra').val(),
             "tercero" : $('#tercero').val()
         };
         $.ajax({

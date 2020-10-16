@@ -16,8 +16,8 @@ function Clasificaciones(){
         $('#id').val(data.id);
         $('#nombre').val(data.nombre);
 		$('#descripcion').val(data.descripcion);
-        $('#cuenta_contable').val(data.cuenta_contable);
-        $('#cuenta_contrapartida').val(data.cuenta_contrapartida);
+        $('#cuenta_contable').val(data.cuenta_contable.id);
+        $('#cuenta_contrapartida').val(data.cuenta_contrapartida.id);
         $('input[type="submit"]').attr('disabled','disabled');
     };
 
