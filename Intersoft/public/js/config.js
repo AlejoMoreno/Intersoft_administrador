@@ -12,7 +12,8 @@
 */
 //namespace
 //var HOST = "http://localhost:8000"; //pruebas
-var HOST = "http://intersoft.wakusoft.com"; //produccion
+var HOST = ""; //produccion
+//var HOST = "http://intersoft.wakusoft.com"; //produccion
 
 var config = new Config();
 
@@ -81,7 +82,6 @@ function Config(){
 	//redireccionar a otra pagina
 	this.Redirect = function(url){
 		console.log("ir a:"+url);
-		$('#cargando').show();
         window.location=url;
 	};
 
@@ -293,7 +293,7 @@ function Config(){
 	this.anular = function(_tipo,_data){
 		var data = JSON.parse(_data);
 		if(_tipo == 'factura'){
-			var url = '/documentos/anular/'+data.id;
+			var url = '/documentos/anular/'+data.idfactura;
 		}
 		if(_tipo == 'cartera'){
 			var url = '/cartera/anular/'+data.id;
@@ -326,7 +326,7 @@ function Config(){
 	this.eliminar = function(_tipo,_data){
 		var data = JSON.parse(_data);
 		if(_tipo == 'factura'){
-			var url = '/documentos/eliminar/'+data.id;
+			var url = '/documentos/eliminar/'+data.idfactura;
 		}
 		if(_tipo == 'cartera'){
 			var url = '/cartera/eliminar/'+data.id;
@@ -360,8 +360,43 @@ function Config(){
 		$('#resultado').css("display","inline");
 	}
 
-}
+	this.createToast = function(type, ToastText){
+		if(type == "success"){
+			toastada.success(ToastText, {
+				lifeSpan: 4000, // timeout
+				position: 'top-right',
+				animate: false, // enable animation
+				animateDuration: 0
+			});
+		}
+		if(type == "info"){
+			toastada.info(ToastText, {
+				lifeSpan: 4000, // timeout
+				position: 'top-right',
+				animate: false, // enable animation
+				animateDuration: 0
+			});
+		}
+		if(type == "warning"){
+			toastada.warning(ToastText, {
+				lifeSpan: 4000, // timeout
+				position: 'top-right',
+				animate: false, // enable animation
+				animateDuration: 0
+			});
+		}
+		if(type == "error"){
+			toastada.error(ToastText, {
+				lifeSpan: 4000, // timeout
+				position: 'top-right',
+				animate: false, // enable animation
+				animateDuration: 0
+			});
+		}
+		
+	}
 
+}
 
 
 
