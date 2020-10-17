@@ -289,14 +289,14 @@ class KardexController extends Controller
 			
 			$sucursales =  Sucursales::where('id_empresa','=',Session::get('id_empresa'))->get();
 
-            $facturas = Facturas::where('id_empresa','=',Session::get('id_empresa'))
+            $factura = Facturas::where('id_empresa','=',Session::get('id_empresa'))
 				->where('id_sucursal','=',Session::get('sucursal'))	
 				->where('numero','=',$request->numero)
                 ->where('prefijo','=',$request->prefijo)
                 ->where('id_cliente','=',$tercero->id)
                 ->where('id_documento','=',$documento->id)
                 ->get();
-            if(sizeof($facturas)==0){
+            if(sizeof($factura)==0){
                 return array(
                     "result" => "Incorrecto",
                     "body" => "La factura No existe en la base de datos"
@@ -328,6 +328,9 @@ class KardexController extends Controller
 				$lotes->id_empresa	= Session::get('id_empresa');
 				$lotes->save();
 			}
+			$lote = Lotes::where('id_empresa','=',Session::get('id_empresa'))
+                ->where('id_referencia','=',$producto[0]->id)
+                ->get();
                         
 			//verificar si ya esta subido este o no
 			$kardex = Kardex::where('id_empresa','=',Session::get('id_empresa'))
@@ -354,7 +357,7 @@ class KardexController extends Controller
 			$obj->id_factura 	= $factura[0]->id;
 			$obj->id_vendedor 	= $factura[0]->id_vendedor;
 			$obj->fecha 		= $factura[0]->fecha;
-			$obj->id_referencia = $producto[0]->id_referencia;
+			$obj->id_referencia = $producto[0]->id;
 			$obj->lote 			= $lote[0]->id;
 			$obj->serial 		= $lote[0]->serial;
 			$obj->fecha_vencimiento = $lote[0]->fecha_vencimiento;
@@ -377,7 +380,7 @@ class KardexController extends Controller
 			$obj->kardex_anterior = $factura[0]->id; //id factura
 			$obj->id_empresa	= Session::get('id_empresa');
 			$obj->estado 		= strval($factura[0]->estado);
-			//$obj->save();
+			$obj->save();
             return array(
                 "result" => "Correcto",
                 "body" => "El documento fue SUBIDO en su totalidad"
