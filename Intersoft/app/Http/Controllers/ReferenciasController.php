@@ -572,5 +572,72 @@ class ReferenciasController extends Controller
 			'data' => $data,
 			'vistalineas'=>explode(',',$request->linea)
 		]);
+	}
+	
+	/**
+     * FUNCIONES PARA SUBIR ARCHIVO PLANO
+    */
+
+    public function subirSaldos(Request $request){
+        //GUARDAR ARCHIVO EN EL STORAGE
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('file');
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('local')->put($nombre,  \File::get($file));
+
+        //RECORRER EL ARCHIVO EN EL STORAGE
+        $public_path = public_path();
+        $url = $public_path.'/storage/'.$nombre;
+        //verificamos si el archivo existe y lo retornamos
+        if (\Storage::exists($nombre))
+        {
+            $numlinea = 0;
+            $archivo = fopen($url,'r');
+            //recorrer cada linea
+            while ($linea = fgets($archivo)) {
+                $lineas[] = explode(',',$linea);  
+                $numlinea++;
+            }
+            fclose($archivo);
+        }
+
+ 
+        return view('administrador.integracion',[
+            "saldos"=>$lineas
+        ]);
+    }
+
+    public function saveSaldos(Request $request){
+
+        try{
+			
+			
+			$referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
+				->where('codigo_interno','=',$request->codigo)
+                ->get();
+            if(sizeof($referencias)==0){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "El producto no existe en la base de datos"
+                );
+			}
+
+			$referencias[0]->saldo = $request->saldo;
+			$referencias[0]->costo = $request->ultimoCosto;
+            $referencias[0]->save();
+
+            return array(
+                "result" => "Correcto",
+                "body" => "El producto fue ACTUALIZADO en su totalidad"
+            );
+        }
+        catch(Exception $exce){
+            return array(
+                "result" => "Incorrecto",
+                "body" => $exce
+            );
+        }
     }
 }

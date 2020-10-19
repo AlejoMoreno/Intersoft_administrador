@@ -361,6 +361,12 @@ Route::post('/administrador/integracion/terceros','DirectoriosController@subirTe
 Route::post('/administrador/saveTercero','DirectoriosController@saveTercero');
 Route::post('/administrador/integracion/kardex','KardexController@subirKardex');
 Route::post('/administrador/saveKardex','KardexController@saveKardex');
+Route::post('/administrador/integracion/carteras','CarterasController@subirCarteras');
+Route::post('/administrador/saveCarteras','CarterasController@saveCarteras');
+Route::post('/administrador/integracion/kardexcarteras','KardexCarterasController@subirKardexcarteras');
+Route::post('/administrador/saveKardexcarteras','KardexCarterasController@saveKardexcarteras');
+Route::post('/administrador/integracion/saldos','ReferenciasController@subirSaldos');
+Route::post('/administrador/saveSaldos','ReferenciasController@saveSaldos');
 
 /*
 |--------------------------------------------------------------------------

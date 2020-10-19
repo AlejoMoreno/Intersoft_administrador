@@ -307,6 +307,170 @@
         </div>
     </div>
 
+
+    <div class="panel panel-default col-md-12" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Integración de carteras</h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">Debe subir el archivo plano CARTERAS.LIS generado por el software INTERCON. 
+            </p>
+        </div>
+
+        <div class="row" style="padding: 2%;">
+            <div class="col-md-10 col-md-offset-1">
+                <form method="POST" action="/administrador/integracion/carteras" accept-charset="UTF-8" enctype="multipart/form-data">
+                                          
+                    <div class="form-group" >
+                      <label class="col-md-4 control-label">Archivo .LIS Intercon</label>
+                      <div class="col-md-4">
+                        <input type="file" class="form-control" name="file" >
+                      </div>
+                      <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Validar</button>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="btn btn-primary" id="recorrerCarteras">Recorrer</div>
+                      </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-md-12" style="overflow-x: scroll">
+                @if(isset($carteras))
+                <table class="table" id="carteras">
+                    @foreach ($carteras as $linea)
+                    <tbody>
+                        <tr>
+                            <td>{{ $linea[0] }}</td>
+                            <td>{{ $linea[1] }}</td>
+                            <td>{{ $linea[2] }}</td>
+                            <td>{{ $linea[3] }}</td>
+                            <td>{{ $linea[4] }}</td>
+                            <td>{{ $linea[5] }}</td>
+                            <td>{{ $linea[6] }}</td>
+                            <td>{{ $linea[7] }}</td>
+                            <td>{{ $linea[8] }}</td>
+                            <td>{{ $linea[9] }}</td>
+                            <td>{{ $linea[10] }}</td>
+                            <td>{{ $linea[11] }}</td>
+                            <td>{{ $linea[12] }}</td>
+                            <td>Resultado</td>
+                        </tr>
+                    </tbody>
+                    @endforeach
+                </table>
+                @endif
+            </div>
+        </div>
+    </div>
+
+
+    <div class="panel panel-default col-md-12" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Integración de Facturas pagadas / kardexcarteras</h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">Debe subir el archivo plano kardexcarteras.LIS generado por el software INTERCON. 
+            </p>
+        </div>
+
+        <div class="row" style="padding: 2%;">
+            <div class="col-md-10 col-md-offset-1">
+                <form method="POST" action="/administrador/integracion/kardexcarteras" accept-charset="UTF-8" enctype="multipart/form-data">
+                                          
+                    <div class="form-group" >
+                      <label class="col-md-4 control-label">Archivo .LIS Intercon</label>
+                      <div class="col-md-4">
+                        <input type="file" class="form-control" name="file" >
+                      </div>
+                      <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Validar</button>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="btn btn-primary" id="recorrerKardexcarteras">Recorrer</div>
+                      </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-md-12" style="overflow-x: scroll">
+                @if(isset($kardexcarteras))
+                <table class="table" id="kardexcarteras">
+                    @foreach ($kardexcarteras as $linea)
+                    <tbody>
+                        <tr>
+                            <td>{{ $linea[0] }}</td>
+                            <td>{{ $linea[1] }}</td>
+                            <td>{{ $linea[2] }}</td>
+                            <td>{{ $linea[3] }}</td>
+                            <td>{{ $linea[4] }}</td>
+                            <td>{{ $linea[5] }}</td>
+                            <td>{{ $linea[6] }}</td>
+                            <td>{{ $linea[7] }}</td>
+                            <td>{{ $linea[8] }}</td>
+                            <td>{{ $linea[9] }}</td>
+                            <td>{{ $linea[10] }}</td>
+                            <td>{{ $linea[11] }}</td>
+                            <td>{{ $linea[12] }}</td>
+                            <td>{{ $linea[13] }}</td>
+                            <td>{{ $linea[14] }}</td>
+                            <td>{{ $linea[15] }}</td>
+                            <td>{{ $linea[16] }}</td>
+                            <td>Resultado</td>
+                        </tr>
+                    </tbody>
+                    @endforeach
+                </table>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default col-md-12" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Integración de saldos kardex</h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">Debe subir el archivo plano SALDOS.LIS generado por el software INTERCON. 
+            </p>
+        </div>
+
+        <div class="row" style="padding: 2%;">
+            <div class="col-md-10 col-md-offset-1">
+                <form method="POST" action="/administrador/integracion/saldos" accept-charset="UTF-8" enctype="multipart/form-data">
+                                          
+                    <div class="form-group" >
+                      <label class="col-md-4 control-label">Archivo .LIS Intercon</label>
+                      <div class="col-md-4">
+                        <input type="file" class="form-control" name="file" >
+                      </div>
+                      <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Validar</button>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="btn btn-primary" id="recorrerSaldos">Recorrer</div>
+                      </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-md-12" style="overflow-x: scroll">
+                @if(isset($saldos))
+                <table class="table" id="saldos">
+                    @foreach ($saldos as $linea)
+                    <tbody>
+                        <tr>
+                            <td>{{ $linea[0] }}</td>
+                            <td>{{ $linea[1] }}</td>
+                            <td>{{ $linea[2] }}</td>
+                            <td>Resultado</td>
+                        </tr>
+                    </tbody>
+                    @endforeach
+                </table>
+                @endif
+            </div>
+        </div>
+    </div>
+
     <script>
         $('#recorrerFacturas').click(function (){
             var table = document.getElementById("mytab1"); 
@@ -595,6 +759,186 @@
                         row.classList.add("incorrecto");
                         row.cells[34].innerHTML = response.body;
                         recursivoTablaKardex( document.getElementById("kardex"), index );
+                    }
+                });
+            }
+        }
+
+        
+    </script>
+
+
+    <script>
+        $('#recorrerCarteras').click(function (){
+            var table = document.getElementById("carteras"); 
+            recursivoTablaCarteras( table, 1 );
+        });
+
+        function recursivoTablaCarteras( table, index){
+            var row = table.rows[index];
+            console.log(index);
+            index = index + 1;
+            if(index >= table.rows.length + 1){
+               return true; 
+            }
+            else{
+                parametros = {
+                    'numero' : row.cells[3].innerHTML,
+                    'prefijo' : row.cells[2].innerHTML,
+                    'nit_tercero' : row.cells[5].innerHTML,
+                    'tipoCartera' : row.cells[0].innerHTML,
+                    'efectivo' : row.cells[8].innerHTML,
+                    'fecha' : row.cells[6].innerHTML,
+                    'total' : row.cells[7].innerHTML
+                }
+                $.ajax({
+                    data:  parametros,
+                    url:   '/administrador/saveCarteras',
+                    type:  'post',
+                    beforeSend: function () {
+                        row.classList.add("esperando");
+                    },
+                    success:  function (response) {
+                        row.classList.remove("esperando");
+                        if(response.result == "Correcto"){
+                            row.classList.add("correcto");
+                            row.cells[13].innerHTML = response.body;
+                        }
+                        else if(response.result == "Existe"){
+                            row.classList.add("correcto");
+                            row.cells[13].innerHTML = response.body;
+                        }
+                        else{
+                            row.classList.add("incorrecto");
+                            row.cells[13].innerHTML = response.body;
+                        }
+                        console.log("respuesta index: "+index, response);
+                        recursivoTablaCarteras( document.getElementById("carteras"), index );
+                    },
+                    error: function (error) {
+                        row.classList.add("incorrecto");
+                        row.cells[13].innerHTML = response.body;
+                        recursivoTablaCarteras( document.getElementById("carteras"), index );
+                    }
+                });
+            }
+        }
+
+        
+    </script>
+
+    <script>
+        $('#recorrerKardexcarteras').click(function (){
+            var table = document.getElementById("kardexcarteras"); 
+            recursivoTablaKardexcarteras( table, 1 );
+        });
+
+        function recursivoTablaKardexcarteras( table, index){
+            var row = table.rows[index];
+            console.log(index);
+            index = index + 1;
+            if(index >= table.rows.length + 1){
+               return true; 
+            }
+            else{
+                parametros = {
+                    'nit_tercero' : row.cells[4].innerHTML,
+                    'numero' : row.cells[2].innerHTML,
+                    'prefijo' : row.cells[1].innerHTML,
+                    'tipoCartera' : row.cells[0].innerHTML,
+                    'numero_factura' : row.cells[8].innerHTML,
+                    'prefijo_factura' : row.cells[7].innerHTML,
+                    'tipo_factura' : row.cells[6].innerHTML,
+                    'efectivo' : row.cells[9].innerHTML,
+                    'descuentos' : row.cells[11].innerHTML,
+                    'sobrecostos' : row.cells[14].innerHTML,
+                    'retefuente' : row.cells[10].innerHTML,
+                    'reteiva' : row.cells[13].innerHTML,
+                    'reteica' : row.cells[12].innerHTML
+                }
+                $.ajax({
+                    data:  parametros,
+                    url:   '/administrador/saveKardexcarteras',
+                    type:  'post',
+                    beforeSend: function () {
+                        row.classList.add("esperando");
+                    },
+                    success:  function (response) {
+                        row.classList.remove("esperando");
+                        if(response.result == "Correcto"){
+                            row.classList.add("correcto");
+                            row.cells[17].innerHTML = response.body;
+                        }
+                        else if(response.result == "Existe"){
+                            row.classList.add("correcto");
+                            row.cells[17].innerHTML = response.body;
+                        }
+                        else{
+                            row.classList.add("incorrecto");
+                            row.cells[17].innerHTML = response.body;
+                        }
+                        console.log("respuesta index: "+index, response);
+                        recursivoTablaKardexcarteras( document.getElementById("kardexcarteras"), index );
+                    },
+                    error: function (error) {
+                        row.classList.add("incorrecto");
+                        row.cells[17].innerHTML = response.body;
+                        recursivoTablaKardexcarteras( document.getElementById("kardexcarteras"), index );
+                    }
+                });
+            }
+        }
+
+        
+    </script>
+
+    <script>
+        $('#recorrerSaldos').click(function (){
+            var table = document.getElementById("saldos"); 
+            recursivoTablaSaldos( table, 1 );
+        });
+
+        function recursivoTablaSaldos( table, index){
+            var row = table.rows[index];
+            console.log(index);
+            index = index + 1;
+            if(index >= table.rows.length + 1){
+               return true; 
+            }
+            else{
+                parametros = {
+                    'codigo' : row.cells[0].innerHTML,
+                    'saldo' : row.cells[1].innerHTML,
+                    'ultimoCosto' : row.cells[2].innerHTML
+                }
+                $.ajax({
+                    data:  parametros,
+                    url:   '/administrador/saveSaldos',
+                    type:  'post',
+                    beforeSend: function () {
+                        row.classList.add("esperando");
+                    },
+                    success:  function (response) {
+                        row.classList.remove("esperando");
+                        if(response.result == "Correcto"){
+                            row.classList.add("correcto");
+                            row.cells[17].innerHTML = response.body;
+                        }
+                        else if(response.result == "Existe"){
+                            row.classList.add("correcto");
+                            row.cells[17].innerHTML = response.body;
+                        }
+                        else{
+                            row.classList.add("incorrecto");
+                            row.cells[17].innerHTML = response.body;
+                        }
+                        console.log("respuesta index: "+index, response);
+                        recursivoTablaSaldos( document.getElementById("saldos"), index );
+                    },
+                    error: function (error) {
+                        row.classList.add("incorrecto");
+                        row.cells[17].innerHTML = response.body;
+                        recursivoTablaSaldos( document.getElementById("saldos"), index );
                     }
                 });
             }

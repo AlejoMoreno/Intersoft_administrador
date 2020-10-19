@@ -205,7 +205,25 @@ class CarterasController extends Controller
 		]);
 	}
 
-	function extracto(){
+	function extracto(Request $request){
+		$totalcarteraProveedor=null;
+		$totalcarteracliente=null;
+		if(!isset($request)){
+			$totalcarteraProveedor = Directorios::where('id_directorio_tipo_tercero', '=', '1')
+							->select(DB::raw('SUM(facturas.saldo) as totalfacturas'))
+							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
+							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
+							->where('facturas.id_empresa','=',Session::get('id_empresa'))
+							->where('saldo','>','0')
+							->first();
+			$totalcarteracliente = Directorios::where('id_directorio_tipo_tercero', '=', '2')
+							->select(DB::raw('SUM(facturas.saldo) as totalfacturas'))
+							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
+							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
+							->where('facturas.id_empresa','=',Session::get('id_empresa'))
+							->where('saldo','>','0')
+							->first();
+		}
 		$carteraproveedor = Directorios::where('id_directorio_tipo_tercero', '=', '1')
 							->select('facturas.*','directorios.*','usuarios.*',
 								DB::raw('facturas.id as idfactura'),
@@ -214,6 +232,19 @@ class CarterasController extends Controller
 							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
 							->where('facturas.id_empresa','=',Session::get('id_empresa'))
 							->where('saldo','>','0')
+							->where(function ($q) use ($request) {
+								if(isset($request->nit)){
+									$q->where('directorios.nit','=',$request->nit);
+								}
+								if(isset($request->razonsocial)){
+									$q->where('directorios.razon_social','like','%'.$request->razonsocial.'%');                  
+								}
+								if(isset($request->fechainicio)){
+									$q->whereBetween('facturas.fecha', [$request->fechainicio, $request->fechafinal]);
+								}
+							})
+							->orderBy('facturas.fecha','desc')
+							->take(100)
 							->get();
 		$carteracliente = Directorios::where('id_directorio_tipo_tercero', '=', '2')
 							->select('facturas.*','directorios.*','usuarios.*',
@@ -223,10 +254,25 @@ class CarterasController extends Controller
 							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
 							->where('facturas.id_empresa','=',Session::get('id_empresa'))
 							->where('saldo','>','0')
+							->where(function ($q) use ($request) {
+								if(isset($request->nit)){
+									$q->where('directorios.nit','=',$request->nit);
+								}
+								if(isset($request->razonsocial)){
+									$q->where('directorios.razon_social','like','%'.$request->razonsocial.'%');                  
+								}
+								if(isset($request->fechainicio)){
+									$q->whereBetween('facturas.fecha', [$request->fechainicio, $request->fechafinal]);
+								}
+							})
+							->orderBy('facturas.fecha','desc')
+							->take(100)
 							->get();
 		return view('cartera.extracto', array(
 			"carteraproveedor"=>$carteraproveedor,
-			"carteracliente"=>$carteracliente
+			"carteracliente"=>$carteracliente,
+			"totalcarteraProveedor"=>$totalcarteraProveedor,
+			"totalcarteracliente"=>$totalcarteracliente
 		));
 	}
 
@@ -256,5 +302,104 @@ class CarterasController extends Controller
 		));
 	}
 	
+
+	/**
+     * FUNCIONES PARA SUBIR ARCHIVO PLANO
+    */
+
+    public function subirCarteras(Request $request){
+        //GUARDAR ARCHIVO EN EL STORAGE
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('file');
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('local')->put($nombre,  \File::get($file));
+
+        //RECORRER EL ARCHIVO EN EL STORAGE
+        $public_path = public_path();
+        $url = $public_path.'/storage/'.$nombre;
+        //verificamos si el archivo existe y lo retornamos
+        if (\Storage::exists($nombre))
+        {
+            $numlinea = 0;
+            $archivo = fopen($url,'r');
+            //recorrer cada linea
+            while ($linea = fgets($archivo)) {
+                $lineas[] = explode(',',$linea);  
+                $numlinea++;
+            }
+            fclose($archivo);
+        }
+
+ 
+        return view('administrador.integracion',[
+            "carteras"=>$lineas
+        ]);
+    }
+
+    public function saveCarteras(Request $request){
+
+        try{
+			
+			$tercero = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                            ->where('nit','=',$request->nit_tercero)
+                            ->first();
+            if($tercero==null){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "Tercero no existe"
+                );
+            }
+
+            $cartera = Carteras::where('id_empresa','=',Session::get('id_empresa'))
+				->where('numero','=',$request->numero)
+                ->where('prefijo','=',$request->prefijo)
+                ->where('id_cliente','=',$tercero->id)
+                ->where('tipoCartera','=',$request->tipoCartera)
+                ->get();
+            if(sizeof($cartera)>0){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "La Cartera ya existe en la base de datos"
+                );
+			}
+                        
+			
+            $obj = new Carteras();
+			$obj->reteiva 		= 0;
+			$obj->reteica 		= 0;
+			$obj->efectivo 		= $request->efectivo;
+			$obj->sobrecosto 	= 0;
+			$obj->descuento 	= 0;
+			$obj->retefuente 	= 0;
+			$obj->otros 		= 0;
+			$obj->id_sucursal 	= Session::get('sucursal');
+			$obj->numero 		= $request->numero;
+			$obj->prefijo 		= $request->prefijo;
+			$obj->id_cliente 	= $tercero->id;
+			$obj->id_vendedor 	= Session::get('user_id');
+			$obj->fecha 		= $request->fecha;
+			$obj->tipoCartera 	= $request->tipoCartera;
+			$obj->subtotal 		= 0;
+			$obj->total 		= $request->total;
+			$obj->id_modificado = Session::get('user_id');
+			$obj->observaciones = "INTERCON";
+			$obj->id_empresa = Session::get('id_empresa');
+			$obj->estado 		= "ACTIVO";
+			$obj->save();
+
+            return array(
+                "result" => "Correcto",
+                "body" => "El documento fue SUBIDO en su totalidad"
+            );
+        }
+        catch(Exception $exce){
+            return array(
+                "result" => "Incorrecto",
+                "body" => $exce
+            );
+        }
+    }
 
 }
