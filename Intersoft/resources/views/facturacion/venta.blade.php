@@ -844,7 +844,8 @@ function recorrerproductos(element){
         inputs[4].value = 0;    
     }
     else{
-        inputs[4].value = (parseFloat(cantidad) * parseFloat(valor_unidad)) - ((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)));//totaliva
+        inputs[4].value = ((parseFloat(cantidad) * parseFloat(valor_unidad)) * iva)/100;
+        //inputs[4].value = (parseFloat(cantidad) * parseFloat(valor_unidad)) - ((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)));//totaliva
     }
 
     //RETENCION
@@ -888,10 +889,11 @@ function recorrerproductos(element){
 function recorrerCree(){
     descuento = parseFloat($('#descuento').val());
     fletes = parseFloat($('#fletes').val());
-    cree = $('#otro_impuesto').val();
-    retefuente = $('#retefuente').val();
-    impoconsumo = $('#impoconsumo').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente).toFixed(2) );
+    cree = parseFloat($('#otro_impuesto').val());
+    retefuente = parseFloat($('#retefuente').val());
+    impoconsumo = parseFloat($('#impoconsumo').val());
+    iva = parseFloat($('#iva').val());
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente + iva).toFixed(2) );
 }
 
 function recorrerSinImpuestos(){
@@ -919,7 +921,7 @@ function recorrerSinImpuestos(){
     $('#iva').val(parseFloat(iva).toFixed(2));
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
     directorio_tipo = $('#directorio_tipo').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );
     
 
     /** cartera verificar y recorrer **/
@@ -967,7 +969,7 @@ function recorrerTotal(){
     }
     
 
-    $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
+    $('#subtotal').val((parseFloat(subtot)).toFixed(2));
     $('#iva').val(parseFloat(iva).toFixed(2));
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
     directorio_tipo = $('#directorio_tipo').val();
@@ -979,7 +981,7 @@ function recorrerTotal(){
         $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.09).toFixed(2)); //CREE
     }
     cree = $('#otro_impuesto').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );
     
 
     /** cartera verificar y recorrer **/

@@ -9,7 +9,7 @@
 
 <div class="row top-11-w" style="padding:2%;">
 
-    <div class="panel panel-default col-md-5" >
+    <div class="panel panel-default col-md-4" >
         <!-- Default panel contents -->
         <div class="panel-heading row"><h5>Vista de Directorio</h5></div>
         <div class="panel-body" >
@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <div class="col-md-7 row">
+    <div class="col-md-8 row">
         <div class="panel panel-warning col-md-12" >
             <!-- Default panel contents -->
             <form action='/administrador/directorios/create' method="POST">

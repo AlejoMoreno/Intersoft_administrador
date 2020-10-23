@@ -10,7 +10,8 @@ function Directorios(){
 		parametros = {
             "razon_social" : $('#razon_social').val(),
             "nit" : $('#nit').val(),
-            "correo" : $('#correo').val()
+			"correo" : $('#correo').val(),
+			"tipo" : $('select[name="id_directorio_tipo_tercero"] option:selected').text()
         };
         $.ajax({
 			data:  parametros,
@@ -94,6 +95,7 @@ function Directorios(){
 				$('#id_directorio_clase').val(response.body.id_directorio_clase);
 				$('#id_directorio_tipo_tercero').val(response.body.id_directorio_tipo_tercero);
 				//desaparecer modal 
+				$('#btnguardar').hide();
 				$('#butonmodal').trigger('click');
 				$('#resultado').css('display','none');
 			}
@@ -142,12 +144,31 @@ function Directorios(){
 				},
 				success:  function (response) {
 	                console.log(response);
-	                alert('Cambio correcto');
+					swal({
+						title: "Correcto",
+						text: "Guardo con exito",
+						icon: "success",
+						buttons: true,
+						dangerMode: true,
+						})
+						.then((willDelete) => {
+						if (willDelete) {
+							location.reload();
+						} else {
+							location.reload();
+						}
+					}); 
 				}
 	        });
     	}
     	else{
-    		alert('No puedes actualizar sin haber buscado un tercero');
+			$('#resultado').hide();
+                swal({
+                    title: "Algo anda mal",
+                    text: 'No puedes actualizar sin haber buscado un tercero',
+                    icon: "error",
+                    button: "Aceptar",
+                });
     	}
         
     }

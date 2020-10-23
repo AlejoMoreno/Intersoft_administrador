@@ -221,18 +221,19 @@
 			<?php  use App\Sucursales; ?>
 
 
+			<p></p>
+			<div class="panel panel-success" id="empresa" style="width: 300px;">
+				<div class="panel-heading" style="text-aling:center"><img class="logo" src="/assets/img/logo_intersoft1.png"></div>
+				<div class="panel-body">
+					<input type="text" id="nit_empresa" class="form-control" onkeypress="pulsar(event)" autocomplete="off" placeholder="nit empresa" >
+					<p style="color:black;font-size:8pt">Escriba el nit sin puntos junto al digito de verificación</p>
+					<div class="form-control btn btn-success" id="validar_empresa">Validar Empresa</div>
+				</div>
+			</div>
 
 			<form action="/loguin" method="POST" style="width: 300px;" >
 				
-				<p></p>
-				<div class="panel panel-success" id="empresa">
-					<div class="panel-heading" style="text-aling:center"><img class="logo" src="/assets/img/logo_intersoft1.png"></div>
-					<div class="panel-body">
-						<input type="text" id="nit_empresa" class="form-control" autocomplete="off" placeholder="nit empresa" >
-						<p style="color:black;font-size:8pt">Escriba el nit sin puntos junto al digito de verificación</p>
-						<div class="form-control btn btn-success" id="validar_empresa">Validar Empresa</div>
-					</div>
-				</div>
+				
 				
 				<div id="login">
 					<div class="panel panel-success" id="empresa">
@@ -368,8 +369,19 @@
 	</body>
 </html>
 <script>
+
+function pulsar(e) {
+	if (e.keyCode === 13 && !e.shiftKey) {
+		e.preventDefault();
+		$('#validar_empresa').trigger('click');		
+	}
+}
+
 $(document).ready(function(){
 	$('#login').hide();
+
+	
+
 	$('#validar_empresa').click(function (){
 		parametros = {
 			"nit" : $('#nit_empresa').val()

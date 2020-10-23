@@ -11,6 +11,7 @@
 |
 */
 
+
 Route::get('/laravel', function () {
     return view('welcome');
 });

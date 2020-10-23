@@ -173,8 +173,8 @@
                                         <input type="text" class="form-control" name="codigo_barras" id="codigo_barras" placeholder="Escribe el codigo_barras" required="" onkeyup="config.UperCase('codigo_barras');">
 
                                         <div class="col-md-6">
-                                            <!--<label>código interno</label><br>-->
-                                            <input type="hidden" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno" value="NA" onkeyup="config.UperCase('codigo_interno');">
+                                            <label>código interno</label><br>
+                                            <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno" value="NA" onkeyup="config.UperCase('codigo_interno');">
                                         </div>
                                         <div class="col-md-6">
                                             <!--<label>código alterno</label><br>-->
@@ -189,17 +189,17 @@
                                             @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-12">
                                             <label>peso</label><br>
                                             <input type="number" class="form-control" value="0" name="peso" id="peso" placeholder="Escribe el peso" required="" onkeyup="config.UperCase('peso');">
                                         </div>
-
                                         <label>Marca</label><br>
                                         <select class="form-control" name="id_marca" id="id_marca">
                                         @foreach ($marcas as $obj)
                                             <option value="{{ $obj['id'] }}">{{ $obj['nombre']}}</option>
                                         @endforeach
                                         </select>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -223,14 +223,8 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <!--<label>iva (%)</label><br>-->
-                                            <input type="hidden" name="iva" id="iva" value="0.19">
-                                            <!--<select class="form-control" name="iva" id="iva" placeholder="Escribe el iva" required="">
-                                                <option value="">0.19%</option>
-                                                <option value="0.05">0.05%</option>
-                                                <option value="0.10">0.10%</option>
-                                                <option value="0.16">0.16%</option>
-                                            </select>-->
+                                            <label>iva (%)</label><br>
+                                            <input type="text" name="iva" id="iva"  class="form-control"  value="0.19">
                                         </div>
                                         <div class="col-md-6">
                                             <!--<label>impo consumo (%)</label><br>-->
@@ -245,16 +239,16 @@
                                             <label>descuento (%)</label><br>
                                             <input type="number" maxlength="2" value="0" class="form-control" name="descuento" id="descuento" placeholder="Escribe el descuento" required="" onkeyup="config.UperCase('descuento');">
                                         </div>
-
-                                        <label>serie</label><br>
-                                        <input type="text" value="NA" class="form-control" name="serie" id="serie" placeholder="Escribe el serie" required="" onkeyup="config.UperCase('serie');">
-
-                                        <label>clasificacion</label><br>
-                                        <select class="form-control" name="id_clasificacion" id="id_clasificacion">
-                                        @foreach ($clasificaciones as $obj)
-                                            <option value="{{ $obj['id'] }}">{{ $obj['nombre']}}</option>
-                                        @endforeach
-                                        </select>
+                                        <div class="col-md-6">
+                                            <label>serie</label><br>
+                                            <input type="text" value="NA" class="form-control" name="serie" id="serie" placeholder="Escribe el serie" required="" onkeyup="config.UperCase('serie');">
+                                        </div>
+                                            <label>clasificacion</label><br>
+                                            <select class="form-control" name="id_clasificacion" id="id_clasificacion">
+                                            @foreach ($clasificaciones as $obj)
+                                                <option value="{{ $obj['id'] }}">{{ $obj['nombre']}}</option>
+                                            @endforeach
+                                            </select>
                                     </div>
                                 </div>
                             </div>
@@ -330,7 +324,16 @@
 </div>
 
 
-<script>referencias.initial( <?php echo json_encode($_GET); ?>);</script>
+<script>
+
+$('#datos').DataTable( {
+    dom: 'Bfrtip',
+    buttons: [
+        'copy', 'csv', 'excel', 'pdf', 'print'
+    ]
+} );
+
+referencias.initial( <?php echo json_encode($_GET); ?>);</script>
 
 <style>
 a img{

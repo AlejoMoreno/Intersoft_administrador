@@ -2,26 +2,11 @@
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
 	<meta name="viewport" content="width=device-width" />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <!-- Bootstrap core CSS     -->
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Animation library for notifications   -->
-    <link href="/assets/css/animate.min.css" rel="stylesheet"/>
-    <!--  Light Bootstrap Table core CSS    -->
-    <link href="/assets/css/light-bootstrap-dashboard.css" rel="stylesheet"/>
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="/assets/css/demo.css" rel="stylesheet" />
-    <!--     Fonts and icons     -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <!-- TEXT EDTIT -->
-    <link rel="stylesheet" href="https://imperavi.com/assets/redactor/redactor.min.css" />
-<head>
 <meta charset="UTF-8">
 </head>
 <style type="text/css">
 	*{
-		font-size: 9px;
+		font-size: 12pt;
 	}
 </style>
 <style>
@@ -38,7 +23,7 @@
 			<tr>
 				<td style="width: 20%">
 					<!--<img style="width:120px;" src="https://wakusoft.com/img/logo_wakusoft.png">-->
-					<img style="width:120px;" src="/assets/img/empresas/{{ Session::get('id_empresa') }}.jpeg">
+					<!--<img style="width:120px;" src="/assets/img/empresas/{{ Session::get('id_empresa') }}.jpeg">-->
 				</td>
 				<td style="width: 40%">
 					<table style="width: 100%">
@@ -89,16 +74,18 @@
 		<table style="width: 100%;">
 			<thead>
 				<tr style="background: #ddd">
-					<th><strong>Iva</strong></th>
-					<th><strong>Descripción</strong></th>
-					<th><strong>Unidades</strong></th>
-					<th><strong>Precio Unitario</strong></th>
-					<th><strong>Precio</strong></th>
+					<th><strong>IVA</strong></th>
+					<th><strong>CODIGO</strong></th>
+					<th><strong>DESCRIPCIÓN</strong></th>
+					<th><strong>CANTIDAD</strong></th>
+					<th><strong>PRECIO/U</strong></th>
+					<th><strong>PARCIAL</strong></th>
 				</tr>
 			</thead>
 			<?php for($i=0;sizeof($kardex)>$i; $i++) { ?>
 			<tr>
 				<td>{{ $kardex[$i]['id_referencia']['iva'] }}</td>
+				<td>{{ $kardex[$i]['id_referencia']['codigo_interno'] }}</td>
 				<td>{{ $kardex[$i]['id_referencia']['descripcion'] }}</td>
 				<td>{{ $kardex[$i]['cantidad'] }}</td>
 				<td>{{ number_format($kardex[$i]['precio'], 0, ",", ".") }}</td>
