@@ -94,11 +94,11 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           <td><input type="text" class="form-control" placeholder="prefijo" name="in_prefijo" id="in_prefijo"></td>
         </tr>
         <tr> 
-          <th># Factura</th>
+          <th># Documento</th>
           <td><input type="text" class="form-control" placeholder="Número" name="in_factura" id="in_factura"></td>
         </tr>
         <tr>  
-          <th>Fecha Factura</th>
+          <th>Fecha Documento</th>
           <td><input type="date" class="form-control" placeholder="Fecha factura" name="in_fecha" id="in_fecha"></td>
         </tr>
         <tr>  
@@ -115,7 +115,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
       Nota: <br>
       Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
       <div class="btn btn-danger" onclick="carteras.eliminar();">Eliminar</div><br>
-      Si ha <strong>terminado de registrar</strong> las facturas dirijase a escoger la forma de pago.<br><br><br>
+      Si ha <strong>terminado de registrar</strong> los documentos equibalentes dirijase a escoger la forma de pago.<br><br><br>
     </div>
   </div>
 
@@ -127,8 +127,8 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           <tr>
             <th><input type="checkbox" name="" id="checkbox_noname"> </th>
             <th>Prefijo</th>
-            <th># Factura</th>
-            <th>Fecha Factura</th>
+            <th># Documento</th>
+            <th>Fecha Documento</th>
             <th>Flete</th>
             <th>ReteF.</th>
             <th>ReteIva.</th>
@@ -191,44 +191,22 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
             
 
 <hr>
-            
+        
 <div class="row top-11-w">
   <div class="col-sm-12">
     <div class="row titulo">
-      <div class="col-sm-3">
-        <label>Fletes</label>
-        <input type="text" id="valor_flete" value="0" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Retefuente</label>
-        <input value="0" type="text" id="valor_retefuente" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Reteiva</label>
-        <input value="0" type="text" id="valor_reteiva" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Reteica</label>
-        <input type="text" value="0" id="valor_reteica" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>InteresL</label>
-        <input type="text" value="0" id="valor_interes" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Descuento</label>
-        <input type="text" value="0" id="valor_descuento" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Efectivo</label>
-        <input type="text" value="0" id="valor_efectivo" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>TOTAL</label>
+      <div class="col-md-4">
+        <input type="hidden" id="valor_flete" value="0" class="form-control" disabled="">
+        <input value="0" type="hidden" id="valor_retefuente" class="form-control" disabled="">
+        <input value="0" type="hidden" id="valor_reteiva" class="form-control" disabled="">
+        <input type="hidden" value="0" id="valor_reteica" class="form-control" disabled="">
+        <input type="hidden" value="0" id="valor_interes" class="form-control" disabled="">
+        <input type="hidden" value="0" id="valor_descuento" class="form-control" disabled="">
+        <input type="hidden" value="0" id="valor_efectivo" class="form-control" disabled="">
+        <label>TOTAL</label>        
         <input type="number" name="total" id="total" class="form-control" disabled="">
       </div>
-      <div class="col-sm-12" style="height: 20px;"></div>
-      <div class="col-sm-12">
+      <div class="col-sm-8">
         <label>CONDICIONES DE </label>
         <input id="observaciones" name="observaciones" class="form-control" value="SIN OBSERVACIONES" >
       </div>

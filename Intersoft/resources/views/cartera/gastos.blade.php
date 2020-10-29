@@ -195,40 +195,18 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
 <div class="row top-11-w">
   <div class="col-sm-12">
     <div class="row titulo">
-      <div class="col-sm-3">
-        <label>Fletes</label>
-        <input type="text" id="valor_flete" value="0" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Retefuente</label>
-        <input value="0" type="text" id="valor_retefuente" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Reteiva</label>
-        <input value="0" type="text" id="valor_reteiva" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Reteica</label>
-        <input type="text" value="0" id="valor_reteica" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>InteresL</label>
-        <input type="text" value="0" id="valor_interes" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Descuento</label>
-        <input type="text" value="0" id="valor_descuento" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
-        <label>Efectivo</label>
-        <input type="text" value="0" id="valor_efectivo" class="form-control" disabled="">
-      </div>
-      <div class="col-sm-3">
+      <div class="col-sm-4">
+        <input type="hidden" id="valor_flete" value="0" class="form-control" disabled="">
+        <input value="0" type="hidden" id="valor_retefuente" class="form-control" disabled="">
+        <input value="0" type="hidden" id="valor_reteiva" class="form-control" disabled="">
+        <input type="hidden" value="0" id="valor_reteica" class="form-control" disabled="">
+        <input type="hidden" value="0" id="valor_interes" class="form-control" disabled="">
+        <input type="hidden" value="0" id="valor_descuento" class="form-control" disabled="">
+        <input type="hidden" value="0" id="valor_efectivo" class="form-control" disabled="">
         <label>TOTAL</label>
         <input type="number" name="total" id="total" class="form-control" disabled="">
       </div>
-      <div class="col-sm-12" style="height: 20px;"></div>
-      <div class="col-sm-12">
+      <div class="col-sm-7">
         <label>CONDICIONES DE </label>
         <input id="observaciones" name="observaciones" class="form-control" value="SIN OBSERVACIONES" >
       </div>

@@ -205,7 +205,7 @@ class CarterasController extends Controller
 		]);
 	}
 
-	function extracto(Request $request){
+	function castigarcartera(Request $request){
 		$totalcarteraProveedor=null;
 		$totalcarteracliente=null;
 		if(!isset($request)){
@@ -268,12 +268,31 @@ class CarterasController extends Controller
 							->orderBy('facturas.fecha','desc')
 							->take(100)
 							->get();
-		return view('cartera.extracto', array(
+		return view('cartera.castigarcartera', array(
 			"carteraproveedor"=>$carteraproveedor,
 			"carteracliente"=>$carteracliente,
 			"totalcarteraProveedor"=>$totalcarteraProveedor,
 			"totalcarteracliente"=>$totalcarteracliente
 		));
+	}
+
+	function extracto($id_cliente, $fecha){
+
+		/**
+		 * SELECT facturas.id as idfactura, facturas.id_cliente as cliente, 
+		 * facturas.numero as fnumero, facturas.prefijo as fprefijo, 
+		 * facturas.total, facturas.signo, carteras.id as idcartera, 
+		 * carteras.numero as cnumero, carteras.prefijo as cprefijo, 
+		 * carteras.total as totalcartera FROM facturas 
+		 * INNER JOIN carteras on carteras.id_cliente = facturas.id_cliente 
+		 * where facturas.id_cliente = 50638
+		 */
+
+		return view('cartera.extracto');
+	}
+
+	function extractoindex(){
+		return view('cartera.extracto');
 	}
 
 	function historial($idtercero){

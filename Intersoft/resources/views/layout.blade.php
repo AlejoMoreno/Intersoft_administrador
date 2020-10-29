@@ -443,7 +443,7 @@
                                 <li>
                                     <div class="row" style="padding-bottom: 10%;">
                                         <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/gastos');">Control de Gastos</a>
-                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/egreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/gastos');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
                                     </div>
                                 </li>
                             <?php } ?>
@@ -451,7 +451,7 @@
                                 <li>
                                     <div class="row" style="padding-bottom: 10%;">
                                         <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/otrosingresos');">Otros Ingresos</a>
-                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/ingreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/otroingreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
                                     </div>
                                 </li>
                             <?php } ?>
@@ -471,7 +471,10 @@
                                     </div>
                                 </li>
                             <?php } ?>
-                            <?php if(in_array("Extracto y Cuentas de Cobro",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto y Cuentas de Cobro</a></li><?php } ?>
+                            <?php if(in_array("Extracto y Cuentas de Cobro",$Tesoreria)){ ?>
+                                <li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto</a></li>
+                                <li><a href="javascript:;" onclick="config.Redirect('/cartera/castigarcartera');">Castigar cartera</a></li>
+                            <?php } ?>
                             <?php if(in_array("Reportes",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/reporte');">Reportes</a></li><?php } ?>
                         </ul>
                     </a>

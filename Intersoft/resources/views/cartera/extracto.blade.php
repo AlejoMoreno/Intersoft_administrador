@@ -4,6 +4,11 @@
 
 
 <style>
+span{
+    color: black;
+    font-size: 10pt;
+    text-align: right;
+}
 .title{
     margin-left: 2%;
     font-weight: bold;
@@ -18,316 +23,165 @@
     animation: pantallain 100s infinite;
     animation-direction: alternate;
 }
+
 </style>
 
 <div class="enc-article">
-    <h4 class="title">Extracto clientes / proveedores</h4>
-</div>
-<br><br>
-<!-- Trigger the modal with a button -->
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Gráfica</button>
-
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Graficas</h4>
-      </div>
-      <div class="modal-body">
-        <canvas id="myChart" width="400" height="200"></canvas>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-
-  </div>
+    <h4 class="title">Extracto</h4>
 </div>
 
-<br><br>
 <div class="row top-11-w">
-
+    <div class="card" style="margin:3%;">
+        <div class="header row" style="background:white">
+            <div class="col-md-4">
+                <label>Nit:</label>
+                <input type="hidden" name="id_cliente" id="id_cliente">
+                <input type="text" list="listDirectorio" name="cedula_tercero" value=""  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value)">
+                <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>                
+            </div>
+            <div class="col-md-4">
+                <label>Razón Social:</label>
+                <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" onchange="buscarcliente2(this.value)" >
+                <datalist id="listaclientes"></datalist>
+            </div>
+            <div class="col-md-4">
+                <label>Fecha Corte:</label>
+                <input type="date" name="fecha_corte"  id="fecha_corte" placeholder="Fecha corte" class="form-control" >
+            </div>
+        </div>
+    </div>
     
-    <div class="panel panel-primary " style="margin-left:5%;margin-right:5%;">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Extracto clientes</div>
-        <div class="panel-body" >
-
-            <br><br>
-            <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Filtros de busqueda:</p>
-            <div class="col-md-12"> 
-                <form method="GET" class="row">
-                    <div class="col-md-2">
-                        <input type="text" name="nit" placeholder="Nit" value="{{ isset($_GET['nit'])?$_GET['nit']:'' }}" class="form-control">
-                    </div>
-                    <div class="col-md-3">
-                        <div class="col-md-12 row">
-                            <div class="col-md-12">
-                                <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-5 row">
-                        <div class="col-md-6">
-                            <input type="date" name="fechainicio" value="{{ isset($_GET['fechainicio'])?$_GET['fechainicio']:date('Y-m-d') }}" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:date('Y-m-d') }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="submit" value="Consultar" class="btn btn-success">
-                    </div>
-                </form><br><br>
-            </div>
-            
-
-            <p style="font-size: 10pt;">A continuación se describe el extracto de los clientes, en el cual se detalla
-                el saldo diferente de 0 (cero) de cada uno de las facturas emitidas con corte
-                al presente día. <br> <strong style="font-size: 20pt;">TOTAL : $ 
-                @if(isset($totalcarteracliente))
-                <span style="font-size: 20pt;" >{{ $totalcarteracliente->totalfacturas }}</span>
-                @else
-                <span style="font-size: 20pt;" id="total_cliente"></span>
-                @endif
-                    
-                </strong>
-                <div id="total_cliente1"></div>
-            </p>
-        </div>
-
-        
-        <!-- Table -->
-        <div style="overflow-x:scroll;">
-            <table class="table table-hover" id="tabla_cliente">
-                <thead>
-                    <tr>
-                        <th>NIT</th>
-                        <th>RAZÓN SOCIAL</th>
-                        <th>TELÉFONO</th>
-                        <th>ZONA VENTA</th>
-                        <th>PLAZO DE </th>
-                        <th>DIAS MORA</th>
-                        <th>DOCUMENTO</th>
-                        <th>VENDEDOR</th>
-                        <th>SALDO</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($carteracliente as $obj)
-                    <?php $datetime1 = new DateTime($obj->fecha);
-                    $datetime2 = new DateTime($obj->fecha_vencimiento); 
-                    $interval = $datetime1->diff($datetime2);
-                    $plazo = $interval->format('%R%a días');
-                    
-                    $datetime3 = new DateTime(date("Y-m-d"));
-                    $datetime4 = new DateTime($obj->fecha_vencimiento); 
-                    $interval = $datetime3->diff($datetime4);
-                    $mora = $interval->format('%R%a días');?>
-                    <tr>
-                        <td>{{ number_format($obj->nit, 0, ",", ".") }}</td>
-                        <td><a href="/cartera/historial/{{ $obj['idcliente'] }}">{{ $obj->razon_social }}</td>
-                        <td>{{ $obj->telefono }}</td>
-                        <td>{{ $obj->zona_venta }}</td>
-                        <td>{{ $plazo }}</td>
-                        <td>{{ $mora }}</td>
-                        <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj['idfactura'] }}')" >{{ $obj->prefijo }} {{ $obj->numero }}</a></td>
-                        <td>{{ number_format($obj->ncedula, 0, ",", ".") }}</td>
-                        <td>{{ $obj->saldo }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
-    <div class="panel panel-warning " style="margin-left:5%;margin-right:5%;">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Extracto proveedores</div>
-        <div class="panel-body" >
-
-            <br><br>
-            <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Filtros de busqueda:</p>
-            <div class="col-md-12"> 
-                <form method="GET" class="row">
-                    <div class="col-md-2">
-                        <input type="text" name="nit" placeholder="Nit" value="{{ isset($_GET['nit'])?$_GET['nit']:'' }}" class="form-control">
-                    </div>
-                    <div class="col-md-3">
-                        <div class="col-md-12 row">
-                            <div class="col-md-12">
-                                <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-5 row">
-                        <div class="col-md-6">
-                            <input type="date" name="fechainicio" value="{{ isset($_GET['fechainicio'])?$_GET['fechainicio']:date('Y-m-d') }}" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:date('Y-m-d') }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="submit" value="Consultar" class="btn btn-success">
-                    </div>
-                </form><br><br>
-            </div>
-            
-            <p style="font-size: 10pt;">A continuación se describe el extracto de los proveedores, en el cual se detalla
-                el saldo diferente de 0 (cero) de cada uno de las facturas emitidas con corte
-                al presente día. <br> <strong style="font-size: 20pt;">TOTAL : $                 
-                @if(isset($totalcarteraproveedor))
-                <span style="font-size: 20pt;">{{ $totalcarteraproveedor->totalfacturas }}</span>
-                @else
-                <span style="font-size: 20pt;" id="total_proveedor"></span>
-                @endif
-                </strong>
-                <div id="total_proveedor1"></div>
-            </p>
-        </div>
-
-        <!-- Table -->
-        <div style="overflow-x:scroll;">
-            <table class="table table-hover" id="tabla_proveedor">
-                <thead>
-                    <tr>
-                        <th>NIT</th>
-                        <th>RAZÓN SOCIAL</th>
-                        <th>TELÉFONO</th>
-                        <th>ZONA VENTA</th>
-                        <th>PLAZO DE </th>
-                        <th>DIAS MORA</th>
-                        <th>DOCUMENTO</th>
-                        <th>VENDEDOR</th>
-                        <th>SALDO</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($carteraproveedor as $obj)
-                    <?php $datetime1 = new DateTime($obj->fecha);
-                    $datetime2 = new DateTime($obj->fecha_vencimiento); 
-                    $interval = $datetime1->diff($datetime2);
-                    $plazo = $interval->format('%R%a días');
-                    
-                    $datetime3 = new DateTime(date("Y-m-d"));
-                    $datetime4 = new DateTime($obj->fecha_vencimiento); 
-                    $interval = $datetime3->diff($datetime4);
-                    $mora = $interval->format('%R%a días');?>
-                    <tr>
-                        <td>{{ number_format($obj->nit, 0, ",", ".") }}</td>
-                        <td>{{ $obj->razon_social }}</td>
-                        <td>{{ $obj->telefono }}</td>
-                        <td>{{ $obj->zona_venta }}</td>
-                        <td>{{ $plazo }}</td>
-                        <td>{{ $mora }}</td>
-                        <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj['idfactura'] }}')" >{{ $obj->prefijo }} {{ $obj->numero }}</a></td>
-                        <td>{{ number_format($obj->ncedula, 0, ",", ".") }}</td>
-                        <td>{{ $obj->saldo }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-
 </div>
 
 
-
-
-
-<script>
-$(document).ready(function() {
-    var table = $('#tabla_cliente').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
-    } );
-    var table2 = $('#tabla_proveedor').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
-    } );
-
-    totalclientes(table);
-    totalproveedor(table2);
-
-    $('input[aria-controls=tabla_cliente]').keypress(function(){
-        totalclientes(table);
-    });
-    
-    $('input[aria-controls=tabla_proveedor]').keypress(function(){
-        totalproveedor(table2);
-    });
-
-} );
-
-
-function totalclientes(table){
-    var total = 0;
-    var data = table.rows().data();
-    data.each(function (value, index){
-        total = total + parseInt(value[8]);
-    });
-    $('#total_cliente').html(new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP"}).format(total));
-    $('#total_cliente1').html(total);
-}
-
-function totalproveedor(table){
-    var total = 0;
-    var data = table.rows().data();
-    data.each(function (value, index){
-        total = total + parseInt(value[8]);
-    });
-    $('#total_proveedor').html(new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP"}).format(total));
-    $('#total_proveedor1').html(total);
-}
-
-function envioUrl (url){
-    window.open(url, "imprimir documento", "width=800, height=700")
-}
-</script>
-
 <script>
 
-    setTimeout(function() {
-        // rest of code here
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var cliente = document.getElementById('total_cliente1').innerHTML;
-        var proveedor = document.getElementById('total_proveedor1').innerHTML;
-        console.log(cliente);
-        console.log(proveedor);
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Clientes', 'Proveedor'],
-                datasets: [{
-                    label: 'Cuentas por cobrar / pagar',
-                    data: [cliente,proveedor],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 1
-                }]
+
+function buscarcliente(texto){
+    console.log(texto);
+    if(texto.length > 3){
+        var urls = "/administrador/diretorios/search/search";
+        if($('#nombre').val()==""){
+            parametros = {
+                "nit" : texto.trim()
+            };
+        }
+        else{
+            parametros = {
+                "razon_social" : $('#nombre').val()
+            };
+        }
+        $.ajax({
+            data:  parametros,
+            url:   urls,
+            type:  'post',
+            beforeSend: function () {
+                $('#resultado').html('<p>Espere porfavor</p>');
+            },
+            success:  function (response) {
+                console.log(response);
+                if(response.body.length != 0){ // existe
+                    cliente = response.body[0];
+                    $('#id_cliente').val(cliente.id);
+                    $('#cedula_tercero').val(cliente.nit);
+                    $('#nombre').val(cliente.razon_social);
+                    $('#resCliente').text("Cliente existe");            
+                }  
+                else{
+                    $('#cedula_tercero').val("");
+                    $('#nombre').val("");
+                    $('#id_cliente').val("");
+                    $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
+                }              
+            },
+            error: function(){
+                swal({
+                  title: "Algo anda mal",
+                  text: "Verifique conexión a internet y/o diligencie completamente los campos del encabezado",
+                  icon: "error",
+                  button: "Aceptar",
+                });
             }
         });
-    }, 15000);
-        
+    }
+}
+
+function buscarcliente2(texto){
+    console.log(texto);
+    if(texto.length > 3){
+        var urls = "/administrador/diretorios/search/search";
+        parametros = {
+            "razon_social" : texto.trim()
+        };
+        $.ajax({
+            data:  parametros,
+            url:   urls,
+            type:  'post',
+            beforeSend: function () {
+                $('#resultado').html('<p>Espere porfavor</p>');
+            },
+            success:  function (response) {
+                console.log(response);
+                if(response.body.length != 0){ // existe
+                    cliente = response.body[0];
+                    $('#listaclientes').find('option').remove();
+                    for(i=0;response.body.length > i;i++){
+                        $('#listaclientes').append('<option value="'+response.body[i].razon_social+'">"'+response.body[i].razon_social+'"</option>');
+                    }
+                    $('#cedula_tercero').val(cliente.nit);
+                    //$('#nombre').val(cliente.razon_social);
+                    $('#direccion').val(cliente.direccion);
+                    $('#telefono').val(cliente.telefono);
+                    $('#correo').val(cliente.correo); 
+                    $('#id_ciudad').val(cliente.id_ciudad);
+                    $('#zona').val(cliente.zona_venta);
+                    $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
+                    $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
+                    $('#nombre').prop( "disabled", false );  
+                    $('#direccion').prop( "disabled", false );  
+                    $('#telefono').prop( "disabled", false );  
+                    $('#correo').prop( "disabled", false );    
+                    $('#id_ciudad').prop("disabled", false);
+                    $('#zona').prop("disabled", false);
+                    //$('#guardarCliente').hide();   
+                    config.createToast("success", "Cliente existe");
+                    $('#resCliente').text("Cliente existe");    
+                    //cartera
+                    $('#Carterasid_cliente').val(cliente.id);           
+                }  
+                else{
+                    $('#listaclientes').find('option').remove();
+                    $('#cedula_tercero').val("");
+                    $('#nombre').val("");
+                    $('#direccion').val("");
+                    $('#telefono').val("");
+                    $('#correo').val("");
+                    $('#zona').val("");
+                    $('#directorio_tipo').val("");
+                    $('#id_retefuente').val("");
+                    $('#nombre').prop( "disabled", false );  
+                    $('#direccion').prop( "disabled", false );  
+                    $('#telefono').prop( "disabled", false );  
+                    $('#correo').prop( "disabled", false ); 
+                    $('#id_ciudad').prop("disabled", false);
+                    $('#zona').prop("disabled", false);
+                    //$('#guardarCliente').show();
+                    config.createToast("error", "Cliente no existe, si desea crearlo, diligencie los datos restantes");
+                    $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
+                }              
+            },
+            error: function(){
+                swal({
+                  title: "Algo anda mal",
+                  text: "Verifique conexión a internet y/o diligencie completamente los campos del encabezado",
+                  icon: "error",
+                  button: "Aceptar",
+                });
+            }
+        });
+    }
+}
 </script>
+
 
 @endsection()
