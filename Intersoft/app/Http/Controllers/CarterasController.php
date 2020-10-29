@@ -84,16 +84,16 @@ class CarterasController extends Controller
     	$carteras->id_cliente = Directorios::where('id',$carteras->id_cliente)->first();
 		$carteras->id_cliente->id_ciudad = Ciudades::where('id',$carteras->id_cliente->id_ciudad)->first();
 		//dd($carteras->id_sucursal->id_empresa);
-		$pdf = PDF::loadView('cartera.imprimir', [
+		/*$pdf = PDF::loadView('cartera.imprimir', [
             "carteras"=>$carteras,
 			"kardexCarteras"=>$kardexCarteras
         ]);//->setPaper($customPaper, 'landscape');
         return $pdf->download($carteras->tipoCartera.'-'.$carteras->prefijo.'-'.$carteras->numero.'.pdf');
-
-		/*return view('cartera.imprimir',[
+			*/
+		return view('cartera.imprimir',[
 			"carteras"=>$carteras,
 			"kardexCarteras"=>$kardexCarteras
-		]);*/
+		]);
 	}
 
 	public function consultar_documentos(Request $request){
@@ -400,6 +400,36 @@ class CarterasController extends Controller
                 "body" => $exce
             );
         }
-    }
+	}
+	
+	function consultaTipo(Request $request, $tipo){
+
+		$documento = Carteras::select(
+			['carteras.*','directorios.*',
+			'directorios.razon_social as nombre_cliente','directorios.nit as nit_cliente',
+			'carteras.id as idcartera'])
+					->join('directorios','directorios.id','=','id_cliente')
+                    ->where('tipoCartera','=',$tipo)
+                    ->where('carteras.id_empresa','=',Session::get('id_empresa'))
+                    ->where(function ($q) use ($request) {
+                        if(isset($request->nit)){
+                            $q->where('id_tercero','=',$request->nit);
+                        }
+                        if(isset($request->razonsocial)){
+                            $q->where('directorios.razon_social','like','%'.$request->razonsocial.'%');                  
+                        }
+                        if(isset($request->fechainicio)){
+                            $q->whereBetween('fecha', [$request->fechainicio, $request->fechafinal]);
+                        }
+                    })
+                    ->orderBy('carteras.id','desc')
+                    ->take(100)
+                    ->get();
+        
+        return view('cartera.consultaTipo', [
+			'documento' => $documento,
+			'tipo' => $tipo
+        ]);
+	}
 
 }

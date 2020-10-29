@@ -395,6 +395,30 @@ function Config(){
 		}
 		
 	}
+
+	this.localStringToNumber = function ( s ){
+		return Number(String(s).replace(/[^0-9.-]+/g,""))
+	  }
+	  
+	this.onFocus = function (e){
+		var value = e.target.value;
+		e.target.value = value ? this.localStringToNumber(value) : ''
+	  }
+	  
+	this.onBlur = function (e){
+		var value = e.target.value
+	  
+		var options = {
+			maximumFractionDigits : 2,
+			currency              : "COP",
+			style                 : "currency",
+			currencyDisplay       : "symbol"
+		}
+		
+		e.target.value = value 
+		  ? this.localStringToNumber(value).toLocaleString(undefined, options)
+		  : ''
+	}
 }
 
 

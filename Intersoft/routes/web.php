@@ -501,6 +501,8 @@ Route::get('/cartera/otrosingresos', 'CarterasController@otrosingresosindex');
 Route::get('/cartera/extracto', 'CarterasController@extracto');
 Route::get('/cartera/historial/{idtercero}', 'CarterasController@historial');
 
+Route::get('/cartera/consulta/{tipo}', 'CarterasController@consultaTipo');
+
 Route::post('/cartera/FormaPagos','CarterasController@saveFormaPagos');
 
 

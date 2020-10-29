@@ -171,11 +171,11 @@ function Carteras(){
         cel9.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_interes' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
         cel10.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
         cel11.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel12.innerHTML = "<input type='text' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled>";
+        cel12.innerHTML = "<input type='hidden' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled><span id='"+lista_seleccionados.length+"_span'>0</span>";
         cel13.innerHTML = "";
         carteras.calcular(lista_seleccionados.length);
         //desaparecer el boton pagar
-        $('#pagarbtn').hide();
+        //$('#pagarbtn').hide();
 	}
 
 
@@ -190,6 +190,7 @@ function Carteras(){
         efectivo = parseFloat(document.getElementById(index+"_efectivo").value);
         total = flete+retefuente+reteiva+reteica+interes-descuento+efectivo;
         $("#"+index+"_total").val(total);
+        $("#"+index+"_span").html(new Intl.NumberFormat().format(total));
         carteras.recorrer();
     }
 
@@ -519,7 +520,7 @@ function Carteras(){
         cel13.innerHTML = "";
         carteras.calcular(lista_seleccionados.length);
         //desaparecer el boton pagar
-        $('#pagarbtn').hide();
+        //$('#pagarbtn').hide();
     }
 
 

@@ -3,7 +3,11 @@
 @section('content')
 
 <style>
-
+  span{
+      color: black;
+      font-size: 10pt;
+      text-align: right;
+  }
   .title{
       margin-left: 2%;
       font-weight: bold;
@@ -45,7 +49,8 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           </div>
           <div class="col-md-4">
               <label>Razón Social:</label>
-              <input type="text" name="nombre"  id="nombre" placeholder="Razón Social" class="form-control" >
+              <input type="text" name="nombre"  id="nombre" list="listaclientes"  placeholder="Razón Social" class="form-control" onchange="buscarcliente2(this.value)" >
+              <datalist id="listaclientes"></datalist>
           </div>
           <div class="col-md-4">
               <label>Dirección:</label>
@@ -197,7 +202,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
       </div>
       <div class="col-sm-3">
         <label>TOTAL</label>
-        <input type="number" name="total" id="total" class="form-control" disabled="">
+        <input type="text" name="total" id="total" class="form-control" disabled="">
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
       <div class="col-sm-12">
@@ -351,6 +356,90 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           });
       }
   }
+
+  function buscarcliente2(texto){
+    console.log(texto);
+    if(texto.length > 3){
+        var urls = "/administrador/diretorios/search/search";
+        parametros = {
+            "razon_social" : texto.trim()
+        };
+        $.ajax({
+            data:  parametros,
+            url:   urls,
+            type:  'post',
+            beforeSend: function () {
+                $('#resultado').html('<p>Espere porfavor</p>');
+            },
+            success:  function (response) {
+                console.log(response);
+                if(response.body.length != 0){ // existe
+                    cliente = response.body[0];
+                    $('#listaclientes').find('option').remove();
+                    for(i=0;response.body.length > i;i++){
+                        $('#listaclientes').append('<option value="'+response.body[i].razon_social+'">"'+response.body[i].razon_social+'"</option>');
+                    }
+                    $('#cedula_tercero').val(cliente.nit);
+                    //$('#nombre').val(cliente.razon_social);
+                    $('#direccion').val(cliente.direccion);
+                    $('#telefono').val(cliente.telefono);
+                    $('#correo').val(cliente.correo); 
+                    $('#id_ciudad').val(cliente.id_ciudad);
+                    $('#zona').val(cliente.zona_venta);
+                    $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
+                    $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
+                    $('#nombre').prop( "disabled", false );  
+                    $('#direccion').prop( "disabled", false );  
+                    $('#telefono').prop( "disabled", false );  
+                    $('#correo').prop( "disabled", false );    
+                    $('#id_ciudad').prop("disabled", false);
+                    $('#zona').prop("disabled", false);
+                    //$('#guardarCliente').hide();   
+                    config.createToast("success", "Cliente existe");
+                    $('#resCliente').text("Cliente existe");    
+                    //cartera
+                    $('#Carterasid_cliente').val(cliente.id);     
+                    carteras.allDocumentos_ingreso();                 
+                }  
+                else{
+                    $('#listaclientes').find('option').remove();
+                    $('#cedula_tercero').val("");
+                    $('#nombre').val("");
+                    $('#direccion').val("");
+                    $('#telefono').val("");
+                    $('#correo').val("");
+                    $('#zona').val("");
+                    $('#directorio_tipo').val("");
+                    $('#id_retefuente').val("");
+                    $('#nombre').prop( "disabled", false );  
+                    $('#direccion').prop( "disabled", false );  
+                    $('#telefono').prop( "disabled", false );  
+                    $('#correo').prop( "disabled", false ); 
+                    $('#id_ciudad').prop("disabled", false);
+                    $('#zona').prop("disabled", false);
+                    //$('#guardarCliente').show();
+                    config.createToast("error", "Cliente no existe, si desea crearlo, diligencie los datos restantes");
+                    $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
+                }              
+            },
+            error: function(){
+                swal({
+                  title: "Algo anda mal",
+                  text: "Verifique conexión a internet y/o diligencie completamente los campos del encabezado",
+                  icon: "error",
+                  button: "Aceptar",
+                });
+            }
+        });
+    }
+}
+
+$('#nombre').on('keydown', function(e) {
+    if (e.key === "Enter") {
+        buscarcliente2($('#nombre').val());
+        return false;
+    }
+});
 
 $('#cedula_tercero').on('keydown', function(e) {
   if (e.key === "Enter") {

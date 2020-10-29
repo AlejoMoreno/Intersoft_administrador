@@ -4,7 +4,11 @@
 
 
 <style>
-
+span{
+    color: black;
+    font-size: 10pt;
+    text-align: right;
+}
 .title{
     margin-left: 2%;
     font-weight: bold;
@@ -48,7 +52,7 @@
             </div>
             <div class="col-md-4">
                 <label>Razón Social:</label>
-                <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" onchange="buscarcliente(this.value)" >
+                <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" onchange="buscarcliente2(this.value)" >
                 <datalist id="listaclientes"></datalist>
             </div>
             <div class="col-md-4">
@@ -104,30 +108,36 @@
 
 <div class="row top-11-w">
     
-    <div class="card col-md-4" style="margin:3%;margin-top:0%;color:black;">
-        <div class="header row " style="background:white;overflow-x:scroll;">
-            <table id="busquedaReferencia" class="table" style="color:black;">
-                <thead>
-                    <tr>
-                        <th>id</th>
-                        <th>codigo interno</th>
-                        <th>descripcion</th>
-                        <th>Iva</th>
-                        <th>precio #1</th>
-                        <th>precio #2</th>
-                        <th>precio #3</th>
-                        <th>costo</th>
-                        <th>saldo</th>
-                    </tr>
-                </thead>
-            </table>   
+    <div class="card col-md-11" style="margin:3%;margin-top:0%;color:black;">
+        <div class="header row " style="background:white;">
+            <div class="col-md-6" style="overflow-x:scroll">
+                <table id="busquedaReferencia" class="table " style="color:black;">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>codigo interno</th>
+                            <th>descripcion</th>
+                            <th>Iva</th>
+                            <th>precio #1</th>
+                            <th>precio #2</th>
+                            <th>precio #3</th>
+                            <th>costo</th>
+                            <th>saldo</th>
+                        </tr>
+                    </thead>
+                </table>   
+            </div>
+            
+            <div class="col-md-5" style="background: #ddd;margin-left: 6%;margin-top:6%; color:black;">
+                <br>
+                Nota: <br>
+                Para <strong>agregar productos</strong> dirijase al boton más.<br>
+                Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
+                <div class="btn btn-danger">X</div><br>
+                Si ha <strong>terminado de registrar</strong> los productos dirijase al boton Guardar.<br><br><br>
+            </div>
         </div>
-        <br>
-        Nota: <br>
-        Para <strong>agregar productos</strong> dirijase al boton más.<br>
-        Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
-        <div class="btn btn-danger">X</div><br>
-        Si ha <strong>terminado de registrar</strong> los productos dirijase al boton Guardar.<br><br><br>
+        
     </div>
 
     <div class="card" style="margin:3%;margin-top:0%;">
@@ -138,11 +148,11 @@
                     <thead>
                     <tr>
                         <th><input type="checkbox" name="" id="checkbox_noname"> </th>                        
-                        <th>REFERNCIA</th>
+                        <th>CODIGO</th>
                         <th>DESCRIPCIÓN</th>
                         <th style="width:100px;">LOTE</th>
-                        <th style="width:50px;">CANTIDAD</th>
-                        <th>VALOR_UNIDAD.</th>
+                        <th style="width:200px;">CANTIDAD</th>
+                        <th style="width:200px;">VALOR_UNIDAD.</th>
                         <th style="width:100px;">IVA (%)</th>
                         <th style="width:200px;">VALOR_TOTAL.</th>
                     </tr>
@@ -173,7 +183,7 @@
                 </div>
                 <div class="col-sm-3">
                     <label>SUB.TOTAL</label>
-                    <input type="number" id="subtotal" class="form-control" disabled="">
+                    <input type="number" id="subtotal"  class="form-control" disabled="">
                 </div>
                 <div class="col-sm-3">
                     <label>IVA</label>
@@ -181,6 +191,7 @@
                 </div>
                 <div class="col-sm-3">
                     <label>DESCUENTO</label>
+                    <!--<input type="text" value="0" name="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="$1,000,000.00" id="descuento" class="form-control" onkeyup="recorrerCree()">-->
                     <input type="number" value="0" id="descuento" class="form-control" onkeyup="recorrerCree()">
                 </div>
                 <div class="col-sm-3">
@@ -290,7 +301,7 @@
                 <input type="hidden" id="CarterastipoCartera">
                 <input type="hidden" id="Carterassubtotal">
                 <label>Total</label>
-                <input type="number" class="form-control" style="text-align: right;" id="Carterastotal" disabled>
+                <input type="currency" class="form-control" style="text-align: right;" id="Carterastotal" disabled>
             </div>
         </div>
       </div>
@@ -790,7 +801,7 @@ function getReferencia(id){
             cell4.innerHTML = "<input type='number' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
             cell5.innerHTML = precios;
             cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
-            cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'>";
+            cell7.innerHTML = "<input type='hidden' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'><span name='spanTotal'>0</span>";
         },
         error: function(){
             swal({
@@ -812,6 +823,7 @@ function recorrerproductos(element){
     
     inputs = tr.getElementsByTagName('input');
     selects = tr.getElementsByTagName('select');
+    span = tr.getElementsByTagName('span');
 
     if($('#preciosselect').val() == '0'){
         swal("Escribe el valor del producto:", {
@@ -823,6 +835,7 @@ function recorrerproductos(element){
             option.value = value;
             selects[1].add(option);
             selects[1].value = value;
+            recorrerproductos(element);
         });
     }
     
@@ -838,6 +851,7 @@ function recorrerproductos(element){
 
     
     inputs[5].value = parseFloat(cantidad) * parseFloat(valor_unidad); 
+    span[0].innerHTML = new Intl.NumberFormat().format(inputs[5].value);
 
     //IVA 
     if(iva == 0){
@@ -852,16 +866,19 @@ function recorrerproductos(element){
     try{
         retefuente = 0;
         if($('#id_retefuente').val() == '0'){
-            retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+            //retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 2.5;
+            retefuente = parseFloat( (((parseFloat(cantidad) * parseFloat(valor_unidad))) * 2.5)/100);
             inputs[6].value = retefuente; 
         }
         else{
             id_retefuente = JSON.parse($('#id_retefuente').val());
             if(id_retefuente.nombre == "SOBRE TODO"){
-                retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+                //retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 2.5;
+                retefuente = parseFloat( (((parseFloat(cantidad) * parseFloat(valor_unidad))) * 2.5)/100);
             }
             else if(id_retefuente.nombre == "SOBRE LA BASE MENSUAL"){
-                retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+                //retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 2.5;
+                retefuente = parseFloat( (((parseFloat(cantidad) * parseFloat(valor_unidad))) * 2.5)/100);
             }
             else{
                 retefuente = 0;
@@ -1201,5 +1218,95 @@ function buscarcliente2(texto){
     }
 }
 </script>
+
+<script>
+$("input[data-type='currency']").on({
+    keyup: function() {
+      formatCurrency($(this));
+    },
+    blur: function() { 
+      formatCurrency($(this), "blur");
+    }
+});
+
+
+function formatNumber(n) {
+  // format number 1000000 to 1,234,567
+  return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}
+
+
+function formatCurrency(input, blur) {
+  // appends $ to value, validates decimal side
+  // and puts cursor back in right position.
+  
+  // get input value
+  var input_val = input.val();
+  
+  // don't validate empty input
+  if (input_val === "") { return; }
+  
+  // original length
+  var original_len = input_val.length;
+
+  // initial caret position 
+  var caret_pos = input.prop("selectionStart");
+    
+  // check for decimal
+  if (input_val.indexOf(".") >= 0) {
+
+    // get position of first decimal
+    // this prevents multiple decimals from
+    // being entered
+    var decimal_pos = input_val.indexOf(".");
+
+    // split number by decimal point
+    var left_side = input_val.substring(0, decimal_pos);
+    var right_side = input_val.substring(decimal_pos);
+
+    // add commas to left side of number
+    left_side = formatNumber(left_side);
+
+    // validate right side
+    right_side = formatNumber(right_side);
+    
+    // On blur make sure 2 numbers after decimal
+    if (blur === "blur") {
+      right_side += "00";
+    }
+    
+    // Limit decimal to only 2 digits
+    right_side = right_side.substring(0, 2);
+
+    // join number by .
+    input_val = "$" + left_side + "." + right_side;
+
+  } else {
+    // no decimal entered
+    // add commas to number
+    // remove all non-digits
+    input_val = formatNumber(input_val);
+    input_val = "$" + input_val;
+    
+    // final formatting
+    if (blur === "blur") {
+      input_val += ".00";
+    }
+  }
+  
+  // send updated string to input
+  input.val(input_val);
+
+  // put caret back in the right position
+  var updated_len = input_val.length;
+  caret_pos = updated_len - original_len + caret_pos;
+  input[0].setSelectionRange(caret_pos, caret_pos);
+}
+
+
+
+
+</script>
+
 
 @endsection()

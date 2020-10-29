@@ -439,10 +439,38 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Tesorería
                         <ul class="dropdown-menu">
-                            <?php if(in_array("Control de Gastos",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/gastos');">Control de Gastos</a></li><?php } ?>
-                            <?php if(in_array("Otros Ingresos",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/otrosingresos');">Otros Ingresos</a></li><?php } ?>
-                            <?php if(in_array("Pago a Proveedores",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/egresos');">Pago a Proveedores</a></li><?php } ?>
-                            <?php if(in_array("Cobro Cartera",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Cobro Cartera</a></li><?php } ?>
+                            <?php if(in_array("Control de Gastos",$Tesoreria)){ ?>
+                                <li>
+                                    <div class="row" style="padding-bottom: 10%;">
+                                        <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/gastos');">Control de Gastos</a>
+                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/egreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                            <?php if(in_array("Otros Ingresos",$Tesoreria)){ ?>
+                                <li>
+                                    <div class="row" style="padding-bottom: 10%;">
+                                        <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/otrosingresos');">Otros Ingresos</a>
+                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/ingreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                            <?php if(in_array("Pago a Proveedores",$Tesoreria)){ ?>
+                                <li>
+                                    <div class="row" style="padding-bottom: 10%;">
+                                        <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/egresos');">Pago a Proveedores</a>
+                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/egreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                    </div>
+                                </li>
+                            <?php } ?>
+                            <?php if(in_array("Cobro Cartera",$Tesoreria)){ ?>
+                                <li>
+                                    <div class="row" style="padding-bottom: 10%;">
+                                        <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Cobro Cartera</a>
+                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/ingreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                    </div>
+                                </li>
+                            <?php } ?>
                             <?php if(in_array("Extracto y Cuentas de Cobro",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto y Cuentas de Cobro</a></li><?php } ?>
                             <?php if(in_array("Reportes",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/reporte');">Reportes</a></li><?php } ?>
                         </ul>
