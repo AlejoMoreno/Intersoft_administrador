@@ -288,7 +288,25 @@ class CarterasController extends Controller
 		 * where facturas.id_cliente = 50638
 		 */
 
-		return view('cartera.extracto');
+		$docs = Facturas::select(DB::raw('facturas.id as idfactura'), DB::raw('kardex_carteras.id_factura as carterafactura'),
+					DB::raw('facturas.id_cliente as cliente'), 
+					DB::raw('facturas.numero as fnumero'), DB::raw('facturas.prefijo as fprefijo'), 
+					DB::raw('facturas.total'), DB::raw('kardex_carteras.total as totalkardexcartera'),
+					DB::raw('facturas.signo'), DB::raw('carteras.id as idcartera'), 
+					DB::raw('carteras.numero as cnumero'), DB::raw('carteras.prefijo as cprefijo'), 
+					DB::raw('carteras.total as totalcartera'))
+				->leftJoin('kardex_carteras', 'kardex_carteras.id_factura', '=', 'facturas.id')
+				->leftJoin('carteras', 'carteras.id', '=', 'kardex_carteras.id_cartera')
+				->where('facturas.id_empresa','=',Session::get('id_empresa'))
+				->where('facturas.id_cliente','=',$id_cliente)
+				->where('facturas.fecha', '<', $fecha)
+				->orderBy('facturas.fecha','desc')
+				->take(100)
+				->get();
+
+		return view('cartera.extracto', array(
+			"docs"=>$docs
+		));
 	}
 
 	function extractoindex(){

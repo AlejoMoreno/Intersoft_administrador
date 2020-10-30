@@ -23,7 +23,9 @@ span{
     animation: pantallain 100s infinite;
     animation-direction: alternate;
 }
-
+.table > tbody td{
+    color: black;
+}
 </style>
 
 <div class="enc-article">
@@ -47,6 +49,43 @@ span{
             <div class="col-md-4">
                 <label>Fecha Corte:</label>
                 <input type="date" name="fecha_corte"  id="fecha_corte" placeholder="Fecha corte" class="form-control" >
+            </div>
+            
+            <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
+                <table class="table table-hover table-striped"  id="datos">
+                    <thead>
+                        <th>idfactura</th>
+                        <th>carterafactura</th>
+                        <th>cliente</th>
+                        <th>fnumero</th>
+                        <th>fprefijo</th>
+                        <th>total</th>
+                        <th>totalkardexcartera</th>
+                        <th>signo</th>
+                        <th>idcartera</th>
+                        <th>cnumero</th>
+                        <th>cprefijo</th>
+                        <th>totalcartera</th>
+                    </tr></thead>
+                    <tbody>
+                        @foreach($docs as $obj)
+                        <tr>
+                            <td>{{ $obj->idfactura }}</td>
+                            <td>{{ $obj->carterafactura }}</td>
+                            <td>{{ $obj->cliente }}</td>
+                            <td>{{ $obj->fnumero }}</td>
+                            <td>{{ $obj->fprefijo }}</td>
+                            <td>{{ $obj->total }}</td>
+                            <td>{{ $obj->totalkardexcartera }}</td>
+                            <td>{{ $obj->signo }}</td>
+                            <td>{{ $obj->idcartera }}</td>
+                            <td>{{ $obj->cnumero }}</td>
+                            <td>{{ $obj->cprefijo }}</td>
+                            <td>{{ $obj->totalcartera }}</td>
+                        </tr>
+                        @endforeach                                
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
