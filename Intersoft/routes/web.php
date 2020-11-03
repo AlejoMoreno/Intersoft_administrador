@@ -368,6 +368,8 @@ Route::post('/administrador/integracion/kardexcarteras','KardexCarterasControlle
 Route::post('/administrador/saveKardexcarteras','KardexCarterasController@saveKardexcarteras');
 Route::post('/administrador/integracion/saldos','ReferenciasController@subirSaldos');
 Route::post('/administrador/saveSaldos','ReferenciasController@saveSaldos');
+Route::post('/administrador/integracion/contabilidad','ContabilidadesController@subirContabilidad');
+Route::post('/administrador/saveContabilidad','ContabilidadesController@saveContabilidad');
 
 /*
 |--------------------------------------------------------------------------

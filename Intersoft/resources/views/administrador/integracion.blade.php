@@ -471,6 +471,63 @@
         </div>
     </div>
 
+
+    <div class="panel panel-default col-md-12" >
+        <!-- Default panel contents -->
+        <div class="panel-heading row"><h5>Integración de Contabilidad</h5></div>
+        <div class="panel-body" >
+            <p style="font-size: 10pt;">Debe subir el archivo plano CONTABILIDAD.DAT generado por el software INTERCON. 
+            </p>
+        </div>
+
+        <div class="row" style="padding: 2%;">
+            <div class="col-md-10 col-md-offset-1">
+                <form method="POST" action="/administrador/integracion/contabilidad" accept-charset="UTF-8" enctype="multipart/form-data">
+                                          
+                    <div class="form-group" >
+                      <label class="col-md-4 control-label">Archivo .DAT Intercon</label>
+                      <div class="col-md-4">
+                        <input type="file" class="form-control" name="file" >
+                      </div>
+                      <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary">Validar</button>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="btn btn-primary" id="recorrerContabilidad">Recorrer</div>
+                      </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-md-12" style="overflow-x: scroll">
+                @if(isset($contabilidad))
+                <table class="table" id="contabilidad1">
+                    @foreach ($contabilidad as $linea)
+                    <tbody>
+                        <tr>
+                            <td>{{ $linea[0] }}</td>
+                            <td>{{ $linea[1] }}</td>
+                            <td>{{ $linea[2] }}</td>
+                            <td>{{ $linea[3] }}</td>
+                            <td>{{ $linea[4] }}</td>
+                            <td>{{ $linea[5] }}</td>
+                            <td>{{ $linea[6] }}</td>
+                            <td>{{ $linea[7] }}</td>
+                            <td>{{ $linea[8] }}</td>
+                            <td>{{ $linea[9] }}</td>
+                            <td>{{ $linea[10] }}</td>
+                            <td>{{ $linea[11] }}</td>
+                            <td>{{ $linea[12] }}</td>
+                            <td>Resultado</td>
+                        </tr>
+                    </tbody>
+                    @endforeach
+                </table>
+                @endif
+            </div>
+        </div>
+    </div>
+
     <script>
         $('#recorrerFacturas').click(function (){
             var table = document.getElementById("mytab1"); 
@@ -942,6 +999,68 @@
                     }
                 });
             }
+        }
+
+        
+    </script>
+
+
+<script>
+        $('#recorrerContabilidad').click(function (){
+            var table = document.getElementById("contabilidad1"); 
+            console.log(table);
+            recursivoTablaContabilidad( table, 0 );
+        });
+
+        function recursivoTablaContabilidad( table, index){
+            var row = table.rows[index];
+            console.log(index);
+            index = index + 1;
+            if(index >= table.rows.length + 1){
+               return true; 
+            }
+            parametros = {
+                'tipo_documento' : row.cells[0].innerHTML,
+                'id_sucursal' : row.cells[1].innerHTML,
+                'id_documento' : 0,
+                'numero_documento' : row.cells[3].innerHTML,
+                'prefijo' : row.cells[2].innerHTML,
+                'fecha_documento' : row.cells[4].innerHTML,
+                'valor_transaccion' : row.cells[10].innerHTML,
+                'tipo_transaccion' : row.cells[11].innerHTML,
+                'tercero' : row.cells[6].innerHTML,
+                'id_auxiliar' : row.cells[5].innerHTML
+            }
+            $.ajax({
+                data:  parametros,
+                url:   '/administrador/saveContabilidad',
+                type:  'post',
+                beforeSend: function () {
+                    row.classList.add("esperando");
+                },
+                success:  function (response) {
+                    row.classList.remove("esperando");
+                    if(response.result == "Correcto"){
+                        row.classList.add("correcto");
+                        row.cells[13].innerHTML = response.body;
+                    }
+                    else if(response.result == "Existe"){
+                        row.classList.add("correcto");
+                        row.cells[13].innerHTML = response.body;
+                    }
+                    else{
+                        row.classList.add("incorrecto");
+                        row.cells[13].innerHTML = response.body;
+                    }
+                    console.log("respuesta index: "+index, response);
+                    recursivoTablaContabilidad( document.getElementById("contabilidad1"), index );
+                },
+                error: function (error) {
+                    row.classList.add("incorrecto");
+                    row.cells[13].innerHTML = response.body;
+                    recursivoTablaContabilidad( document.getElementById("contabilidad1"), index );
+                }
+            });
         }
 
         

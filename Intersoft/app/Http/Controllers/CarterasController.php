@@ -289,10 +289,10 @@ class CarterasController extends Controller
 		 */
 
 		$docs = Facturas::select(DB::raw('facturas.id as idfactura'), DB::raw('kardex_carteras.id_factura as carterafactura'),
-					DB::raw('facturas.id_cliente as cliente'), 
+					DB::raw('facturas.id_cliente as cliente'), DB::raw('facturas.id_documento as id_documento'), 
 					DB::raw('facturas.numero as fnumero'), DB::raw('facturas.prefijo as fprefijo'), 
 					DB::raw('facturas.total'), DB::raw('kardex_carteras.total as totalkardexcartera'),
-					DB::raw('facturas.signo'), DB::raw('carteras.id as idcartera'), 
+					DB::raw('facturas.signo'),  DB::raw('carteras.tipoCartera as tipoCartera'), DB::raw('carteras.id as idcartera'), 
 					DB::raw('carteras.numero as cnumero'), DB::raw('carteras.prefijo as cprefijo'), 
 					DB::raw('carteras.total as totalcartera'))
 				->leftJoin('kardex_carteras', 'kardex_carteras.id_factura', '=', 'facturas.id')
@@ -303,9 +303,15 @@ class CarterasController extends Controller
 				->orderBy('facturas.fecha','desc')
 				->take(100)
 				->get();
+		
+		foreach($docs as $doc){
+			$doc->cliente = Directorios::where('id','=',$doc->cliente)->first();
+			$doc->id_documento = Documentos::where('id','=',$doc->id_documento)->first();
+		}
 
 		return view('cartera.extracto', array(
-			"docs"=>$docs
+			"docs"=>$docs,
+			"fecha"=>$fecha
 		));
 	}
 
@@ -416,7 +422,7 @@ class CarterasController extends Controller
 			$obj->prefijo 		= $request->prefijo;
 			$obj->id_cliente 	= $tercero->id;
 			$obj->id_vendedor 	= Session::get('user_id');
-			$obj->fecha 		= $request->fecha;
+			$obj->fecha 		= substr($request->fecha,0,4).'-'.substr($request->fecha,4,2).'-'.substr($request->fecha,6,2);
 			$obj->tipoCartera 	= $request->tipoCartera;
 			$obj->subtotal 		= 0;
 			$obj->total 		= $request->total;

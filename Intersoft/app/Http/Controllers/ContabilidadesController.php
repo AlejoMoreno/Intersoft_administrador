@@ -556,4 +556,108 @@ class ContabilidadesController extends Controller
         );
     }
 
+
+
+    /**
+     * FUNCIONES PARA SUBIR ARCHIVO PLANO
+    */
+
+    public function subirContabilidad(Request $request){
+        //GUARDAR ARCHIVO EN EL STORAGE
+        //obtenemos el campo file definido en el formulario
+        $file = $request->file('file');
+        //obtenemos el nombre del archivo
+        $nombre = $file->getClientOriginalName();
+        //indicamos que queremos guardar un nuevo archivo en el disco local
+        \Storage::disk('local')->put($nombre,  \File::get($file));
+
+        //RECORRER EL ARCHIVO EN EL STORAGE
+        $public_path = public_path();
+        $url = $public_path.'/storage/'.$nombre;
+        //verificamos si el archivo existe y lo retornamos
+        if (\Storage::exists($nombre))
+        {
+            $numlinea = 0;
+            $archivo = fopen($url,'r');
+            //recorrer cada linea
+            while ($linea = fgets($archivo)) {
+                $lineas[] = explode(':',$linea);  
+                $numlinea++;
+            }
+            fclose($archivo);
+        }
+        //dd($lineas);
+ 
+        return view('administrador.integracion',[
+            "contabilidad"=>$lineas
+        ]);
+    }
+
+    public function saveContabilidad(Request $request){
+
+        try{
+
+
+			
+			$tercero = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                            ->where('nit','=',$request->nit_tercero)
+                            ->first();
+            if($tercero==null){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "Tercero no existe"
+                );
+            }
+
+            $auxiliar = Pucauxiliars::where('id_empresa','=',Session::get('id_empresa'))
+                            ->where('codigo','=',$request->id_auxiliar)
+                            ->first();
+            if($tercero==null){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "Auxiliar no existe"
+                );
+            }
+
+            $contabilidades = Contabilidades::where('id_empresa','=',Session::get('id_empresa'))
+                ->where('id_auxiliar','=',$auxiliar->id)
+                ->where('tercero','=',$tercero->id)
+                ->where('valor_transaccion','=',$request->valor_transaccion)
+                ->where('tipo_transaccion','=',$request->tipo_transaccion)
+                ->get();
+            if(sizeof($contabilidades)>0){
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "La contabilidades ya existe en la base de datos"
+                );
+			}
+                        
+			
+			$contabilidad = new Contabilidades();
+            $contabilidad->tipo_documento = $request->tipo_documento;
+            $contabilidad->id_sucursal = Session::get('sucursal');
+            $contabilidad->id_documento = $request->id_documento;
+            $contabilidad->numero_documento = 0;
+            $contabilidad->prefijo = $request->prefijo;
+            $contabilidad->fecha_documento = substr($request->fecha_documento,0,4).'-'.substr($request->fecha_documento,4,2).'-'.substr($request->fecha_documento,6,2);;
+            $contabilidad->valor_transaccion = $request->valor_transaccion;
+            $contabilidad->tipo_transaccion = $request->tipo_transaccion;
+            $contabilidad->tercero = $tercero->id;
+            $contabilidad->id_auxiliar = $auxiliar->id;
+            $contabilidad->id_empresa = Session::get('id_empresa');
+            $contabilidad->save();
+
+            return array(
+                "result" => "Correcto",
+                "body" => "El documento fue SUBIDO en su totalidad"
+            );
+        }
+        catch(Exception $exce){
+            return array(
+                "result" => "Incorrecto",
+                "body" => $exce
+            );
+        }
+	}
+
 }

@@ -37,8 +37,8 @@ span{
         <div class="header row" style="background:white">
             <div class="col-md-4">
                 <label>Nit:</label>
-                <input type="hidden" name="id_cliente" id="id_cliente">
-                <input type="text" list="listDirectorio" name="cedula_tercero" value=""  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value)">
+                <input type="hidden" name="id_cliente" value="<?php echo (isset($docs[0]->cliente->id ))?$docs[0]->cliente->id :""; ?>" id="id_cliente">
+                <input type="text" name="cedula_tercero" value="<?php echo (isset($docs[0]->cliente->nit ))?$docs[0]->cliente->nit :""; ?>"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value)">
                 <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>                
             </div>
             <div class="col-md-4">
@@ -48,42 +48,66 @@ span{
             </div>
             <div class="col-md-4">
                 <label>Fecha Corte:</label>
-                <input type="date" name="fecha_corte"  id="fecha_corte" placeholder="Fecha corte" class="form-control" >
+                <input type="date" name="fecha_corte" value="<?php echo (isset($fecha))?$fecha:""; ?>"  id="fecha_corte" placeholder="Fecha corte" class="form-control" >
+            </div>
+
+            <div class="col-md-4"><br>
+                <button onclick="ir()" class="btn btn-success">Consultar</button>
             </div>
             
             <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
+                <h2>{{ $docs[0]->cliente->nit }} {{ $docs[0]->cliente->razon_social }}</h2>
                 <table class="table table-hover table-striped"  id="datos">
                     <thead>
-                        <th>idfactura</th>
-                        <th>carterafactura</th>
-                        <th>cliente</th>
-                        <th>fnumero</th>
-                        <th>fprefijo</th>
-                        <th>total</th>
-                        <th>totalkardexcartera</th>
-                        <th>signo</th>
-                        <th>idcartera</th>
-                        <th>cnumero</th>
-                        <th>cprefijo</th>
-                        <th>totalcartera</th>
+                        <th>TIPO DOC</th>
+                        <th>DOCUMENTO</th>
+                        <th>TOTAL</th>
+                        <th>TIPO CARTERA</th>
+                        <th>CARTERA</th>
+                        <th>CARTERA PAGO</th>
+                        <th>SALDO</th>
                     </tr></thead>
                     <tbody>
-                        @foreach($docs as $obj)
+                        <?php
+                        $total = 0; 
+                        for($i=0;$i<=sizeof($docs)-1;$i++){
+                            $obj = $docs[$i];
+                            if($obj->id_documento->nombre == "VENTA"){
+                                $total = $total + $obj->total; 
+                            }
+                            else if($obj->id_documento->nombre == "COMPRA"){
+                                $total = $total - $obj->total ; 
+                            }
+                            else{
+                                $total = $total;
+                            }
+
+                            if($obj->totalkardexcartera != null){
+                                if($obj->tipoCartera == "INGRESO"){
+                                    $total = $total - $obj->totalkardexcartera; 
+                                }
+                                if($obj->tipoCartera == "EGRESO"){
+                                    $total = $total + $obj->totalkardexcartera; 
+                                }
+                                else{
+                                    $total = $total;
+                                }
+                            }
+                            else{
+                                $total = $total;
+                            }
+                            
+                        ?>
                         <tr>
-                            <td>{{ $obj->idfactura }}</td>
-                            <td>{{ $obj->carterafactura }}</td>
-                            <td>{{ $obj->cliente }}</td>
-                            <td>{{ $obj->fnumero }}</td>
-                            <td>{{ $obj->fprefijo }}</td>
+                            <td>{{ $obj->id_documento->nombre }}</td>
+                            <td>{{ $obj->fprefijo }} {{ $obj->fnumero }}</td>
                             <td>{{ $obj->total }}</td>
+                            <td>{{ $obj->tipoCartera }}</td>
+                            <td>{{ $obj->cprefijo }} {{ $obj->cnumero }}</td>
                             <td>{{ $obj->totalkardexcartera }}</td>
-                            <td>{{ $obj->signo }}</td>
-                            <td>{{ $obj->idcartera }}</td>
-                            <td>{{ $obj->cnumero }}</td>
-                            <td>{{ $obj->cprefijo }}</td>
-                            <td>{{ $obj->totalcartera }}</td>
+                            <td>{{ $total }}</td>
                         </tr>
-                        @endforeach                                
+                        <?php } ?>               
                     </tbody>
                 </table>
             </div>
@@ -95,6 +119,23 @@ span{
 
 <script>
 
+function ir(){
+    config.Redirect('/cartera/extracto/'+$('#id_cliente').val()+'/'+$('#fecha_corte').val());
+}
+
+$('#cedula_tercero').on('keydown', function(e) {
+    if (e.key === "Enter") {
+        buscarcliente($('#cedula_tercero').val());
+        return false;
+    }
+});
+
+$('#nombre').on('keydown', function(e) {
+    if (e.key === "Enter") {
+        buscarcliente2($('#nombre').val());
+        return false;
+    }
+});
 
 function buscarcliente(texto){
     console.log(texto);
@@ -167,45 +208,15 @@ function buscarcliente2(texto){
                     for(i=0;response.body.length > i;i++){
                         $('#listaclientes').append('<option value="'+response.body[i].razon_social+'">"'+response.body[i].razon_social+'"</option>');
                     }
+                    $('#id_cliente').val(cliente.id);
                     $('#cedula_tercero').val(cliente.nit);
-                    //$('#nombre').val(cliente.razon_social);
-                    $('#direccion').val(cliente.direccion);
-                    $('#telefono').val(cliente.telefono);
-                    $('#correo').val(cliente.correo); 
-                    $('#id_ciudad').val(cliente.id_ciudad);
-                    $('#zona').val(cliente.zona_venta);
-                    $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
-                    $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
-                    $('#nombre').prop( "disabled", false );  
-                    $('#direccion').prop( "disabled", false );  
-                    $('#telefono').prop( "disabled", false );  
-                    $('#correo').prop( "disabled", false );    
-                    $('#id_ciudad').prop("disabled", false);
-                    $('#zona').prop("disabled", false);
-                    //$('#guardarCliente').hide();   
-                    config.createToast("success", "Cliente existe");
-                    $('#resCliente').text("Cliente existe");    
-                    //cartera
-                    $('#Carterasid_cliente').val(cliente.id);           
+                    $('#nombre').val(cliente.razon_social);
+                    $('#resCliente').text("Cliente existe");           
                 }  
                 else{
-                    $('#listaclientes').find('option').remove();
                     $('#cedula_tercero').val("");
                     $('#nombre').val("");
-                    $('#direccion').val("");
-                    $('#telefono').val("");
-                    $('#correo').val("");
-                    $('#zona').val("");
-                    $('#directorio_tipo').val("");
-                    $('#id_retefuente').val("");
-                    $('#nombre').prop( "disabled", false );  
-                    $('#direccion').prop( "disabled", false );  
-                    $('#telefono').prop( "disabled", false );  
-                    $('#correo').prop( "disabled", false ); 
-                    $('#id_ciudad').prop("disabled", false);
-                    $('#zona').prop("disabled", false);
-                    //$('#guardarCliente').show();
-                    config.createToast("error", "Cliente no existe, si desea crearlo, diligencie los datos restantes");
+                    $('#id_cliente').val("");
                     $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
                 }              
             },
