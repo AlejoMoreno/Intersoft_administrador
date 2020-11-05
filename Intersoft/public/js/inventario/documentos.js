@@ -801,4 +801,89 @@ function Documentos(){
         window.location.replace("imprimir/"+id_factura);
     }
 
+
+    this.updateResoluciones = function( id, res_password_dian, res_usuario_dian, 
+            res_rango_final, res_rango_inicio, res_numero_presente, res_fecha, res_prefijo){
+        $('#actualizar').show();
+        console.log('Daatos Sucurusal-update:');
+        //ubicar informacion en el formulario
+        $('#res_id').val(id);
+        $('#res_password_dian').val(res_password_dian);
+        $('#res_usuario_dian').val(res_usuario_dian);
+        $('#res_rango_final').val(res_rango_final);
+        $('#res_rango_inicio').val(res_rango_inicio);
+        $('#res_numero_presente').val(res_numero_presente);
+        $('#res_fecha').val(res_fecha);
+        $('#res_prefijo').val(res_prefijo);
+    };
+
+    this.sendResoluciones= function(){
+        parametros = {
+            "id" : $('#res_id').val(),
+            "id_documento" : $('#id_documento').val(),
+            "password_dian" : $('#res_password_dian').val(),
+            "usuario_dian" : $('#res_usuario_dian').val(),
+            "rango_final" : $('#res_rango_final').val(),
+            "rango_inicio" : $('#res_rango_inicio').val(),
+            "numero_presente" : $('#res_numero_presente').val(),
+            "fecha" : $('#res_fecha').val(),
+            "prefijo" : $('#res_prefijo').val()
+        };
+        $.ajax({
+			data:  parametros,
+			url:   '/documentos/resoluciones/create',
+			type:  'post',
+			beforeSend: function () {
+				$('#resultado').html('<p>Espere porfavor</p>');
+			},
+			success:  function (response) {
+                console.log(response);
+                config.Redirect('/inventario/documentos');
+			}
+        });
+    }
+
+    this.verResoluciones = function(data){
+        var data = JSON.parse(data);
+        console.log(data);
+        $('#id_documento').val(data.id);
+        parametros = {
+            "id_documento" : data.id
+        };
+        $.ajax({
+			data:  parametros,
+			url:   '/documentos/resoluciones',
+			type:  'get',
+			beforeSend: function () {
+				$('#resultado').html('<p>Espere porfavor</p>');
+			},
+			success:  function (response) {
+                console.log(response);
+                var table = document.getElementById('tableresoluciones');
+                for(i = 0; i < response.body.length; i++){
+                    var row = table.insertRow(1);
+                    var cell0 = row.insertCell(0);
+                    var cell1 = row.insertCell(1);
+                    var cell2 = row.insertCell(2);
+                    var cell3 = row.insertCell(3);
+                    var cell4 = row.insertCell(4);
+                    var cell5 = row.insertCell(5);
+                    var cell6 = row.insertCell(6);
+                    var cell7 = row.insertCell(7);
+                    cell0.innerHTML = response.body[i].prefijo;
+                    cell1.innerHTML = response.body[i].rango_inicio;
+                    cell2.innerHTML = response.body[i].rango_final;
+                    cell3.innerHTML = response.body[i].numero_presente;
+                    cell4.innerHTML = response.body[i].fecha;
+                    cell5.innerHTML = response.body[i].usuario_dian;
+                    cell6.innerHTML = response.body[i].password_dian;
+                    cell7.innerHTML = "<a href='javascript:;' class='btn btn-warning' onclick=documentos.updateResoluciones('"+response.body[i].id+"','"+response.body[i].password_dian+"','"+ response.body[i].usuario_dian+"','"+response.body[i].rango_final+"','"+response.body[i].rango_inicio+"','"+response.body[i].numero_presente+"','"+response.body[i].fecha+"','"+response.body[i].prefijo+"')>></a>";
+                }
+			}
+        });
+
+    }
+
+
+
 }

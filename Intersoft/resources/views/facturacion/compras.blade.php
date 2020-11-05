@@ -24,7 +24,8 @@
 
 <div class="enc-article">
     <h4 class="title">{{ $documento['nombre'] }}</h4>
-    <input type="hidden" id="prefijo" value="{{ $documento['prefijo'] }}">
+    <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo" value="{{ $documento['prefijo'] }}">
+    <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 45%;" id="numero" value="0">
     <input type="hidden" id="idDocumento" value="{{ $documento['id'] }}">
     <input type="hidden" id="signoDocumento" value="{{ $documento['signo'] }}">
 </div>
@@ -536,7 +537,7 @@ function saveFactura(){
     }
     var parametros = {
         'id_sucursal' : '1',
-        'numero' : '0',
+        'numero' : $('#numero').val(),
         'prefijo' : prefijo,
         'id_cliente' : $('#cedula_tercero').val(), //debe ser el id
         'id_tercero' : $('#cedula_tercero').val(), //debe ser el id

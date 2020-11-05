@@ -124,6 +124,8 @@ table {
                                 <th>Ncedula</th>
                                 <th>Nombre</th>                                 
                                 <th>Linea</th> 
+                                <th>Comisión</th>
+                                <th>% Comisión</th>
                                 <th>Referencia</th> 
                                 <th>Precio Und.</th> 
                                 <th>Cantidad</th>
@@ -136,11 +138,18 @@ table {
                         </thead>
                         <tbody>
                             @if($kardex!=null)
+                                <?php $totalcomision = 0; ?>
                                 @foreach ($kardex as $obj)
+                                <?php 
+                                $total = ((floatval($obj['preciototal']) * floatval($obj['lineascomision']))/100);
+                                $totalcomision = $totalcomision + $total;
+                                ?>
                                     <tr>
                                         <td style="background: #ededed">{{ $obj['ncedula'] }}</td>
                                         <td style="background: #ededed">{{ $obj['usuarionombre'] }}</td>                                    
                                         <td>{{ $obj['lineasdescripcion'] }}</td>
+                                        <td>{{ $total }}</td>
+                                        <td>{{ $obj['lineascomision'] }}</td>
                                         <td>{{ $obj['referenciasdescripcion'] }}</td>
                                         <td>{{ $obj['precio'] }}</td>
                                         <td>{{ $obj['cantidad'] }}</td>
@@ -154,6 +163,7 @@ table {
                             @endif
                         </tbody>
                     </table>
+                    <h3>Total Comisión: $ {{ number_format($totalcomision, 0, ",", ".") }}</h3>
                     <div id="chart"></div>
                 </div>
             </div>

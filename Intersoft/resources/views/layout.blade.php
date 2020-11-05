@@ -405,28 +405,50 @@
                             @if( true )
                                 @foreach ($documentosSalida as $obj)
                                     <?php 
-                                    if($obj["signo"]=='+'){
-                                        $signo = "mas";
+                                    if($obj["documento_contable"]==3){
+                                        ?>
+                                        <li>
+                                            <div class="row">
+                                                <?php $url = '/facturacion/venta/'.$obj['id']; ?>
+                                                <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
+                                                <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                                <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                            <div>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <?php 
                                     }
-                                    elseif($obj["signo"]=='-'){
-                                        $signo = "menos";
+                                    else if($obj["documento_contable"]==4){
+                                        ?>
+                                        <li>
+                                            <div class="row">
+                                                <?php $url = '/facturacion/compra/'.$obj['id']; ?>
+                                                <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
+                                                <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                                <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                            <div>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <?php 
                                     }
                                     else{
-                                        $signo = "igual";
+                                        ?>
+                                        <li>
+                                            <div class="row">
+                                                <?php $url = '/facturacion/cotizacion/'.$obj['id']; ?>
+                                                <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
+                                                <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                                <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                            <div>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <?php 
                                     }
                                     if($obj['nombre']=="MAYORISTA"){
                                         $num  = $obj['num_presente'];
                                     }
                                     ?> 
-                                    <li>
-                                        <div class="row">
-                                            <?php $url = '/facturacion/venta/'.$obj['id']; ?>
-                                            <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
-                                            <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
-                                            <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
-                                        <div>
-                                    </li>
-                                    <li role="separator" class="divider"></li>
+                                    
                                 @endforeach
                             @endif
                         </ul>

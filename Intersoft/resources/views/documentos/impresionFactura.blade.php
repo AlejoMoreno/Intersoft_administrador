@@ -26,6 +26,11 @@
 		page-break-after: auto;
 	}
 	</style>
+
+	<?php 
+	$resolucion = App\Resoluciones::where('id_documento','=',$factura['id_documento']['id'])
+									->where('prefijo','=',$factura['prefijo'])->first();
+	?>
 	
 	
 	<?php $paginas = sizeof($kardex)/5; ?>
@@ -60,9 +65,9 @@
 			</tr>
 		</table>
 		
-
-		<div style="width: 100%;"><small style="font-size: 10px"> RESOL. DE {{ $factura['id_documento']['fecha_inicio'] }} </small><br></div>
-		
+		@if(isset($resolucion))
+			<div style="width: 100%;"><small style="font-size: 10px"> RESOL. DE {{ $resolucion['fecha'] }} RANGO. {{ $resolucion['prefijo'] }} {{ $resolucion['rango_inicio'] }} - {{ $resolucion['prefijo'] }} {{ $resolucion['rango_final'] }}</small><br></div>
+		@endif
 
 		<table style="width: 20%;border: 1px dashed black; float: left;">
 			<tr>

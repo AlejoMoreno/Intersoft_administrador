@@ -28,7 +28,11 @@ span{
 
 <div class="enc-article">
     <h4 class="title">{{ $documento['nombre'] }}</h4>
-    <input type="hidden" id="prefijo" value="{{ $documento['prefijo'] }}">
+    <select class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo">
+        @foreach ($resoluciones as $pre)
+        <option value="{{ $pre->prefijo }}">{{ $pre->prefijo }}</option>
+        @endforeach
+    </select>
     <input type="hidden" id="idDocumento" value="{{ $documento['id'] }}">
     <input type="hidden" id="signoDocumento" value="{{ $documento['signo'] }}">
 </div>

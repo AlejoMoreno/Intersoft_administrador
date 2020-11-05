@@ -600,7 +600,7 @@ class ContabilidadesController extends Controller
 
 			
 			$tercero = Directorios::where('id_empresa','=',Session::get('id_empresa'))
-                            ->where('nit','=',$request->nit_tercero)
+                            ->where('nit','=',$request->tercero)
                             ->first();
             if($tercero==null){
                 return array(
@@ -609,7 +609,7 @@ class ContabilidadesController extends Controller
                 );
             }
 
-            $auxiliar = Pucauxiliars::where('id_empresa','=',Session::get('id_empresa'))
+            $auxiliar = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
                             ->where('codigo','=',$request->id_auxiliar)
                             ->first();
             if($tercero==null){

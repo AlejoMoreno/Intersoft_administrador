@@ -399,6 +399,7 @@ class UsuariosController extends Controller
                             DB::raw('usuarios.nombre as usuarionombre'),
                             DB::raw('documentos.nombre as documentosnombre'),
                             DB::raw('lineas.descripcion as lineasdescripcion'),
+                            DB::raw('lineas.codigo_interno as lineascomision'),
                             DB::raw('referencias.descripcion as referenciasdescripcion'),
                             DB::raw('(kardexes.precio * kardexes.cantidad) as preciototal'))
                         ->where('kardexes.id_empresa','=',Session::get('id_empresa'))

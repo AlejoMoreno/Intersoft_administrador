@@ -102,7 +102,6 @@ class KardexCarterasController extends Controller
             $cartera = Carteras::where('id_empresa','=',Session::get('id_empresa'))
 				->where('numero','=',$request->numero)
                 ->where('prefijo','=',$request->prefijo)
-                ->where('id_cliente','=',$tercero->id)
                 ->where('tipoCartera','=',$request->tipoCartera)
                 ->get();
             if(sizeof($cartera)==0){
@@ -123,6 +122,12 @@ class KardexCarterasController extends Controller
                             ->where('nombre','like','MAYORISTA')
                             ->first();
             }
+            else { 
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "EL DOCUMENTO No existe en la base de datos"
+                );
+            }
 			
 
 			$factura = Facturas::where('id_empresa','=',Session::get('id_empresa'))
@@ -141,7 +146,6 @@ class KardexCarterasController extends Controller
 			$kardex = KardexCarteras::where('id_empresa','=',Session::get('id_empresa'))
 				->where('id_cartera','=',$cartera[0]->id)
                 ->where('id_factura','=',$factura[0]->id)
-				->where('id_cliente','=',$tercero->id)
 				->where('total','=',$request->efectivo)
                 ->get();
             if(sizeof($kardex)>0){

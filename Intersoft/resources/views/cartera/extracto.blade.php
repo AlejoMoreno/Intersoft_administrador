@@ -72,7 +72,7 @@ span{
                         $total = 0; 
                         for($i=0;$i<=sizeof($docs)-1;$i++){
                             $obj = $docs[$i];
-                            if($obj->id_documento->nombre == "VENTA"){
+                            if($obj->id_documento->nombre == "VENTA" || $obj->id_documento->nombre == "MAYORISTA"){
                                 $total = $total + $obj->total; 
                             }
                             else if($obj->id_documento->nombre == "COMPRA"){

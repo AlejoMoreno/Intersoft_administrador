@@ -443,6 +443,10 @@ Route::get('/inventario/documentos/delete/{id}', 'DocumentosController@delete');
 Route::get('/inventario/documentos/update/{id}', 'DocumentosController@showupdate');
 Route::post('/inventario/documentos/create', 'DocumentosController@create');
 Route::post('/inventario/documentos/update', 'DocumentosController@update');
+//------resoluciones
+Route::get('/documentos/resoluciones', 'DocumentosController@resoluciones');
+Route::post('/documentos/resoluciones/create', 'DocumentosController@storeResoluciones');
+
 
 //Catalogo
 Route::get('/inventario/catalogo', 'ReferenciasController@catalogo');

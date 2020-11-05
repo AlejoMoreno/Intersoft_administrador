@@ -16,9 +16,14 @@ class CreateResolucionesTable extends Migration
         Schema::create('resoluciones', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->increments('id');
+            $table->string('prefijo');
             $table->string('fecha');
-            $table->integer('numero');
-            $table->string('rango');
+            $table->integer('numero_presente');
+            $table->string('rango_inicio');
+            $table->string('rango_final');
+            $table->string('usuario_dian');
+            $table->string('password_dian');
+            $table->integer('id_documento');
             $table->integer('id_empresa');
             $table->timestamps();
         });

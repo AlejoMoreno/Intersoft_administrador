@@ -22,6 +22,7 @@ use App\Http\Controllers\KardexController;
 use App\Pucauxiliar;
 use App\Tipopagos;
 use App\Directorio_tipo_terceros;
+use App\Resoluciones;
 
 use App\Insumo_x_m_ls;
 
@@ -35,9 +36,29 @@ class FacturasController extends Controller
     public function saveDocument(Request $request){
         $documento = Documentos::where('id','=',$request->id_documento)
                                ->where('id_empresa','=',Session::get('id_empresa'))->first();
+        $resoluciones = Resoluciones::where('id_documento','=',$documento->id)
+                                ->where('prefijo','=',$request->prefijo)->first();
         //aumentar el numero de documento
-        $documento->num_presente = intval($documento->num_presente) + 1;
-        $documento->save();
+        if($documento->documento_contable == 3){ //venta
+            $documento->num_presente = intval($documento->num_presente) + 1;
+            $documento->save();
+            if(isset($resoluciones)){
+                $resoluciones->numero_presente = intval($resoluciones->numero_presente) + 1;
+                $documento->num_presente = $resoluciones->numero_presente;
+                $documento->prefijo = $resoluciones->prefijo;
+                $resoluciones->save();
+            }
+        }
+        else if($documento->documento_contable == 4){ //compra
+            $documento->num_presente = $request->numero;
+            $documento->prefijo = $request->prefijo;
+            $documento->save();
+        }
+        else{
+            $documento->num_presente = intval($documento->num_presente) + 1;
+            $documento->save();
+        }
+        
         //verificar el clinete/proveedor/tercero
         $tercero = FacturasController::Tercero($documento->signo,$request);
 
@@ -204,6 +225,7 @@ class FacturasController extends Controller
             ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
             'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
             'facturas.created_at as creado','facturas.id as idfactura',
+            'documentos.nombre as nombredocumento',
             'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor',
             'facturas.estado as estadofactura'])
                     ->where('facturas.id_documento','=',$documento)
@@ -226,6 +248,12 @@ class FacturasController extends Controller
                         }
                         if(isset($request->vendedor)){
                             $q->where('id_vendedor','=',$request->vendedor);
+                        }
+                        if(isset($request->prefijo)){
+                            $q->where('facturas.prefijo','=',$request->prefijo);
+                        }
+                        if(isset($request->numero)){
+                            $q->where('facturas.numero','=',$request->numero);
                         }
                     })
                     ->orderBy('id_documento','desc')
@@ -441,11 +469,13 @@ class FacturasController extends Controller
         $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
                                 ->where('estado','=','ACTIVO')->get();
         $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
+        $resoluciones = Resoluciones::where('id_documento','=',$documento->id)->get();
         
         return view('facturacion.venta',array(
             "referencias"=>$referencias,
             "documento"=>$documento,
-            "ciudades"=>$ciudades
+            "ciudades"=>$ciudades,
+            "resoluciones"=>$resoluciones
         ));
     }
     /**

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Documentos;
 use App\Pucauxiliar;
+use App\Resoluciones;
 use Session;
 
 class DocumentosController extends Controller
@@ -122,6 +123,59 @@ cuenta_contable_contrapartida
             return  array(
                 "result"=>"fail",
                 "body"=>$exception);
+        }
+    }
+
+    public function storeResoluciones(Request $request){
+        try{
+            if($request->id == ""){
+                $obj = new Resoluciones();
+                $obj->prefijo = $request->prefijo;
+                $obj->fecha = $request->fecha;
+                $obj->numero_presente = $request->numero_presente;
+                $obj->rango_inicio = $request->rango_inicio;
+                $obj->rango_final = $request->rango_final;
+                $obj->usuario_dian = $request->usuario_dian;
+                $obj->password_dian = $request->password_dian;
+                $obj->id_documento = $request->id_documento;
+                $obj->id_empresa = Session::get('id_empresa');
+                $obj->save();
+            }
+            else{
+                $obj = Resoluciones::where('id','=',$request->id)->first();
+                $obj->prefijo = $request->prefijo;
+                $obj->fecha = $request->fecha;
+                $obj->numero_presente = $request->numero_presente;
+                $obj->rango_inicio = $request->rango_inicio;
+                $obj->rango_final = $request->rango_final;
+                $obj->usuario_dian = $request->usuario_dian;
+                $obj->password_dian = $request->password_dian;
+                $obj->id_documento = $request->id_documento;
+                $obj->id_empresa = Session::get('id_empresa');
+                $obj->save();
+            }
+            return  array(
+                "result"=>"success",
+                "body"=>$obj);
+        }
+        catch(Exception $ex){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exc);
+        }
+    }
+
+    function resoluciones(Request $request){
+        try{
+            $obj = Resoluciones::where('id_documento','=',$request->id_documento)->get();
+            return  array(
+                "result"=>"success",
+                "body"=>$obj);
+        }
+        catch(Exception $exc){
+            return  array(
+                "result"=>"fail",
+                "body"=>$exc);
         }
     }
 

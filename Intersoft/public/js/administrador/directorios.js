@@ -30,7 +30,6 @@ function Directorios(){
 		                    '<th>Direccion</th>'+
 		                    '<th>Correo</th>'+
 		                    '<th>Teléfono</th>'+
-		                    '<th>Regimen</th>'+
 		                    '<th>Tipo</th>'+
 		                  '</tr>'+
 		              '</thead><tbody>');
@@ -41,7 +40,6 @@ function Directorios(){
 	                    '<td>'+value.direccion+'</td>'+
 	                    '<td>'+value.correo+'</td>'+
 	                    '<td>'+value.telefono+'</td>'+
-	                    '<td>'+value.id_regimen.nombre+'</td>'+
 	                    '<td>'+value.id_directorio_tipo_tercero.nombre+'</td>'+
 	                  '</tr>');
 				});

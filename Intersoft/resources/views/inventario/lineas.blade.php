@@ -49,6 +49,7 @@
                             <th>ID</th>
                             <th>Nombre</th>
                             <th>Descripción</th>
+                            <th>% comisión</th>
                             <th>retefuente porcentaje</th>
                             <th>v puc retefuente</th>
                             <th>c puc retefuente</th>
@@ -70,6 +71,7 @@
                                 <td>{{ $obj['id'] }}</td>
                                 <td>{{ $obj['nombre'] }}</td>
                                 <td>{{ $obj['descripcion'] }}</td>
+                                <td>{{ $obj['codigo_interno'] }}</td>
                                 <td>{{ $obj['retefuente_porcentaje'] }}</td>
                                 <td>{{ $obj['v_puc_retefuente']['codigo'] }} - {{ $obj['v_puc_retefuente']['descripcion'] }}</td>
                                 <td>{{ $obj['c_puc_retefuente']['codigo'] }} - {{ $obj['c_puc_retefuente']['descripcion'] }}</td>
@@ -108,8 +110,8 @@
                             <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Escribe el nombre" onkeyup="config.UperCase('nombre');">
                         </div>
                         <div class="col-md-4">
-                            <label>Código interno</label><i class="fas fa-question pregunta" onclick="swal('Codigo interno para diferenciar uno del otro');"></i><br>
-                            <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el codigo_interno " value="NA" onkeyup="config.UperCase('codigo_interno');">
+                            <label>(%) comisión</label><i class="fas fa-question pregunta" onclick="swal('Codigo interno para diferenciar uno del otro');"></i><br>
+                            <input type="text" class="form-control" name="codigo_interno" id="codigo_interno" placeholder="Escribe el % de comisión " value="NA" onkeyup="config.UperCase('codigo_interno');">
                         </div>
                         <div class="col-md-4">
                             <label>Código alterno</label><i class="fas fa-question pregunta" onclick="swal('Codigo homologo para integrar con otras herramientas');"></i><br>
