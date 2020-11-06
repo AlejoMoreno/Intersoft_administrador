@@ -27,7 +27,16 @@ class CarterasController extends Controller
 
 		$cartera = Carteras::where('id_empresa','=',Session::get('id_empresa'))->orderBy('numero','desc')->first();
 
-		$id_cliente = Directorios::where('nit',$request->id_cliente)->first();
+		if($request->tipoCartera == "GASTOS"){
+			$id_cliente = Directorios::where('id_empresa','=',Session::get('id_empresa'))->first();
+		}
+		else if($request->tipoCartera == "OTROINGRESO"){
+			$id_cliente = Directorios::where('id_empresa','=',Session::get('id_empresa'))->first();
+		}
+		else{
+			$id_cliente = Directorios::where('nit',$request->id_cliente)->first();
+		}
+		
 		$obj = new Carteras();
 		$obj->reteiva 		= $request->reteiva;
 		$obj->reteica 		= $request->reteica;
@@ -40,7 +49,7 @@ class CarterasController extends Controller
 		$obj->numero 		= $cartera->numero + 1;
 		$obj->prefijo 		= $cartera->prefijo;
 		$obj->id_cliente 	= $id_cliente->id;
-		$obj->id_vendedor 	= $request->id_vendedor;
+		$obj->id_vendedor 	= Session::get('user_id');
 		$obj->fecha 		= $request->fecha;
 		$obj->tipoCartera 	= $request->tipoCartera;
 		$obj->subtotal 		= $request->subtotal;

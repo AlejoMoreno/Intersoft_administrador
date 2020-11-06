@@ -380,38 +380,20 @@ function Carteras(){
 
                     localStorage.setItem("documento",documento.id);
 
-                    var tabla = document.getElementById("tabla_facturas_seleccionadas");
-                    for (var i=1;i < tabla.rows.length; i++){  
-
-                        var flete, retefuente, reteiva, reteica, interes, descuento, efectivo, total;
-                        var prefijo, numero, fecha, id_factura;
-                        flete = document.getElementById(i+"_flete").value;
-                        retefuente = document.getElementById(i+"_retefuente").value;
-                        reteiva = document.getElementById(i+"_reteiva").value;
-                        reteica = document.getElementById(i+"_reteica").value;
-                        interes = document.getElementById(i+"_interes").value;
-                        descuento = document.getElementById(i+"_descuento").value;
-                        efectivo = document.getElementById(i+"_efectivo").value;
-                        prefijo = document.getElementById(i+"_prefijo").value;
-                        numero = document.getElementById(i+"_numero").value;
-                        fecha = document.getElementById(i+"_fecha").value;
-                        total = document.getElementById(i+"_total").value;
-                        id_factura = document.getElementById(i+"_id_factura").value;
-                        
-
+                    if(documento.tipoCartera == "GASTOS"){
                         var parametros = {
                             'id_cartera' : documento.id,
-                            'id_factura' : id_factura, 
-                            'fechaFactura' : fecha,
-                            'numeroFactura' : prefijo+"|"+numero,
-                            'descuentos' : descuento,
-                            'sobrecostos' : interes,
-                            'fletes' : flete,
-                            'retefuente' : retefuente,
-                            'efectivo' : efectivo,
-                            'reteiva' : reteiva,
-                            'reteica' : reteica,
-                            'total' : total
+                            'id_factura' : null, 
+                            'fechaFactura' : $('#fecha').val(),
+                            'numeroFactura' : $('#prefijo').val()+"|"+$('#numero').val(),
+                            'descuentos' : 0,
+                            'sobrecostos' : 0,
+                            'fletes' : 0,
+                            'retefuente' : 0,
+                            'efectivo' : 0,
+                            'reteiva' : 0,
+                            'reteica' : 0,
+                            'total' : $('#total').val()
                         };
                         $.ajax({
                             data:  parametros,
@@ -430,10 +412,10 @@ function Carteras(){
                                 else{
                                     console.log("Error interno fila "+i);
                                     swal({
-                                      title: "Algo anda mal",
-                                      text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
-                                      icon: "error",
-                                      button: "Aceptar",
+                                    title: "Algo anda mal",
+                                    text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
+                                    icon: "error",
+                                    button: "Aceptar",
                                     });
                                 }
                                 
@@ -442,14 +424,140 @@ function Carteras(){
                                 $('#resultado').hide();
                                 console.log(request.responseText);
                                 swal({
-                                  title: "Algo anda mal",
-                                  text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
-                                  icon: "error",
-                                  button: "Aceptar",
+                                title: "Algo anda mal",
+                                text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
+                                icon: "error",
+                                button: "Aceptar",
                                 });
                             }
                         });
                     }
+                    else if(documento.tipoCartera == "OTROINGRESO"){
+                        var parametros = {
+                            'id_cartera' : documento.id,
+                            'id_factura' : null, 
+                            'fechaFactura' : $('#fecha').val(),
+                            'numeroFactura' : $('#prefijo').val()+"|"+$('#numero').val(),
+                            'descuentos' : 0,
+                            'sobrecostos' : 0,
+                            'fletes' : 0,
+                            'retefuente' : 0,
+                            'efectivo' : 0,
+                            'reteiva' : 0,
+                            'reteica' : 0,
+                            'total' : $('#total').val()
+                        };
+                        $.ajax({
+                            data:  parametros,
+                            url:   HOST+'/cartera/kardex/guardar',
+                            type:  'post',
+                            beforeSend: function () {
+                                $('#resultado').html('<center><div id="cargando" style="position: absolute;width: 100%;height: 100%;background: black;top: 0px;left: 0px;opacity: 0.8;z-index:100"><img src="http://pa1.narvii.com/6598/aa4c454ca15cbd104315d00a5590246f8b8dbbda_00.gif" style="margin-top: 20%;"></div></center>');
+                            },
+                            success:  function (response) {
+                                $('#resultado').hide();
+                                console.log(response);
+                                //si la respuesta es correcta 
+                                if(response.result == "success"){
+                                    console.log("Guardado exitoso fila "+i);
+                                }
+                                else{
+                                    console.log("Error interno fila "+i);
+                                    swal({
+                                    title: "Algo anda mal",
+                                    text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
+                                    icon: "error",
+                                    button: "Aceptar",
+                                    });
+                                }
+                                
+                            },
+                            error: function (request, status, error) {
+                                $('#resultado').hide();
+                                console.log(request.responseText);
+                                swal({
+                                title: "Algo anda mal",
+                                text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
+                                icon: "error",
+                                button: "Aceptar",
+                                });
+                            }
+                        });
+                    }
+                    else{
+                        var tabla = document.getElementById("tabla_facturas_seleccionadas");
+                        for (var i=1;i < tabla.rows.length; i++){  
+
+                            var flete, retefuente, reteiva, reteica, interes, descuento, efectivo, total;
+                            var prefijo, numero, fecha, id_factura;
+                            flete = document.getElementById(i+"_flete").value;
+                            retefuente = document.getElementById(i+"_retefuente").value;
+                            reteiva = document.getElementById(i+"_reteiva").value;
+                            reteica = document.getElementById(i+"_reteica").value;
+                            interes = document.getElementById(i+"_interes").value;
+                            descuento = document.getElementById(i+"_descuento").value;
+                            efectivo = document.getElementById(i+"_efectivo").value;
+                            prefijo = document.getElementById(i+"_prefijo").value;
+                            numero = document.getElementById(i+"_numero").value;
+                            fecha = document.getElementById(i+"_fecha").value;
+                            total = document.getElementById(i+"_total").value;
+                            id_factura = document.getElementById(i+"_id_factura").value;
+                            
+
+                            var parametros = {
+                                'id_cartera' : documento.id,
+                                'id_factura' : id_factura, 
+                                'fechaFactura' : fecha,
+                                'numeroFactura' : prefijo+"|"+numero,
+                                'descuentos' : descuento,
+                                'sobrecostos' : interes,
+                                'fletes' : flete,
+                                'retefuente' : retefuente,
+                                'efectivo' : efectivo,
+                                'reteiva' : reteiva,
+                                'reteica' : reteica,
+                                'total' : total
+                            };
+                            $.ajax({
+                                data:  parametros,
+                                url:   HOST+'/cartera/kardex/guardar',
+                                type:  'post',
+                                beforeSend: function () {
+                                    $('#resultado').html('<center><div id="cargando" style="position: absolute;width: 100%;height: 100%;background: black;top: 0px;left: 0px;opacity: 0.8;z-index:100"><img src="http://pa1.narvii.com/6598/aa4c454ca15cbd104315d00a5590246f8b8dbbda_00.gif" style="margin-top: 20%;"></div></center>');
+                                },
+                                success:  function (response) {
+                                    $('#resultado').hide();
+                                    console.log(response);
+                                    //si la respuesta es correcta 
+                                    if(response.result == "success"){
+                                        console.log("Guardado exitoso fila "+i);
+                                    }
+                                    else{
+                                        console.log("Error interno fila "+i);
+                                        swal({
+                                        title: "Algo anda mal",
+                                        text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
+                                        icon: "error",
+                                        button: "Aceptar",
+                                        });
+                                    }
+                                    
+                                },
+                                error: function (request, status, error) {
+                                    $('#resultado').hide();
+                                    console.log(request.responseText);
+                                    swal({
+                                    title: "Algo anda mal",
+                                    text: "Verifique conexión a internet y/o diligencie completamente los campos, en la fila " + i + " de los productos.",
+                                    icon: "error",
+                                    button: "Aceptar",
+                                    });
+                                }
+                            });
+                        }
+                    }
+
+                    
 
                     swal({
                       title: "Imprimir",

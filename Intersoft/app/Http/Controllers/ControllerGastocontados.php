@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Gastocontados;
+use App\TipoPagos;
 use Session;
 
 class ControllerGastocontados extends Controller
@@ -25,10 +26,10 @@ class ControllerGastocontados extends Controller
             $obj->detalle = $request->detalle;
             $obj->id_empresa = Session::get('id_empresa');
             if(isset($request->btnagregar)){
-                return redirect('/cartera/gastocontados?prefijo='.$obj->prefijo.'&numero='.$obj->numero.'&fecha_egreso='.$obj->fecha_egreso);
+                return redirect('/cartera/gastocontados?prefijo='.$obj->prefijo.'&numero='.$obj->numero);
             }
             $obj->save();
-            return redirect('/cartera/gastocontados?prefijo='.$obj->prefijo.'&numero='.$obj->numero.'&fecha_egreso='.$obj->fecha_egreso);
+            return redirect('/cartera/gastocontados?prefijo='.$obj->prefijo.'&numero='.$obj->numero);
         }
         catch (ModelNotFoundException $exception){
             return  array(
@@ -64,7 +65,7 @@ class ControllerGastocontados extends Controller
     
     public function showone($id){
         try{
-			$obj = Gastocontados::where('id','=',$id)->fisrt();
+			$obj = Gastocontados::where('id','=',$id)->first();
             return  array(
                 "result"=>"success",
                 "body"=>$obj);
@@ -78,9 +79,9 @@ class ControllerGastocontados extends Controller
 
     public function delete($id){
         try{
-            $obj = Gastocontados::where('id','=',$id)->fisrt();
+            $obj = Gastocontados::where('id','=',$id)->first();
             $obj->delete();
-            return redirect('/cartera/gastocontados');
+            return redirect('/cartera/gastocontados?prefijo='.$obj->prefijo.'&numero='.$obj->numero);
         }
         catch (ModelNotFoundException $exception){
             return  array(
@@ -106,9 +107,10 @@ class ControllerGastocontados extends Controller
     public function index(){
         try{
             $objs = Gastocontados::where('id_empresa','=',Session::get('id_empresa'))->get();
-            
+            $tipo_pagos = TipoPagos::where('id_empresa','=',Session::get('id_empresa'))->get();
             return view('cartera.gastocontados', [
-                'causaciones' => $objs
+                'causaciones' => $objs,
+                'tipo_pagos'=>$tipo_pagos
             ]);
         }
         catch (ModelNotFoundException $exception){

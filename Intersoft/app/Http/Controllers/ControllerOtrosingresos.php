@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Otrosingresos;
+use App\TipoPagos;
 use Session;
 
 class ControllerOtrosingresos extends Controller
@@ -24,10 +25,10 @@ class ControllerOtrosingresos extends Controller
             $obj->naturaleza = $request->naturaleza;
             $obj->id_empresa = Session::get('id_empresa');
             if(isset($request->btnagregar)){
-                return redirect('/cartera/otrosingresos?prefijo='.$obj->prefijo.'&numero='.$obj->numero.'&fecha='.$obj->fecha.'&valor='.$obj->valor);
+                return redirect('/cartera/otrosingresos?prefijo='.$obj->prefijo.'&numero='.$obj->numero);
             }
             $obj->save();
-            return redirect('/cartera/otrosingresos?prefijo='.$obj->prefijo.'&numero='.$obj->numero.'&fecha='.$obj->fecha.'&valor='.$obj->valor);
+            return redirect('/cartera/otrosingresos?prefijo='.$obj->prefijo.'&numero='.$obj->numero);
         }
         catch (ModelNotFoundException $exception){
             return  array(
@@ -63,7 +64,7 @@ class ControllerOtrosingresos extends Controller
     
     public function showone($id){
         try{
-			$obj = Otrosingresos::where('id','=',$id)->fisrt();
+			$obj = Otrosingresos::where('id','=',$id)->first();
             return  array(
                 "result"=>"success",
                 "body"=>$obj);
@@ -77,9 +78,9 @@ class ControllerOtrosingresos extends Controller
 
     public function delete($id){
         try{
-            $obj = Otrosingresos::where('id','=',$id)->fisrt();
+            $obj = Otrosingresos::where('id','=',$id)->first();
             $obj->delete();
-            return redirect('/cartera/otrosingresos');
+            return redirect('/cartera/otrosingresos?prefijo='.$obj->prefijo.'&numero='.$obj->numero);
         }
         catch (ModelNotFoundException $exception){
             return  array(
@@ -105,9 +106,10 @@ class ControllerOtrosingresos extends Controller
     public function index(){
         try{
             $objs = Otrosingresos::where('id_empresa','=',Session::get('id_empresa'))->get();
-            
+            $tipo_pagos = TipoPagos::where('id_empresa','=',Session::get('id_empresa'))->get();
             return view('cartera.otrosingresos', [
-                'causaciones' => $objs
+                'causaciones' => $objs,
+                'tipo_pagos'=>$tipo_pagos
             ]);
         }
         catch (ModelNotFoundException $exception){
