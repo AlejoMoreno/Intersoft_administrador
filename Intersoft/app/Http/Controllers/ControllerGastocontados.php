@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Gastocontados;
-use App\TipoPagos;
+use App\Tipopagos;
 use Session;
 
 class ControllerGastocontados extends Controller
@@ -107,7 +107,7 @@ class ControllerGastocontados extends Controller
     public function index(){
         try{
             $objs = Gastocontados::where('id_empresa','=',Session::get('id_empresa'))->get();
-            $tipo_pagos = TipoPagos::where('id_empresa','=',Session::get('id_empresa'))->get();
+            $tipo_pagos = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get();
             return view('cartera.gastocontados', [
                 'causaciones' => $objs,
                 'tipo_pagos'=>$tipo_pagos
