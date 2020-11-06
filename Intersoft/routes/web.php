@@ -513,6 +513,31 @@ Route::get('/cartera/consulta/{tipo}', 'CarterasController@consultaTipo');
 
 Route::post('/cartera/FormaPagos','CarterasController@saveFormaPagos');
 
+//////////OTROS TIPOS DE CARTERA
+Route::get('/cartera/causacion', 'ControllerCausaciones@index');
+Route::get('/cartera/causacion/all', 'ControllerCausaciones@all');
+Route::get('/cartera/causacion/{id}', 'ControllerCausaciones@formcreate');
+Route::get('/cartera/causacion/delete/{id}', 'ControllerCausaciones@delete');
+Route::get('/cartera/causacion/update/{id}', 'ControllerCausaciones@showupdate');
+Route::post('/cartera/causacion', 'ControllerCausaciones@create');
+Route::post('/cartera/causacion/update', 'ControllerCausaciones@update');
+
+Route::get('/cartera/gastocontados', 'ControllerGastocontados@index');
+Route::get('/cartera/gastocontados/all', 'ControllerGastocontados@all');
+Route::get('/cartera/gastocontados/{id}', 'ControllerGastocontados@formcreate');
+Route::get('/cartera/gastocontados/delete/{id}', 'ControllerGastocontados@delete');
+Route::get('/cartera/gastocontados/update/{id}', 'ControllerGastocontados@showupdate');
+Route::post('/cartera/gastocontados', 'ControllerGastocontados@create');
+Route::post('/cartera/gastocontados/update', 'ControllerGastocontados@update');
+
+Route::get('/cartera/otrosingresos', 'ControllerOtrosingresos@index');
+Route::get('/cartera/otrosingresos/all', 'ControllerOtrosingresos@all');
+Route::get('/cartera/otrosingresos/{id}', 'ControllerOtrosingresos@formcreate');
+Route::get('/cartera/otrosingresos/delete/{id}', 'ControllerOtrosingresos@delete');
+Route::get('/cartera/otrosingresos/update/{id}', 'ControllerOtrosingresos@showupdate');
+Route::post('/cartera/otrosingresos', 'ControllerOtrosingresos@create');
+Route::post('/cartera/otrosingresos/update', 'ControllerOtrosingresos@update');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -537,6 +562,7 @@ Route::post('/contabilidad/cuentas', 'CuentasController@create');
 Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 
 Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
+Route::post('/contabilidad/auxiliars/search/searchcode', 'ContabilidadesController@searchcode');
 
 Route::get('/contabilidad/librosauxiliares', 'ContabilidadesController@librosauxiliaresIndex');
 Route::get('/contabilidad/comprobantesdiario', function(){ 

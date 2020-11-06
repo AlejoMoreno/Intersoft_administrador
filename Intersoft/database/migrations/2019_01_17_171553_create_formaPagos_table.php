@@ -19,6 +19,7 @@ class CreateFormaPagosTable extends Migration
             $table->integer('id_empresa');
             $table->string('formaPago');
             $table->integer('id_cartera');
+            $table->integer('id_banco');
             $table->double('valor');
             $table->string('observacion');
             $table->timestamps();

@@ -658,6 +658,17 @@ class ContabilidadesController extends Controller
                 "body" => $exce
             );
         }
-	}
+    }
+    
+    function searchcode(Request $request){
+        $auxiliar = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
+                    ->where('codigo','like',$request->codigo.'%')
+                    ->take(100)
+                    ->get();
+
+        return  array(
+            "result"=>"success",
+            "body"=>$auxiliar);
+    }
 
 }

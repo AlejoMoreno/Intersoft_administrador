@@ -54,7 +54,7 @@
                             <td>{{ $obj['nombre'] }}</td>
                             <td>{{ $obj['sucursal'] }}</td>
                             <td>{{ $obj['numero_de_cuenta'] }}</td>
-                            <td>{{ $obj['cuenta_contable'] }}</td>
+                            <td>{{ $obj['cuenta_contable']['codigo'] }} {{ $obj['cuenta_contable']['descripcion'] }}</td>
                             <td>{{ $obj['nit_banco'] }}</td>
                             <td>{{ $obj['impuesto'] }}</td>
                             <td></td> 
@@ -112,8 +112,8 @@
                     </div>
                     <br><br>
 
-                <input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control">
-                <div id="actualizar" onclick="config.send_post('#formulario', '/administrador/bancos/update', '/administrador/bancos');" class="btn btn-warning form-control">Actualizar</div>
+                <input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control" style="background: #3c763d;margin-bottom:2%;color:white;">
+                <div id="actualizar" onclick="config.send_post('#formulario', '/administrador/bancos/update', '/administrador/bancos');" style="background: #FF9500;margin-bottom:2%;color:white;" class="btn btn-warning form-control">Actualizar</div>
                 </form>
             </div>
         </div>

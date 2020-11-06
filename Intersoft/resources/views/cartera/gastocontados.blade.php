@@ -23,7 +23,7 @@
 
 <?php
 if(isset($_GET['prefijo'])){
-  $gastos = App\Otrosingresos::where('id_empresa','=',Session::get('id_empresa'))
+  $gastos = App\Gastocontados::where('id_empresa','=',Session::get('id_empresa'))
           ->where('prefijo','=',$_GET['prefijo'])
           ->where('numero','=',$_GET['numero'])
           ->get();
@@ -37,15 +37,15 @@ if(isset($_GET['prefijo'])){
 
 
 <div class="enc-article">
-  <h4 class="title">Otros Ingresos</h4>
+  <h4 class="title">Gastos de Contado</h4>
 </div>
 
 <div class="row top-11-w" style="padding:2%;">
 
   <div class="panel panel-default col-md-12" >
       <!-- Default panel contents -->
-    <form action="/cartera/otrosingresos" method="post" name="formulario1">
-      <div class="panel-heading row"><h5>Encabezado del ingreso</h5></div>
+    <form action="/cartera/gastocontados" method="post" name="formulario1">
+      <div class="panel-heading row"><h5>Encabezado del Gasto</h5></div>
       <div class="panel-body" >
         <div class="row">
           <div class="col-md-2">
@@ -58,11 +58,11 @@ if(isset($_GET['prefijo'])){
           </div>
           <div class="col-md-3">
             <label>Fecha egreso</label>
-            <input type="date" placeholder="fecha" class="form-control" id="fecha" name="fecha" value="{{ isset($_GET['fecha'])? $_GET['fecha'] : '' }}">
+            <input type="date" placeholder="fecha_egreso" class="form-control" id="fecha_egreso" name="fecha_egreso" value="{{ isset($_GET['fecha_egreso'])? $_GET['fecha_egreso'] : '' }}">
           </div>
           <div class="col-md-3">
-            <label>Valor</label>
-            <input type="number" placeholder="valor" class="form-control" id="valor" name="valor" value="{{ isset($_GET['valor'])? $_GET['valor'] : '' }}">
+            <label>Centro de costo</label>
+            <input type="text" placeholder="centro costo" onkeyup="config.UperCase('centro_costo');"  class="form-control" id="centro_costo" name="centro_costo" value="{{ isset($_GET['centro_costo'])? $_GET['centro_costo'] : '' }}">
           </div>
           <div class="col-md-2">
             <br>
@@ -72,11 +72,12 @@ if(isset($_GET['prefijo'])){
           <table class="table table-hover col-md-12" >
             <thead>
               <tr>
+                <th>Consecutivo</th>
                 <th>Tercero</th>
                 <th>Auxiliar</th>
                 <th>Valor</th>
                 <th>Naturaleza</th>
-                <th>concepto</th>
+                <th>Detalle</th>
                 <th>Guardar</th>
               </tr>
             </thead>
@@ -85,15 +86,17 @@ if(isset($_GET['prefijo'])){
                 @foreach ($gastos as $obj)
                 <?php $consec = $obj->consecutivo; ?>
                     <tr>
+                      <td> {{ $obj->consecutivo }}</td>
                       <td> {{ $obj->id_tercero->nit }} - {{ $obj->id_tercero->razon_social }}</td>
                       <td> {{ $obj->id_auxiliar->codigo }} - {{ $obj->id_auxiliar->descripcion }}</td>
-                      <td> {{ $obj->valor_auxiliar }}</td>
+                      <td> {{ $obj->valor }}</td>
                       <td> {{ $obj->naturaleza }}</td>
-                      <td> {{ $obj->concepto }}</td>
+                      <td> {{ $obj->detalle }}</td>
                     </tr>
                 @endforeach
               @endif
               <tr>
+                <td><input type="number" placeholder="consecutivo" name="consecutivo" id="consecutivo" class="form-control" value="{{ isset($consec)?$consec + 1:'' }}"></td>
                 <td>
                   <div class="row">
                     <input type="hidden" placeholder="id_tercero" name="id_tercero" id="id_tercero" class="col-md-6 form-control" >
@@ -116,9 +119,9 @@ if(isset($_GET['prefijo'])){
                     <input type="text" placeholder="descripcion codigo"  disabled="true" name="descripcion_codigo" id="descripcion_codigo" class="col-md-6 form-control" >
                   </div>
                 </td>
-                <td><input type="number" placeholder="valor_auxiliar" name="valor_auxiliar" id="valor_auxiliar" class="form-control" ></td>
+                <td><input type="number" placeholder="valor" name="valor" id="valor" class="form-control" ></td>
                 <td><input type="text" placeholder="naturaleza" onkeyup="config.UperCase('naturaleza');"  name="naturaleza" id="naturaleza" class="form-control" ></td>
-                <td><input type="text" placeholder="concepto" onkeyup="config.UperCase('concepto');"  name="concepto" id="concepto" class="form-control" ></td>
+                <td><input type="text" placeholder="detalle" onkeyup="config.UperCase('detalle');"  name="detalle" id="detalle" class="form-control" ></td>
                 <td><input type="submit" id="guardar" class="btn btn-success" value="Guardar"></td>
               </tr>
             

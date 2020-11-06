@@ -109,8 +109,8 @@
                     </div>
 
 
-                <input type="submit" value="Guardar" id="btnguardar" class="btn btn-success form-control">
-                <div id="actualizar" onclick="config.send_post('#formulario', '/administrador/tipopagos/update', '/administrador/tipopagos');" class="btn btn-warning form-control">Actualizar</div>
+                <input type="submit" style="background: #3c763d;margin-bottom:2%;margin-top:2%;color:white;" value="Guardar" id="btnguardar" class="btn btn-success form-control">
+                <div id="actualizar" style="background: #FF9500;margin-bottom:2%;color:white;" onclick="config.send_post('#formulario', '/administrador/tipopagos/update', '/administrador/tipopagos');" class="btn btn-warning form-control">Actualizar</div>
                 </form>
             </div>
         </div>

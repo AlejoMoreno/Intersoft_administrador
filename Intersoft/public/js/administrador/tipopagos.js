@@ -17,7 +17,7 @@ function TipoPagos(){
         $('#nombre').val(data.nombre);
         $('#puc_cuenta').val(data.puc_cuenta.id);
         $('#puc_compra').val(data.puc_compra.id);
-        $('#tercero').val(data.tercero);
+        $('#tercero').val(data.tercero.id);
 		$('input[type="submit"]').attr('disabled','disabled');
     };
 
