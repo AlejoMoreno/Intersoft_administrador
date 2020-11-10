@@ -479,7 +479,6 @@
                                 <li>
                                     <div class="row" style="padding-bottom: 10%;">
                                         <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/causacion');">Causaciones</a>
-                                        <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/otroingreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
                                     </div>
                                 </li>
                                 <li>
@@ -500,7 +499,7 @@
                             <?php if(in_array("Cobro Cartera",$Tesoreria)){ ?>
                                 <li>
                                     <div class="row" style="padding-bottom: 10%;">
-                                        <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Cobro Cartera</a>
+                                        <a class="col-md-8" style="margin-left:7%;color:black;" href="javascript:;" onclick="config.Redirect('/cartera/ingresos');">Recibo de caja</a>
                                         <a class="col-md-2" href="javascript:;" onclick="config.Redirect('/cartera/consulta/ingreso');" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
                                     </div>
                                 </li>

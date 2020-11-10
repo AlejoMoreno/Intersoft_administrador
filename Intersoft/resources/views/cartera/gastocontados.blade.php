@@ -56,7 +56,7 @@ if(isset($_GET['prefijo'])){
         <div class="row">
           <div class="col-md-2">
             <label>prefijo</label>
-            <input type="text" placeholder="Prefijo" class="form-control" id="prefijo" name="prefijo" value="{{ isset($_GET['prefijo'])? $_GET['prefijo'] : '' }}">
+            <input type="text" placeholder="Prefijo" class="form-control" id="prefijo" name="prefijo" value="{{ isset($_GET['prefijo'])? $_GET['prefijo'] : 'GT' }}">
           </div>
           <div class="col-md-2">
             <label>numero</label>

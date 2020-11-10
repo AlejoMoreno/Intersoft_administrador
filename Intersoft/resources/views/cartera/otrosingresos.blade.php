@@ -55,8 +55,9 @@ if(isset($_GET['prefijo'])){
       <div class="panel-body" >
         <div class="row">
           <div class="col-md-2">
+            <input type="" id="cedula_tercero">
             <label>prefijo</label>
-            <input type="text" placeholder="Prefijo" class="form-control" id="prefijo" name="prefijo" value="{{ isset($_GET['prefijo'])? $_GET['prefijo'] : '' }}">
+            <input type="text" placeholder="Prefijo" class="form-control" id="prefijo" name="prefijo" value="{{ isset($_GET['prefijo'])? $_GET['prefijo'] : 'OT' }}">
           </div>
           <div class="col-md-2">
             <label>numero</label>
@@ -265,11 +266,13 @@ function buscarcliente(texto){
                     cliente = response.body[0];
                     $('#id_tercero').val(cliente.id);
                     $('#nit').val(cliente.nit);
+                    $('#cedula_tercero').val(cliente.nit);
                     $('#razon_social').val(cliente.razon_social);
                     //$('#guardarCliente').hide();   
                 }  
                 else{
                     $('#id_tercero').val("");
+                    $('#cedula_tercero').val("");
                     $('#nit').val("");
                     $('#razon_social').val("");
                     //$('#guardarCliente').show();
@@ -312,12 +315,14 @@ function buscarcliente2(texto){
                     }
                     $('#nit').val(cliente.nit);
                     $('#id_tercero').val(cliente.id);
+                    $('#cedula_tercero').val(cliente.nit);
                     //$('#nombre').val(cliente.razon_social);
                     //$('#guardarCliente').hide();
 
                 }  
                 else{
                     $('#listaclientes').find('option').remove();
+                    $('#cedula_tercero').val("");
                     $('#nit').val("");
                     $('#id_tercero').val("");
                     $('#razon_social').val("");

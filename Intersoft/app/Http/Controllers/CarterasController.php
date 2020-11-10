@@ -30,11 +30,8 @@ class CarterasController extends Controller
 		if($request->tipoCartera == "GASTOS"){
 			$id_cliente = Directorios::where('id_empresa','=',Session::get('id_empresa'))->first();
 		}
-		else if($request->tipoCartera == "OTROINGRESO"){
-			$id_cliente = Directorios::where('id_empresa','=',Session::get('id_empresa'))->first();
-		}
 		else{
-			$id_cliente = Directorios::where('nit',$request->id_cliente)->first();
+			$id_cliente = Directorios::where('id_empresa','=',Session::get('id_empresa'))->where('nit',$request->id_cliente)->first();
 		}
 		
 		$obj = new Carteras();
@@ -472,6 +469,12 @@ class CarterasController extends Controller
                         }
                         if(isset($request->fechainicio)){
                             $q->whereBetween('fecha', [$request->fechainicio, $request->fechafinal]);
+						}
+						if(isset($request->prefijo)){
+                            $q->where('prefijo', '=',$request->prefijo);
+						}
+						if(isset($request->numero)){
+                            $q->where('numero', '=',$request->numero);
                         }
                     })
                     ->orderBy('carteras.id','desc')

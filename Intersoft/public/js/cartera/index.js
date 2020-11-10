@@ -290,9 +290,9 @@ function Carteras(){
         var cel2 = row.insertCell(2);
         var cel3 = row.insertCell(3);
 
-        cel0.innerHTML = "<div id='"+lista_seleccionados_frp.length+"_forma_pago'>"+forma_pago+"</div>";
-        cel1.innerHTML = "<input value='"+valor_pago+"' class='form-control' id='"+lista_seleccionados_frp.length+"_valor_pago' disabled>";
-        cel2.innerHTML = "<div id='"+lista_seleccionados_frp.length+"_observacion_pago'>"+observacion_pago+"</div>";
+        cel0.innerHTML = "<div id='"+lista_seleccionados_frp.length+"_forma_pago'>"+forma_pago+"</div><input type='hidden' value='"+forma_pago+"' name='CarteraformaPago'>";
+        cel1.innerHTML = "<input value='"+valor_pago+"' class='form-control' id='"+lista_seleccionados_frp.length+"_valor_pago' name='Carteravalor' disabled>";
+        cel2.innerHTML = "<div id='"+lista_seleccionados_frp.length+"_observacion_pago'>"+observacion_pago+"</div><input type='hidden' name='Carteraobservacion' value='"+observacion_pago+"'>";
         cel3.innerHTML = "<div class='btn btn-danger' onclick='carteras.eliminarFormaPago(this)' >Eliminar Forma Pago</div>";
 
         carteras.recorrerFormaPago();
@@ -377,6 +377,33 @@ function Carteras(){
                 //si la respuesta es correcta 
                 if(response.result == "success"){
                     documento = response.body;
+
+                    //guardar formas de pago
+                    CarteraformaPago = document.getElementsByName("CarteraformaPago");
+                    Carteravalor = document.getElementsByName("Carteravalor");
+                    Carteraobservacion = document.getElementsByName("Carteraobservacion");
+
+                    setTimeout(function(){ 
+                        for(i=0;i<CarteraformaPago.length;i++){ 
+                            formaPago = CarteraformaPago[i];
+                            valor = Carteravalor[i];
+                            observacion = Carteraobservacion[i];
+                            var parametros2 = {
+                                'formaPago':formaPago.value,
+                                'id_cartera':response.body.id,
+                                'valor':valor.value,
+                                'observacion':observacion.value
+                            };
+                            $.ajax({
+                                data:  parametros2,
+                                url:   '/cartera/FormaPagos',
+                                type:  'post',
+                                success:  function (response1) {
+                                    console.log(response1);
+                                }
+                            });
+                        }
+                    }, 1000);
 
                     localStorage.setItem("documento",documento.id);
 

@@ -56,15 +56,12 @@ span{
             </div>
             
             <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
-                <h2>{{ $docs[0]->cliente->nit }} {{ $docs[0]->cliente->razon_social }}</h2>
+                <h2 style="color:#ddd">{{ $docs[0]->cliente->nit }} {{ $docs[0]->cliente->razon_social }}</h2>
                 <table class="table table-hover table-striped"  id="datos">
                     <thead>
                         <th>TIPO DOC</th>
                         <th>DOCUMENTO</th>
                         <th>TOTAL</th>
-                        <th>TIPO CARTERA</th>
-                        <th>CARTERA</th>
-                        <th>CARTERA PAGO</th>
                         <th>SALDO</th>
                     </tr></thead>
                     <tbody>
@@ -72,26 +69,11 @@ span{
                         $total = 0; 
                         for($i=0;$i<=sizeof($docs)-1;$i++){
                             $obj = $docs[$i];
-                            if($obj->id_documento->nombre == "VENTA" || $obj->id_documento->nombre == "MAYORISTA"){
+                            if($obj->id_documento->nombre == "Factura Electronica" || $obj->id_documento->nombre == "MAYORISTA"){
                                 $total = $total + $obj->total; 
                             }
-                            else if($obj->id_documento->nombre == "COMPRA"){
+                            else if($obj->id_documento->nombre == "Compra"){
                                 $total = $total - $obj->total ; 
-                            }
-                            else{
-                                $total = $total;
-                            }
-
-                            if($obj->totalkardexcartera != null){
-                                if($obj->tipoCartera == "INGRESO"){
-                                    $total = $total - $obj->totalkardexcartera; 
-                                }
-                                if($obj->tipoCartera == "EGRESO"){
-                                    $total = $total + $obj->totalkardexcartera; 
-                                }
-                                else{
-                                    $total = $total;
-                                }
                             }
                             else{
                                 $total = $total;
@@ -101,11 +83,8 @@ span{
                         <tr>
                             <td>{{ $obj->id_documento->nombre }}</td>
                             <td>{{ $obj->fprefijo }} {{ $obj->fnumero }}</td>
-                            <td>{{ $obj->total }}</td>
-                            <td>{{ $obj->tipoCartera }}</td>
-                            <td>{{ $obj->cprefijo }} {{ $obj->cnumero }}</td>
-                            <td>{{ $obj->totalkardexcartera }}</td>
-                            <td>{{ $total }}</td>
+                            <td>{{ number_format($obj->total, 0, ",", ".") }}</td>
+                            <td>{{ number_format($total, 0, ",", ".") }}</td>
                         </tr>
                         <?php } ?>               
                     </tbody>

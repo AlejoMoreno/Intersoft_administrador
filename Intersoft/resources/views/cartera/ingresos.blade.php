@@ -33,7 +33,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
 
 
 <div class="enc-article">
-  <h4 class="title">Control de pago de clientes</h4>
+  <h4 class="title">Control de ingresos</h4>
 </div>
 
 <div class="row top-11-w">
