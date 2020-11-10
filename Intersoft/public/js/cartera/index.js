@@ -502,6 +502,11 @@ function Carteras(){
                             fecha = document.getElementById(i+"_fecha").value;
                             total = document.getElementById(i+"_total").value;
                             id_factura = document.getElementById(i+"_id_factura").value;
+
+                            if(documento.tipoCartera=="GASTOCAUSADO"){
+                                //restar al saldo
+                                carteras.saldocausado(id_factura,total);
+                            }
                             
 
                             var parametros = {
@@ -583,6 +588,22 @@ function Carteras(){
                 console.log(e);
             }
 
+        });
+    }
+
+    this.saldocausado = function(id, total){
+        var parametros = {
+            'id' : id,
+            'total' : total
+        };
+        $.ajax({
+            data:  parametros,
+            url:   '/cartera/causacion/updatesaldo',
+            type:  'post',
+            success:  function (response) {
+                $('#resultado').hide();
+                console.log(response);
+            }
         });
     }
 

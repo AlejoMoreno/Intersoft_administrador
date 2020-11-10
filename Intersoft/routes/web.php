@@ -516,11 +516,14 @@ Route::post('/cartera/FormaPagos','CarterasController@saveFormaPagos');
 //////////OTROS TIPOS DE CARTERA
 Route::get('/cartera/causacion', 'ControllerCausaciones@index');
 Route::get('/cartera/causacion/all', 'ControllerCausaciones@all');
+Route::get('/cartera/causacion/all/{tercero}', 'ControllerCausaciones@allTercero');
+Route::post('/cartera/causacion/updatesaldo', 'ControllerCausaciones@updateSaldo');
 Route::get('/cartera/causacion/{id}', 'ControllerCausaciones@formcreate');
 Route::get('/cartera/causacion/delete/{id}', 'ControllerCausaciones@delete');
 Route::get('/cartera/causacion/update/{id}', 'ControllerCausaciones@showupdate');
 Route::post('/cartera/causacion', 'ControllerCausaciones@create');
 Route::post('/cartera/causacion/update', 'ControllerCausaciones@update');
+Route::get('/cartera/causacionPago', 'ControllerCausaciones@indexPago');
 
 Route::get('/cartera/gastocontados', 'ControllerGastocontados@index');
 Route::get('/cartera/gastocontados/all', 'ControllerGastocontados@all');

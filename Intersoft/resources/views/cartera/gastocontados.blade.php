@@ -72,7 +72,7 @@ if(isset($_GET['prefijo'])){
           </div>
           <div class="col-md-2">
             <br>
-            <input type="submit" class="form-control btn btn-success" style="background: #3c763d;color:white;" value="Agregar" name="btnagregar">
+            <input type="submit" class="form-control btn btn-success" style="background: #3c763d;color:white;" value="Buscar" name="btnagregar">
           </div>
           <div class="col-md-12"><br><br></div>
           <table class="table table-hover col-md-12" >
@@ -80,7 +80,7 @@ if(isset($_GET['prefijo'])){
               <tr>
                 <th>Consecutivo</th>
                 <th>Tercero</th>
-                <th>Auxiliar</th>
+                <th>PUC</th>
                 <th>Valor</th>
                 <th>Naturaleza</th>
                 <th>Detalle</th>

@@ -105,10 +105,8 @@ class ControllerOtrosingresos extends Controller
 
     public function index(){
         try{
-            $objs = Otrosingresos::where('id_empresa','=',Session::get('id_empresa'))->get();
             $tipo_pagos = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get();
             return view('cartera.otrosingresos', [
-                'causaciones' => $objs,
                 'tipo_pagos'=>$tipo_pagos
             ]);
         }

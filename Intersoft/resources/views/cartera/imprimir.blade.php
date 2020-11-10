@@ -38,7 +38,53 @@
 	</style>
 	
 
+	@if($carteras['tipoCartera'] == "GASTOS")
 
+	<div style="width: 100%;top:0;left: 0;padding: 2%;">
+		<table style="width: 98%;">
+			<tr>
+				<td style="width: 35%">
+					<!--<img style="width:120px;" src="https://wakusoft.com/img/logo_wakusoft.png">-->
+					<!--<img style="width:120px;" src="/assets/img/empresas/{{ Session::get('id_empresa') }}.jpeg">-->
+				</td>
+				<td style="width: 30%">
+					<table style="width: 100%">
+						<tr><td><strong>{{ $carteras['id_sucursal']['id_empresa']['razon_social'] }}</strong></td></tr>
+						<tr><td><strong>NIT. {{ $carteras['id_sucursal']['id_empresa']['nit_empresa'] }}</strong></td></tr>
+						<tr><td>{{ $carteras['id_sucursal']['id_empresa']['telefono'] }} - {{ $carteras['id_sucursal']['id_empresa']['telefono1'] }}</td></tr>
+						<tr><td>{{ $carteras['id_sucursal']['id_empresa']['direccion'] }}</td></tr>
+					</table>
+				</td>
+				<td style="width: 20%">
+					<table style="width: 100%">
+						<tr>
+							<td style="text-align: right"><strong>Comprobante de {{ $carteras['tipoCartera'] }}</strong>
+							<br>
+							<div ><?php echo $carteras['prefijo'].'  '.$carteras['numero'];?></div></td>
+						</tr>
+						<tr>
+							<td></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+		<table style="width: 100%;border: 1px dashed black; float: left;">
+			<tr>
+				<td class="headtablelast" style="text-align: center"><strong >Codigo</strong></td>
+				<td class="headtablelast" style="text-align: center"><strong >Concepto</strong></td>
+				<td class="headtablelast" style="text-align: center"><strong >Valor</strong></td>
+			</tr>
+			
+			
+		</table>
+
+
+	</div>
+	@endif
+
+	@if($carteras['tipoCartera'] == "EGRESOS")
 	<div style="width: 100%;top:0;left: 0;padding: 2%;">
 		<table style="width: 98%;">
 			<tr>
@@ -215,9 +261,11 @@
 		
 		
 	</div>
+	@endif
+	
 
 <script>
- window.print();
+ //window.print();
 </script>
 
 <script>

@@ -23,19 +23,14 @@
 
 <?php
 if(isset($_GET['prefijo'])){
-  $ingresos = App\Otrosingresos::where('id_empresa','=',Session::get('id_empresa'))
+  $causaciones = App\Causaciones::where('id_empresa','=',Session::get('id_empresa'))
           ->where('prefijo','=',$_GET['prefijo'])
           ->where('numero','=',$_GET['numero'])
           ->get();
-  foreach ($ingresos as $key => $value) {
+  foreach ($causaciones as $key => $value) {
     $value->id_tercero = App\Directorios::where('id','=',$value->id_tercero)->first();
+    $value->id_tercero_auxiliar = App\Directorios::where('id','=',$value->id_tercero_auxiliar)->first();
     $value->id_auxiliar = App\Pucauxiliar::where('id','=',$value->id_auxiliar)->first();
-  }
-  $kardex_carteras = App\KardexCarteras::where('id_empresa','=',Session::get('id_empresa'))
-          ->where('numeroFactura','=',$_GET['prefijo'].'|'.$_GET['numero'])
-          ->first();
-  if(isset($kardex_carteras)){
-    $kardex_carteras->id_cartera = App\Carteras::where('id','=',$kardex_carteras->id_cartera)->first();
   }
 }
 
@@ -43,15 +38,15 @@ if(isset($_GET['prefijo'])){
 
 
 <div class="enc-article">
-  <h4 class="title">Otros Ingresos</h4>
+  <h4 class="title">Causaciones</h4>
 </div>
 
 <div class="row top-11-w" style="padding:2%;">
 
   <div class="panel panel-default col-md-12" >
       <!-- Default panel contents -->
-    <form action="/cartera/otrosingresos" method="post" name="formulario1">
-      <div class="panel-heading row"><h5>Encabezado del ingreso</h5></div>
+    <form action="/cartera/causacion" method="post" name="formulario1">
+      <div class="panel-heading row"><h5>Encabezado de la causación</h5></div>
       <div class="panel-body" >
         <div class="row">
           <div class="col-md-2">
@@ -63,12 +58,41 @@ if(isset($_GET['prefijo'])){
             <input type="text" placeholder="Número" class="form-control" id="numero" name="numero" value="{{ isset($_GET['numero'])? $_GET['numero'] : '' }}">
           </div>
           <div class="col-md-3">
-            <label>Fecha egreso</label>
-            <input type="date" placeholder="fecha" class="form-control" id="fecha" name="fecha" value="{{ isset($_GET['fecha'])? $_GET['fecha'] : isset($ingresos)? $ingresos[0]->fecha : '' }}">
+            <label>Fecha</label>
+            <input type="date" placeholder="fecha" class="form-control" id="fecha" name="fecha" value="{{ isset($causaciones)? $causaciones[0]->fecha : '' }}" >
           </div>
           <div class="col-md-3">
-            <label>Valor</label>
-            <input type="number" placeholder="valor" class="form-control" id="valor" name="valor" value="{{ isset($_GET['valor'])? $_GET['valor'] : isset($ingresos)? $ingresos[0]->valor : '' }}">
+            <label>Centro de costo</label>
+            <input type="text" placeholder="centro costo" onkeyup="config.UperCase('centro_costo');"  class="form-control" id="centro_costo" name="centro_costo" value="{{ isset($causaciones)? $causaciones[0]->centro_costo : '' }}">
+          </div>
+          <div class="col-md-4">
+            <label>Tercero</label>
+            <input type="hidden" placeholder="id_tercero"  class="form-control" id="id_tercero" name="id_tercero" value="{{ isset($causaciones)? $causaciones[0]->id_tercero->id : '' }}">
+            <div class="row">
+              <div class="col-md-6">
+                <input type="text" placeholder="Nit" name="nit" id="nit" class="col-md-6 form-control" value="{{ isset($causaciones)? $causaciones[0]->id_tercero->nit : '' }}" >
+              </div>
+              <div class="col-md-6">
+                <input type="text" placeholder="Razon social" list="listaclientes"  name="razon_social" id="razon_social" class="col-md-6 form-control" value="{{ isset($causaciones)? $causaciones[0]->id_tercero->razon_social : '' }}">
+                <datalist id="listaclientes"></datalist>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <label>Factura</label>
+            <input type="text" placeholder="Factura" onkeyup="config.UperCase('factura');"  class="form-control" id="factura" name="factura" value="{{ isset($causaciones)? $causaciones[0]->factura : '' }}">
+          </div>
+          <div class="col-md-3">
+            <label>Neto a pagar</label>
+            <input type="number" placeholder="neto pagar" onkeyup="config.UperCase('neto_pagar');"  class="form-control" id="neto_pagar" name="neto_pagar" value="{{ isset($causaciones)? $causaciones[0]->neto_pagar : '' }}">
+          </div>
+          <div class="col-md-3">
+            <label>Fecha vencimiento</label>
+            <input type="date"  class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" value="{{ isset($causaciones)? $causaciones[0]->fecha_vencimiento : '' }}">
+          </div>
+          <div class="col-md-3">
+            <label>Detalle</label>
+            <input type="text" placeholder="Detalle" onkeyup="config.UperCase('detalle');"  class="form-control" id="detalle" name="detalle" value="{{ isset($causaciones)? $causaciones[0]->detalle : '' }}">
           </div>
           <div class="col-md-2">
             <br>
@@ -78,6 +102,7 @@ if(isset($_GET['prefijo'])){
           <table class="table table-hover col-md-12" >
             <thead>
               <tr>
+                <th>Consecutivo</th>
                 <th>Tercero</th>
                 <th>PUC</th>
                 <th>Valor</th>
@@ -87,29 +112,30 @@ if(isset($_GET['prefijo'])){
               </tr>
             </thead>
             <tbody>
-              @if(isset($ingresos))
-                @foreach ($ingresos as $obj)
+              @if(isset($causaciones))
+                @foreach ($causaciones as $obj)
                 <?php $consec = $obj->consecutivo; ?>
                     <tr>
-                      <td> {{ $obj->id_tercero->nit }} - {{ $obj->id_tercero->razon_social }}</td>
+                      <td> {{ $obj->consecutivo }}</td>
+                      <td> {{ $obj->id_tercero_auxiliar->nit }} - {{ $obj->id_tercero_auxiliar->razon_social }}</td>
                       <td> {{ $obj->id_auxiliar->codigo }} - {{ $obj->id_auxiliar->descripcion }}</td>
                       <td> {{ $obj->valor_auxiliar }}</td>
                       <td> {{ $obj->naturaleza }}</td>
-                      <td> {{ $obj->concepto }}</td>
                       <td><a href="javascript:;" class="btn btn-danger" onclick="eliminar('{{ $obj }}')" >X</a></td>
                     </tr>
                 @endforeach
               @endif
               <tr>
+                <td><input type="number" placeholder="consecutivo" name="consecutivo" id="consecutivo" class="form-control" value="{{ isset($consec)?$consec + 1:'' }}"></td>
                 <td>
                   <div class="row">
-                    <input type="hidden" placeholder="id_tercero" name="id_tercero" id="id_tercero" class="col-md-6 form-control" >
+                    <input type="hidden" placeholder="id_tercero_auxiliar" name="id_tercero_auxiliar" id="id_tercero_auxiliar" class="col-md-6 form-control" >
                     <div class="col-md-6">
-                      <input type="text" placeholder="Nit" name="nit" id="nit" class="col-md-6 form-control" >
+                      <input type="text" placeholder="Nit" name="nit_tercero" id="nit_tercero" class="col-md-6 form-control" >
                     </div>
                     <div class="col-md-6">
                       <input type="text" placeholder="Razon social" list="listaclientes"  name="razon_social" id="razon_social" class="col-md-6 form-control" >
-                      <datalist id="listaclientes"></datalist>
+                      <datalist id="listaclientes1"></datalist>
                     </div>
                   </div>
                 </td>
@@ -125,7 +151,6 @@ if(isset($_GET['prefijo'])){
                 </td>
                 <td><input type="number" placeholder="valor_auxiliar" name="valor_auxiliar" id="valor_auxiliar" class="form-control" ></td>
                 <td><input type="text" placeholder="naturaleza" onkeyup="config.UperCase('naturaleza');"  name="naturaleza" id="naturaleza" class="form-control" ></td>
-                <td><input type="text" placeholder="concepto" onkeyup="config.UperCase('concepto');"  name="concepto" id="concepto" class="form-control" ></td>
                 <td><input type="submit" id="guardar" class="btn btn-success" value="Guardar"></td>
               </tr>
             
@@ -136,88 +161,12 @@ if(isset($_GET['prefijo'])){
   </div>
 </div>
 
-@if(isset($kardex_carteras))
-<div>
-  <h3>Se realizo el pago con el documento: {{ $kardex_carteras->id_cartera->tipoCartera }}  {{ $kardex_carteras->id_cartera->prefijo }} {{ $kardex_carteras->id_cartera->numero }}</h3>
-</div>
-@else
-<div class="row top-11-w">
-  <div class="col-md-6">
-    <p style="font-size:10px">FORMA DE PAGO: </p>
-    <table class="table table-bordered" style="width: 96%;margin-left: 2%;">
-      <thead>
-        <tr>
-          <th>
-            <select id="forma_pago" name="forma_pago" class="form-control">                      
-              @foreach ($tipo_pagos as $obj)
-              <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
-              @endforeach
-            </select>
-          </th>
-          <th>
-            <input type="text" id="valor_pago" name="" class="form-control" placeholder="Valor" value="{{ isset($_GET['valor'])? $_GET['valor'] : isset($ingresos)? $ingresos[0]->valor : '' }}">
-          </th>
-          <th>
-            <input type="text" id="observacion_pago" name="" value="NINGUNA" class="form-control" placeholder="Observacion">
-          </th>
-          <th><div class="btn btn-success form-control" onclick="carteras.getReferenciaPago()">+</div></th>
-        </tr>
-      </thead>
-    </table>
-  </div>
-  <div class="col-md-6">
-    <p style="font-size:10px">Tabla que indica las formas de pago que serán incorporados en el egreso:</p> 
-    <table id="tabla_forma_pago" class="table table-bordered" style="width: 96%;margin-left: 2%;">
-      <thead>
-        <tr>
-          <th>Forma de Pago</th>
-          <th>Valor</th>
-          <th>Observaciones</th>
-          <th></th>
-        </tr>
-      </thead>
-    </table>
-    <label>Total Forma Pago</label>
-    <input type="text" class="form-control" id="total_forma_pago" value="" disabled="">
-  </div>
-</div>
-@endif
-<hr>
-            
-<div class="row top-11-w">
-  <div class="col-sm-12">
-    <div class="row titulo">
-      <div>
-        <input type="hidden" value="0" id="valor_efectivo" class="form-control" >
-        <input type="hidden" value="0" id="valor_descuento" class="form-control" >
-        <input type="hidden" value="0" id="valor_interes" class="form-control" >
-        <input value="0" type="hidden" id="valor_retefuente" class="form-control" >
-        <input type="hidden" value="0" id="valor_reteica" class="form-control" >
-        <input value="0" type="hidden" id="valor_reteiva" class="form-control" >
-        <input type="hidden" id="valor_flete" value="0" class="form-control" >
-        <input type="hidden" name="total" id="total" class="form-control" value="{{ isset($_GET['valor'])? $_GET['valor'] : isset($ingresos)? $ingresos[0]->valor : '' }}">
-      </div>
-      <div class="col-sm-12" style="height: 20px;"></div>
-      <div class="col-sm-12">
-        <label>CONDICIONES DE </label>
-        <input id="observaciones" name="observaciones" class="form-control" value="SIN OBSERVACIONES" >
-      </div>
-      <div class="col-sm-12" style="height: 20px;"></div>
-      <div class="col-sm-12">
-        <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('OTROINGRESO');" style="background-color: #28a745;color:white;">GUARDAR</div>
-      </div>
-      <div class="col-sm-12" style="height: 20px;"></div>
-    </div>
-  </div>
-</div>
-
-
 <script>
 
 function eliminar(data){
   data = JSON.parse(data);
   console.log(data);
-  config.Redirect('/cartera/otrosingresos/delete/'+data.id);
+  config.Redirect('/cartera/causacion/delete/'+data.id);
 }
 
 
@@ -264,13 +213,17 @@ function buscarcliente(texto){
                 if(response.body.length != 0){ // existe
                     cliente = response.body[0];
                     $('#id_tercero').val(cliente.id);
+                    $('#id_tercero_auxiliar').val(cliente.id);
                     $('#nit').val(cliente.nit);
+                    $('#nit_tercero').val(cliente.nit);
                     $('#razon_social').val(cliente.razon_social);
                     //$('#guardarCliente').hide();   
                 }  
                 else{
                     $('#id_tercero').val("");
+                    $('#id_tercero_auxiliar').val("");
                     $('#nit').val("");
+                    $('#nit_tercero').val();
                     $('#razon_social').val("");
                     //$('#guardarCliente').show();
                 }              
@@ -309,9 +262,12 @@ function buscarcliente2(texto){
                     $('#listaclientes').find('option').remove();
                     for(i=0;response.body.length > i;i++){
                         $('#listaclientes').append('<option value="'+response.body[i].razon_social+'">"'+response.body[i].razon_social+'"</option>');
+                        $('#listaclientes1').append('<option value="'+response.body[i].razon_social+'">"'+response.body[i].razon_social+'"</option>');                   
                     }
                     $('#nit').val(cliente.nit);
                     $('#id_tercero').val(cliente.id);
+                    $('#id_tercero_auxiliar').val(cliente.id);
+                    $('#nit_tercero').val(cliente.nit);
                     //$('#nombre').val(cliente.razon_social);
                     //$('#guardarCliente').hide();
 
@@ -319,7 +275,9 @@ function buscarcliente2(texto){
                 else{
                     $('#listaclientes').find('option').remove();
                     $('#nit').val("");
+                    $('#nit_tercero').val("");
                     $('#id_tercero').val("");
+                    $('#id_tercero_auxiliar').val("");
                     $('#razon_social').val("");
                     //$('#guardarCliente').show();
                 }              
