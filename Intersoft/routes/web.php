@@ -466,6 +466,9 @@ Route::get('/inventario/actualizacionPrecios', 'ReferenciasController@actualizac
 Route::post('/inventario/actualizacionPrecios', 'ReferenciasController@actualizarPrecios');
 Route::get('/inventario/actualizacionPrecios/{id}/{precio1}/{precio2}/{precio3}', 'ReferenciasController@updatePrecios');
 
+Route::get('/inventario/cierreInventario', 'ReferenciasController@cierreInventario');
+Route::post('/inventario/cierreInventario', 'ReferenciasController@cierreInventarioStore');
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes SALIDAS
@@ -541,6 +544,8 @@ Route::get('/cartera/otrosingresos/update/{id}', 'ControllerOtrosingresos@showup
 Route::post('/cartera/otrosingresos', 'ControllerOtrosingresos@create');
 Route::post('/cartera/otrosingresos/update', 'ControllerOtrosingresos@update');
 
+Route::get('/cartera/cierreCartera', 'CarterasController@cierreCartera');
+Route::post('/cartera/cierreCartera', 'CarterasController@cierreCarteraStore');
 
 /*
 |--------------------------------------------------------------------------

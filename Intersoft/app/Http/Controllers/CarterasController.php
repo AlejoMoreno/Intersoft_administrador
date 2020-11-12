@@ -14,6 +14,8 @@ use App\Usuarios;
 use App\Ciudades;
 use App\FormaPagos;
 use App\Tipopagos;
+use App\Cierrecarterasaldos;
+use App\Causaciones;
 
 use PDF;
 use DB;
@@ -485,6 +487,75 @@ class CarterasController extends Controller
 			'documento' => $documento,
 			'tipo' => $tipo
         ]);
+	}
+
+	public function cierreCarteraStore(Request $request){
+		try{
+			$directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))->get();
+			foreach($directorios as $directorio){
+				if($directorio->id_directorio_tipo_tercero == 3){ //causacion
+					$documento = Causaciones::select([DB::raw('SUM(saldo) as saldo')])
+						->where('id_tercero','=',$directorio->id)
+						->first();
+				}
+				else if($directorio->id_directorio_tipo_tercero == 2){ //cliente
+					$documento = Facturas::select([DB::raw('SUM(saldo) as saldo')])
+						->where('signo','=','-')
+						->where('id_cliente','=',$directorio->id)
+						->first();
+						
+				}
+				else if($directorio->id_directorio_tipo_tercero == 1){ //proveedor
+					$documento = Facturas::select([DB::raw('SUM(saldo) as saldo')])
+						->where('signo','=','+')
+						->where('id_cliente','=',$directorio->id)
+						->first();
+				}
+				
+				if($documento->saldo != null){
+					//recorrer cartera y guardar saldos.
+					$obj = new Cierrecarterasaldos();
+					$obj->id_tercero = $directorio->id;
+					$obj->fecha = $request->fecha;
+					$obj->saldo = $documento->saldo;
+					$obj->estado = 'ACTIVO';
+					$obj->id_empresa = Session::get('id_empresa');
+					$obj->save();
+				}
+			}
+			
+			$cierres = Cierrecarterasaldos::select('fecha',DB::raw('count(*) as count'))
+				->orderBy('fecha', 'desc')
+				->groupBy('fecha')
+				->get();
+			return view('cartera.cierrecartera',[
+				"cierres"=>$cierres
+			]); 
+		}
+		catch(Exception $exce){
+			return array(
+				"result" => "Incorrecto",
+				"body" => $exce
+			);
+		}
+	}
+	
+	public function cierreCartera(){
+		try{
+			$cierres = Cierrecarterasaldos::select('fecha',DB::raw('count(*) as count'))
+				->orderBy('fecha', 'desc')
+				->groupBy('fecha')
+				->get();
+			return view('cartera.cierrecartera',[
+				"cierres"=>$cierres
+			]); 
+		}
+		catch(Exception $exce){
+			return array(
+				"result" => "Incorrecto",
+				"body" => $exce
+			);
+		}
 	}
 
 }

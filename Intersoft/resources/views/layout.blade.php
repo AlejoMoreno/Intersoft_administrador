@@ -263,10 +263,10 @@
         if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
             $lista = ["Inicio", "Directorio", "Inventario", "Producción", "Facturación", "Tesorería", "Contabilidad", "Parámetros", "Salida"];
             $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
-            $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
+            $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','CierredeInventario','Alistamiento'];
             $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
             $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES','Facturatech'];
-            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones','Reportes'];
+            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones','Reportes','CierreCartera'];
         }
         else if(Session::get('cargo') == "Ventas" || Session::get('cargo') == "venta" || Session::get('cargo') == "Vendedor"){
             $lista = ["Inicio", "Directorio", "Facturación", "Salida"];
@@ -276,14 +276,14 @@
         }
         else if(Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario" || Session::get('cargo') == "Inventario"){
             $lista = ["Inicio", "Inventario", "Producción", "Facturación", "Salida"];
-            $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','Cierre de inventario','Alistamiento'];
+            $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','CierredeInventario','Alistamiento'];
             $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
             $Facturacion = ['Estadistica Ventas','Facturatech'];
         }
         else if(Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos"){
             $lista = ["Inicio", "Directorio", "Facturación", "Tesorería", "Salida"];
             $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
-            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones','Reportes'];
+            $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones','Reportes','CierreCartera'];
             $Facturacion = ['Estadistica Ventas','Zonas Asingada','Facturatech'];
         }
     }
@@ -342,7 +342,7 @@
                             <?php if(in_array("Catálogo",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/catalogo');">Catálogo</a></li><?php } ?>
                             <?php if(in_array("Tarjeta Kardex",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/kardex');">Tarjeta Kardex</a></li><?php } ?>
                             <?php if(in_array("Actualización y Lista de Precios",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/actualizacionPrecios');">Actualización y Lista de Precios</a></li><?php } ?>
-                            <?php if(in_array("Cierre de Inventario",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/cierreInventario');">Cierre de Inventario</a></li><?php } ?>
+                            <?php if(in_array("CierredeInventario",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/cierreInventario');">Cierre de Inventario</a></li><?php } ?>
                             <?php if(in_array("Alistamiento",$Inventario)){ ?><li><a href="javascript:;" onclick="config.Redirect('/facturacion/alistamiento');">Alistamiento</a></li><?php } ?>
                             <li role="separator" class="divider"></li>
                             @foreach ($documentos as $obj)
@@ -509,6 +509,7 @@
                                 <li><a href="javascript:;" onclick="config.Redirect('/cartera/castigarcartera');">Castigar cartera</a></li>
                             <?php } ?>
                             <?php if(in_array("Reportes",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/reporte');">Reportes</a></li><?php } ?>
+                            <?php if(in_array("CierreCartera",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/cierreCartera');">Cierre Cartera</a></li><?php } ?>
                         </ul>
                     </a>
                 </li>

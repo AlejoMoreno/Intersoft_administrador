@@ -16,6 +16,7 @@ use App\Usuarios;
 use App\Cuentas;
 use App\Pucauxiliar;
 use App\Kardex;
+use App\Cierreinventarios;
 
 use Yajra\Datatables\Datatables;
 
@@ -639,5 +640,53 @@ class ReferenciasController extends Controller
                 "body" => $exce
             );
         }
-    }
+	}
+
+	public function cierreInventarioStore(Request $request){
+		try{
+			//recorrer inventario y guardar saldos.
+			$referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+			foreach($referencias as $referencia){
+				$obj = new Cierreinventarios();
+				$obj->id_referencia = $referencia->id;
+				$obj->fecha = $request->fecha;
+				$obj->saldo = $referencia->saldo;
+				$obj->estado = 'ACTIVO';
+				$obj->id_empresa = Session::get('id_empresa');
+				$obj->save();
+			}
+
+			$cierres = Cierreinventarios::select('fecha',DB::raw('count(*) as count'))
+				->orderBy('fecha', 'desc')
+				->groupBy('fecha')
+				->get();
+			return view('inventario.cierreinventarios',[
+				"cierres"=>$cierres
+			]); 
+		}
+		catch(Exception $exce){
+			return array(
+				"result" => "Incorrecto",
+				"body" => $exce
+			);
+		}
+	}
+	
+	public function cierreInventario(){
+		try{
+			$cierres = Cierreinventarios::select('fecha',DB::raw('count(*) as count'))
+				->orderBy('fecha', 'desc')
+				->groupBy('fecha')
+				->get();
+			return view('inventario.cierreinventarios',[
+				"cierres"=>$cierres
+			]); 
+		}
+		catch(Exception $exce){
+			return array(
+				"result" => "Incorrecto",
+				"body" => $exce
+			);
+		}
+	}
 }
