@@ -12,6 +12,7 @@ use App\Facturas;
 use App\Sucursales;
 use App\Lineas;
 use App\Directorios;
+use App\CierreInventarios;
 
 use App\Clasificaciones;
 use App\Contabilidades;
@@ -183,18 +184,35 @@ class KardexController extends Controller
 	}
 	
 
-    public function showid($id){
+    public function showid($id, Request $request){
 
-		$kardex = Kardex::where('id_referencia','=',$id)->orderBy('created_at')->paginate(5);
-    	foreach ($kardex as $value) {
-    		$value->cabecera = Facturas::where('numero','=',$value->numero)->where('id_documento','=',$value->id_documento)->get();
-    		$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->first();
-    		$value->id_documento = Documentos::where('id','=',$value->id_documento)->first();
-    		$value->id_sucursal = Sucursales::where('id','=',$value->cabecera[0]->id_sucursal)->first();    		
-    	}
+		$kardex = null;
+		$saldocierre = null;
+		if(isset($request->fecha_inicio)){
+			$kardex = Kardex::where('id_referencia','=',$id)
+				->where('fecha','>',$request->fecha_inicio)
+				->orderBy('created_at')
+				->get();
+			foreach ($kardex as $value) {
+				$value->cabecera = Facturas::where('numero','=',$value->numero)->where('id_documento','=',$value->id_documento)->get();
+				$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->first();
+				$value->id_documento = Documentos::where('id','=',$value->id_documento)->first();
+			}
+			$saldocierre = CierreInventarios::where('id_referencia','=',$id)
+				->where('fecha','=',$request->fecha_inicio)
+				->first();
+		}
+		
+    	
+		$cierre = CierreInventarios::select(['fecha'])
+			->groupBy('fecha')
+			->where('id_empresa','=',Session::get('id_empresa'))->get();
     	//dd($kardex);
     	return view('inventario.kardex',[
-    		'kardex'=>$kardex
+			'id'=>$id,
+			'kardex'=>$kardex,
+			'cierre'=>$cierre,
+			'saldocierre'=>$saldocierre
     	]);
 	}
 	

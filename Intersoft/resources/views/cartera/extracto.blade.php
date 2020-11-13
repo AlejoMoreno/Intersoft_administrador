@@ -34,63 +34,76 @@ span{
 
 <div class="row top-11-w">
     <div class="card" style="margin:3%;">
-        <div class="header row" style="background:white">
-            <div class="col-md-4">
+        <form class="header row" style="background:white">
+            <div class="col-md-2">
                 <label>Nit:</label>
                 <input type="hidden" name="id_cliente" value="<?php echo (isset($docs[0]->cliente->id ))?$docs[0]->cliente->id :""; ?>" id="id_cliente">
                 <input type="text" name="cedula_tercero" value="<?php echo (isset($docs[0]->cliente->nit ))?$docs[0]->cliente->nit :""; ?>"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value)">
                 <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>                
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <label>Razón Social:</label>
                 <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" onchange="buscarcliente2(this.value)" >
                 <datalist id="listaclientes"></datalist>
             </div>
-            <div class="col-md-4">
-                <label>Fecha Corte:</label>
-                <input type="date" name="fecha_corte" value="<?php echo (isset($fecha))?$fecha:""; ?>"  id="fecha_corte" placeholder="Fecha corte" class="form-control" >
+            <div class="col-md-2">
+                <label>Sucursal:</label>
+                <select name="fecha_corte" class="form-control">
+                    <option value="">Seleccione sucursal</option>
+                    @foreach ($sucursales as $obj)
+                    <option value="{{$obj['id']}}">{{$obj['nombre']}}</option>    
+                    @endforeach
+                </select>
             </div>
-
+            <div class="col-md-3">
+                <label>Fecha Corte:</label>
+                <select name="fecha_corte" class="form-control">
+                    <option value="">Seleccione fecha corte</option>
+                    @foreach ($cierres as $obj)
+                    <option value="{{$obj['fecha']}}">{{$obj['fecha']}}</option>    
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label>Tipo Vista:</label>
+                <select name="tipo" class="form-control">
+                    <option value="">Seleccione tipo</option>
+                    <option value="1">Detalle y resumen</option>
+                    <option value="2">Solo resumen</option>
+                </select>
+            </div>
+            <div class="col-md-6"><br></div>
             <div class="col-md-4"><br>
                 <button onclick="ir()" class="btn btn-success">Consultar</button>
             </div>
-            
-            <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
-                <h2 style="color:#ddd">{{ $docs[0]->cliente->nit }} {{ $docs[0]->cliente->razon_social }}</h2>
-                <table class="table table-hover table-striped"  id="datos">
-                    <thead>
-                        <th>TIPO DOC</th>
-                        <th>DOCUMENTO</th>
-                        <th>TOTAL</th>
+        </form>
+        <div style="margin:2%;">
+            <h4 class="title" style="color:black;text-align: center"> RELACION DE EXTRACTO</h4>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: center;">{{ isset($cliente->nit)? $cliente->nit .' '.$cliente->razon_social : '0000000 NOMBRE' }}</th>
+                    </tr>
+                    <tr>
+                        <th>DESCRIPCIÓN ACTIVIDAD</th>
+                        <th>DEBE</th>
+                        <th>HABER</th>
                         <th>SALDO</th>
-                    </tr></thead>
-                    <tbody>
-                        <?php
-                        $total = 0; 
-                        for($i=0;$i<=sizeof($docs)-1;$i++){
-                            $obj = $docs[$i];
-                            if($obj->id_documento->nombre == "Factura Electronica" || $obj->id_documento->nombre == "MAYORISTA"){
-                                $total = $total + $obj->total; 
-                            }
-                            else if($obj->id_documento->nombre == "Compra"){
-                                $total = $total - $obj->total ; 
-                            }
-                            else{
-                                $total = $total;
-                            }
-                            
-                        ?>
-                        <tr>
-                            <td>{{ $obj->id_documento->nombre }}</td>
-                            <td>{{ $obj->fprefijo }} {{ $obj->fnumero }}</td>
-                            <td>{{ number_format($obj->total, 0, ",", ".") }}</td>
-                            <td>{{ number_format($total, 0, ",", ".") }}</td>
-                        </tr>
-                        <?php } ?>               
-                    </tbody>
-                </table>
-            </div>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SALDO</td>
+                        <td>{{ ($saldos->saldo >= 0)? '0' : $saldos->saldo }}</td>
+                        <td>{{ ($saldos->saldo < 0)? '0' : $saldos->saldo }}</td>
+                        <td>0</td>
+                    </tr>
+                    
+                </tbody>
+            </table>
         </div>
+            
+            
     </div>
     
 </div>

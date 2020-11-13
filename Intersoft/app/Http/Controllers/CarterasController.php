@@ -317,14 +317,38 @@ class CarterasController extends Controller
 			$doc->id_documento = Documentos::where('id','=',$doc->id_documento)->first();
 		}
 
+		$cierres = Cierrecarterasaldos::select('fecha')
+			->groupBy('fecha')
+			->where('id_empresa','=',Session::get('id_empresa'))
+			->get();
+		$sucursales = Sucursales::where('id_empresa','=',Session::get('id_empresa'))->get();
+			
 		return view('cartera.extracto', array(
 			"docs"=>$docs,
-			"fecha"=>$fecha
+			"fecha"=>$fecha,
+			"cierres"=>$cierres,
+			"sucursales"=>$sucursales
 		));
 	}
 
-	function extractoindex(){
-		return view('cartera.extracto');
+	function extractoindex(Request $request){
+		$sucursales = Sucursales::where('id_empresa','=',Session::get('id_empresa'))->get();
+		$cierres = Cierrecarterasaldos::select('fecha')
+			->groupBy('fecha')
+			->where('id_empresa','=',Session::get('id_empresa'))
+			->get();
+		$cliente = null;
+		$saldos = null;
+		if(isset($request->id_cliente)){
+			$cliente = Directorios::where('id','=',$request->id_cliente)->first();
+			$saldos = Cierrecarterasaldos::where('id_tercero','=',$cliente->id)->where('fecha','=',$request->fecha_corte)->first();
+		}
+		return view('cartera.extracto', array(
+			"cierres"=>$cierres,
+			"sucursales"=>$sucursales,
+			"cliente"=>$cliente,
+			"saldos"=>$saldos
+		));
 	}
 
 	function historial($idtercero){
