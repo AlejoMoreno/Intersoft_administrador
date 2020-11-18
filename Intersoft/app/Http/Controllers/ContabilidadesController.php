@@ -135,10 +135,14 @@ class ContabilidadesController extends Controller
 
     public function viewComprobantes(Request $request){
         
-        $contabilidades = Contabilidades::where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+        $contabilidades = Contabilidades::select('pucauxiliars.id','pucauxiliars.codigo',
+                'pucauxiliars.descripcion','contabilidades.tipo_transaccion',
+                DB::raw('SUM(contabilidades.valor_transaccion) as valor_transaccion'))
+                        ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
                         ->where('numero_documento','=',$request->numero_documento)
                         ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
                         ->join('directorios','directorios.id','=','contabilidades.tercero')
+                        ->groupBy('pucauxiliars.id','pucauxiliars.codigo','pucauxiliars.descripcion','contabilidades.tipo_transaccion')
                         ->get();
         return array(
             "contabilidades"=>$contabilidades

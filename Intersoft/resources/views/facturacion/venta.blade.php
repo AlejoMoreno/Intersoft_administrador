@@ -340,7 +340,7 @@ function saveCartera(){
 		"otros":$('#Carterasotros').val(),
 		"numero":"0",
 		"prefijo":"NA",
-		"id_cliente":$('#Carterasid_cliente').val(),
+		"id_cliente":$('#cedula_tercero').val(),
 		"id_vendedor":$('#Carterasid_vendedor').val(),
 		"fecha":$('#fecha').val(),
 		"tipoCartera":$('#CarterastipoCartera').val(),

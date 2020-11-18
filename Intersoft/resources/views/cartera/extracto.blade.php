@@ -48,7 +48,7 @@ span{
             </div>
             <div class="col-md-2">
                 <label>Sucursal:</label>
-                <select name="fecha_corte" class="form-control">
+                <select name="sucursal" class="form-control">
                     <option value="">Seleccione sucursal</option>
                     @foreach ($sucursales as $obj)
                     <option value="{{$obj['id']}}">{{$obj['nombre']}}</option>    
@@ -79,6 +79,7 @@ span{
         </form>
         <div style="margin:2%;">
             <h4 class="title" style="color:black;text-align: center"> RELACION DE EXTRACTO</h4>
+            @if(isset($cliente->nit))
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -93,14 +94,52 @@ span{
                 </thead>
                 <tbody>
                     <tr>
-                        <td>SALDO</td>
-                        <td>{{ ($saldos->saldo >= 0)? '0' : $saldos->saldo }}</td>
+                        <td>SALDO {{ $_GET['fecha_corte'] }}</td>
                         <td>{{ ($saldos->saldo < 0)? '0' : $saldos->saldo }}</td>
-                        <td>0</td>
+                        <td>{{ ($saldos->saldo >= 0)? '0' : $saldos->saldo }}</td>
+                        <td>{{ $saldos->saldo }}</td>
                     </tr>
-                    
+                    @if(isset($carteras))
+                        @foreach ($carteras as $cartera)
+                        <?php 
+                            if($cartera['tipoCartera'] == 'INGRESO'){
+                                $saldos->saldo = $saldos->saldo - $cartera['totalkard'];
+                            }
+                            else if($cartera['tipoCartera'] == 'EGRESO'){
+                                $saldos->saldo = $saldos->saldo + $cartera['totalkard'];
+                            }
+                            
+                        ?>
+                        <tr>
+                            <td>Pago de factura {{ $cartera['numeroFactura'] }} tipo {{ $cartera['tipoCartera'] }} # {{ $cartera['numero'] }}</td>
+                            <td>{{ ($cartera['tipoCartera'] == 'INGRESO')? '0' : $cartera['totalkard'] }}</td>
+                            <td>{{ ($cartera['tipoCartera'] == 'EGRESO')? '0' : $cartera['totalkard'] }}</td>
+                            <td>{{ $saldos->saldo }}</td>
+                        </tr>
+                        @endforeach
+                    @endif
+                    @if(isset($facturas))
+                        @foreach ($facturas as $factura)
+                        <?php 
+                            if($factura['signo'] == '-'){
+                                $saldos->saldo = $saldos->saldo + $factura['total'];
+                            }
+                            else if($factura['signo'] == '+'){
+                                $saldos->saldo = $saldos->saldo - $factura['total'];
+                            }
+                            
+                        ?>
+                        <tr>
+                            <td>Factura {{ $factura['prefijo'] }}||{{ $factura['numero'] }} tipo {{ $factura['id_documento']['nombre'] }}</td>
+                            <td>{{ ($factura['signo'] == '+')? '0' : $factura['total'] }}</td>
+                            <td>{{ ($factura['signo'] == '-')? '0' : $factura['total'] }}</td>
+                            <td>{{ $saldos->saldo }}</td>
+                        </tr>
+                        @endforeach
+                    @endif
                 </tbody>
             </table>
+            @endif
         </div>
             
             

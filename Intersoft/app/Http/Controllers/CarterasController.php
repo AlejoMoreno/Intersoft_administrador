@@ -16,6 +16,10 @@ use App\FormaPagos;
 use App\Tipopagos;
 use App\Cierrecarterasaldos;
 use App\Causaciones;
+use App\Contabilidades;
+use App\Pucauxiliar;
+use App\Otrosingresos;
+use App\Gastocontados;
 
 use PDF;
 use DB;
@@ -74,6 +78,124 @@ class CarterasController extends Controller
 		$obj->valor = $request->valor;
 		$obj->observacion = $request->observacion;
 		$obj->save();
+		//guardar contabilidad
+		//saber cual tipo pago fue la forma de pago
+		$tipopago = Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->where('id','=',$obj->formaPago)->first();
+		//saber si es ingreso o egreso
+		$cartera = Carteras::where('id','=',$obj->id_cartera)->first();
+		if($cartera->tipoCartera == 'EGRESO'){
+			$auxiliar = $tipopago->puc_compra;
+			$naturaleza = 'D';
+			$credito = $obj->valor;
+			$tipo_doc = 1;
+			$aux = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->where('codigo','=','22050501')->first();
+			//contra partida
+			$contabilidad = new Contabilidades();     
+			$contabilidad->numero_documento = $cartera->numero;
+			$contabilidad->id_auxiliar = $aux->id;
+			$contabilidad->tipo_documento = $tipo_doc;
+			$contabilidad->id_documento = $request->id_cartera;
+			$contabilidad->prefijo = $cartera->prefijo;
+			$contabilidad->fecha_documento = $cartera->fecha;
+			$contabilidad->valor_transaccion = $obj->valor;
+			$contabilidad->tipo_transaccion = 'C';
+			$contabilidad->tercero = $cartera->id_cliente;
+			$contabilidad->id_sucursal = Session::get('sucursal');
+			$contabilidad->id_empresa = Session::get('id_empresa');
+			$contabilidad->save();
+		}
+		else if($cartera->tipoCartera == 'INGRESO'){
+			$auxiliar = $tipopago->puc_cuenta;
+			$debito = $obj->valor;
+			$naturaleza = 'C';
+			$tipo_doc = 2;
+			$aux = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))->where('codigo','=','13050501')->first();
+			//contra partida
+			$contabilidad1 = new Contabilidades();     
+			$contabilidad1->numero_documento = $cartera->numero;
+			$contabilidad1->id_auxiliar = $aux->id;
+			$contabilidad1->tipo_documento = $tipo_doc;
+			$contabilidad1->id_documento = $request->id_cartera;
+			$contabilidad1->prefijo = $cartera->prefijo;
+			$contabilidad1->fecha_documento = $cartera->fecha;
+			$contabilidad1->valor_transaccion = $obj->valor;
+			$contabilidad1->tipo_transaccion = 'D';
+			$contabilidad1->tercero = $cartera->id_cliente;
+			$contabilidad1->id_sucursal = Session::get('sucursal');
+			$contabilidad1->id_empresa = Session::get('id_empresa');
+			$contabilidad1->save();
+		}
+		else if($cartera->tipoCartera == 'GASTOS'){
+			$auxiliar = $tipopago->puc_compra;
+			$naturaleza = 'D';
+			$credito = $obj->valor;
+			$tipo_doc = 1;
+			//saber cual es el gasto que se genero
+			$kardexcartera = KardexCarteras::where('id_empresa','=',Session::get('id_empresa'))->where('id_cartera','=',$cartera->id)->first();
+			$gasto = Gastocontados::where('id_empresa','=',Session::get('id_empresa'))->where('prefijo','=',explode('|',$kardexcartera->numeroFactura)[0])->where('numero','=',explode('|',$kardexcartera->numeroFactura)[1])->get();
+			foreach($gasto as $gastocontado){
+				$contabilidad = new Contabilidades();     
+				$contabilidad->numero_documento = $cartera->numero;
+				$contabilidad->id_auxiliar = $gastocontado->id_auxiliar;
+				$contabilidad->tipo_documento = $tipo_doc;
+				$contabilidad->id_documento = $request->id_cartera;
+				$contabilidad->prefijo = $cartera->prefijo;
+				$contabilidad->fecha_documento = $gastocontado->fecha_egreso;
+				$contabilidad->valor_transaccion = $gastocontado->valor;
+				$contabilidad->tipo_transaccion = $gastocontado->naturaleza;
+				$contabilidad->tercero = $gastocontado->id_tercero;
+				$contabilidad->id_sucursal = Session::get('sucursal');
+				$contabilidad->id_empresa = Session::get('id_empresa');
+				$contabilidad->save();
+			}
+			
+		}
+		else if($cartera->tipoCartera == 'OTROINGRESO'){
+			$auxiliar = $tipopago->puc_cuenta;
+			$debito = $obj->valor;
+			$naturaleza = 'C';
+			$tipo_doc = 2;
+			//saber cual es el gasto que se genero
+			$kardexcartera = KardexCarteras::where('id_empresa','=',Session::get('id_empresa'))->where('id_cartera','=',$cartera->id)->first();
+			$ingreso = Otrosingresos::where('id_empresa','=',Session::get('id_empresa'))->where('prefijo','=',explode('|',$kardexcartera->numeroFactura)[0])->where('numero','=',explode('|',$kardexcartera->numeroFactura)[1])->get();
+			foreach($ingreso as $otrosing){
+				$contabilidad = new Contabilidades();     
+				$contabilidad->numero_documento = $cartera->numero;
+				$contabilidad->id_auxiliar = $otrosing->id_auxiliar;
+				$contabilidad->tipo_documento = $tipo_doc;
+				$contabilidad->id_documento = $request->id_cartera;
+				$contabilidad->prefijo = $cartera->prefijo;
+				$contabilidad->fecha_documento = $otrosing->fecha;
+				$contabilidad->valor_transaccion = $otrosing->valor;
+				$contabilidad->tipo_transaccion = $otrosing->naturaleza;
+				$contabilidad->tercero = $otrosing->id_tercero;
+				$contabilidad->id_sucursal = Session::get('sucursal');
+				$contabilidad->id_empresa = Session::get('id_empresa');
+				$contabilidad->save();
+			}
+		}
+		else{
+			$auxiliar = $tipopago->puc_cuenta;
+			$debito = $obj->valor;
+			$naturaleza = 'D';
+			$tipo_doc = 2;
+		}
+		
+		$contabilidad = new Contabilidades();     
+		$contabilidad->numero_documento = $cartera->numero;
+		$contabilidad->id_auxiliar = $auxiliar;
+		$contabilidad->tipo_documento = $tipo_doc;
+		$contabilidad->id_documento = $request->id_cartera;
+		$contabilidad->prefijo = $cartera->prefijo;
+		$contabilidad->fecha_documento = $cartera->fecha;
+		$contabilidad->valor_transaccion = $obj->valor;
+		$contabilidad->tipo_transaccion = $naturaleza;
+		$contabilidad->tercero = $cartera->id_cliente;
+		$contabilidad->id_sucursal = Session::get('sucursal');
+		$contabilidad->id_empresa = Session::get('id_empresa');
+		$contabilidad->save();
+
+		
 		return array(
 			"reault"=>"success",
 			"body"=>$obj
@@ -339,15 +461,35 @@ class CarterasController extends Controller
 			->get();
 		$cliente = null;
 		$saldos = null;
+		$carteras = null;
+		$facturas = null;
 		if(isset($request->id_cliente)){
 			$cliente = Directorios::where('id','=',$request->id_cliente)->first();
 			$saldos = Cierrecarterasaldos::where('id_tercero','=',$cliente->id)->where('fecha','=',$request->fecha_corte)->first();
+
+			$carteras = KardexCarteras::select('kardex_carteras.*','carteras.*','kardex_carteras.total as totalkard')
+				->where('carteras.id_empresa','=',Session::get('id_empresa'))
+				->join('carteras','carteras.id','=','kardex_carteras.id_cartera')
+				->where('fecha','>',$request->fecha_corte)
+				->where('carteras.id_cliente','=',$cliente->id)
+				->get();
+
+			$facturas = Facturas::where('id_empresa','=',Session::get('id_empresa'))
+				->where('fecha','>',$request->fecha_corte)
+				->where('id_cliente','=',$cliente->id)
+				->get();
+				foreach($facturas as $factura){
+					$factura->id_documento = Documentos::where('id','=',$factura->id_documento)->first();
+				}
 		}
+
 		return view('cartera.extracto', array(
 			"cierres"=>$cierres,
 			"sucursales"=>$sucursales,
 			"cliente"=>$cliente,
-			"saldos"=>$saldos
+			"saldos"=>$saldos,
+			"carteras"=>$carteras,
+			"facturas"=>$facturas
 		));
 	}
 

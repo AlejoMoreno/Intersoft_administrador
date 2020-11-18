@@ -79,12 +79,10 @@ al tipo de documento seleccionado anteriormente.</p>
         <table class="table table-hover table-striped" id="tablecont">
             <thead>
                 <tr>
-                    <th># doc</th>
-                    <th>Auxiliar</th>
+                    <th>Código</th>
                     <th>Descripción</th>
                     <th>Debito</th>
                     <th>Credito</th>
-                    <th colspan="2">tercero</th>
                     <th></th>
                 </tr>
             </thead>
@@ -263,19 +261,22 @@ function Obj(){
         
         
         $("#cuerpo").html("");
+        debitos = 0;
+        creditos = 0;
         for(var i=0; i<response.contabilidades.length; i++){
             var id = response.contabilidades[i].id;
             var tr = `<tr>
-            <td>`+response.contabilidades[i].numero_documento+` `+response.contabilidades[i].prefijo+`</td>
             <td>`+response.contabilidades[i].codigo+`</td>
             <td>`+response.contabilidades[i].descripcion+`</td>`;
             if(response.contabilidades[i].tipo_transaccion == 'D'){
+                debitos = debitos + response.contabilidades[i].valor_transaccion;
                 tr = tr + `
                 <td>`+response.contabilidades[i].valor_transaccion+`</td>
                 <td>0</td>
                 `;
             }
             else{
+                creditos = creditos + response.contabilidades[i].valor_transaccion;
                 tr = tr + `
                 <td>0</td>
                 <td>`+response.contabilidades[i].valor_transaccion+`</td>
@@ -283,14 +284,18 @@ function Obj(){
             }
             
             tr = tr + `
-            <td>`+response.contabilidades[i].nit+`</td>
-            <td>`+response.contabilidades[i].razon_social+`</td>
             <td>
                 <div class='btn btn-danger' onclick='obj.deleteComprobantes(`+id+`, `+response.contabilidades[i].numero_documento+`)'>x</div>
             </td>
             </tr>`;
             $("#cuerpo").append(tr)
         }
+        $("#cuerpo").append(`<tr>
+            <td colspan=2></td>
+            <td>`+debitos+`</td>
+            <td>`+creditos+`</td>
+            <td></td>
+            </tr>`);
         $('#tablecont').DataTable({
             dom: 'Bfrtip',
             buttons: [

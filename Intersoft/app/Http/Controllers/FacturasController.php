@@ -97,7 +97,7 @@ class FacturasController extends Controller
 		$obj->id_modificado 	= $request->id_modificado;
 		$obj->observaciones 	= (string)$request->observaciones;
 		$obj->estado 			= $request->estado;
-		$obj->saldo             = $request->saldo;
+		$obj->saldo             = $request->total;
 		$obj->id_empresa	 	= Session::get('id_empresa');
         if($obj->save()){ //si guarda correctamente la factura
             $obj->kardex = KardexController::saveDocumentSinContabilidad($request->productosArr,$obj,$obj->asiento_contable);
