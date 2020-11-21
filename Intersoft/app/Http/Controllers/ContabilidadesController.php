@@ -21,6 +21,12 @@ use App\Clasificaciones;
 use App\Empresas;
 use App\Contabilidades;
 
+use App\Cierrecontables;
+use App\Cierreclases;
+use App\Cierrecuentas;
+use App\Cierregrupos;
+use App\Cierresubcuentas;
+
 use Excel;
 use PDF;
 use DB;
@@ -68,26 +74,84 @@ class ContabilidadesController extends Controller
     }
 
     public function librosauxiliaresIndex(){
-        $obj = DB::select("SELECT 
-            contabilidades.tipo_documento as 'tipo_documento', 
-            sucursales.nombre as 'sucursal', 
-            contabilidades.numero_documento as 'numero_documento', 
-            contabilidades.prefijo as 'prefijo', 
-            contabilidades.valor_transaccion as 'valor_transaccion', 
-            contabilidades.tipo_transaccion as 'tipo_transaccion', 
-            pucauxiliars.codigo as 'cuenta', 
-            pucauxiliars.descripcion as 'descripcion', 
-            directorios.nit as 'tercero', 
-            directorios.razon_social as 'razon_social', 
-            contabilidades.fecha_documento as 'fecha_documento' 
-            FROM `contabilidades` 
-                JOIN sucursales ON contabilidades.id_sucursal = sucursales.id 
-                JOIN pucauxiliars ON contabilidades.id_auxiliar = pucauxiliars.id 
-                JOIN directorios ON contabilidades.tercero = directorios.id
-            WHERE contabilidades.id_empresa = ".Session::get("id_empresa"));
+        $data = Contabilidades::select('contabilidades.numero_documento','contabilidades.prefijo',
+            'pucauxiliars.codigo','pucauxiliars.descripcion','contabilidades.tipo_documento','contabilidades.fecha_documento',
+            'contabilidades.valor_transaccion','contabilidades.tipo_transaccion','directorios.razon_social','directorios.nit')
+            ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+            ->join('directorios','directorios.id','=','contabilidades.tercero')
+            ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+            ->orderBy('pucauxiliars.codigo','asc')
+            ->orderBy('directorios.nit','asc')
+            ->get();
+        return view('contabilidad.librosauxiliares', array(
+            "data"=>$data
+        ));
+    }
+    
+    public function librosmayoresIndex(Request $request){
+        if($request->tipo == "CLASES"){
+            $data = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total')
+                ,'pucclases.codigo','pucclases.descripcion','contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->join('puccuentas','puccuentas.id','=','pucsubcuentas.id_puccuentas')
+                ->join('pucgrupos','pucgrupos.id','=','puccuentas.id_pucgrupos')
+                ->join('pucclases','pucclases.id','=','pucgrupos.id_pucclases')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->groupBy('pucclases.codigo','pucclases.descripcion','contabilidades.tipo_transaccion')
+                ->orderBy('pucclases.codigo','asc')
+                ->get();
+        }
+        else if($request->tipo == "GRUPOS"){
+            $data = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total')
+                ,'pucgrupos.codigo','pucgrupos.descripcion','contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->join('puccuentas','puccuentas.id','=','pucsubcuentas.id_puccuentas')
+                ->join('pucgrupos','pucgrupos.id','=','puccuentas.id_pucgrupos')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->groupBy('pucgrupos.codigo','pucgrupos.descripcion','contabilidades.tipo_transaccion')
+                ->orderBy('pucgrupos.codigo','asc')
+                ->get();
+        }
+        else if($request->tipo == "CUENTAS"){
+            $data = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total')
+                ,'puccuentas.codigo','puccuentas.descripcion','contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->join('puccuentas','puccuentas.id','=','pucsubcuentas.id_puccuentas')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->groupBy('puccuentas.codigo','puccuentas.descripcion','contabilidades.tipo_transaccion')
+                ->orderBy('puccuentas.codigo','asc')
+                ->get();
+        }
+        else if($request->tipo == "SUBCUENTAS"){
+            $data = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total')
+                ,'pucsubcuentas.codigo','pucsubcuentas.descripcion','contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->groupBy('pucsubcuentas.codigo','pucsubcuentas.descripcion','contabilidades.tipo_transaccion')
+                ->orderBy('pucsubcuentas.codigo','asc')
+                ->get();
+        }
+        else{
+            $data = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total')
+                ,'pucclases.codigo','pucclases.descripcion','contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->join('puccuentas','puccuentas.id','=','pucsubcuentas.id_puccuentas')
+                ->join('pucgrupos','pucgrupos.id','=','puccuentas.id_pucgrupos')
+                ->join('pucclases','pucclases.id','=','pucgrupos.id_pucclases')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->groupBy('pucclases.codigo','pucclases.descripcion','contabilidades.tipo_transaccion')
+                ->orderBy('pucclases.codigo','asc')
+                ->get();
+        }
         
-        $data= json_decode( json_encode($obj), true);
-        return view('contabilidad.librosauxiliares', ['data' => $data]);
+        return view('contabilidad.librosmayores', array(
+            "data"=>$data
+        ));
     }
 
     public function getDocumentos($id, Request $request){
@@ -673,6 +737,140 @@ class ContabilidadesController extends Controller
         return  array(
             "result"=>"success",
             "body"=>$auxiliar);
+    }
+
+    function cierrecontablestore(Request $request){
+        try{
+            
+            $saldos = Contabilidades::select([DB::raw('SUM(valor_transaccion) as total'), 
+                'id_auxiliar', 'tercero', 'tipo_transaccion'])
+                ->where('id_empresa','=',Session::get('id_empresa'))
+                ->where('fecha_documento','<=',$request->fecha)
+                ->groupBy('id_auxiliar', 'tercero', 'tipo_transaccion')
+                ->get();
+            foreach($saldos as $saldo){
+                $obj = new Cierrecontables();
+                $obj->id_auxiliar = $saldo->id_auxiliar;
+                $obj->id_tercero = $saldo->tercero;
+                $obj->fecha = $request->fecha;
+                $obj->saldo = $saldo->total;
+                $obj->estado = $saldo->tipo_transaccion;
+                $obj->id_empresa = Session::get('id_empresa');
+                $obj->save();
+            }
+
+            $saldosSubcuentas = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total'), 
+                'pucsubcuentas.id', 'contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->where('contabilidades.fecha_documento','<=',$request->fecha)
+                ->groupBy('pucsubcuentas.id', 'contabilidades.tipo_transaccion')
+                ->get();
+            foreach($saldosSubcuentas as $saldo){
+                $obj = new Cierresubcuentas();
+                $obj->id_subcuenta = $saldo->id;
+                $obj->fecha = $request->fecha;
+                $obj->saldo = $saldo->total;
+                $obj->estado = $saldo->tipo_transaccion;
+                $obj->id_empresa = Session::get('id_empresa');
+                $obj->save();
+            }
+
+            $saldosCuentas = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total'), 
+                'puccuentas.id', 'contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->join('puccuentas','puccuentas.id','=','pucsubcuentas.id_puccuentas')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->where('contabilidades.fecha_documento','<=',$request->fecha)
+                ->groupBy('puccuentas.id', 'contabilidades.tipo_transaccion')
+                ->get();
+            foreach($saldosCuentas as $saldo){
+                $obj = new Cierrecuentas();
+                $obj->id_cuenta = $saldo->id;
+                $obj->fecha = $request->fecha;
+                $obj->saldo = $saldo->total;
+                $obj->estado = $saldo->tipo_transaccion;
+                $obj->id_empresa = Session::get('id_empresa');
+                $obj->save();
+            }
+                
+            $saldosGrupos = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total'), 
+                'pucgrupos.id', 'contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->join('puccuentas','puccuentas.id','=','pucsubcuentas.id_puccuentas')
+                ->join('pucgrupos','pucgrupos.id','=','puccuentas.id_pucgrupos')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->where('contabilidades.fecha_documento','<=',$request->fecha)
+                ->groupBy('pucgrupos.id', 'contabilidades.tipo_transaccion')
+                ->get();
+            foreach($saldosGrupos as $saldo){
+                $obj = new Cierregrupos();
+                $obj->id_grupo = $saldo->id;
+                $obj->fecha = $request->fecha;
+                $obj->saldo = $saldo->total;
+                $obj->estado = $saldo->tipo_transaccion;
+                $obj->id_empresa = Session::get('id_empresa');
+                $obj->save();
+            }
+
+            $saldosClases = Contabilidades::select([DB::raw('SUM(contabilidades.valor_transaccion) as total'), 
+                'pucclases.id', 'contabilidades.tipo_transaccion'])
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('pucsubcuentas','pucsubcuentas.id','=','pucauxiliars.id_pucsubcuentas')
+                ->join('puccuentas','puccuentas.id','=','pucsubcuentas.id_puccuentas')
+                ->join('pucgrupos','pucgrupos.id','=','puccuentas.id_pucgrupos')
+                ->join('pucclases','pucclases.id','=','pucgrupos.id_pucclases')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->where('contabilidades.fecha_documento','<=',$request->fecha)
+                ->groupBy('pucclases.id', 'contabilidades.tipo_transaccion')
+                ->get();
+            foreach($saldosClases as $saldo){
+                $obj = new Cierreclases();
+                $obj->id_clase = $saldo->id;
+                $obj->fecha = $request->fecha;
+                $obj->saldo = $saldo->total;
+                $obj->estado = $saldo->tipo_transaccion;
+                $obj->id_empresa = Session::get('id_empresa');
+                $obj->save();
+            }
+            
+            
+			
+			$cierres = Cierrecontables::select('fecha',DB::raw('count(*) as count'))
+				->orderBy('fecha', 'desc')
+				->groupBy('fecha')
+				->get();
+			return view('contabilidad.cierrecontable',[
+				"cierres"=>$cierres
+			]); 
+		}
+		catch(Exception $exce){
+			return array(
+				"result" => "Incorrecto",
+				"body" => $exce
+			);
+		}
+    }
+
+    function cierrecontable(){
+        try{
+			$cierres = Cierrecontables::select('fecha',DB::raw('count(*) as count'))
+				->orderBy('fecha', 'desc')
+				->groupBy('fecha')
+				->get();
+			return view('contabilidad.cierrecontable',[
+				"cierres"=>$cierres
+			]); 
+		}
+		catch(Exception $exce){
+			return array(
+				"result" => "Incorrecto",
+				"body" => $exce
+			);
+		}
     }
 
 }

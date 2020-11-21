@@ -25,7 +25,7 @@ class ControllerOtrosingresos extends Controller
             $obj->naturaleza = $request->naturaleza;
             $obj->id_empresa = Session::get('id_empresa');
             if(isset($request->btnagregar)){
-                return redirect('/cartera/otrosingresos?numero='.$obj->numero);
+                return redirect('/cartera/otrosingresos?prefijo='.$obj->prefijo.'&numero='.$obj->numero.'&buscar=true');
             }
             $obj->save();
             return redirect('/cartera/otrosingresos?prefijo='.$obj->prefijo.'&numero='.$obj->numero);

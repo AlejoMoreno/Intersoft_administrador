@@ -142,7 +142,7 @@
 		</table>
 
 		<?php 
-		$forma_pagos = App\Formapagos::where('id_cartera','=',$carteras->id)->get();
+		$forma_pagos = App\FormaPagos::where('id_cartera','=',$carteras->id)->get();
 		foreach ($forma_pagos as $value) {
 			$value->formaPago = App\Tipopagos::where('id','=',$value->formaPago)->first();
 		}
@@ -282,7 +282,7 @@
 		</table>
 
 		<?php 
-		$forma_pagos = App\Formapagos::where('id_cartera','=',$carteras->id)->get();
+		$forma_pagos = App\FormaPagos::where('id_cartera','=',$carteras->id)->get();
 		foreach ($forma_pagos as $value) {
 			$value->formaPago = App\Tipopagos::where('id','=',$value->formaPago)->first();
 		}

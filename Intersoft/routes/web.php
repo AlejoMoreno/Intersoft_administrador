@@ -573,6 +573,7 @@ Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
 Route::post('/contabilidad/auxiliars/search/searchcode', 'ContabilidadesController@searchcode');
 
 Route::get('/contabilidad/librosauxiliares', 'ContabilidadesController@librosauxiliaresIndex');
+Route::get('/contabilidad/librosmayores', 'ContabilidadesController@librosmayoresIndex');
 Route::get('/contabilidad/comprobantesdiario', function(){ 
     $documentos = App\Documentos::select(['id','nombre'])
                 ->where('id_empresa','=',Session::get('id_empresa'))
@@ -599,6 +600,8 @@ Route::get('/contabilidad/generarnotadb/{doc}','ContabilidadesController@generar
 Route::get('/contabilidad/generarnotacr/{doc}','ContabilidadesController@generarnotacr');
 Route::get('/contabilidad/generarnotacontable/{doc}','ContabilidadesController@generarnotacontable');
 
+Route::post('/contabilidad/cierrecontable','ContabilidadesController@cierrecontablestore');
+Route::get('/contabilidad/cierrecontable','ContabilidadesController@cierrecontable');
 
 /*
 |--------------------------------------------------------------------------

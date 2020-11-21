@@ -27,9 +27,15 @@ if(isset($_GET['prefijo'])){
           ->where('prefijo','=',$_GET['prefijo'])
           ->where('numero','=',$_GET['numero'])
           ->get();
-  foreach ($ingresos as $key => $value) {
-    $value->id_tercero = App\Directorios::where('id','=',$value->id_tercero)->first();
-    $value->id_auxiliar = App\Pucauxiliar::where('id','=',$value->id_auxiliar)->first();
+  if(sizeof($ingresos)!=0){
+    foreach ($ingresos as $key => $value) {
+      $value->id_tercero = App\Directorios::where('id','=',$value->id_tercero)->first();
+      $value->id_auxiliar = App\Pucauxiliar::where('id','=',$value->id_auxiliar)->first();
+    }
+    $_GET['buscar'] = 'false';
+  }
+  else{
+    $_GET['buscar'] = 'true';
   }
   $kardex_carteras = App\KardexCarteras::where('id_empresa','=',Session::get('id_empresa'))
           ->where('numeroFactura','=',$_GET['prefijo'].'|'.$_GET['numero'])
@@ -65,11 +71,11 @@ if(isset($_GET['prefijo'])){
           </div>
           <div class="col-md-3">
             <label>Fecha egreso</label>
-            <input type="date" placeholder="fecha" class="form-control" id="fecha" name="fecha" value="{{ isset($_GET['fecha'])? $_GET['fecha'] : isset($ingresos)? $ingresos[0]->fecha : '' }}">
+            <input type="date" placeholder="fecha" class="form-control" id="fecha" name="fecha" value="{{ isset($_GET['prefijo'])? sizeof($ingresos)!=0? $ingresos[0]->fecha : '' : '' }}">
           </div>
           <div class="col-md-3">
             <label>Valor</label>
-            <input type="number" placeholder="valor" class="form-control" id="valor" name="valor" value="{{ isset($_GET['valor'])? $_GET['valor'] : isset($ingresos)? $ingresos[0]->valor : '' }}">
+            <input type="number" placeholder="valor" class="form-control" id="valor" name="valor" value="{{ isset($_GET['prefijo'])? sizeof($ingresos)!=0? $ingresos[0]->valor : '' : '' }}">
           </div>
           <div class="col-md-2">
             <br>
@@ -88,18 +94,20 @@ if(isset($_GET['prefijo'])){
               </tr>
             </thead>
             <tbody>
-              @if(isset($ingresos))
-                @foreach ($ingresos as $obj)
-                <?php $consec = $obj->consecutivo; ?>
-                    <tr>
-                      <td> {{ $obj->id_tercero->nit }} - {{ $obj->id_tercero->razon_social }}</td>
-                      <td> {{ $obj->id_auxiliar->codigo }} - {{ $obj->id_auxiliar->descripcion }}</td>
-                      <td> {{ $obj->valor_auxiliar }}</td>
-                      <td> {{ $obj->naturaleza }}</td>
-                      <td> {{ $obj->concepto }}</td>
-                      <td><a href="javascript:;" class="btn btn-danger" onclick="eliminar('{{ $obj }}')" >X</a></td>
-                    </tr>
-                @endforeach
+              @if(isset($_GET['prefijo']))
+                @if(sizeof($ingresos)!=0)
+                  @foreach ($ingresos as $obj)
+                  <?php $consec = $obj->consecutivo; ?>
+                      <tr>
+                        <td> {{ $obj->id_tercero->nit }} - {{ $obj->id_tercero->razon_social }}</td>
+                        <td> {{ $obj->id_auxiliar->codigo }} - {{ $obj->id_auxiliar->descripcion }}</td>
+                        <td> {{ $obj->valor_auxiliar }}</td>
+                        <td> {{ $obj->naturaleza }}</td>
+                        <td> {{ $obj->concepto }}</td>
+                        <td><a href="javascript:;" class="btn btn-danger" onclick="eliminar('{{ $obj }}')" >X</a></td>
+                      </tr>
+                  @endforeach
+                @endif
               @endif
               <tr>
                 <td>
@@ -156,7 +164,7 @@ if(isset($_GET['prefijo'])){
             </select>
           </th>
           <th>
-            <input type="text" id="valor_pago" name="" class="form-control" placeholder="Valor" value="{{ isset($_GET['valor'])? $_GET['valor'] : isset($ingresos)? $ingresos[0]->valor : '' }}">
+            <input type="text" id="valor_pago" name="" class="form-control" placeholder="Valor" value="{{ isset($_GET['prefijo'])? sizeof($ingresos)!=0? $ingresos[0]->valor : '' : '' }}">
           </th>
           <th>
             <input type="text" id="observacion_pago" name="" value="NINGUNA" class="form-control" placeholder="Observacion">
@@ -196,7 +204,7 @@ if(isset($_GET['prefijo'])){
         <input type="hidden" value="0" id="valor_reteica" class="form-control" >
         <input value="0" type="hidden" id="valor_reteiva" class="form-control" >
         <input type="hidden" id="valor_flete" value="0" class="form-control" >
-        <input type="hidden" name="total" id="total" class="form-control" value="{{ isset($_GET['valor'])? $_GET['valor'] : isset($ingresos)? $ingresos[0]->valor : '' }}">
+        <input type="hidden" name="total" id="total" class="form-control" value="{{ isset($_GET['prefijo'])? sizeof($ingresos)!=0? $ingresos[0]->valor : '' : '' }}">
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
       <div class="col-sm-12">

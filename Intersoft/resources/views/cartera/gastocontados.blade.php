@@ -27,16 +27,25 @@ if(isset($_GET['prefijo'])){
           ->where('prefijo','=',$_GET['prefijo'])
           ->where('numero','=',$_GET['numero'])
           ->get();
-  foreach ($gastos as $key => $value) {
-    $value->id_tercero = App\Directorios::where('id','=',$value->id_tercero)->first();
-    $value->id_auxiliar = App\Pucauxiliar::where('id','=',$value->id_auxiliar)->first();
+          
+  if(sizeof($gastos)!=0){
+    foreach ($gastos as $key => $value) {
+      $value->id_tercero = App\Directorios::where('id','=',$value->id_tercero)->first();
+      $value->id_auxiliar = App\Pucauxiliar::where('id','=',$value->id_auxiliar)->first();
+    }
+    $_GET['buscar'] = 'false';
   }
+  else{
+    $_GET['buscar'] = 'true';
+  }
+  
   $kardex_carteras = App\KardexCarteras::where('id_empresa','=',Session::get('id_empresa'))
           ->where('numeroFactura','=',$_GET['prefijo'].'|'.$_GET['numero'])
           ->first();
   if(isset($kardex_carteras)){
     $kardex_carteras->id_cartera = App\Carteras::where('id','=',$kardex_carteras->id_cartera)->first();
   }
+
 }
 
 ?>
@@ -64,11 +73,11 @@ if(isset($_GET['prefijo'])){
           </div>
           <div class="col-md-3">
             <label>Fecha egreso</label>
-            <input type="date" placeholder="fecha_egreso" class="form-control" id="fecha" name="fecha_egreso" value="{{ isset($_GET['fecha_egreso'])? $_GET['fecha_egreso'] : isset($gastos)? $gastos[0]->fecha_egreso : '' }}">
+            <input type="date" placeholder="fecha_egreso" class="form-control" id="fecha" name="fecha_egreso" value="{{ isset($_GET['prefijo'])? sizeof($gastos)!=0? $gastos[0]->fecha_egreso : '' : '' }}">
           </div>
           <div class="col-md-3">
             <label>Centro de costo</label>
-            <input type="text" placeholder="centro costo" onkeyup="config.UperCase('centro_costo');"  class="form-control" id="centro_costo" name="centro_costo" value="{{ isset($_GET['centro_costo'])? $_GET['centro_costo'] : '' }}">
+            <input type="text" placeholder="centro costo" onkeyup="config.UperCase('centro_costo');"  class="form-control" id="centro_costo" name="centro_costo" value="{{ isset($_GET['prefijo'])? sizeof($gastos)!=0? $gastos[0]->centro_costo : '' : '' }}">
           </div>
           <div class="col-md-2">
             <br>
@@ -88,19 +97,21 @@ if(isset($_GET['prefijo'])){
               </tr>
             </thead>
             <tbody>
-              @if(isset($gastos))
-                @foreach ($gastos as $obj)
-                <?php $consec = $obj->consecutivo; ?>
-                    <tr>
-                      <td> {{ $obj->consecutivo }}</td>
-                      <td> {{ $obj->id_tercero->nit }} - {{ $obj->id_tercero->razon_social }}</td>
-                      <td> {{ $obj->id_auxiliar->codigo }} - {{ $obj->id_auxiliar->descripcion }}</td>
-                      <td> {{ $obj->valor }}</td>
-                      <td> {{ $obj->naturaleza }}</td>
-                      <td> {{ $obj->detalle }}</td>
-                      <td><a href="javascript:;" class="btn btn-danger" onclick="eliminar('{{ $obj }}')" >X</a></td>
-                    </tr>
-                @endforeach
+              @if(isset($_GET['prefijo']))
+                @if(sizeof($gastos)!=0)
+                  @foreach ($gastos as $obj)
+                  <?php $consec = $obj->consecutivo; ?>
+                      <tr>
+                        <td> {{ $obj->consecutivo }}</td>
+                        <td> {{ $obj->id_tercero->nit }} - {{ $obj->id_tercero->razon_social }}</td>
+                        <td> {{ $obj->id_auxiliar->codigo }} - {{ $obj->id_auxiliar->descripcion }}</td>
+                        <td> {{ $obj->valor }}</td>
+                        <td> {{ $obj->naturaleza }}</td>
+                        <td> {{ $obj->detalle }}</td>
+                        <td><a href="javascript:;" class="btn btn-danger" onclick="eliminar('{{ $obj }}')" >X</a></td>
+                      </tr>
+                  @endforeach
+                @endif
               @endif
               <tr>
                 <td><input type="number" placeholder="consecutivo" name="consecutivo" id="consecutivo" class="form-control" value="{{ isset($consec)?$consec + 1:'' }}"></td>

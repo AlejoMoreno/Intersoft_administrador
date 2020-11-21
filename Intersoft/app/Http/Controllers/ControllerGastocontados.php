@@ -26,7 +26,7 @@ class ControllerGastocontados extends Controller
             $obj->detalle = $request->detalle;
             $obj->id_empresa = Session::get('id_empresa');
             if(isset($request->btnagregar)){
-                return redirect('/cartera/gastocontados?numero='.$obj->numero);
+                return redirect('/cartera/gastocontados?prefijo='.$obj->prefijo.'&numero='.$obj->numero.'&buscar=true');
             }
             $obj->save();
             return redirect('/cartera/gastocontados?prefijo='.$obj->prefijo.'&numero='.$obj->numero);

@@ -531,6 +531,7 @@
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/balancegeneral');">Balance General</a></li>
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/certificados');">Certificados</a></li>
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/liquidacionimpuestos');">Liquidación Impuestos</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/cierrecontable');">Cierre Contable</a></li>
                         </ul>
                     </a>
                 </li>
