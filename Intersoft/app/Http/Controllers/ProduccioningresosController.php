@@ -295,4 +295,8 @@ class ProduccioningresosController extends Controller
         }
         
     }
+
+    public function reempaque($request){
+
+    }
 }
