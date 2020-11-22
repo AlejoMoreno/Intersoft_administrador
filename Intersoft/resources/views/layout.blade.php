@@ -378,6 +378,7 @@
                         Producción
                         <ul class="dropdown-menu">
                             <?php if(in_array("Ficha técnica",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/fichatecnica');">Ficha técnica</a></li><?php } ?>
+                            <?php if(in_array("Ficha técnica",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/reempaque');">Proceso de reempaque</a></li><?php } ?>
                             <?php if(in_array("Inventario Materia Prima",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/materiaprima');">Inventario Materia Prima</a></li><?php } ?>
                             <?php if(in_array("Ordenes de Producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ordenesdeproduccion');">Ordenes de Producción</a></li><?php } ?>
                             <?php if(in_array("Liquidación Mano de Obra",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/liquidacionobra');">Liquidación Mano de Obra</a></li><?php } ?>

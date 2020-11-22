@@ -469,6 +469,9 @@ Route::get('/inventario/actualizacionPrecios/{id}/{precio1}/{precio2}/{precio3}'
 Route::get('/inventario/cierreInventario', 'ReferenciasController@cierreInventario');
 Route::post('/inventario/cierreInventario', 'ReferenciasController@cierreInventarioStore');
 
+Route::get('/inventario/reempaque', 'ProduccioningresosController@reempaque');
+Route::post('/inventario/reempaque', 'ProduccioningresosController@reempaqueStore');
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes SALIDAS
