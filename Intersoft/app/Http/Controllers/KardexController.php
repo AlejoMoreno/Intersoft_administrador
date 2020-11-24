@@ -12,7 +12,7 @@ use App\Facturas;
 use App\Sucursales;
 use App\Lineas;
 use App\Directorios;
-use App\CierreInventarios;
+use App\Cierreinventarios;
 
 use App\Clasificaciones;
 use App\Contabilidades;
@@ -198,7 +198,7 @@ class KardexController extends Controller
 				$value->id_referencia = Referencias::where('id','=',$value->id_referencia)->first();
 				$value->id_documento = Documentos::where('id','=',$value->id_documento)->first();
 			}
-			$saldocierre = CierreInventarios::where('id_referencia','=',$id)
+			$saldocierre = Cierreinventarios::where('id_referencia','=',$id)
 				->where('fecha','=',$request->fecha_inicio)
 				->first();
 		}

@@ -191,6 +191,7 @@
 
 <script>
 $(document).ready(function() {
+    usuarios.initial();
     var table = $('#tabla').DataTable( {
         dom: 'Bfrtip',
         buttons: [

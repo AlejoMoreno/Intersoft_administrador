@@ -26,12 +26,12 @@ function Usuarios(){
 		$('#arl').val(data.arl);
 		$('#eps').val(data.eps);
 		$('#cesantias').val(data.cesantias);
-		$('#pension').val(data.pension);
+		$('#pension').val(data.pension.split(","));
 		$('#caja_compensacion').val(data.caja_compensacion);
 		$('#id_contrato').val(data.id_contrato.id);
 		$('#referencia_personal').val(data.referencia_personal);
 		$('#telefono_referencia').val(data.telefono_referencia);
-        $('input[type="submit"]').attr('disabled','disabled');
+        $('#btnguardar').hide();
     };
 
     this.sendUpdate = function(){

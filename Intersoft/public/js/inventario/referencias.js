@@ -12,14 +12,8 @@ function Referencias(){
         $('#crear').hide();
         $('#tabla').show();
         $('#tabla').addClass('fadeIn');
-    };
-
-    this.crear = function(){
-    	$('#tabla').hide();
-    	$('#crear').show();
-    	$('#crear').addClass('fadeIn');
-    };
-
+	};
+	
     //function para eliminar por post
 	this.delete_get = function( _url, _obj, _redirect ){
 		_obj = JSON.parse(_obj);
@@ -55,42 +49,40 @@ function Referencias(){
         console.log('Daatos Sucurusal-update:');
         var data = JSON.parse(data);
         console.log(data);
-        $('#row'+data.id).css('opacity','0.4');
+        $('#row'+data.refid).css('opacity','0.4');
         //ubicar informacion en el formulario
-        $('#id').val(data.id);
-        $('#codigo_linea').val(data.codigo_linea[0].id);
-		$('#codigo_letras').val(data.codigo_letras);
-		$('#codigo_consecutivo').val(data.codigo_consecutivo);
-		$('#descripcion').val(data.descripcion);
-		$('#codigo_barras').val(data.codigo_barras);
-		$('#codigo_interno').val(data.codigo_interno);
-		$('#codigo_alterno').val(data.codigo_alterno);
-		$('#id_presentacion').val(data.id_presentacion[0].id);
-		$('#id_marca').val(data.id_marca[0].id);
-		$('#factor_rendimiento').val(data.factor_rendimiento);
-		$('#stok_minimo').val(data.stok_minimo);
-		$('#stok_maximo').val(data.stok_maximo);
-		$('#iva').val(data.iva);
-		$('#impo_consumo').val(data.impo_consumo);
-		$('#sobre_tasa').val(data.sobre_tasa);
-		$('#serie').val(data.serie);
-		$('#descuento').val(data.descuento);
-		$('#id_clasificacion').val(data.id_clasificacion[0].id);
-		$('#peso').val(data.peso);
-		$('#precio1').val(data.precio1);
-		$('#precio2').val(data.precio2);
-		$('#precio3').val(data.precio3);
-		$('#precio4').val(data.precio4);
+        $('#id').val(data.refid);
+        $('#codigo_linea').val(data.idlineas);
+		$('#codigo_letras').val(data.refcodigo_letras);
+		$('#codigo_consecutivo').val(data.refcodigo_consecutivo);
+		$('#descripcion').val(data.refdescripcion);
+		$('#codigo_barras').val(data.refcodigo_barras);
+		$('#codigo_interno').val(data.refcodigo_interno);
+		$('#codigo_alterno').val(data.refcodigo_alterno);
+		$('#id_presentacion').val(data.idtipopresentaciones);
+		$('#id_marca').val(data.idmarcas);
+		$('#factor_rendimiento').val(data.reffactor_rendimiento);
+		$('#stok_minimo').val(data.refstok_minimo);
+		$('#stok_maximo').val(data.refstok_maximo);
+		$('#iva').val(data.refiva);
+		$('#impo_consumo').val(data.refimpo_consumo);
+		$('#sobre_tasa').val(data.refsobre_tasa);
+		$('#serie').val(data.refserie);
+		$('#descuento').val(data.refdescuento);
+		$('#id_clasificacion').val(data.idclasificaciones);
+		$('#peso').val(data.refpeso);
+		$('#precio1').val(data.refprecio1);
+		$('#precio2').val(data.refprecio2);
+		$('#precio3').val(data.refprecio3);
+		$('#precio4').val(data.refprecio4);
 		$('#estado').val(data.estado);
-		$('#hommologo').val(data.hommologo);
-		$('#costo').val(data.costo);
-		$('#costo_promedio').val(data.costo_promedio);
-		$('#saldo').val(data.saldo);
-		$('#usuario_creador').val(data.usuario_creador[0].id);
-		$('#cuentaDB').val(data.cuentaDB[0].id);
-		$('#cuentaCR').val(data.cuentaCR[0].id);
-		$('input[type="submit"]').attr('disabled','disabled');
-		referencias.crear();
+		$('#hommologo').val(data.refhommologo);
+		$('#costo').val(data.refcosto);
+		$('#costo_promedio').val(data.refcosto_promedio);
+		$('#saldo').val(data.refsaldo);
+		$('#usuario_creador').val(data.refusuarios);
+		$('input[type="submit"]').hide();
+		
     };
 
     this.sendUpdate = function(){

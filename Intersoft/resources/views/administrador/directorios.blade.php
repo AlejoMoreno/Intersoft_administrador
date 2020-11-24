@@ -230,5 +230,10 @@
 
 </div>
 
+<script>
+    $(document).ready(function() {
+        directorios.init();
+    });
+</script>
 
 @endsection()

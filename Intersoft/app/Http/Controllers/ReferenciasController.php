@@ -167,58 +167,50 @@ class ReferenciasController extends Controller
 
     public function index(Request $request){
 		try{
-			$sql = " WHERE 1=1 ";
-			$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
-			if($request->linea != '' ){
-				if($request->linea !=0){
-					$sql .= " AND codigo_linea in (".$request->linea.")";
-				}
-			}
-			if($request->tipo_reporte != ''){
-				if($request->tipo_reporte == 'exitencia'){
-					$sql .= " AND saldo > 0 ";
-				}
-			}
-			if($request->orden != ''){
-				if($request->orden == "codigo"){
-					$orden = " ORDER BY codigo_linea,codigo_letras,codigo_consecutivo";
-				}
-				else{
-					$orden = " ORDER BY ".$request->orden;
-				}
-			}
-			$objs = DB::select("SELECT * FROM referencias ".$sql." AND id_empresa = ".Session::get('id_empresa')." ".$orden);
-			$objs= Collection::make($objs);
 			
-			//$objs = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+			$objs = Referencias::select(['lineas.*','tipo_presentaciones.*',
+				'usuarios.*',
+				'marcas.nombre as marcnombre','referencias.descripcion as refdescripcion',
+				'referencias.codigo_interno as refcodigo_interno','referencias.codigo_letras as refcodigo_letras',
+				'referencias.peso as refpeso','referencias.precio1 as refprecio1',
+				'referencias.precio2 as refprecio2','referencias.precio3 as refprecio3','referencias.precio4 as refprecio4',
+				'referencias.costo as refcosto','referencias.costo_promedio as refcosto_promedio','referencias.saldo as refsaldo',
+				'referencias.codigo_consecutivo as refcodigo_consecutivo','referencias.codigo_barras as refcodigo_barras','usuarios.id as refusuarios',
+				'referencias.descuento as refdescuento','referencias.serie as refserie','usuarios.id as refusuarios',
+				'referencias.id as refid','referencias.codigo_interno as refcodigo_interno','referencias.codigo_alterno as refcodigo_alterno',
+				'referencias.iva as refiva','referencias.impo_consumo as refimpo_consumo','referencias.sobre_tasa as refsobre_tasa',
+				'referencias.hommologo as refhommologo','referencias.stok_minimo as refstok_minimo','referencias.stok_maximo as refstok_maximo','referencias.factor_rendimiento as reffactor_rendimiento',
+				'lineas.id as idlineas','tipo_presentaciones.id as idtipopresentaciones','marcas.id as idmarcas','clasificaciones.id as idclasificaciones'])
+				->where('referencias.id_empresa','=',Session::get('id_empresa'))
+				->join('lineas','lineas.id','=','referencias.codigo_linea')
+				->join('tipo_presentaciones','tipo_presentaciones.id','=','referencias.id_presentacion')
+				->join('marcas','marcas.id','=','referencias.id_marca')
+				->join('clasificaciones','clasificaciones.id','=','referencias.id_clasificacion')
+				->join('usuarios','usuarios.id','=','referencias.usuario_creador')
+				->where(function ($q) use ($request) {
+					if($request->linea > 0){
+						$q->where('referencias.codigo_linea','=',$request->linea);
+					}
+					if($request->tipo_reporte == 'exitencia'){
+						$q->where('referencias.saldo','>',0);
+					}
+				})
+				->get();
 			
 			$lineas = Lineas::where('id_empresa','=',Session::get('id_empresa'))->get();
 			$presentaciones = Tipo_presentaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
 			$marcas = Marcas::where('id_empresa','=',Session::get('id_empresa'))->get();
 			$clasificaciones = Clasificaciones::where('id_empresa','=',Session::get('id_empresa'))->get();
 			$usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
-			/**Toca cambiarlo ya que el codigo 13 no pertenece al invetario */
-			$cuentaDB = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
-								->where('codigo','like','13%')->get();
-			/**Toca cambiarlo ya que aun no se cuenta con el credito del inventario */
-			$cuentaCR = Pucauxiliar::where('id_empresa','=',Session::get('id_empresa'))
-								->where('codigo','like','13%')->get(); 
-			foreach ($objs as $value) {
-				$value->codigo_linea = Lineas::where('id', $value->codigo_linea)->get();
-				$value->id_presentacion = Tipo_presentaciones::where('id', $value->id_presentacion)->get();
-				$value->id_marca = Marcas::where('id', $value->id_marca)->get();
-				$value->id_clasificacion = Clasificaciones::where('id', $value->id_clasificacion)->get();
-				$value->usuario_creador = Usuarios::where('id', $value->usuario_creador)->get();
-			}
+			
 			return view('inventario.referencias', [
 				'referencias' => $objs,
 				'lineas' => $lineas,
 				'presentaciones' => $presentaciones,
 				'marcas' => $marcas,
 				'clasificaciones' => $clasificaciones,
-				'usuarios' => $usuarios,
-				'cuentaDB' => $cuentaDB,
-				'cuentaCR' => $cuentaCR]);
+				'usuarios' => $usuarios
+			]);
 		}
         catch (ModelNotFoundException $exception){
             return  array(

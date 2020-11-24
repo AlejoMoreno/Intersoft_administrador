@@ -70,11 +70,11 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
     <script>try{Modernizr} catch(e) {document.write('<script src="./assets/js/vendor/modernizr-2.8.3.min.js"><\/script>')}</script>
-    <!-- https://leafletjs.com/examples.html GOOGLE MAPS API LEAFLETSJS-->
+    <!-- https://leafletjs.com/examples.html GOOGLE MAPS API LEAFLETSJS
     <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
     <link rel="stylesheet" href="/assets/leafletjs/leaflet-routing-machine.css">
-    <script src="/assets/leafletjs/leaflet-routing-machine.js"></script>
+    <script src="/assets/leafletjs/leaflet-routing-machine.js"></script>-->
 
     <link rel="stylesheet" href="/js/Toastada-master/demo/index.css" media="screen">
     

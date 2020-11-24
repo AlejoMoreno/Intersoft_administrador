@@ -81,10 +81,10 @@ $referencia = App\Referencias::where('id','=',$id)->first();
                 }
 
                 ?>
-                    <td>{{ $obj->id_documento->nombre }} {{ ' Pref. '. $obj->prefijo }}</td>
+                    <td>{{ isset($obj->id_documento)?$obj->id_documento->nombre:'' }} {{ ' Pref. '. isset($obj->prefijo)?$obj->prefijo:'' }}</td>
                     <td>{{ $obj->fecha }}</td>
-                    <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj->cabecera[0]->id }}')">{{ $obj->numero }}</a></td>
-                    <td>{{ $obj->cabecera[0]->id_tercero }}</td>
+                    <td><a href="javascript:envioUrl('/documentos/imprimir/{{ isset($obj->cabecera)?'':$obj->cabecera[0]->id }}')">{{ isset($obj->numero)?'':$obj->numero }}</a></td>
+                    <td>{{ isset($obj->cabecera)?'':$obj->cabecera[0]->id_tercero }}</td>
                     <td>{{ number_format($obj->cantidad) }}</td>
                     <td>{{ number_format($cont) }}</td>	
                     </tr>

@@ -2,7 +2,7 @@ var directorios = new Directorios();
 
 function Directorios(){
 	this.init = function(){
-
+		$('#actualizar').hide();
 	}
 	//funciona unicamente con inputs
 	this.buscar = function(){
@@ -94,6 +94,7 @@ function Directorios(){
 				$('#id_directorio_tipo_tercero').val(response.body.id_directorio_tipo_tercero);
 				//desaparecer modal 
 				$('#btnguardar').hide();
+				$('#actualizar').show();
 				$('#butonmodal').trigger('click');
 				$('#resultado').css('display','none');
 			}

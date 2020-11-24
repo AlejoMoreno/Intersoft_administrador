@@ -296,7 +296,106 @@ class ProduccioningresosController extends Controller
         
     }
 
-    public function reempaque($request){
+    public function reempaqueStore(Request $request){
+        
+        $fichas_tecnicas = Fichatecnicas::where('id_empresa','=',Session::get('id_empresa'))
+            ->where('orden','=',$request->ficha)
+            ->get();
+        //referencia nueva
+        $referencia = Referencias::where('id','=',$request->producto)->first();
+        $referencia->saldo = $referencia->saldo + $request->cantidad;
+        $referencia->save();
+        $obj = new Kardex();
+        $obj->id_sucursal	= Session::get('sucursal');
+        $obj->numero 		= 0;
+        $obj->prefijo 		= "ORDEN";
+        $obj->id_cliente 	= 0;
+        $obj->id_factura 	= 0;
+        $obj->id_vendedor 	= 0;
+        $obj->fecha 		= $request->fecha;
+        $obj->id_referencia = $referencia->id;
+        $obj->lote 			= 0;
+        $obj->serial 		= 0;
+        $obj->fecha_vencimiento = $request->fecha;
+        $obj->cantidad 		= $request->cantidad;
+        $obj->precio 		= 0;
+        $obj->costo 		= 0;
+        $obj->id_documento 	= 0;
+        $obj->signo 		= "+";
+        $obj->subtotal 		= 0;
+        $obj->iva 			= 0;
+        $obj->impoconsumo 	= 0;
+        $obj->otro_impuesto = 0;
+        $obj->otro_impuesto1 = 0;
+        $obj->descuento 	= 0;
+        $obj->fletes 		= 0;
+        $obj->retefuente 	= 0;
+        $obj->total 		= 0;
+        $obj->observaciones = "ORDEN";
+        $obj->id_modificado = 0;
+        $obj->kardex_anterior = 0;
+        $obj->id_empresa	= Session::get('id_empresa');
+        $obj->estado 		= "ACTIVO";
+        $obj->save();
+        //recorrer materias primas
+        foreach($fichas_tecnicas as $ficha){
+            $referencia = Referencias::where('id','=',$ficha->id_referencia)->first();
+            $total = $ficha->cantidad * $request->cantidad;
+            $referencia->saldo = $referencia->saldo - $total;
+            $referencia->save();
 
+            $obj = new Kardex();
+            $obj->id_sucursal	= Session::get('sucursal');
+            $obj->numero 		= $ficha->orden;
+            $obj->prefijo 		= "ORDEN";
+            $obj->id_cliente 	= 0;
+            $obj->id_factura 	= 0;
+            $obj->id_vendedor 	= 0;
+            $obj->fecha 		= $request->fecha;
+            $obj->id_referencia = $referencia->id;
+            $obj->lote 			= 0;
+            $obj->serial 		= 0;
+            $obj->fecha_vencimiento = $request->fecha;
+            $obj->cantidad 		= $total;
+            $obj->precio 		= 0;
+            $obj->costo 		= 0;
+            $obj->id_documento 	= 0;
+            $obj->signo 		= "-";
+            $obj->subtotal 		= 0;
+            $obj->iva 			= 0;
+            $obj->impoconsumo 	= 0;
+            $obj->otro_impuesto = 0;
+            $obj->otro_impuesto1 = 0;
+            $obj->descuento 	= 0;
+            $obj->fletes 		= 0;
+            $obj->retefuente 	= 0;
+            $obj->total 		= 0;
+            $obj->observaciones = "ORDEN";
+            $obj->id_modificado = 0;
+            $obj->kardex_anterior = 0;
+            $obj->id_empresa	= Session::get('id_empresa');
+            $obj->estado 		= "ACTIVO";
+            $obj->save();
+        }
+
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $fichas = Fichatecnicas::select(['nombre'])
+            ->where('id_empresa','=',Session::get('id_empresa'))
+            ->groupBy('nombre')->get();
+        return view('/inventario/reempaque',[
+            "referencias"=>$referencias,
+            "fichas"=>$fichas
+        ]);
+    }
+
+    public function reempaque(Request $request){
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $fichas = Fichatecnicas::select(['nombre','orden'])
+            ->where('id_empresa','=',Session::get('id_empresa'))
+            ->groupBy(['nombre','orden'])->get();
+        return view('/inventario/reempaque',[
+            "referencias"=>$referencias,
+            "fichas"=>$fichas
+        ]);
     }
 }
