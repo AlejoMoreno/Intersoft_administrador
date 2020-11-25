@@ -377,13 +377,13 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         Producción
                         <ul class="dropdown-menu">
-                            <?php if(in_array("Ficha técnica",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/fichatecnica');">Ficha técnica</a></li><?php } ?>
-                            <?php if(in_array("Ficha técnica",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/reempaque');">Proceso de reempaque</a></li><?php } ?>
-                            <?php if(in_array("Inventario Materia Prima",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/materiaprima');">Inventario Materia Prima</a></li><?php } ?>
-                            <?php if(in_array("Ordenes de Producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ordenesdeproduccion');">Ordenes de Producción</a></li><?php } ?>
-                            <?php if(in_array("Liquidación Mano de Obra",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/liquidacionobra');">Liquidación Mano de Obra</a></li><?php } ?>
-                            <?php if(in_array("Costos Directos",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/costosdirectos');">Costos Directos</a></li><?php } ?>
-                            <?php if(in_array("Ingreso por producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ingresoporproduccion');">Ingreso por producción</a></li><?php } ?>
+                            <?php if(in_array("Ficha técnica",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/fichatecnica');">Conformar producto terminado</a></li><?php } ?>
+                            <?php if(in_array("Ficha técnica",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/reempaque');">Ingreso por producción</a></li><?php } ?>
+                            <?php if(in_array("Inventario Materia Prima",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/materiaprima');">Inventario materia prima</a></li><?php } ?>
+                            <?php if(in_array("Ordenes de Producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ordenesdeproduccion');">Ordenes de producción</a></li><?php } ?>
+                            <?php if(in_array("Liquidación Mano de Obra",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/liquidacionobra');">Liquidación mano de obra</a></li><?php } ?>
+                            <?php if(in_array("Costos Directos",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/costosdirectos');">Costos directos</a></li><?php } ?>
+                            <?php if(in_array("Ingreso por producción",$Produccion)){ ?><li><a href="javascript:;" onclick="config.Redirect('/inventario/ingresoporproduccion');">Control de producción</a></li><?php } ?>
                         </ul>
                     </a>
                 </li>

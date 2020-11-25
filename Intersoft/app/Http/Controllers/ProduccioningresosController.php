@@ -389,7 +389,10 @@ class ProduccioningresosController extends Controller
     }
 
     public function reempaque(Request $request){
-        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $referencias = Referencias::select(['referencias.*','clasificaciones.nombre'])
+            ->where('referencias.id_empresa','=',Session::get('id_empresa'))
+            ->join('clasificaciones','referencias.id_clasificacion','=','clasificaciones.id')
+            ->where('clasificaciones.nombre','=','PRODUCTO TERMINADO')->get();
         $fichas = Fichatecnicas::select(['nombre','orden'])
             ->where('id_empresa','=',Session::get('id_empresa'))
             ->groupBy(['nombre','orden'])->get();

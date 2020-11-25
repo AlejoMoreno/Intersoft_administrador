@@ -22,7 +22,7 @@
     
 
 <div class="enc-article">
-    <h4 class="title">Ficha técnica</h4>
+    <h4 class="title">Ficha técnica / Conformar producto Terminado</h4>
 </div>
 
 <div class="row top-5-w" style="padding:2%;">

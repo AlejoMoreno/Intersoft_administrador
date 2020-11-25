@@ -22,12 +22,12 @@
     
 
 <div class="enc-article">
-    <h4 class="title">Reempaque</h4>
+    <h4 class="title">Conformar producto Terminado</h4>
 </div>
 
 <div class="row top-5-w" style="padding:2%;">
     <p>
-        Formulario para reempaquetar productos a partir de una ficha técnica.
+        Formulario para Conformar producto Terminado productos a partir de una ficha técnica.
     </p>
 
     <div class="panel panel-default col-md-5" >
@@ -44,19 +44,19 @@
         <div class="panel panel-warning col-md-12" >
             <!-- Default panel contents -->
             <div class="panel-heading row" >
-                <h5 class="col-md-8">Creación de reempaques </h5>
+                <h5 class="col-md-8">Creación de producto Terminado </h5>
                 <div class="col-md-4 row">
                     <div class="col-md-3"><a href="/inventario/reempaque" class="btn btn-danger" style="background:white;"><i class="fas fa-plus-circle"></i> Nuevo </a></div>
                 </div>                
             </div>
             <div class="panel-body" >
-                <p style="font-size: 10pt;">Diligencie cada uno de los datos relacionados para crear el producto reempaque, recuerde que el nombre de la ficha debe coincidir con el nombre del producto nuevo.
+                <p style="font-size: 10pt;">Diligencie cada uno de los datos relacionados para Conformar producto Terminado, recuerde que el nombre de la ficha debe coincidir con el nombre del producto nuevo.
                 </p>
                 <form action='/inventario/reempaque'' method="POST" >
                     <div class="panel panel-success">
                         <div class="panel-heading">
                             <div class="row">
-                                <div class="col-md-4">Creación reempaque </div>
+                                <div class="col-md-4">Creación  </div>
                                 <div class="col-md-12">
                                     <label style="color:white">Cantidad</label>
                                     <input type="number" class="form-control" name="cantidad">
