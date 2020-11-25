@@ -123,11 +123,11 @@
                                         <td>
                                             <select name="id_referencia" id="id_referencia" class="form-control">
                                             @foreach( $referencias as $ref )
-                                            <option value="{{ $ref->id }}">{{ $ref->descripcion }}</option>
+                                            <option value="{{ $ref->id }}">{{ $ref->codigo_interno }} - {{ $ref->descripcion }}</option>
                                             @endforeach
                                             </select>    
                                         </td>
-                                        <td><input type="number" class="form-control" id="cantidad" name="cantidad" ></td>
+                                        <td><input class="form-control" id="cantidad" name="cantidad" ></td>
                                         <td>
                                             <select name="estado" id="estado" class="form-control">
                                                 <option value="ACTIVO">ACTIVO</option>

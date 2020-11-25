@@ -62,7 +62,7 @@ class FichatecnicasController extends Controller
             $referencias = Referencias::select(['referencias.*','clasificaciones.nombre'])
                         ->where('referencias.id_empresa','=',Session::get('id_empresa'))
                         ->join('clasificaciones','referencias.id_clasificacion','=','clasificaciones.id')
-                        ->where('clasificaciones.nombre','=','MATERIA PRIMA')->get();
+                        ->where('clasificaciones.nombre','=','MATERIA PRIMA')->orderBy('referencias.codigo_interno')->get();
             return view('inventario.fichatecnica', [
                 'fichatecnicas' => $objs,
                 'referencias' => $referencias,
