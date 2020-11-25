@@ -164,7 +164,7 @@
                     <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
-                    <label>CREE</label>
+                    <label>ICA</label>
                     <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
@@ -754,28 +754,34 @@ function recorrerproductos(element){
     
     inputs[7].value = parseFloat(cantidad) * parseFloat(valor_unidad);
 
-    //IVA
+    //IVA 
     if(iva == 0){
         inputs[6].value = 0;    
     }
     else{
-        inputs[6].value = (parseFloat(cantidad) * parseFloat(valor_unidad)) - ((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)));//totaliva
+        inputs[6].value = ((parseFloat(cantidad) * parseFloat(valor_unidad)) * iva)/100;
+        //inputs[6].value = (parseFloat(cantidad) * parseFloat(valor_unidad)) - ((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)));//totaliva
     }
 
     //RETENCION
     try{
         retefuente = 0;
         if($('#id_retefuente').val() == '0'){
-            retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+            //retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 2.5;
+            retefuente = parseFloat( (((parseFloat(cantidad) * parseFloat(valor_unidad))) * 2.5)/100);
             inputs[8].value = retefuente; 
         }
         else{
             id_retefuente = JSON.parse($('#id_retefuente').val());
             if(id_retefuente.nombre == "SOBRE TODO"){
-                retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+                console.log("ESTA ES LA RETEFUENTE ");
+                //retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 2.5;
+                retefuente = parseFloat( (((parseFloat(cantidad) * parseFloat(valor_unidad))) * 2.5)/100);
+                console.log(retefuente);
             }
             else if(id_retefuente.nombre == "SOBRE LA BASE MENSUAL"){
-                retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 0.25;
+                //retefuente = parseFloat(((parseFloat(cantidad) * parseFloat(valor_unidad))/(1+parseFloat(iva)))) * 2.5;
+                retefuente = parseFloat( (((parseFloat(cantidad) * parseFloat(valor_unidad))) * 2.5)/100);
             }
             else{
                 retefuente = 0;
@@ -799,7 +805,8 @@ function recorrerCree(){
     cree = $('#otro_impuesto').val();
     retefuente = $('#retefuente').val();
     impoconsumo = $('#impoconsumo').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente).toFixed(2) );
+    iva = parseFloat($('#iva').val());
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente + iva).toFixed(2) );
 }
 
 function recorrerTotal(){
@@ -808,6 +815,7 @@ function recorrerTotal(){
     descuento = parseFloat($('#descuento').val());
     fletes = parseFloat($('#fletes').val());
     impoconsumo = $('#impoconsumo').val();
+    
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
         subtot += parseFloat(element.value);
@@ -832,20 +840,20 @@ function recorrerTotal(){
         retefuente = 0;
     }
 
-    $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
+    $('#subtotal').val((parseFloat(subtot)).toFixed(2));
     $('#iva').val(parseFloat(iva).toFixed(2));
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
     directorio_tipo = $('#directorio_tipo').val();
     //VERIFICAR TIPO DE TERCERO PARA (CREE)
     if(directorio_tipo == "JURIDICA"){
-        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.25).toFixed(2)); //CREE
+        $('#otro_impuesto').val(parseFloat(($('#subtotal').val() * 11.04)/100).toFixed(2)); //CREE
     }
     else{
-        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.09).toFixed(2)); //CREE
+        $('#otro_impuesto').val(parseFloat(($('#subtotal').val() * 11.04)/100).toFixed(2)); //CREE
     }
     cree = $('#otro_impuesto').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo).toFixed(2) );
-
+    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );
+    
     /** cartera verificar y recorrer **/
     var table = document.getElementById("tabla_forma_pagos");
     if(table.rows.length >= 1 ){
