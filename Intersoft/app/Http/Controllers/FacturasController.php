@@ -62,7 +62,7 @@ class FacturasController extends Controller
         //verificar el clinete/proveedor/tercero
         $tercero = FacturasController::Tercero($documento->signo,$request);
 
-        $facturas = Facturas::where('id_tercero','=',$request->id_tercero)
+        /*$facturas = Facturas::where('id_tercero','=',$request->id_tercero)
                 ->where('subtotal','=',$request->subtotal)
                 ->where('signo','=',$request->signo)
                 ->where('fecha','=',$request->fecha)
@@ -72,7 +72,7 @@ class FacturasController extends Controller
                 "result" => "false",
                 "body" => "Cedula ya esta facturada con el mismo valor en el dia de hoy" 
             );
-        }
+        }*/
         //creacion de factura 
         $obj = new Facturas();
     	$obj->id_sucursal		= Session::get('sucursal');
@@ -470,7 +470,7 @@ class FacturasController extends Controller
                                 ->where('estado','=','ACTIVO')->get();
         $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
         $resoluciones = Resoluciones::where('id_documento','=',$documento->id)->get();
-        
+
         return view('facturacion.venta',array(
             "referencias"=>$referencias,
             "documento"=>$documento,

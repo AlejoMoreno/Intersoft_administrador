@@ -62,6 +62,8 @@
                             <th>iva porcentaje</th>
                             <th>v puc iva</th>
                             <th>c puc iva</th>
+                            <th>compra</th>
+                            <th>venta</th>
                             <th></th> 
                         </tr>
                     </thead>
@@ -84,6 +86,8 @@
                                 <td>{{ $obj['iva_porcentaje'] }}</td>
                                 <td>{{ $obj['v_puc_iva']['codigo'] }} - {{ $obj['v_puc_iva']['descripcion'] }}</td>
                                 <td>{{ $obj['c_puc_iva']['codigo'] }} - {{ $obj['c_puc_iva']['descripcion'] }}</td>
+                                <td>{{ $obj['puc_compra']['codigo'] }} - {{ $obj['puc_compra']['descripcion'] }}</td>
+                                <td>{{ $obj['puc_venta']['codigo'] }} - {{ $obj['puc_venta']['descripcion'] }}</td>
                                 <td><a href="javascript:;" onclick="lineas.update('{{ $obj }}');"><button class="btn btn-warning">></button></a></td>
                                 <!--td><a onclick="config.delete_get('/inventario/lineas/delete/', '{{ $obj }}',  '/inventario/lineas');" href="#"><button class="btn btn-danger">x</button></a></td-->
                             </tr>
@@ -240,9 +244,7 @@
                                                 <select name="puc_venta" class="form-control" id="puc_venta"> 
                                                     <option>Seleccione Cuenta</option>
                                                     @foreach ( $cuentas as $cuenta )
-                                                    @if(strpos($cuenta->codigo, '613595') !== false)
                                                     <option value="{{ $cuenta->id }}">{{ $cuenta->codigo }} - {{ $cuenta->descripcion }}</option>
-                                                    @endif
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -251,9 +253,7 @@
                                             <select name="puc_compra" class="form-control" id="puc_compra"> 
                                                 <option>Seleccione Cuenta</option>
                                                 @foreach ( $cuentas as $cuenta )
-                                                @if(strpos($cuenta->codigo, '140505') !== false)
                                                 <option value="{{ $cuenta->id }}">{{ $cuenta->codigo }} - {{ $cuenta->descripcion }}</option>
-                                                @endif
                                                 @endforeach
                                             </select>
                                         </div>

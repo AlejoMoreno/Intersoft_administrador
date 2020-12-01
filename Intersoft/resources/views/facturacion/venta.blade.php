@@ -28,11 +28,12 @@ span{
 
 <div class="enc-article">
     <h4 class="title">{{ $documento['nombre'] }}</h4>
-    <select class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo">
+    <select class="form-control " style="width: 400px;position: absolute;top: 25%;left: 35%;" id="prefijo">
         @foreach ($resoluciones as $pre)
-        <option value="{{ $pre->prefijo }}">{{ $pre->prefijo }}</option>
+        <option value="{{ $pre->prefijo }}">Prefijo: {{ $pre->prefijo }} Número actual: {{ ($pre->numero_presente)+1 }} </option>
         @endforeach
     </select>
+    
     <input type="hidden" id="idDocumento" value="{{ $documento['id'] }}">
     <input type="hidden" id="signoDocumento" value="{{ $documento['signo'] }}">
 </div>
@@ -639,7 +640,10 @@ function saveFactura(){
             //datos para generar la cartera
             $('#idFactura').val(factura.id);
             $('#numeroFactrua').val(factura.numero);
-            setTimeout(function(){ saveCartera(); }, 1000);
+            if($('#tipo_pago').val() != '3'){
+                setTimeout(function(){ saveCartera(); }, 1000);
+            }
+            
             //fin de cartera
             setTimeout(function(){ saveContabilidad(); }, 1000);
 
@@ -996,10 +1000,10 @@ function recorrerTotal(){
     directorio_tipo = $('#directorio_tipo').val();
     //VERIFICAR TIPO DE TERCERO (CREE)
     if(directorio_tipo == "JURIDICA"){
-        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.25).toFixed(2)); //CREE
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
     else{
-        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.09).toFixed(2)); //CREE
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
     cree = $('#otro_impuesto').val();
     $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );

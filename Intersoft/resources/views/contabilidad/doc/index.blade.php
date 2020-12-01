@@ -205,15 +205,17 @@ function Obj(){
                     <td>`+response.contabilidades[i].numero_documento+` `+response.contabilidades[i].prefijo+`</td>
                     <td>`+response.contabilidades[i].id_auxiliar+`</td>`;
                     if(response.contabilidades[i].tipo_transaccion == 'D'){
+                        valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                         tr = tr + `
-                        <td>`+response.contabilidades[i].valor_transaccion+`</td>
+                        <td>`+ valor_trans +`</td>
                         <td>0</td>
                         `;
                     }
                     else{
+                        valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                         tr = tr + `
                         <td>0</td>
-                        <td>`+response.contabilidades[i].valor_transaccion+`</td>
+                        <td>`+ valor_trans +`</td>
                         `;
                     }
                     
@@ -270,16 +272,18 @@ function Obj(){
             <td>`+response.contabilidades[i].descripcion+`</td>`;
             if(response.contabilidades[i].tipo_transaccion == 'D'){
                 debitos = debitos + response.contabilidades[i].valor_transaccion;
+                valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                 tr = tr + `
-                <td>`+response.contabilidades[i].valor_transaccion+`</td>
+                <td>`+valor_trans+`</td>
                 <td>0</td>
                 `;
             }
             else{
                 creditos = creditos + response.contabilidades[i].valor_transaccion;
+                valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                 tr = tr + `
                 <td>0</td>
-                <td>`+response.contabilidades[i].valor_transaccion+`</td>
+                <td>`+valor_trans+`</td>
                 `;
             }
             
@@ -290,10 +294,12 @@ function Obj(){
             </tr>`;
             $("#cuerpo").append(tr)
         }
+        debitos = new Intl.NumberFormat("de-DE").format(debitos);
+        creditos = new Intl.NumberFormat("de-DE").format(creditos);
         $("#cuerpo").append(`<tr>
             <td colspan=2></td>
-            <td>`+debitos+`</td>
-            <td>`+creditos+`</td>
+            <td><h5>`+debitos+`</h5></td>
+            <td><h5>`+creditos+`</h5></td>
             <td></td>
             </tr>`);
         $('#tablecont').DataTable({
