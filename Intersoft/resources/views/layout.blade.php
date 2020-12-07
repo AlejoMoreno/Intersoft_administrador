@@ -84,6 +84,9 @@
         i{
             font-size: 18pt;
         }
+        .numberTex{
+            font-size: 18pt;font-weight: bold;
+        }
         .no-geolocation .box { color: red; }
         .geolocation .box { color: green; }
         .navbar-default .navbar-nav > li > a:not(.btn) {
@@ -411,7 +414,7 @@
                                         <li>
                                             <div class="row">
                                                 <?php $url = '/facturacion/venta/'.$obj['id']; ?>
-                                                <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
+                                                <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ ($obj['nombre']=="Factura Electronica")?"Factura de Venta":$obj['nombre'] }}</a>
                                                 <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
                                                 <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
                                             <div>
@@ -809,7 +812,20 @@
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.6.2/js/buttons.print.min.js"></script>
 
-
+<script>
+    $(".number").on({
+        "focus": function(event) {
+        $(event.target).select();
+        },
+        "keyup": function(event) {
+        $(event.target).val(function(index, value) {
+            return value.replace(/\D/g, "")
+            .replace(/([0-9])([0-9]{2})$/, '$1.$2')
+            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+        });
+        }
+    });
+</script>
 
 
 </body>

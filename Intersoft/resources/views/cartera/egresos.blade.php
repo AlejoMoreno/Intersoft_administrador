@@ -129,7 +129,9 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           <th>
             <select id="forma_pago" name="forma_pago" class="form-control">                      
               @foreach ($tipo_pagos as $obj)
-              <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                @if($obj['nombre'] != "CREDITO")
+                <option value="{{ $obj['id']}}">{{ $obj['nombre'] }}</option>
+                @endif
               @endforeach
             </select>
           </th>
@@ -157,47 +159,56 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
       </thead>
     </table>
     <label>Total Forma Pago</label>
-    <input type="text" class="form-control" id="total_forma_pago" value="" disabled="">
+    <p id="total_forma_pago_tex" class="numberTex">$ 0.00</p>
+    <input type="hidden" class="form-control" id="total_forma_pago" value="" disabled="">
   </div>
 </div>
             
 
 <hr>
-            
-<div class="row top-11-w">
+   
+<div class="row top-11-w" style="display: none">
   <div class="col-sm-12">
     <div class="row titulo">
       <div class="col-sm-3">
         <label>Fletes</label>
-        <input type="text" id="valor_flete" value="0" class="form-control" disabled="">
+        <p id="valor_fleteTex">$ 0.00</p>
+        <input type="hidden" id="valor_flete" value="0" class="form-control" disabled="">
       </div>
       <div class="col-sm-3">
         <label>Retefuente</label>
-        <input value="0" type="text" id="valor_retefuente" class="form-control" disabled="">
+        <p id="valor_retefuenteTex">$ 0.00</p>
+        <input value="0" type="hidden" id="valor_retefuente" class="form-control" disabled="">
       </div>
       <div class="col-sm-3">
         <label>Reteiva</label>
-        <input value="0" type="text" id="valor_reteiva" class="form-control" disabled="">
+        <p id="valor_reteivaTex">$ 0.00</p>
+        <input value="0" type="hidden" id="valor_reteiva" class="form-control" disabled="">
       </div>
       <div class="col-sm-3">
         <label>Reteica</label>
-        <input type="text" value="0" id="valor_reteica" class="form-control" disabled="">
+        <p id="valor_reteicaTex">$ 0.00</p>
+        <input type="hidden" value="0" id="valor_reteica" class="form-control" disabled="">
       </div>
       <div class="col-sm-3">
         <label>InteresL</label>
-        <input type="text" value="0" id="valor_interes" class="form-control" disabled="">
+        <p id="valor_interesTex">$ 0.00</p>
+        <input type="hidden" value="0" id="valor_interes" class="form-control" disabled="">
       </div>
       <div class="col-sm-3">
         <label>Descuento</label>
-        <input type="text" value="0" id="valor_descuento" class="form-control" disabled="">
+        <p id="valor_descuentoTex">$ 0.00</p>
+        <input type="hidden" value="0" id="valor_descuento" class="form-control" disabled="">
       </div>
       <div class="col-sm-3">
         <label>Efectivo</label>
-        <input type="text" value="0" id="valor_efectivo" class="form-control" disabled="">
+        <p id="valor_efectivoTex">$ 0.00</p>
+        <input type="hidden" value="0" id="valor_efectivo" class="form-control" disabled="">
       </div>
       <div class="col-sm-3">
         <label>TOTAL</label>
-        <input type="number" name="total" id="total" class="form-control" disabled="">
+        <p id="totalTex" class="numberTex">$ 0.00</p>
+        <input type="hidden" name="total" id="total" class="form-control" disabled="">
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
       <div class="col-sm-12">
@@ -206,13 +217,17 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
       <div class="col-sm-12">
-        <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('EGRESO');" style="background-color: #28a745;color:white;">GUARDAR</div>
+        <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('INGRESO');" style="background-color: #28a745;color:white;">GUARDAR</div>
         <div id="imprimirPOST" onclick="carteras.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
         <div id="imprimirDOC" onclick="carteras.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
     </div>
   </div>
+</div>
+
+<div class="col-sm-12">
+  <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('EGRESO');" style="background-color: #28a745;color:white;">GUARDAR</div>
 </div>
 
 <script type="text/javascript">

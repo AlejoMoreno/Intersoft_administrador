@@ -4,6 +4,7 @@
 
 
 <style>
+    
 span{
     color: black;
     font-size: 10pt;
@@ -27,7 +28,7 @@ span{
 </style>
 
 <div class="enc-article">
-    <h4 class="title">{{ $documento['nombre'] }}</h4>
+    <h4 class="title">{{ ($documento['nombre']=="Factura Electronica")?"Factura de Venta":$documento['nombre'] }}</h4>
     <select class="form-control " style="width: 400px;position: absolute;top: 25%;left: 35%;" id="prefijo">
         @foreach ($resoluciones as $pre)
         <option value="{{ $pre->prefijo }}">Prefijo: {{ $pre->prefijo }} Número actual: {{ ($pre->numero_presente)+1 }} </option>
@@ -188,36 +189,48 @@ span{
                 </div>
                 <div class="col-sm-3">
                     <label>SUB.TOTAL</label>
-                    <input type="number" id="subtotal"  class="form-control" disabled="">
+                    <p id="subtotalTex">$ 0.00</p>
+                    <input type="hidden" id="subtotal"  class="form-control" disabled="">
                 </div>
                 <div class="col-sm-3">
                     <label>IVA</label>
-                    <input type="number" id="iva" class="form-control" disabled="">
+                    <p id="ivaTex">$ 0.00</p>
+                    <input type="hidden" id="iva" class="form-control" disabled="">
                 </div>
                 <div class="col-sm-3">
                     <label>DESCUENTO</label>
-                    <!--<input type="text" value="0" name="currency-field" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="$1,000,000.00" id="descuento" class="form-control" onkeyup="recorrerCree()">-->
-                    <input type="number" value="0" id="descuento" class="form-control" onkeyup="recorrerCree()">
+                    <br>
+                    <p id="descuentoTex" onclick="config.aparecer('descuento','descuentoTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="descuento" class="form-control" onchange="config.aparecer('descuentoTex','descuento')" onkeyup="recorrerCree()">
                 </div>
                 <div class="col-sm-3">
                     <label>FLETES</label>
-                    <input type="number"  value="0" id="fletes" onkeyup="recorrerCree();" class="form-control">
+                    <br>
+                    <p id="fletesTex" onclick="config.aparecer('fletes','fletesTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="fletes" onchange="config.aparecer('fletesTex','fletes')" onkeyup="recorrerCree();" class="form-control ">
                 </div>
                 <div class="col-sm-3">
                     <label>RETEFUENTE</label>
-                    <input type="number" value="0" id="retefuente" class="form-control" onkeyup="recorrerCree();">
+                    <br>
+                    <p id="retefuenteTex" onclick="config.aparecer('retefuente','retefuenteTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="retefuente" onchange="config.aparecer('retefuenteTex','retefuente')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
-                    <label>IMPOCONSUMO</label>
-                    <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerCree();">
+                    <label>ICA</label>
+                    <br>
+                    <p id="impoconsumoTex" onclick="config.aparecer('impoconsumo','impoconsumoTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>CREE</label>
-                    <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerCree();">
+                    <br>
+                    <p id="otro_impuestoTex" onclick="config.aparecer('otro_impuesto','otro_impuestoTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="otro_impuesto" onchange="config.aparecer('otro_impuestoTex','otro_impuesto')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>TOTAL</label>
-                    <input type="number"  id="total" class="form-control" disabled="">
+                    <p id="totalTex" class="numberTex">$ 0.00</p>
+                    <input type="hidden" id="total" class="form-control" disabled="">
                 </div>
                 <div class="col-sm-12" style="height: 20px;"></div>
                 <div class="col-sm-12">
@@ -575,7 +588,7 @@ function saveFactura(){
 
         check = inputs[0].value;
         id = inputs[1].value;
-        cantidad = inputs[2].value;
+        cantidad = inputs[2].value.replace(",","");
         iva = inputs[3].value;
         subtotal = inputs[4].value;
 
@@ -608,19 +621,19 @@ function saveFactura(){
         'fecha_vencimiento' : $('#fecha_vencimiento').val(),
         'id_documento' : $('#idDocumento').val(),
         'signo' : $('#signoDocumento').val(),
-        'subtotal' :  $('#subtotal').val(),
-        'iva' : $('#iva').val(),
-        'impoconsumo' : $('#impoconsumo').val(),
-        'otro_impuesto' : $('#otro_impuesto').val(),
+        'subtotal' :  $('#subtotal').val().replace(",",""),
+        'iva' : $('#iva').val().replace(",",""),
+        'impoconsumo' : $('#impoconsumo').val().replace(",",""),
+        'otro_impuesto' : $('#otro_impuesto').val().replace(",",""),
         'otro_impuesto1' : '0',
-        'descuento' : $('#descuento').val(),
-        'fletes' : $('#fletes').val(),
-        'retefuente' : $('#retefuente').val(),
-        'total' : $('#total').val(),
+        'descuento' : $('#descuento').val().replace(",",""),
+        'fletes' : $('#fletes').val().replace(",",""),
+        'retefuente' : $('#retefuente').val().replace(",",""),
+        'total' : $('#total').val().replace(",",""),
         'id_modificado' : localStorage.getItem('Id_usuario'),
         'observaciones' : $('#observaciones').val(),
         'estado' : 'ACTIVO',
-        'saldo'  : $('#total').val(),
+        'saldo'  : $('#total').val().replace(",",""),
         'tipo_pago' : $('#tipo_pago').val(),
         'productosArr' : jsonArr
     };
@@ -785,7 +798,7 @@ function getReferencia(id){
             if(precioasignado.includes("3")){
                 precios += "<option value='"+referencia.precio3+"'>"+new Intl.NumberFormat().format(referencia.precio3)+"</option>";
             }
-            precios += "<option value='0'>Otro valor</option>";
+            precios += "<option value=''>Otro valor</option>";
             precios += "</select>";
             lotes = "<select class='form-control' name='lote'>";
             for(i=0;i<lote.length;i++){ 
@@ -806,10 +819,10 @@ function getReferencia(id){
             cell1.innerHTML = "<strong style='color:black'>"+referencia.codigo_interno+"</strong>";
             cell2.innerHTML = "<strong style='color:black'>"+referencia.descripcion+"</strong>";
             cell3.innerHTML = lotes;
-            cell4.innerHTML = "<input type='number' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
+            cell4.innerHTML = "<input value='0' onchange='recorrerproductos(this)' class='form-control' onkeyup='config.puntuacion(this)' name='cantidad'>";
             cell5.innerHTML = precios;
             cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
-            cell7.innerHTML = "<input type='hidden' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'><span name='spanTotal'>0</span>";
+            cell7.innerHTML = "<input type='hidden' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'><p name='spanTotal' class='numberTex' style='color:black;'>$ 0.00</p>";
         },
         error: function(){
             swal({
@@ -831,9 +844,9 @@ function recorrerproductos(element){
     
     inputs = tr.getElementsByTagName('input');
     selects = tr.getElementsByTagName('select');
-    span = tr.getElementsByTagName('span');
+    span = tr.getElementsByTagName('p');
 
-    if($('#preciosselect').val() == '0'){
+    if($('#preciosselect').val() == ''){
         swal("Escribe el valor del producto:", {
             content: "input",
         })
@@ -849,7 +862,7 @@ function recorrerproductos(element){
     
     check = inputs[0].value;
     id = inputs[1].value;
-    cantidad = inputs[2].value;
+    cantidad = inputs[2].value.replace(",","");
     iva = inputs[3].value;
     totaliva = inputs[4].value;
     subtotal = inputs[5].value;
@@ -859,7 +872,7 @@ function recorrerproductos(element){
 
     
     inputs[5].value = parseFloat(cantidad) * parseFloat(valor_unidad); 
-    span[0].innerHTML = new Intl.NumberFormat().format(inputs[5].value);
+    span[0].innerHTML = "$ " + new Intl.NumberFormat().format(inputs[5].value);
 
     //IVA 
     if(iva == 0){
@@ -912,13 +925,20 @@ function recorrerproductos(element){
 }
 
 function recorrerCree(){
-    descuento = parseFloat($('#descuento').val());
-    fletes = parseFloat($('#fletes').val());
-    cree = parseFloat($('#otro_impuesto').val());
-    retefuente = parseFloat($('#retefuente').val());
-    impoconsumo = parseFloat($('#impoconsumo').val());
-    iva = parseFloat($('#iva').val());
+    subtot = parseFloat($('#subtotal').val().replace(",",""));
+    descuento = parseFloat($('#descuento').val().replace(",",""));
+    document.getElementById("descuentoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#descuento').val());
+    fletes = parseFloat($('#fletes').val().replace(",",""));
+    document.getElementById("fletesTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#fletes').val());
+    cree = parseFloat($('#otro_impuesto').val().replace(",",""));
+    document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
+    retefuente = parseFloat($('#retefuente').val().replace(",",""));
+    document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
+    impoconsumo = parseFloat($('#impoconsumo').val().replace(",",""));
+    iva = parseFloat($('#iva').val().replace(",",""));
+    document.getElementById("impoconsumoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#impoconsumo').val());
     $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente + iva).toFixed(2) );
+    document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 }
 
 function recorrerSinImpuestos(){
@@ -926,10 +946,10 @@ function recorrerSinImpuestos(){
     subtotales = document.getElementsByName("subtotal");
     subtot = 0;
     descuento = parseFloat($('#descuento').val());
-    fletes = parseFloat($('#fletes').val());
-    cree = $('#otro_impuesto').val();
-    retefuente = $('#retefuente').val();
-    impoconsumo = $('#impoconsumo').val();
+    fletes = parseFloat($('#fletes').val().replace(",",""));
+    cree = $('#otro_impuesto').val().replace(",","");
+    retefuente = $('#retefuente').val().replace(",","");
+    impoconsumo = $('#impoconsumo').val().replace(",","");
 
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
@@ -943,11 +963,14 @@ function recorrerSinImpuestos(){
     }
 
     $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
+    document.getElementById("subtotalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#subtotal').val());
     $('#iva').val(parseFloat(iva).toFixed(2));
+    document.getElementById("ivaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#iva').val());
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
+    document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     directorio_tipo = $('#directorio_tipo').val();
     $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );
-    
+    document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 
     /** cartera verificar y recorrer **/
     var table = document.getElementById("tabla_forma_pagos");
@@ -995,8 +1018,11 @@ function recorrerTotal(){
     
 
     $('#subtotal').val((parseFloat(subtot)).toFixed(2));
+    document.getElementById("subtotalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#subtotal').val());
     $('#iva').val(parseFloat(iva).toFixed(2));
+    document.getElementById("ivaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#iva').val());
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
+    document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     directorio_tipo = $('#directorio_tipo').val();
     //VERIFICAR TIPO DE TERCERO (CREE)
     if(directorio_tipo == "JURIDICA"){
@@ -1006,7 +1032,9 @@ function recorrerTotal(){
         $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
     cree = $('#otro_impuesto').val();
+    document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
     $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );
+    document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
     
 
     /** cartera verificar y recorrer **/
@@ -1310,8 +1338,6 @@ function formatCurrency(input, blur) {
   caret_pos = updated_len - original_len + caret_pos;
   input[0].setSelectionRange(caret_pos, caret_pos);
 }
-
-
 
 
 </script>

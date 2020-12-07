@@ -58,7 +58,7 @@
 							<div ><?php echo $factura['prefijo'].'  '.$factura['numero'];?></div></td>
 						</tr>
 						<tr>
-							<td style="text-align: right"><?php echo $factura['id_vendedor']['nombre'] . ' ' . $factura['id_vendedor']['apellido'];?></td>
+							<td style="text-align: right"></td>
 						</tr>
 					</table>
 				</td>
@@ -112,7 +112,7 @@
 					<th class="headtablelast"><strong>PARCIAL</strong></th>
 				</tr>
 			</thead>
-			<?php for($i=0;17>$i; $i++) { ?>
+			<?php for($i=0;15>$i; $i++) { ?>
 			@if(!isset($kardex[$i]))
 			<tr>
 				<td class="bodytable"><br></td>
@@ -183,7 +183,7 @@
 
 		<table style="width: 98%;">
 			<tr>
-				<td style="border: 1px dashed black;width: 24%;margin-left:2%"></td>
+				<td style="border: 1px dashed black;width: 24%;margin-left:2%"><?php echo $factura['id_vendedor']['nombre'] . ' ' . $factura['id_vendedor']['apellido'];?></td>
 				<td style="border: 1px dashed black;width: 10%;margin-left:2%"></td>
 				<td style="border: 1px dashed black;width: 30%;margin-left:2%">
 				<table style="width: 100%;">

@@ -117,8 +117,8 @@ function Carteras(){
                         '<td>'+value.numero+'</td>'+
                         '<td>'+value.fecha+'</td>'+
                         '<td>'+value.fecha_vencimiento+'</td>'+
-                        '<td>'+value.total+'</td>'+
-                        '<td>'+value.saldo+'</td>'+
+                        '<td><p>$'+ new Intl.NumberFormat().format(value.total) +'</p></td>'+
+                        '<td><p style="color:red;">$'+ new Intl.NumberFormat().format(value.saldo) +'</p></td>'+
                         '<td><div class="btn btn-success" id="pagarbtn" onclick="carteras.getDocumento('+
                             id+',`'+
                             prefijo+'`,`'+
@@ -164,14 +164,14 @@ function Carteras(){
         cel2.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_prefijo' value='"+prefijo+"'>"+prefijo;
         cel3.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_numero' value='"+numero+"'>"+numero;
         cel4.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_fecha' value='"+fecha+"'>"+fecha;
-        cel5.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_flete' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel6.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_retefuente' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel7.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteiva' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel8.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteica' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel9.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_interes' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel10.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel11.innerHTML = "<input type='number' style='width: 80px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onkeyup='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel12.innerHTML = "<input type='hidden' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled><span id='"+lista_seleccionados.length+"_span'>0</span>";
+        cel5.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_flete' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel6.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_retefuente' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel7.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteiva' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel8.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteica' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel9.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_interes' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel10.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel11.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel12.innerHTML = "<input type='hidden' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled><p style='color:black;width: 300px !important;' class='numberTex' id='"+lista_seleccionados.length+"_span'>0</span>";
         cel13.innerHTML = "";
         carteras.calcular(lista_seleccionados.length);
         //desaparecer el boton pagar
@@ -180,17 +180,19 @@ function Carteras(){
 
 
 	this.calcular = function(index){
+        console.log(index);
         var flete,retefuente,reteiva,reteica,interes,descuento,efectivo;
-        flete = parseFloat(document.getElementById(index+'_flete').value);
-        retefuente = parseFloat(document.getElementById(index+"_retefuente").value);
-        reteiva = parseFloat(document.getElementById(index+"_reteiva").value);
-        reteica = parseFloat(document.getElementById(index+"_reteica").value);
-        interes = parseFloat(document.getElementById(index+"_interes").value);
-        descuento = parseFloat(document.getElementById(index+"_descuento").value);
-        efectivo = parseFloat(document.getElementById(index+"_efectivo").value);
+        flete = parseFloat(document.getElementById(index+'_flete').value.replace(",",""));
+        retefuente = parseFloat(document.getElementById(index+"_retefuente").value.replace(",",""));
+        reteiva = parseFloat(document.getElementById(index+"_reteiva").value.replace(",",""));
+        reteica = parseFloat(document.getElementById(index+"_reteica").value.replace(",",""));
+        interes = parseFloat(document.getElementById(index+"_interes").value.replace(",",""));
+        descuento = parseFloat(document.getElementById(index+"_descuento").value.replace(",",""));
+        efectivo = parseFloat(document.getElementById(index+"_efectivo").value.replace(",",""));
         total = flete+retefuente+reteiva+reteica+interes-descuento+efectivo;
+        console.log(total);
         $("#"+index+"_total").val(total);
-        $("#"+index+"_span").html(new Intl.NumberFormat().format(total));
+        $("#"+index+"_span").html("$ " + new Intl.NumberFormat().format(total));
         carteras.recorrer();
     }
 
@@ -233,25 +235,33 @@ function Carteras(){
         var valor_efectivo = 0;
     	var tabla = document.getElementById("tabla_facturas_seleccionadas");
     	for (var i=1;i < tabla.rows.length; i++){  
-            valor_principal=parseFloat($('#'+i+'_total').val())+valor_principal;
-            valor_flete=parseFloat($('#'+i+'_flete').val())+valor_flete;
-            valor_retefuente=parseFloat($('#'+i+'_retefuente').val())+valor_retefuente;
-            valor_reteiva=parseFloat($('#'+i+'_reteiva').val())+valor_reteiva;
-            valor_reteica=parseFloat($('#'+i+'_reteica').val())+valor_reteica;
-            valor_interes=parseFloat($('#'+i+'_interes').val())+valor_interes;
-            valor_descuento=parseFloat($('#'+i+'_descuento').val())+valor_descuento;
-            valor_efectivo=parseFloat($('#'+i+'_efectivo').val())+valor_efectivo;
+            valor_principal=parseFloat($('#'+i+'_total').val().replace(",",""))+valor_principal;
+            valor_flete=parseFloat($('#'+i+'_flete').val().replace(",",""))+valor_flete;
+            valor_retefuente=parseFloat($('#'+i+'_retefuente').val().replace(",",""))+valor_retefuente;
+            valor_reteiva=parseFloat($('#'+i+'_reteiva').val().replace(",",""))+valor_reteiva;
+            valor_reteica=parseFloat($('#'+i+'_reteica').val().replace(",",""))+valor_reteica;
+            valor_interes=parseFloat($('#'+i+'_interes').val().replace(",",""))+valor_interes;
+            valor_descuento=parseFloat($('#'+i+'_descuento').val().replace(",",""))+valor_descuento;
+            valor_efectivo=parseFloat($('#'+i+'_efectivo').val().replace(",",""))+valor_efectivo;
             //console.log(valor_principal);
         }
         document.getElementById('total').value = valor_principal;
+        document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
         document.getElementById('valor_pago').value = valor_principal;
         document.getElementById('valor_flete').value = valor_flete;
+        document.getElementById("valor_fleteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#valor_flete').val());
         document.getElementById('valor_retefuente').value = valor_retefuente;
+        document.getElementById("valor_retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#valor_retefuente').val());
         document.getElementById('valor_reteiva').value = valor_reteiva;
+        document.getElementById("valor_reteivaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#valor_reteiva').val());
         document.getElementById('valor_reteica').value = valor_reteica;
+        document.getElementById("valor_reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#valor_reteica').val());
         document.getElementById('valor_interes').value = valor_interes;
+        document.getElementById("valor_interesTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#valor_interes').val());
         document.getElementById('valor_descuento').value = valor_descuento;
+        document.getElementById("valor_descuentoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#valor_descuento').val());
         document.getElementById('valor_efectivo').value = valor_efectivo;
+        document.getElementById("valor_efectivoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#valor_efectivo').val());
     }
 
 
@@ -291,7 +301,7 @@ function Carteras(){
         var cel3 = row.insertCell(3);
 
         cel0.innerHTML = "<div id='"+lista_seleccionados_frp.length+"_forma_pago'>"+forma_pago+"</div><input type='hidden' value='"+forma_pago+"' name='CarteraformaPago'>";
-        cel1.innerHTML = "<input value='"+valor_pago+"' class='form-control' id='"+lista_seleccionados_frp.length+"_valor_pago' name='Carteravalor' disabled>";
+        cel1.innerHTML = "<input type='hidden' value='"+valor_pago+"' class='form-control' id='"+lista_seleccionados_frp.length+"_valor_pago' name='Carteravalor' disabled><p>$ "+ new Intl.NumberFormat().format(valor_pago) +"</p>";
         cel2.innerHTML = "<div id='"+lista_seleccionados_frp.length+"_observacion_pago'>"+observacion_pago+"</div><input type='hidden' name='Carteraobservacion' value='"+observacion_pago+"'>";
         cel3.innerHTML = "<div class='btn btn-danger' onclick='carteras.eliminarFormaPago(this)' >Eliminar Forma Pago</div>";
 
@@ -307,6 +317,7 @@ function Carteras(){
             //console.log(valor_forma_pagos);
         }
         document.getElementById('total_forma_pago').value = valor_forma_pagos;
+        document.getElementById('total_forma_pago_tex').innerHTML = "$ " + new Intl.NumberFormat().format(valor_forma_pagos);
     }
 
 
@@ -343,13 +354,13 @@ function Carteras(){
         var prefijo = '';
         if($('#prefijo').val()=='')             { prefijo = '_'; }                          else { prefijo = $('#prefijo').val(); }
         var parametros = {
-            'reteiva' : $('#valor_reteiva').val(),
-            'reteica' : $('#valor_reteica').val(),
-            'efectivo' : $('#valor_efectivo').val(),
-            'sobrecosto' : $('#valor_interes').val(),
-            'descuento' : $('#valor_descuento').val(),
-            'retefuente' : $('#valor_retefuente').val(),
-            'otros' : $('#valor_flete').val(),
+            'reteiva' : $('#valor_reteiva').val().replace(",",""),
+            'reteica' : $('#valor_reteica').val().replace(",",""),
+            'efectivo' : $('#valor_efectivo').val().replace(",",""),
+            'sobrecosto' : $('#valor_interes').val().replace(",",""),
+            'descuento' : $('#valor_descuento').val().replace(",",""),
+            'retefuente' : $('#valor_retefuente').val().replace(",",""),
+            'otros' : $('#valor_flete').val().replace(",",""),
             'id_sucursal' : '1',
             'numero' : $('#numero').val(),
             'prefijo' : prefijo,
@@ -357,8 +368,8 @@ function Carteras(){
             'id_vendedor' : $('#id_modificado').val(),
             'fecha' : $('#fecha').val(),
             'tipoCartera' : tipo,
-            'subtotal' :  $('#total_forma_pago').val(),
-            'total' : $('#total').val(),
+            'subtotal' :  $('#total_forma_pago').val().replace(",",""),
+            'total' : $('#total').val().replace(",",""),
             'id_modificado' : localStorage.getItem('Id_usuario'),
             'observaciones' : $('#observaciones').val(),
             'estado' : 'ACTIVO'
@@ -517,17 +528,17 @@ function Carteras(){
 
                             var flete, retefuente, reteiva, reteica, interes, descuento, efectivo, total;
                             var prefijo, numero, fecha, id_factura;
-                            flete = document.getElementById(i+"_flete").value;
-                            retefuente = document.getElementById(i+"_retefuente").value;
-                            reteiva = document.getElementById(i+"_reteiva").value;
-                            reteica = document.getElementById(i+"_reteica").value;
-                            interes = document.getElementById(i+"_interes").value;
-                            descuento = document.getElementById(i+"_descuento").value;
-                            efectivo = document.getElementById(i+"_efectivo").value;
+                            flete = document.getElementById(i+"_flete").value.replace(",","");
+                            retefuente = document.getElementById(i+"_retefuente").value.replace(",","");
+                            reteiva = document.getElementById(i+"_reteiva").value.replace(",","");
+                            reteica = document.getElementById(i+"_reteica").value.replace(",","");
+                            interes = document.getElementById(i+"_interes").value.replace(",","");
+                            descuento = document.getElementById(i+"_descuento").value.replace(",","");
+                            efectivo = document.getElementById(i+"_efectivo").value.replace(",","");
                             prefijo = document.getElementById(i+"_prefijo").value;
                             numero = document.getElementById(i+"_numero").value;
                             fecha = document.getElementById(i+"_fecha").value;
-                            total = document.getElementById(i+"_total").value;
+                            total = document.getElementById(i+"_total").value.replace(",","");
                             id_factura = document.getElementById(i+"_id_factura").value;
 
                             if(documento.tipoCartera=="GASTOCAUSADO"){
@@ -679,5 +690,9 @@ function Carteras(){
         //$('#pagarbtn').hide();
     }
 
+    this.getid = function(id, elemento){
+        console.log($('#'+id).val());
+        $('#'+elemento).html($('#'+id).val());
+    }
 
 }

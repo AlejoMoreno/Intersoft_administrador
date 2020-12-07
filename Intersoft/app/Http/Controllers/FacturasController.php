@@ -111,10 +111,10 @@ class FacturasController extends Controller
 
         $obj->id_empresa = Empresas::where('id','=',Session::get('id_empresa'))->first();
         
-        Mail::send('mail.venta', ['facturas' => $obj], function ($m) use ($obj) {
+        /*Mail::send('mail.venta', ['facturas' => $obj], function ($m) use ($obj) {
             $m->from('intersoft@wakusoft.com', 'Intersoft');
             $m->to(["wakusoft@gmail.com",$obj->id_empresa->correo])->subject('Documento generado '.$obj->id_documento->nombre.' #'.$obj->numero  );
-        });
+        });*/
 
 
         return array(

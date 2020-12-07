@@ -419,7 +419,21 @@ function Config(){
 		  ? this.localStringToNumber(value).toLocaleString(undefined, options)
 		  : ''
 	}
+
+	this.puntuacion = function (e){
+		e.value = e.value.replace(/\D/g, "")
+		.replace(/([0-9])([0-9]{2})$/, '$1.$2')
+		.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+	}
+
+	this.aparecer = function(aparecer, desaparecer){
+		document.getElementById(aparecer).style.display = "inline";
+		document.getElementById(desaparecer).style.display = "none";
+	}
+
 }
+
+
 
 
 

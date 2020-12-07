@@ -288,10 +288,10 @@ class DirectoriosController extends Controller
             $directorios->id_ciudad = $request->id_ciudad;
             $directorios->razon_social= $request->razon_social;
             $directorios->direccion = $request->direccion;
-            $directorios->correo    = $request->correo;
-            $directorios->telefono  = $request->telefono;
-            $directorios->telefono1 = $request->telefono;
-            $directorios->telefono2 = $request->telefono;
+            $directorios->correo    = ($request->correo == "")?"admin@admin.com":$request->correo;
+            $directorios->telefono  = ($request->telefono == "")?"0":$request->telefono;
+            $directorios->telefono1 = ($request->telefono == "")?"0":$request->telefono;
+            $directorios->telefono2 = ($request->telefono == "")?"0":$request->telefono;
             $directorios->digito    = "0";
             $directorios->financiacion= "0";
             $directorios->descuento = "0";
@@ -301,7 +301,7 @@ class DirectoriosController extends Controller
             $directorios->actividad_economica= "0";
             $directorios->calificacion= "2";
             $directorios->nivel     = "NACIONAL";
-            $directorios->zona_venta= $request->zona_venta;
+            $directorios->zona_venta= ($request->zona_venta == "")?"NA":$request->zona_venta;
             $directorios->transporte= "NO";
             $directorios->estado    = "1";
             $directorios->id_retefuente= "1";
@@ -315,11 +315,11 @@ class DirectoriosController extends Controller
             $directorios->id_ciudad = $request->id_ciudad;
             $directorios->razon_social= $request->razon_social;
             $directorios->direccion = $request->direccion;
-            $directorios->correo    = $request->correo;
-            $directorios->telefono  = $request->telefono;
-            $directorios->telefono1 = $request->telefono;
-            $directorios->telefono2 = $request->telefono;
-            $directorios->zona_venta= $request->zona_venta;
+            $directorios->correo    = ($request->correo == "")?"admin@admin.com":$request->correo;
+            $directorios->telefono  = ($request->telefono == "")?"0":$request->telefono;
+            $directorios->telefono1 = ($request->telefono == "")?"0":$request->telefono;
+            $directorios->telefono2 = ($request->telefono == "")?"0":$request->telefono;
+            $directorios->zona_venta= ($request->zona_venta == "")?"NA":$request->zona_venta;
         }
         
         if(isset($request->id_directorio_tipo_tercero)){
