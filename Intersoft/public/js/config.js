@@ -426,6 +426,12 @@ function Config(){
 		.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
 	}
 
+	this.puntuacionLabel = function (text){
+		return text.replace(/\D/g, "")
+		.replace(/([0-9])([0-9]{2})$/, '$1.$2')
+		.replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
+	}
+
 	this.aparecer = function(aparecer, desaparecer){
 		document.getElementById(aparecer).style.display = "inline";
 		document.getElementById(desaparecer).style.display = "none";

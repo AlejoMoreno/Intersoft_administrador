@@ -152,8 +152,8 @@
                                     <th>rango_final</th>
                                     <th>numero_presente</th>
                                     <th>fecha</th>
-                                    <th>usuario_dian</th>
-                                    <th>password_dian</th>
+                                    <th>Resolución</th>
+                                    <th>Actividad Económica</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -184,11 +184,11 @@
                             <input type="number" id="res_rango_final" name="res_rango_final" class="form-control" placeholder="rango final">
                         </div>
                         <div class="col-md-6">
-                            <label>Usuario DIAN</label>
+                            <label>Resolución</label>
                             <input id="res_usuario_dian" name="res_usuario_dian" class="form-control" placeholder="usuario dian">
                         </div>
                         <div class="col-md-6">
-                            <label>Password DIAN</label>
+                            <label>Actividad Económica</label>
                             <input id="res_password_dian" name="res_password_dian" class="form-control" placeholder="password dian">
                         </div>
                         <div class="col-md-12">

@@ -51,7 +51,7 @@
                 <th>Sucursal</th>
                 <th>Nit</th>
                 <th>Nombre</th>
-                <th>Fecha Emisión</th>
+                <th>Fecha Emision</th>
                 <th>Fecha Vencimiento</th>
                 <th>subtotal</th>
                 <th>iva</th>
@@ -111,6 +111,7 @@
 $(document).ready( function () {
     $('#datos').DataTable({
         dom: 'Bfrtip',
+        "order": [[2, 'desc']],
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
         ] 

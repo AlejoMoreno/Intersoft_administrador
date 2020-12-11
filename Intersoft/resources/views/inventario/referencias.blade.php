@@ -108,7 +108,7 @@
                 <tbody>
                     @foreach ($referencias as $obj)
                         <tr id="row{{ $obj->id }}">
-                            <td>{{ $obj->refcodigo_interno.$obj->refcodigo_letras.$obj->refcodigo_consecutivo }}</td>
+                            <td>{{ $obj->refcodigo_barras }}</td>
                             <td>{{ $obj->refdescripcion }}</td>
                             <td><small style="font-size: 9px;">{{ $obj->refcodigo_barras }}</small></td>
                             <td>{{ $obj->presnombre }}</td>

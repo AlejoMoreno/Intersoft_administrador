@@ -488,13 +488,15 @@
 		</table>
 		
 		
-
+		<?php 
+		$formatterES = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+		?>
 		<table style="width: 98%;border: 1px dashed black; float: left;">
 			<thead>
 				<tr>
 					<td class="tg-le8v ">
 						<div style="float: left"><strong> PROVEEDOR: </strong> {{ $carteras['id_cliente']['razon_social'] }} </div> <div style="float: right"><strong>NIT/C.C. {{ $carteras['id_cliente']['nit'] }}</strong></div><br>
-						<div style="float: left"><strong>VALOR: {{ $carteras['total'] }}</strong></div> <div style="float: right"><strong>FECHA: {{ $carteras['fecha'] }}</strong></div><br>
+						<div style="float: left"><strong>VALOR: {{ number_format($carteras['total'], 0, ",", ".") }} {{ $formatterES->format($carteras['total']) }}</strong></div> <div style="float: right"><strong>FECHA: {{ $carteras['fecha'] }}</strong></div><br>
 					</td>
 				</tr>
 			</thead>
@@ -517,7 +519,7 @@
 					<th class="tg-le8v headtablelast"><strong>TOTAL</strong></th>
 				</tr>
 			</thead>
-			<?php for($i=0;17>$i; $i++) { ?>
+			<?php for($i=0;15>$i; $i++) { ?>
 				@if(!isset($kardexCarteras[$i]))
 					<tr>
 						<td class="tg-yw4l bodytable"><br></td>
@@ -606,12 +608,15 @@
 		
 		
 
+		<?php 
+		$formatterES = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+		?>
 		<table style="width: 98%;border: 1px dashed black; float: left;">
 			<thead>
 				<tr>
 					<td class="tg-le8v ">
 						<div style="float: left"><strong> CLIENTE: </strong> {{ $carteras['id_cliente']['razon_social'] }} </div> <div style="float: right"><strong>NIT/C.C. {{ $carteras['id_cliente']['nit'] }}</strong></div><br>
-						<div style="float: left"><strong>VALOR: {{ $carteras['total'] }}</strong></div> <div style="float: right"><strong>FECHA: {{ $carteras['fecha'] }}</strong></div><br>
+						<div style="float: left"><strong>VALOR: {{ number_format($carteras['total'], 0, ",", ".") }}  {{ $formatterES->format($carteras['total']) }}</strong></div> <div style="float: right"><strong>FECHA: {{ $carteras['fecha'] }}</strong></div><br>
 					</td>
 				</tr>
 			</thead>
@@ -634,7 +639,7 @@
 					<th class="tg-le8v headtablelast"><strong>TOTAL</strong></th>
 				</tr>
 			</thead>
-			<?php for($i=0;17>$i; $i++) { ?>
+			<?php for($i=0;15>$i; $i++) { ?>
 				@if(!isset($kardexCarteras[$i]))
 					<tr>
 						<td class="tg-yw4l bodytable"><br></td>

@@ -471,11 +471,14 @@ class FacturasController extends Controller
         $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
         $resoluciones = Resoluciones::where('id_documento','=',$documento->id)->get();
 
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+
         return view('facturacion.venta',array(
             "referencias"=>$referencias,
             "documento"=>$documento,
             "ciudades"=>$ciudades,
-            "resoluciones"=>$resoluciones
+            "resoluciones"=>$resoluciones,
+            "usuarios"=>$usuarios
         ));
     }
     /**

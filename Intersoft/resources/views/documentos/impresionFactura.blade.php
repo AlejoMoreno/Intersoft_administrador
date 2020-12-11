@@ -53,7 +53,7 @@
 				<td style="width: 20%">
 					<table style="width: 100%">
 						<tr>
-							<td style="text-align: right"><strong>Factura de {{ $factura['id_documento']['nombre'] }}</strong>
+							<td style="text-align: right"><strong>{{ ($factura['id_documento']['nombre']=="Factura Electronica")?"FACTURA DE VENTA":$factura['id_documento']['nombre'] }}</strong>
 							<br>
 							<div ><?php echo $factura['prefijo'].'  '.$factura['numero'];?></div></td>
 						</tr>
@@ -66,7 +66,7 @@
 		</table>
 		
 		@if(isset($resolucion))
-			<div style="width: 100%;"><small style="font-size: 10px"> RESOL. DE {{ $resolucion['fecha'] }} RANGO. {{ $resolucion['prefijo'] }} {{ $resolucion['rango_inicio'] }} - {{ $resolucion['prefijo'] }} {{ $resolucion['rango_final'] }}</small><br></div>
+			<div style="width: 100%;"><small style="font-size: 10px"> RESOL. {{ $resolucion['usuario_dian'] }} DE {{ $resolucion['fecha'] }} RANGO. {{ $resolucion['prefijo'] }} {{ $resolucion['rango_inicio'] }} - {{ $resolucion['prefijo'] }} {{ $resolucion['rango_final'] }} REGIMEN COMUN ACTIV ECON. {{ $resolucion['password_dian'] }} ICA: ICA {{ $resolucion['ica'] }}</small> <br></div>
 		@endif
 
 		<table style="width: 20%;border: 1px dashed black; float: left;">
@@ -138,10 +138,14 @@
 
 		<table style="width: 98%;">
 			<tr>
-				<td style="width: 70%"><div style="margin-left: 5%;">FAVOR CONSIGNAR A LAS CUENTAS CORRIENTES: <BR>
-				BOGOTA No. 037064961 BANCOLOMBIA No. 21589409081<BR>
-				BANCO AGRARIO No. 302600000368<BR><BR>
-				GENERADA POR SOFTWARE: INTERSOFT. TEL 3219045297<br><br>
+				<td style="width: 70%"><div style="margin-left: 5%;">
+					@if($factura['id_documento']['nombre']!="Compras")
+					<div>FAVOR CONSIGNAR A LAS CUENTAS CORRIENTES: <BR>
+						BOGOTA No. 037064961 BANCOLOMBIA No. 21589409081<BR>
+						BANCO AGRARIO No. 302600000368<BR><BR>
+						GENERADA POR SOFTWARE: INTERSOFT. TEL 3219045297<br><br>
+					</div>
+					@endif
 				 <?php echo $factura['observaciones'] ?></div></td>
 				<td style="width: 30%">
 					<table style="width: 100%;border: 1px dashed black;">

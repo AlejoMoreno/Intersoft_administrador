@@ -100,11 +100,18 @@ span{
                 <label>Fecha:</label>
                 <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
             </div>
-            <div class="col-md-6" style="margin-bottom:2%;">
+            <div class="col-md-3" style="margin-bottom:2%;">
                 <label>Fecha vencimiento:</label>
                   <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
             </div>    
-            <input type="hidden" name="id_modificado" id="id_modificado" class="form-control" value="{{ Session::get('user_id') }}" placeholder="Esciba el nombre del vendedor">        
+            <div class="col-md-3" style="margin-bottom: 2%;">
+                <label>Vendedor</label>
+                <select name="id_modificado" id="id_modificado" class="form-control" >
+                    @foreach ($usuarios as $usuario )
+                    <option value="{{ $usuario->id }}">{{ $usuario->apellido }} {{ $usuario->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
             
         </div>
     </div>
@@ -789,14 +796,18 @@ function getReferencia(id){
 
             var precioasignado = referencia.precioasignado.toString();
             precios = "<select class='form-control' onchange='recorrerproductos(this)' id='preciosselect' name='valor_unidad'>";
+            var options = { style: 'currency', currency: 'USD' };
+            var numberFormat = new Intl.NumberFormat('en-US', options);
+            //console.log();
+
             if(precioasignado.includes("1")){  
-                precios += "<option value='"+referencia.precio1+"'>"+new Intl.NumberFormat().format(referencia.precio1)+"</option>";
+                precios += "<option value='"+referencia.precio1+"'>"+ numberFormat.format(referencia.precio1) +"</option>";
             }
             if(precioasignado.includes("2")){
-                precios += "<option value='"+referencia.precio2+"'>"+new Intl.NumberFormat().format(referencia.precio2)+"</option>";
+                precios += "<option value='"+referencia.precio2+"'>"+ numberFormat.format(referencia.precio2) +"</option>";
             }
             if(precioasignado.includes("3")){
-                precios += "<option value='"+referencia.precio3+"'>"+new Intl.NumberFormat().format(referencia.precio3)+"</option>";
+                precios += "<option value='"+referencia.precio3+"'>"+ numberFormat.format(referencia.precio3) +"</option>";
             }
             precios += "<option value=''>Otro valor</option>";
             precios += "</select>";
