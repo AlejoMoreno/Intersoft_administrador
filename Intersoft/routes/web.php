@@ -176,6 +176,8 @@ Route::get('/facturacion/devoluciones/{id_factura}', 'FacturasController@devoluc
 Route::get('/facturacion/devoluciones', 'FacturasController@devolucionesIndex');
 Route::get('/facturacion/alistamiento', 'FacturasController@alistamiento');
 
+Route::get('/administrador/carterainicial','FacturasController@carterainicial');
+
 
 /*
 |--------------------------------------------------------------------------

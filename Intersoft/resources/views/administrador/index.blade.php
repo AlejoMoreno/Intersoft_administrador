@@ -244,6 +244,12 @@
                                             <td><img width="20" src="/assets/265727.svg">
                                             </td>
                                         </tr>
+                                        <tr onclick="config.Redirect('/administrador/carterainicial');">
+                                            <td><img width="30" src="/assets/265727.svg"></td>
+                                            <td>Inicialización Cartera</td>
+                                            <td><img width="20" src="/assets/265727.svg">
+                                            </td>
+                                        </tr>
                                         <tr onclick="config.Redirect('/administrador/integracion');">
                                             <td>Intercon</td>
                                             <td>Integración Intercon</td>

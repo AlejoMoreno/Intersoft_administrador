@@ -1026,4 +1026,52 @@ class FacturasController extends Controller
         }
     }
 
+    public function carterainicial(Request $request){
+        $vendedor = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+        $documentos = Documentos::where('id_empresa','=',Session::get('id_empresa'))->get();
+        if(isset($request->numero)){
+            $documento = Documentos::where('id','=',$request->id_documento)->first();
+            $tercero = Directorios::where('nit','=',$request->id_tercero)->first();
+            if(isset($tercero)){
+                //creacion de factura 
+                $obj = new Facturas();
+                $obj->id_sucursal		= Session::get('sucursal');
+                $obj->numero 			= $request->num_presente;
+                $obj->prefijo 			= $request->prefijo;
+                $obj->id_cliente 		= $tercero->id;
+                $obj->id_tercero 		= $request->id_tercero;
+                $obj->id_vendedor 		= $request->id_vendedor;
+                $obj->fecha 			= $request->fecha;
+                $obj->fecha_vencimiento = $request->fecha_vencimiento;
+                $obj->id_documento 		= $documento->id;
+                $obj->signo 			= $documento->signo;
+                $obj->subtotal 			= $request->subtotal;
+                $obj->iva 				= $request->iva;
+                $obj->impoconsumo 		= $request->impoconsumo;
+                $obj->otro_impuesto 	= $request->otro_impuesto;
+                $obj->otro_impuesto1 	= $request->otro_impuesto1;
+                $obj->descuento 		= $request->descuento;
+                $obj->fletes 			= $request->fletes;
+                $obj->retefuente 		= $request->retefuente;
+                $obj->total 			= $request->total;
+                $obj->id_modificado 	= Session::get('user_id');
+                $obj->observaciones 	= (string)$request->observaciones;
+                $obj->estado 			= "ACTIVO";
+                $obj->saldo             = $request->total;
+                $obj->id_empresa	 	= Session::get('id_empresa');
+                $obj->save();
+            }
+            else{
+                return array(
+                    "result" => "Incorrecto",
+                    "body" => "es incorrecto el tercero"
+                );
+            }
+        }
+        return view('facturacion.carterainicial',[
+            "vendedor"=>$vendedor,
+            "documentos"=>$documentos
+        ]);
+    }
+
 }
