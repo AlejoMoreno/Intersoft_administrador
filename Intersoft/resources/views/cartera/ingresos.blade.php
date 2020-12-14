@@ -34,6 +34,8 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
 
 <div class="enc-article">
   <h4 class="title">Control de ingresos</h4>
+  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo" value="{{ $documento['prefijo'] }}">
+  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 45%;" id="numero" value="{{ $documento['numero'] + 1 }}">
 </div>
 
 <div class="row top-11-w">

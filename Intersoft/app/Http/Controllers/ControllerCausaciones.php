@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Causaciones;
+use App\Carteras;
 use App\Directorios;
 use App\Tipopagos;
 use Session;
@@ -153,8 +154,11 @@ class ControllerCausaciones extends Controller
     }
     
     public function indexPago(){
+        $documento = Carteras::where('id_empresa','=',Session::get('id_empresa'))->where('tipoCartera','=','EGRESO')->orderBy('numero','desc')->first();
         try{
-            return view('cartera.causacionPago');
+            return view('cartera.causacionPago', array(
+                "documento"=>$documento
+            ));
         }
         catch(Exception $exc){
             return  array(

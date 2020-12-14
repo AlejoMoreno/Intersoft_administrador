@@ -49,8 +49,8 @@ class CarterasController extends Controller
 		$obj->retefuente 	= $request->retefuente;
 		$obj->otros 		= $request->otros;
 		$obj->id_sucursal 	= Session::get('sucursal');
-		$obj->numero 		= $cartera->numero + 1;
-		$obj->prefijo 		= $cartera->prefijo;
+		$obj->numero 		= $request->numero;
+		$obj->prefijo 		= $request->prefijo;
 		$obj->id_cliente 	= $id_cliente->id;
 		$obj->id_vendedor 	= Session::get('user_id');
 		$obj->fecha 		= $request->fecha;
@@ -279,11 +279,17 @@ class CarterasController extends Controller
 	}
 
 	public function egresos(){
-		return view('cartera.egresos');
+		$documento = Carteras::where('id_empresa','=',Session::get('id_empresa'))->where('tipoCartera','=','EGRESO')->orderBy('numero','desc')->first();
+		return view('cartera.egresos',[
+			"documento"=>$documento
+		]);
 	}
 
 	public function ingresos(){
-		return view('cartera.ingresos');
+		$documento = Carteras::where('id_empresa','=',Session::get('id_empresa'))->where('tipoCartera','=','INGRESO')->orderBy('numero','desc')->first();
+		return view('cartera.ingresos',[
+			"documento"=>$documento
+		]);
 	}
 
 	public function causar(){

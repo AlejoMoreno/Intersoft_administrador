@@ -351,8 +351,6 @@ function Carteras(){
     }
 
     this.guardar = function(tipo){
-        var prefijo = '';
-        if($('#prefijo').val()=='')             { prefijo = '_'; }                          else { prefijo = $('#prefijo').val(); }
         var parametros = {
             'reteiva' : $('#valor_reteiva').val().replace(",",""),
             'reteica' : $('#valor_reteica').val().replace(",",""),
@@ -363,7 +361,7 @@ function Carteras(){
             'otros' : $('#valor_flete').val().replace(",",""),
             'id_sucursal' : '1',
             'numero' : $('#numero').val(),
-            'prefijo' : prefijo,
+            'prefijo' : $('#prefijo').val(),
             'id_cliente' : $('#cedula_tercero').val(), //es el id
             'id_vendedor' : $('#id_modificado').val(),
             'fecha' : $('#fecha').val(),
