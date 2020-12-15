@@ -54,8 +54,8 @@ function Carteras(){
 						'<td>'+value.numero+'</td>'+
 						'<td>'+value.fecha+'</td>'+
 						'<td>'+value.fecha_vencimiento+'</td>'+
-						'<td>'+value.total+'</td>'+
-						'<td>'+value.saldo+'</td>'+
+						'<td><p>$'+ new Intl.NumberFormat().format(value.total) +'</p></td>'+
+                        '<td><p style="color:red;">$'+ new Intl.NumberFormat().format(value.saldo) +'</p></td>'+
 						'<td><div class="btn btn-success" id="pagarbtn" onclick="carteras.getDocumento('+
 							id+',`'+
 							prefijo+'`,`'+
@@ -164,13 +164,13 @@ function Carteras(){
         cel2.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_prefijo' value='"+prefijo+"'>"+prefijo;
         cel3.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_numero' value='"+numero+"'>"+numero;
         cel4.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_fecha' value='"+fecha+"'>"+fecha;
-        cel5.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_flete' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel6.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_retefuente' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel7.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteiva' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel8.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteica' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel9.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_interes' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel10.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel11.innerHTML = "<input onkeyup='config.puntuacion(this)' style='width: 100px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel5.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_flete' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel6.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_retefuente' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel7.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteiva' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel8.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteica' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel9.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_interes' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel10.innerHTML = "<input  style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        cel11.innerHTML = "<input  style='width: 100px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
         cel12.innerHTML = "<input type='hidden' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled><p style='color:black;width: 300px !important;' class='numberTex' id='"+lista_seleccionados.length+"_span'>0</span>";
         cel13.innerHTML = "";
         carteras.calcular(lista_seleccionados.length);
@@ -189,7 +189,7 @@ function Carteras(){
         interes = parseFloat(document.getElementById(index+"_interes").value.replace(",",""));
         descuento = parseFloat(document.getElementById(index+"_descuento").value.replace(",",""));
         efectivo = parseFloat(document.getElementById(index+"_efectivo").value.replace(",",""));
-        total = flete+retefuente+reteiva+reteica+interes-descuento+efectivo;
+        total = flete-retefuente+reteiva+reteica+interes-descuento+efectivo;
         console.log(total);
         $("#"+index+"_total").val(total);
         $("#"+index+"_span").html("$ " + new Intl.NumberFormat().format(total));

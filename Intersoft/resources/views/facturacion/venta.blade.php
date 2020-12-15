@@ -948,7 +948,7 @@ function recorrerCree(){
     impoconsumo = parseFloat($('#impoconsumo').val().replace(",",""));
     iva = parseFloat($('#iva').val().replace(",",""));
     document.getElementById("impoconsumoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#impoconsumo').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - impoconsumo - retefuente + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 }
 
@@ -980,7 +980,7 @@ function recorrerSinImpuestos(){
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
     document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     directorio_tipo = $('#directorio_tipo').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - impoconsumo + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 
     /** cartera verificar y recorrer **/
@@ -1044,7 +1044,7 @@ function recorrerTotal(){
     }
     cree = $('#otro_impuesto').val();
     document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - impoconsumo + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
     
 

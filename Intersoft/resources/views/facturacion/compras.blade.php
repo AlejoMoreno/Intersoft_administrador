@@ -31,11 +31,22 @@
 </div>
 
 <?php $tipo_pagos = App\Tipopagos::where('id_empresa','=',Session::get('id_empresa'))->get(); ?>
-<?php if(isset($_GET['nit'])){ $nit = $_GET['nit']; }else{ $nit="";} ?>
+<?php 
+
+if(isset($_GET['nit'])){ $nit = $_GET['nit']; }else{ $nit="";} 
+$empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first();
+?>
 
 <div class="row top-11-w">
-    
     <div class="card" style="margin:3%;">
+        @if($documento['nombre'] != "Compras")
+        
+                <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
+                <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
+                <input type="hidden" list="listDirectorio" name="cedula_tercero" value="{{ $empresa->nit_empresa }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarproveedor(this.value)">
+                <input type="hidden" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control"  >
+        
+        @else
         <div class="header row" style="background:#dbdbdb">
             <h4 class="title col-md-12" style="color:black;">Datos Proveedor<hr></h4>
             <div class="col-md-6">
@@ -52,6 +63,8 @@
                 <datalist id="listaclientes"></datalist>
             </div>
         </div>
+        @endif
+        
         <div class="header row" style="background:#dbdbdb">
             
             <div class="col-md-6" style="margin-bottom:2%;">
@@ -72,7 +85,7 @@
 
 <div class="row top-11-w">
     
-    <div class="card col-md-4" style="margin:3%;margin-top:0%;color:black;">
+    <div class="card col-md-11" style="margin:3%;margin-top:0%;color:black;">
         <div class="header row " style="background:white;overflow-x:scroll;">
             <table id="busquedaReferencia" class="table" style="color:black;">
                 <thead>
@@ -84,18 +97,12 @@
                         <th>precio #1</th>
                         <th>precio #2</th>
                         <th>precio #3</th>
-                        <th>costo</th>
+                        <th>Codigo barras</th>
                         <th>saldo</th>
                     </tr>
                 </thead>
             </table>   
         </div>
-        <br>
-        Nota: <br>
-        Para <strong>agregar productos</strong> dirijase al boton más.<br>
-        Si desea <strong>eliminar un producto</strong> primero seleccione la fila y dirijase al boton eliminar.<br>
-        <div class="btn btn-danger">X</div><br>
-        Si ha <strong>terminado de registrar</strong> los productos dirijase al boton Guardar.<br><br><br>
     </div>
 
     <div class="card" style="margin:3%;margin-top:0%;">
@@ -107,11 +114,11 @@
                     <tr>
                         <th><input type="checkbox" name="" id="checkbox_noname"> </th>                        
                         <th>REFERNCIA</th>
-                        <th>DESCRIPCIÓN</th>
-                        <th style="width:100px;">LOTE</th>
-                        <th style="width:50px;">CANTIDAD</th>
+                        <th  style="width:80px !important;">DESCRIPCIÓN</th>
+                        <th style="width:200px;">LOTE</th>
+                        <th style="width:200px;">CANTIDAD</th>
                         <th>VALOR_UNIDAD.</th>
-                        <th style="width:100px;">IVA (%)</th>
+                        <th style="width:80px;">IVA (%)</th>
                         <th style="width:200px;">VALOR_TOTAL.</th>
                     </tr>
                     </thead>
@@ -126,6 +133,29 @@
         </div>
         <div class="col-sm-12">
             <div class="row titulo">
+            @if($documento['nombre'] != "Compras")
+                <div class="col-sm-3">
+                    <select id="tipo_pago" name="tipo_pago" onchange="banderaefectivo()" class="form-control">                      
+                    @foreach ($tipo_pagos as $obj)
+                    <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                    @endforeach
+                    </select>
+                    <input type="hidden" id="subtotal"  class="form-control" disabled="">
+                    <input type="hidden" id="iva" class="form-control" disabled="">
+                    <input type="number" style="display: none" value="0" id="descuento" class="form-control" onchange="config.aparecer('descuentoTex','descuento')" onkeyup="recorrerCree()">
+                    <input type="number" style="display: none" value="0" id="fletes" onchange="config.aparecer('fletesTex','fletes')" onkeyup="recorrerCree();" class="form-control ">
+                    <input type="number" style="display: none" value="0" id="retefuente" onchange="config.aparecer('retefuenteTex','retefuente')" class="form-control" onkeyup="recorrerCree();">
+                    <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
+                    <input type="number" style="display: none" value="0" id="otro_impuesto" onchange="config.aparecer('otro_impuestoTex','otro_impuesto')" class="form-control" onkeyup="recorrerCree();">
+                    <input type="hidden" id="total" class="form-control" disabled="">
+                    <input id="observaciones" name="observaciones" class="form-control" style="width:100%;" onkeyup="documentos.enterObser(event);" value="SIN OBSERVACIONES" >
+                </div>
+                <script>
+                $( document ).ready(function() {
+                    $('#tipo_pago').hide();
+                });
+                </script>
+            @else
                 <div class="col-sm-3">
                     <label>Tipo Pago: </label>
                     <select id="tipo_pago" name="tipo_pago" onchange="banderaefectivo()" class="form-control">                      
@@ -137,45 +167,59 @@
                 <div class="col-sm-9">
                     <p style="font-size:10px;color:black;">De ser necesario agrega diferentes tipos de pago, puesto que por defecto el sistema registra pago en efectivo, sin embargo puede ser con baucher, cheques o transacciones.</p>
                     <button type="button" class="btn form-control" id="btnSiCaja"  data-toggle="modal" onclick="tomarDatosCartera()" data-target="#myModal">Abrir Pago personalizado</button>
-                    <button type="button" class="btn form-control" id="btnNoCaja" style="color: red;">Pago en credito (No se reciben abonos en este tipo de pago)</button>
+                    <button type="button" class="btn form-control" id="btnNoCaja" style="color: red;">Pago en credito </button>
                 </div>
                 <div class="col-sm-3">
                     <label>SUB.TOTAL</label>
-                    <input type="number" id="subtotal" class="form-control" disabled="">
+                    <p id="subtotalTex">$ 0.00</p>
+                    <input type="hidden" id="subtotal"  class="form-control" disabled="">
                 </div>
                 <div class="col-sm-3">
                     <label>IVA</label>
-                    <input type="number" id="iva" class="form-control" disabled="">
+                    <p id="ivaTex">$ 0.00</p>
+                    <input type="hidden" id="iva" class="form-control" disabled="">
                 </div>
                 <div class="col-sm-3">
                     <label>DESCUENTO</label>
-                    <input type="number" value="0" id="descuento" class="form-control" onkeyup="recorrerCree();">
+                    <br>
+                    <p id="descuentoTex" onclick="config.aparecer('descuento','descuentoTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="descuento" class="form-control" onchange="config.aparecer('descuentoTex','descuento')" onkeyup="recorrerCree()">
                 </div>
                 <div class="col-sm-3">
                     <label>FLETES</label>
-                    <input type="number"  value="0" id="fletes" onkeyup="recorrerCree();" class="form-control">
+                    <br>
+                    <p id="fletesTex" onclick="config.aparecer('fletes','fletesTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="fletes" onchange="config.aparecer('fletesTex','fletes')" onkeyup="recorrerCree();" class="form-control ">
                 </div>
                 <div class="col-sm-3">
                     <label>RETEFUENTE</label>
-                    <input type="number" value="0" id="retefuente" class="form-control" onkeyup="recorrerCree();">
-                </div>
-                <div class="col-sm-3">
-                    <label>IMPOCONSUMO</label>
-                    <input type="number" value="0" id="impoconsumo" class="form-control" onkeyup="recorrerCree();">
+                    <br>
+                    <p id="retefuenteTex" onclick="config.aparecer('retefuente','retefuenteTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="retefuente" onchange="config.aparecer('retefuenteTex','retefuente')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>ICA</label>
-                    <input type="number" value="0" id="otro_impuesto" class="form-control" onkeyup="recorrerCree();">
+                    <br>
+                    <p id="impoconsumoTex" onclick="config.aparecer('impoconsumo','impoconsumoTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
+                </div>
+                <div class="col-sm-3">
+                    <label>CREE</label>
+                    <br>
+                    <p id="otro_impuestoTex" onclick="config.aparecer('otro_impuesto','otro_impuestoTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="otro_impuesto" onchange="config.aparecer('otro_impuestoTex','otro_impuesto')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>TOTAL</label>
-                    <input type="number"  id="total" class="form-control" disabled="">
+                    <p id="totalTex" class="numberTex">$ 0.00</p>
+                    <input type="hidden" id="total" class="form-control" disabled="">
                 </div>
                 <div class="col-sm-12" style="height: 20px;"></div>
                 <div class="col-sm-12">
                     <label>CONDICIONES DE Documento</label>
                     <input id="observaciones" name="observaciones" class="form-control" onkeyup="documentos.enterObser(event);" value="SIN OBSERVACIONES" >
                 </div>
+                @endif
                 <div class="col-sm-12" style="height: 20px;"></div>
                 <div class="col-sm-12">
                     <div id="Guardar" class="btn btn-success form-control" onclick="save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
@@ -669,7 +713,7 @@ $(document).ready( function () {
             { data: 'precio1' },
             { data: 'precio2' },
             { data: 'precio3' },
-            { data: 'costo' },
+            { data: 'codigo_barras' },
             { data: 'saldo' }
         ],
         columnDefs: [
@@ -800,22 +844,73 @@ function recorrerproductos(element){
 }
 
 function recorrerCree(){
+    subtot = parseFloat($('#subtotal').val().replace(",",""));
+    descuento = parseFloat($('#descuento').val().replace(",",""));
+    document.getElementById("descuentoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#descuento').val());
+    fletes = parseFloat($('#fletes').val().replace(",",""));
+    document.getElementById("fletesTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#fletes').val());
+    cree = parseFloat($('#otro_impuesto').val().replace(",",""));
+    document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
+    retefuente = parseFloat($('#retefuente').val().replace(",",""));
+    document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
+    impoconsumo = parseFloat($('#impoconsumo').val().replace(",",""));
+    iva = parseFloat($('#iva').val().replace(",",""));
+    document.getElementById("impoconsumoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#impoconsumo').val());
+    $('#total').val( parseFloat(subtot - descuento + fletes - impoconsumo - retefuente + iva).toFixed(2) );
+    document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
+}
+
+function recorrerSinImpuestos(){
+    config.createToast("info", "Intersoft esta calculando el total del pedido");
+    subtotales = document.getElementsByName("subtotal");
+    subtot = 0;
     descuento = parseFloat($('#descuento').val());
-    fletes = parseFloat($('#fletes').val());
-    cree = $('#otro_impuesto').val();
-    retefuente = $('#retefuente').val();
-    impoconsumo = $('#impoconsumo').val();
-    iva = parseFloat($('#iva').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - impoconsumo - retefuente + iva).toFixed(2) );
+    fletes = parseFloat($('#fletes').val().replace(",",""));
+    cree = $('#otro_impuesto').val().replace(",","");
+    retefuente = $('#retefuente').val().replace(",","");
+    impoconsumo = $('#impoconsumo').val().replace(",","");
+
+    for(i=0;i<subtotales.length;i++){ 
+        element = subtotales[i];
+        subtot += parseFloat(element.value);
+    }
+    ivas = document.getElementsByName("totaliva");
+    iva = 0;
+    for(i=0;i<ivas.length;i++){ 
+        element = ivas[i];
+        iva += parseFloat(element.value);
+    }
+
+    $('#subtotal').val((parseFloat(subtot) - parseFloat(iva)).toFixed(2));
+    document.getElementById("subtotalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#subtotal').val());
+    $('#iva').val(parseFloat(iva).toFixed(2));
+    document.getElementById("ivaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#iva').val());
+    $('#retefuente').val(parseFloat(retefuente).toFixed(2));
+    document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
+    directorio_tipo = $('#directorio_tipo').val();
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - impoconsumo + iva).toFixed(2) );
+    document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
+
+    /** cartera verificar y recorrer **/
+    var table = document.getElementById("tabla_forma_pagos");
+    if(table.rows.length >= 1 ){
+        if(table.rows.length == 1){
+            addFormaPago();
+        }
+        elemento = document.getElementsByName("Carteravalor");
+        elemento[0].value = $('#total').val();
+        tomarDatosCartera();
+    }
 }
 
 function recorrerTotal(){
+    config.createToast("info", "Intersoft esta calculando el Total de la factura");
     subtotales = document.getElementsByName("subtotal");
     subtot = 0;
     descuento = parseFloat($('#descuento').val());
     fletes = parseFloat($('#fletes').val());
     impoconsumo = $('#impoconsumo').val();
-    
+
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
         subtot += parseFloat(element.value);
@@ -839,21 +934,28 @@ function recorrerTotal(){
     else{
         retefuente = 0;
     }
+    
 
     $('#subtotal').val((parseFloat(subtot)).toFixed(2));
+    document.getElementById("subtotalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#subtotal').val());
     $('#iva').val(parseFloat(iva).toFixed(2));
+    document.getElementById("ivaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#iva').val());
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
+    document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     directorio_tipo = $('#directorio_tipo').val();
-    //VERIFICAR TIPO DE TERCERO PARA (CREE)
+    //VERIFICAR TIPO DE TERCERO (CREE)
     if(directorio_tipo == "JURIDICA"){
-        $('#otro_impuesto').val(parseFloat(($('#subtotal').val() * 11.04)/100).toFixed(2)); //CREE
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
     else{
-        $('#otro_impuesto').val(parseFloat(($('#subtotal').val() * 11.04)/100).toFixed(2)); //CREE
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
     cree = $('#otro_impuesto').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - cree - retefuente - impoconsumo + iva).toFixed(2) );
+    document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - impoconsumo + iva).toFixed(2) );
+    document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
     
+
     /** cartera verificar y recorrer **/
     var table = document.getElementById("tabla_forma_pagos");
     if(table.rows.length >= 1 ){

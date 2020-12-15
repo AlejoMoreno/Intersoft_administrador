@@ -489,14 +489,19 @@
 		
 		
 		<?php 
-		$formatterES = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+		try{
+			//$formatterES = new NumberFormatter("es", NumberFormatter::SPELLOUT);
+		}
+		catch(Exception $exc){
+			echo ""; //$formatterES->format($carteras['total'])
+		}
 		?>
 		<table style="width: 98%;border: 1px dashed black; float: left;">
 			<thead>
 				<tr>
 					<td class="tg-le8v ">
 						<div style="float: left"><strong> PROVEEDOR: </strong> {{ $carteras['id_cliente']['razon_social'] }} </div> <div style="float: right"><strong>NIT/C.C. {{ $carteras['id_cliente']['nit'] }}</strong></div><br>
-						<div style="float: left"><strong>VALOR: {{ number_format($carteras['total'], 0, ",", ".") }} {{ $formatterES->format($carteras['total']) }}</strong></div> <div style="float: right"><strong>FECHA: {{ $carteras['fecha'] }}</strong></div><br>
+						<div style="float: left"><strong>VALOR: {{ number_format($carteras['total'], 0, ",", ".") }}</strong></div> <div style="float: right"><strong>FECHA: {{ $carteras['fecha'] }}</strong></div><br>
 					</td>
 				</tr>
 			</thead>
@@ -516,12 +521,14 @@
 					<th class="tg-le8v headtable"><strong>INTERES</strong></th>
 					<th class="tg-le8v headtable"><strong>DESC</strong></th> 
 					<th class="tg-le8v headtable"><strong>EFECT.</strong></th>
-					<th class="tg-le8v headtablelast"><strong>TOTAL</strong></th>
+					<th class="tg-le8v headtable"><strong>TOTAL</strong></th>
+					<th class="tg-le8v headtablelast"><strong>SALDO</strong></th>
 				</tr>
 			</thead>
 			<?php for($i=0;15>$i; $i++) { ?>
 				@if(!isset($kardexCarteras[$i]))
 					<tr>
+						<td class="tg-yw4l bodytable"><br></td>
 						<td class="tg-yw4l bodytable"><br></td>
 						<td class="tg-yw4l bodytable"><br></td>
 						<td class="tg-yw4l bodytable"><br></td>
@@ -544,7 +551,8 @@
 						<td class="tg-yw4l bodytable">{{ number_format($kardexCarteras[$i]['sobrecostos'], 0, ",", ".") }}</td>
 						<td class="tg-yw4l bodytable">{{ number_format($kardexCarteras[$i]['descuentos'], 0, ",", ".") }}</td>
 						<td class="tg-yw4l bodytable">{{ number_format($kardexCarteras[$i]['efectivo'], 0, ",", ".") }}</td>
-						<td class="tg-yw4l">{{ number_format(($kardexCarteras[$i]['total']), 0, ",", ".") }}</td>
+						<td class="tg-yw4l bodytable">{{ number_format(($kardexCarteras[$i]['total']), 0, ",", ".") }}</td>
+						<td class="tg-yw4l">{{ number_format(($kardexCarteras[$i]['id_factura']['saldo']), 0, ",", ".") }}</td>
 					</tr>
 				@endif
 			<?php } ?>
@@ -636,12 +644,14 @@
 					<th class="tg-le8v headtable"><strong>INTERES</strong></th>
 					<th class="tg-le8v headtable"><strong>DESC</strong></th> 
 					<th class="tg-le8v headtable"><strong>EFECT.</strong></th>
-					<th class="tg-le8v headtablelast"><strong>TOTAL</strong></th>
+					<th class="tg-le8v headtable"><strong>TOTAL</strong></th>
+					<th class="tg-le8v headtablelast"><strong>SALDO</strong></th>
 				</tr>
 			</thead>
 			<?php for($i=0;15>$i; $i++) { ?>
 				@if(!isset($kardexCarteras[$i]))
 					<tr>
+						<td class="tg-yw4l bodytable"><br></td>
 						<td class="tg-yw4l bodytable"><br></td>
 						<td class="tg-yw4l bodytable"><br></td>
 						<td class="tg-yw4l bodytable"><br></td>
@@ -664,7 +674,8 @@
 						<td class="tg-yw4l bodytable">{{ number_format($kardexCarteras[$i]['sobrecostos'], 0, ",", ".") }}</td>
 						<td class="tg-yw4l bodytable">{{ number_format($kardexCarteras[$i]['descuentos'], 0, ",", ".") }}</td>
 						<td class="tg-yw4l bodytable">{{ number_format($kardexCarteras[$i]['efectivo'], 0, ",", ".") }}</td>
-						<td class="tg-yw4l">{{ number_format(($kardexCarteras[$i]['total']), 0, ",", ".") }}</td>
+						<td class="tg-yw4l bodytable">{{ number_format(($kardexCarteras[$i]['total']), 0, ",", ".") }}</td>
+						<td class="tg-yw4l">{{ number_format(($kardexCarteras[$i]['id_factura']['saldo'] ), 0, ",", ".") }}</td>
 					</tr>
 				@endif
 			<?php } ?>

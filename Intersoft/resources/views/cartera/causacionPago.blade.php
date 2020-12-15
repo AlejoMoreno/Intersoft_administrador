@@ -41,7 +41,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           <h4 class="title col-md-12" style="color:black;">Datos terceros<hr></h4>
           <div class="col-md-4">
               <label>Nit:</label>
-              <input type="text" name="cedula_tercero" value=""  id="cedula_tercero" placeholder="nit" class="form-control" onkeyup="buscarcliente(this.value)">
+              <input type="text" name="cedula_tercero" value=""  id="cedula_tercero" placeholder="nit" class="form-control" >
               <p style="font-size:10px;color:black;" id="resCliente">Para buscar el Tercero debe tener un minimo de 3 caracteres</p>
               
           </div>

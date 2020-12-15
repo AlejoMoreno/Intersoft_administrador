@@ -256,7 +256,7 @@ class FacturasController extends Controller
                             $q->where('facturas.numero','=',$request->numero);
                         }
                     })
-                    ->orderBy('id_documento','desc')
+                    ->orderBy('facturas.fecha','desc')
                     ->take(100)
                     ->get();
         

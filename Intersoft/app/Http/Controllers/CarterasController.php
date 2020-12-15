@@ -213,6 +213,9 @@ class CarterasController extends Controller
         $carteras->id_vendedor = Usuarios::where('id',$carteras->id_vendedor)->first();
     	$carteras->id_cliente = Directorios::where('id',$carteras->id_cliente)->first();
 		$carteras->id_cliente->id_ciudad = Ciudades::where('id',$carteras->id_cliente->id_ciudad)->first();
+		foreach($kardexCarteras as $obj){
+			$obj->id_factura = Facturas::where('id','=',$obj->id_factura)->first();
+		}
 		//dd($carteras->id_sucursal->id_empresa);
 		/*$pdf = PDF::loadView('cartera.imprimir', [
             "carteras"=>$carteras,
