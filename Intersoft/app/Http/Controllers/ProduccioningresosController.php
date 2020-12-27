@@ -206,8 +206,8 @@ class ProduccioningresosController extends Controller
                     $obj->subtotal 		= 0;
                     $obj->iva 			= 0;
                     $obj->impoconsumo 	= 0;
-                    $obj->otro_impuesto = 0;
-                    $obj->otro_impuesto1 = 0;
+                    $obj->cree = 0;
+                    $obj->cree1 = 0;
                     $obj->descuento 	= 0;
                     $obj->fletes 		= 0;
                     $obj->retefuente 	= 0;
@@ -262,8 +262,8 @@ class ProduccioningresosController extends Controller
                 $obj->subtotal 		= 0;
                 $obj->iva 			= 0;
                 $obj->impoconsumo 	= 0;
-                $obj->otro_impuesto = 0;
-                $obj->otro_impuesto1 = 0;
+                $obj->cree = 0;
+                $obj->cree1 = 0;
                 $obj->descuento 	= 0;
                 $obj->fletes 		= 0;
                 $obj->retefuente 	= 0;
@@ -325,8 +325,8 @@ class ProduccioningresosController extends Controller
         $obj->subtotal 		= 0;
         $obj->iva 			= 0;
         $obj->impoconsumo 	= 0;
-        $obj->otro_impuesto = 0;
-        $obj->otro_impuesto1 = 0;
+        $obj->cree = 0;
+        $obj->cree1 = 0;
         $obj->descuento 	= 0;
         $obj->fletes 		= 0;
         $obj->retefuente 	= 0;
@@ -364,8 +364,8 @@ class ProduccioningresosController extends Controller
             $obj->subtotal 		= 0;
             $obj->iva 			= 0;
             $obj->impoconsumo 	= 0;
-            $obj->otro_impuesto = 0;
-            $obj->otro_impuesto1 = 0;
+            $obj->cree = 0;
+            $obj->cree1 = 0;
             $obj->descuento 	= 0;
             $obj->fletes 		= 0;
             $obj->retefuente 	= 0;

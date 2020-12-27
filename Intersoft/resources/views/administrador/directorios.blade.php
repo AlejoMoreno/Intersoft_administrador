@@ -38,7 +38,8 @@
                     </div>                
                 </div>
                 <div class="panel-body" >
-                    <p style="font-size: 10pt;">Diligencie cada uno de los datos relacionados con el cliente, proveedor o tercero a crear.
+                    <p style="font-size: 10pt;">Diligencie cada uno de los datos relacionados con el cliente, proveedor o tercero a crear. Recordar que para el uso de decimales
+                    es necesario delimitarlos con (.)
                     </p>
                 </div>
 
@@ -123,25 +124,32 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <label>Financiacion (%)</label>
-                                <input type="number" name="financiacion" value="0" class="form-control"  onkeyup="config.UperCase('financiacion');" id="financiacion" placeholder="Ej.(10)">                            
+                                <input type="text" name="financiacion" value="0" class="form-control"  onkeyup="config.UperCase('financiacion');" id="financiacion" placeholder="Ej.(10)">                            
                             </div>
                             <div class="col-md-3">
                                 <label>Descuento (%)</label>
-                                <input type="number" name="descuento" value="0" class="form-control"  onkeyup="config.UperCase('descuento');" id="descuento" placeholder="Ej.(30)">                            
+                                <input type="text" name="descuento" value="0" class="form-control"  onkeyup="config.UperCase('descuento');" id="descuento" placeholder="Ej.(30)">                            
                             </div>
                             <div class="col-md-3">
-                                <input type="hidden" name="rete_ica" value="0" class="form-control"  onkeyup="config.UperCase('rete_ica');" id="rete_ica" value="0" placeholder="Ej.(8)">
-                                <input type="hidden" name="porcentaje_rete_iva" value="0" class="form-control"  onkeyup="config.UperCase('porcentaje_rete_iva');" value="0" id="porcentaje_rete_iva" placeholder="Ej.(8)">
+                                <label>Rete Ica (%) X 1.000</label>
+                                <input type="text" name="rete_ica" value="0" class="form-control"  onkeyup="config.UperCase('rete_ica');" id="rete_ica" placeholder="Ej.(30)">                            
+                            </div>
+                            <div class="col-md-3">
+                                <label>Rete Iva (%)</label>
+                                <input type="text" name="porcentaje_rete_iva" value="0" class="form-control"  onkeyup="config.UperCase('porcentaje_rete_iva');" id="porcentaje_rete_iva" placeholder="Ej.(30)">                            
+                            </div>
+                        </div>
+
+                        <div class="row">
+                        
+                            <div class="col-md-3">
                                 <label>Cupo financiero ($)</label>                            
-                                <input type="number" name="cupo_financiero" value="0" class="form-control"  onkeyup="config.UperCase('cupo_financiero');" id="cupo_financiero" placeholder="Ej.(200000000)">
+                                <input type="text" name="cupo_financiero" value="0" class="form-control"  onkeyup="config.UperCase('cupo_financiero');" id="cupo_financiero" placeholder="Ej.(200000000)">
                             </div>
                             <div class="col-md-3">
                                 <label>Actividad_economica</label>
                                 <input type="text" name="actividad_economica" value="0000" class="form-control"  onkeyup="config.UperCase('actividad_economica');" id="actividad_economica" placeholder="Ej.(1002)">                        
                             </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-md-3">
                                 <label>Calificacion</label>
                                 <select name="calificacion" class="form-control"  onkeyup="config.UperCase('calificacion');" id="calificacion">
@@ -157,6 +165,12 @@
                                     <option value="INTERNACIONAL">INTERNACIONAL</option>
                                 </select>
                             </div>
+                            
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
                             <div class="col-md-3">
                                 <label>Transporte</label>
                                 <select name="transporte" class="form-control"  onkeyup="config.UperCase('transporte');" id="transporte">
@@ -168,19 +182,14 @@
                                 <label>Zona venta</label>
                                 <input type="text" name="zona_venta" value="NA" class="form-control"  onkeyup="config.UperCase('zona_venta');" id="zona_venta" placeholder="EJ.(BOGOTA)">
                             </div>
-                        </div>
-
-                        <hr>
-
-                        <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label>estado</label>
                                 <select name="estado" class="form-control"  onkeyup="config.UperCase('estado');" id="estado">
                                     <option value="ACTIVO">ACTIVO</option>
                                     <option value="INACTIVO">INACTIVO</option>
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label>retefuente</label>
                                 <select name="id_retefuente" class="form-control"  onkeyup="config.UperCase('id_retefuente');" id="id_retefuente">
                                     @foreach ( $retefuentes as $retefuente)
@@ -188,7 +197,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label>regimen</label>
                                 <select name="id_regimen" class="form-control"  onkeyup="config.UperCase('id_regimen');" id="id_regimen">
                                     @foreach ( $regimenes as $regimen)
@@ -196,7 +205,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label>usuario</label>
                                 <select name="id_usuario" class="form-control"  onkeyup="config.UperCase('id_usuario');" id="id_usuario">
                                     @foreach ( $usuarios as $usuario)
@@ -204,7 +213,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label>directorio tipo</label>
                                 <select name="id_directorio_tipo" class="form-control"  onkeyup="config.UperCase('id_directorio_tipo');" id="id_directorio_tipo">   
                                     @foreach ( $directorio_tipos as $value)

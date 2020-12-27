@@ -27,11 +27,12 @@ span{
 
 </style>
 
+
 <div class="enc-article">
-    <h4 class="title">{{ ($documento['nombre']=="Factura Electronica")?"Factura de Venta":$documento['nombre'] }}</h4>
+    <h4 class="title">{{ $documento['nombre'] }}</h4>
     <select class="form-control " style="width: 400px;position: absolute;top: 25%;left: 35%;" id="prefijo">
         @foreach ($resoluciones as $pre)
-        <option value="{{ $pre->prefijo }}">Prefijo: {{ $pre->prefijo }} Número actual: {{ ($pre->numero_presente)+1 }} </option>
+        <option value="{{ $pre->prefijo }}">{{ $pre->prefijo }} # {{ ($pre->numero_presente)+1 }} </option>
         @endforeach
     </select>
     
@@ -44,83 +45,308 @@ span{
 <?php if(isset($_GET['nit'])){ $nit = $_GET['nit']; }else{ $nit="";} ?>
 
 <div class="row top-11-w">
-    
-    <div class="card" style="margin:3%;">
-        <div class="header row" style="background:#dbdbdb">
-            <h4 class="title col-md-12" style="color:black;">Datos Cliente<hr></h4>
-            <input type="hidden" id="directorio_reteica">
-            <input type="hidden" id="directorio_porcentaje_rete_iva">
-            <input type="hidden" id="directorio_cupo_financiero">
-            <input type="hidden" id="directorio_descuento">
-            <input type="hidden" id="directorio_financiacion">
-            <input type="hidden" id="directorio_calificacion">
-            <div class="col-md-4">
-                <label>Nit:</label>
-                <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
-                <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
-                <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" >
-                <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
-                
+    <form action="" method="GET" style="margin:5%;">
+        <select class="form-control" name="tipo_tercero">
+            <option>Seleccione Tipo Tercero</option>
+            <option value="4">A nombre propio</option>
+            <option value="2">Cliente</option>
+            <option value="1">Proveedor</option>
+            <option value="3">Tercero</option>
+        </select>
+        <br>
+        <input type="submit"value="validar" class="form-control btn btn-success">
+    </form>
+    @if(isset($_GET['tipo_tercero']))
+        @if($_GET['tipo_tercero']==2)
+            <div class="card" style="margin:3%;" id="datos_cliente">
+                <div class="header row" style="background:#dbdbdb">
+                    <h4 class="title col-md-12" style="color:black;">Datos Cliente<hr></h4>
+                    <div class="col-md-4">
+                        <label>Nit:</label>
+                        <input type="hidden" id="id_directorio_tipo_tercero" value="2">
+                        <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
+                        <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
+                        <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value, 'CLIENTES')">
+                        <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <label>Razón Social:</label>
+                        <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" onchange="buscarcliente2(this.value, 'CLIENTES')" >
+                        <datalist id="listaclientes"></datalist>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Dirección:</label>
+                        <input type="text" name="direccion"  id="direccion" placeholder="Dirección" class="form-control" >
+                    </div>
+                </div>
+                <div class="header row" style="background:#dbdbdb">
+                    <div class="col-md-4">
+                        <label>Teléfono:</label>
+                        <input type="text" name="telefono"  id="telefono" placeholder="Teléfono" class="form-control" >
+                    </div>
+                    <div class="col-md-2">
+                        <label>Correo:</label>
+                        <input type="text" name="correo"  id="correo" placeholder="Correo" class="form-control" >
+                    </div>
+                    <div class="col-md-2">
+                        <label>Ciudad:</label>
+                        <input name="id_ciudad" class="form-control"  id="id_ciudad" list="ciudades">
+                        <datalist id="ciudades">    
+                            @foreach ( $ciudades as $ciudad)
+                            <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
+                            @endforeach
+                        </datalist>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Nombre Zona:</label>
+                        <input type="text" name="zona"  id="zona" placeholder="Zona" class="form-control" >
+                    </div>
+                </div>
+                <div class="header row" style="background:#dbdbdb">
+                    <div class="col-md-12" style="margin-bottom:2%;">
+                        <label><br></label>
+                        <a href="/gps/directoriomaps" target="_blank" style="background:white;" class="btn btn-warning">Agregar al mapa</a>
+                        <label><br></label>
+                        <div class="btn btn-success" style="background:#3c763d;color:white;" id="guardarCliente1" onclick="guardarCliente(2);">Guardar Cliente</div>
+                    </div>
+                    <div class="col-md-6" style="margin-bottom:2%;">
+                        <label>Fecha:</label>
+                        <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                    </div>
+                    <div class="col-md-3" style="margin-bottom:2%;">
+                        <label>Fecha vencimiento:</label>
+                        <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                    </div>    
+                    <div class="col-md-3" style="margin-bottom: 2%;">
+                        <label>Vendedor</label>
+                        <select name="id_modificado" id="id_modificado" class="form-control" >
+                            @foreach ($usuarios as $usuario )
+                            <option value="{{ $usuario->id }}">{{ $usuario->apellido }} {{ $usuario->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                </div>
             </div>
-            <div class="col-md-4">
-                <label>Razón Social:</label>
-                <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" >
-                <datalist id="listaclientes"></datalist>
+        @elseif($_GET['tipo_tercero']==1)
+            <div class="card" style="margin:3%;" id="datos_proveedor">
+                <div class="header row" style="background:#dbdbdb">
+                    <h4 class="title col-md-12" style="color:black;">Datos Proveedor<hr></h4>
+                    <div class="col-md-4">
+                        <label>Nit:</label>
+                        <input type="hidden" id="id_directorio_tipo_tercero" value="1">
+                        <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
+                        <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
+                        <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value, 'PROVEEDOR')">
+                        <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el proveedor debe tener un minimo de 3 caracteres</p>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <label>Razón Social:</label>
+                        <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" onchange="buscarcliente2(this.value, 'PROVEEDOR')" >
+                        <datalist id="listaclientes"></datalist>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Dirección:</label>
+                        <input type="text" name="direccion"  id="direccion" placeholder="Dirección" class="form-control" >
+                    </div>
+                </div>
+                <div class="header row" style="background:#dbdbdb">
+                    <div class="col-md-4">
+                        <label>Teléfono:</label>
+                        <input type="text" name="telefono"  id="telefono" placeholder="Teléfono" class="form-control" >
+                    </div>
+                    <div class="col-md-2">
+                        <label>Correo:</label>
+                        <input type="text" name="correo"  id="correo" placeholder="Correo" class="form-control" >
+                    </div>
+                    <div class="col-md-2">
+                        <label>Ciudad:</label>
+                        <input name="id_ciudad" class="form-control"  id="id_ciudad" list="ciudades">
+                        <datalist id="ciudades">    
+                            @foreach ( $ciudades as $ciudad)
+                            <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
+                            @endforeach
+                        </datalist>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Nombre Zona:</label>
+                        <input type="text" name="zona"  id="zona" placeholder="Zona" class="form-control" >
+                    </div>
+                </div>
+                <div class="header row" style="background:#dbdbdb">
+                    <div class="col-md-12" style="margin-bottom:2%;">
+                        <label><br></label>
+                        <a href="/gps/directoriomaps" target="_blank" style="background:white;" class="btn btn-warning">Agregar al mapa</a>
+                        <label><br></label>
+                        <div class="btn btn-success" style="background:#3c763d;color:white;" id="guardarCliente2" onclick="guardarCliente(1);">Guardar Proveedor</div>
+                    </div>
+                    <div class="col-md-6" style="margin-bottom:2%;">
+                        <label>Fecha:</label>
+                        <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                    </div>
+                    <div class="col-md-3" style="margin-bottom:2%;">
+                        <label>Fecha vencimiento:</label>
+                        <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                    </div>    
+                    <div class="col-md-3" style="margin-bottom: 2%;">
+                        <label>Vendedor</label>
+                        <select name="id_modificado" id="id_modificado" class="form-control" >
+                            @foreach ($usuarios as $usuario )
+                            <option value="{{ $usuario->id }}">{{ $usuario->apellido }} {{ $usuario->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                </div>
             </div>
-            <div class="col-md-4">
-                <label>Dirección:</label>
-                <input type="text" name="direccion"  id="direccion" placeholder="Dirección" class="form-control" >
+        @elseif($_GET['tipo_tercero']==3)
+            <div class="card" style="margin:3%;" id="datos_tercero">
+                <div class="header row" style="background:#dbdbdb">
+                    <h4 class="title col-md-12" style="color:black;">Datos Tercero<hr></h4>
+                    <div class="col-md-4">
+                        <label>Nit:</label>
+                        <input type="hidden" id="id_directorio_tipo_tercero" value="3">
+                        <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
+                        <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
+                        <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value, 'TERCEROS')">
+                        <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <label>Razón Social:</label>
+                        <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" class="form-control" onchange="buscarcliente2(this.value, 'TERCEROS')" >
+                        <datalist id="listaclientes"></datalist>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Dirección:</label>
+                        <input type="text" name="direccion"  id="direccion" placeholder="Dirección" class="form-control" >
+                    </div>
+                </div>
+                <div class="header row" style="background:#dbdbdb">
+                    <div class="col-md-4">
+                        <label>Teléfono:</label>
+                        <input type="text" name="telefono"  id="telefono" placeholder="Teléfono" class="form-control" >
+                    </div>
+                    <div class="col-md-2">
+                        <label>Correo:</label>
+                        <input type="text" name="correo"  id="correo" placeholder="Correo" class="form-control" >
+                    </div>
+                    <div class="col-md-2">
+                        <label>Ciudad:</label>
+                        <input name="id_ciudad" class="form-control"  id="id_ciudad" list="ciudades">
+                        <datalist id="ciudades">    
+                            @foreach ( $ciudades as $ciudad)
+                            <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
+                            @endforeach
+                        </datalist>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Nombre Zona:</label>
+                        <input type="text" name="zona"  id="zona" placeholder="Zona" class="form-control" >
+                    </div>
+                </div>
+                <div class="header row" style="background:#dbdbdb">
+                    <div class="col-md-12" style="margin-bottom:2%;">
+                        <label><br></label>
+                        <a href="/gps/directoriomaps" target="_blank" style="background:white;" class="btn btn-warning">Agregar al mapa</a>
+                        <label><br></label>
+                        <div class="btn btn-success" style="background:#3c763d;color:white;" id="guardarCliente3" onclick="guardarCliente(3);">Guardar Tercero</div>
+                    </div>
+                    <div class="col-md-6" style="margin-bottom:2%;">
+                        <label>Fecha:</label>
+                        <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                    </div>
+                    <div class="col-md-3" style="margin-bottom:2%;">
+                        <label>Fecha vencimiento:</label>
+                        <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                    </div>    
+                    <div class="col-md-3" style="margin-bottom: 2%;">
+                        <label>Vendedor</label>
+                        <select name="id_modificado" id="id_modificado" class="form-control" >
+                            @foreach ($usuarios as $usuario )
+                            <option value="{{ $usuario->id }}">{{ $usuario->apellido }} {{ $usuario->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                </div>
             </div>
-        </div>
-        <div class="header row" style="background:#dbdbdb">
-            <div class="col-md-4">
-                <label>Teléfono:</label>
-                <input type="text" name="telefono"  id="telefono" placeholder="Teléfono" class="form-control" >
+        @else
+            <div class="card" style="margin:3%;" id="datos_nombrePropio">
+                <div class="header row" style="background:#dbdbdb">
+                    <h4 class="title col-md-12" style="color:black;">Nombre Propio<hr></h4>
+                    <div class="col-md-4">
+                    <?php $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first(); ?>
+                        <label>Nit:</label>
+                        <input type="hidden" id="id_directorio_tipo_tercero" value="3">
+                        <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
+                        <input type="hidden" id="directorio_tipo" placeholder="directorio_tipo" class="form-control">
+                        <input type="text" list="listDirectorio" name="cedula_tercero" value="{{ $empresa->nit }}"  id="cedula_tercero" placeholder="nit" class="form-control" onchange="buscarcliente(this.value, 'TERCEROS')">
+                        <p style="font-size:10px;color:black;"  id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Razón Social:</label>
+                        <input type="text" name="nombre" list="listaclientes"  id="nombre" placeholder="Razón Social" value="{{ $empresa->razon_social }}" class="form-control" onchange="buscarcliente2(this.value, 'TERCEROS')" >
+                        <datalist id="listaclientes"></datalist>                
+                    </div>
+                    <div class="col-md-4">
+                        <label>Dirección:</label>
+                        <input type="text" name="direccion"  id="direccion" placeholder="Dirección" class="form-control" >
+                    </div>
+                </div>
+                <div class="header row" style="background:#dbdbdb">
+                    <div class="col-md-4">
+                        <label>Teléfono:</label>
+                        <input type="text" name="telefono"  id="telefono" placeholder="Teléfono" class="form-control" >
+                    </div>
+                    <div class="col-md-2">
+                        <label>Correo:</label>
+                        <input type="text" name="correo"  id="correo" placeholder="Correo" class="form-control" >
+                    </div>
+                    <div class="col-md-2">
+                        <label>Ciudad:</label>
+                        <input name="id_ciudad" class="form-control"  id="id_ciudad" list="ciudades">
+                        <datalist id="ciudades">    
+                            @foreach ( $ciudades as $ciudad)
+                            <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
+                            @endforeach
+                        </datalist>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Nombre Zona:</label>
+                        <input type="text" name="zona"  id="zona" placeholder="Zona" class="form-control" >
+                    </div>
+                </div>
+                <div class="header row" style="background:#dbdbdb">
+                    <div class="col-md-12" style="margin-bottom:2%;">
+                        <label><br></label>
+                        <a href="/gps/directoriomaps" target="_blank" style="background:white;" class="btn btn-warning">Agregar al mapa</a>
+                        <label><br></label>
+                        <div class="btn btn-success" style="background:#3c763d;color:white;" id="guardarCliente" onclick="guardarCliente();">Guardar Nombre propio</div>
+                    </div>
+                    <div class="col-md-6" style="margin-bottom:2%;">
+                        <label>Fecha:</label>
+                        <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                    </div>
+                    <div class="col-md-3" style="margin-bottom:2%;">
+                        <label>Fecha vencimiento:</label>
+                        <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                    </div>    
+                    <div class="col-md-3" style="margin-bottom: 2%;">
+                        <label>Vendedor</label>
+                        <select name="id_modificado" id="id_modificado" class="form-control" >
+                            @foreach ($usuarios as $usuario )
+                            <option value="{{ $usuario->id }}">{{ $usuario->apellido }} {{ $usuario->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                </div>
             </div>
-            <div class="col-md-2">
-                <label>Correo:</label>
-                <input type="text" name="correo"  id="correo" placeholder="Correo" class="form-control" >
-            </div>
-            <div class="col-md-2">
-                <label>Ciudad:</label>
-                <input name="id_ciudad" class="form-control"  id="id_ciudad" list="ciudades">
-                <datalist id="ciudades">    
-                    @foreach ( $ciudades as $ciudad)
-                    <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
-                    @endforeach
-                </datalist>
-            </div>
-            <div class="col-md-4">
-                <label>Nombre Zona:</label>
-                <input type="text" name="zona"  id="zona" placeholder="Zona" class="form-control" >
-            </div>
-        </div>
-        <div class="header row" style="background:#dbdbdb">
-            <div class="col-md-12" style="margin-bottom:2%;">
-                <label><br></label>
-                <a href="/gps/directoriomaps" target="_blank" style="background:white;" class="btn btn-warning">Agregar al mapa</a>
-                <label><br></label>
-                <div class="btn btn-success" style="background:#3c763d;color:white;" id="guardarCliente" onclick="guardarCliente();">Guardar Cliente</div>
-            </div>
-            <div class="col-md-6" style="margin-bottom:2%;">
-                <label>Fecha:</label>
-                <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
-            </div>
-            <div class="col-md-3" style="margin-bottom:2%;">
-                <label>Fecha vencimiento:</label>
-                  <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
-            </div>    
-            <div class="col-md-3" style="margin-bottom: 2%;">
-                <label>Vendedor</label>
-                <select name="id_modificado" id="id_modificado" class="form-control" >
-                    @foreach ($usuarios as $usuario )
-                    <option value="{{ $usuario->id }}">{{ $usuario->apellido }} {{ $usuario->nombre }}</option>
-                    @endforeach
-                </select>
-            </div>
-            
-        </div>
-    </div>
+        @endif
+    @endif
     
 </div>
 
@@ -186,84 +412,155 @@ span{
         
         </div>
         <div class="col-sm-12">
-            <div class="row titulo">
-                <div class="col-sm-3">
-                    <label>Tipo Pago: </label>
-                    <select id="tipo_pago" name="tipo_pago" onchange="banderaefectivo()" class="form-control">                      
-                    @foreach ($tipo_pagos as $obj)
-                    <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
-                    @endforeach
-                    </select>
+        @if(isset($_GET['tipo_tercero']))
+            @if($_GET['tipo_tercero']==4)
+                <div class="row titulo" style="display:none">
+                    <div class="col-sm-3">
+                        <label>Tipo Pago: </label>
+                        <select id="tipo_pago" name="tipo_pago" onchange="banderaefectivo()" class="form-control">                      
+                        @foreach ($tipo_pagos as $obj)
+                        <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                        @endforeach
+                        </select>
+                    </div>
+                    <div class="col-sm-9">
+                        <p style="font-size:10px;color:black;">De ser necesario agrega diferentes tipos de pago, puesto que por defecto el sistema registra pago en efectivo, sin embargo puede ser con baucher, cheques o transacciones.</p>
+                        <button type="button" class="btn form-control" id="btnSiCaja"  data-toggle="modal" onclick="tomarDatosCartera()" data-target="#myModal">Abrir Pago personalizado</button>
+                        <button type="button" class="btn form-control" id="btnNoCaja" style="color: red;">Pago en credito </button>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>SUB.TOTAL</label>
+                        <p id="subtotalTex">$ 0.00</p>
+                        <input type="hidden" id="subtotal"  class="form-control" disabled="">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>IVA</label>
+                        <p id="ivaTex">$ 0.00</p>
+                        <input type="hidden" id="iva" class="form-control" disabled="">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>DESCUENTO</label>
+                        <br>
+                        <p id="descuentoTex" onclick="config.aparecer('descuento','descuentoTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="descuento" class="form-control" onchange="config.aparecer('descuentoTex','descuento')" onkeyup="recorrerCree()">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>FLETES</label>
+                        <br>
+                        <p id="fletesTex" onclick="config.aparecer('fletes','fletesTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="fletes" onchange="config.aparecer('fletesTex','fletes')" onkeyup="recorrerCree();" class="form-control ">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>RETEFUENTE</label>
+                        <br>
+                        <p id="retefuenteTex" onclick="config.aparecer('retefuente','retefuenteTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="retefuente" onchange="config.aparecer('retefuenteTex','retefuente')" class="form-control" onkeyup="recorrerCree();">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>ICA</label>
+                        <br>
+                        <p id="impoconsumoTex" onclick="config.aparecer('impoconsumo','impoconsumoTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>CREE</label>
+                        <br>
+                        <p id="otro_impuestoTex" onclick="config.aparecer('otro_impuesto','otro_impuestoTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="otro_impuesto" onchange="config.aparecer('otro_impuestoTex','otro_impuesto')" class="form-control" onkeyup="recorrerCree();">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>TOTAL</label>
+                        <p id="totalTex" class="numberTex">$ 0.00</p>
+                        <input type="hidden" id="total" class="form-control" disabled="">
+                    </div>
+                    <div class="col-sm-12" style="height: 20px;"></div>
+                    <div class="col-sm-12">
+                        <label>CONDICIONES DE Documento</label>
+                        <input id="observaciones" name="observaciones" class="form-control" onkeyup="documentos.enterObser(event);" value="SIN OBSERVACIONES" >
+                    </div>
+                    <div class="col-sm-12" style="height: 20px;"></div>
+                    <div class="col-sm-12">
+                        <div id="imprimirPOST" onclick="documentos.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
+                        <div id="imprimirDOC" onclick="documentos.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
+                    </div>
+                    <div class="col-sm-12" style="height: 20px;"></div>
                 </div>
-                <div class="col-sm-9">
-                    <p style="font-size:10px;color:black;">De ser necesario agrega diferentes tipos de pago, puesto que por defecto el sistema registra pago en efectivo, sin embargo puede ser con baucher, cheques o transacciones.</p>
-                    <button type="button" class="btn form-control" id="btnSiCaja"  data-toggle="modal" onclick="tomarDatosCartera()" data-target="#myModal">Abrir Pago personalizado</button>
-                    <button type="button" class="btn form-control" id="btnNoCaja" style="color: red;">Pago en credito </button>
+                <div id="Guardar" class="btn btn-success form-control" onclick="save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
+            @else
+                <div class="row titulo">
+                    <div class="col-sm-3">
+                        <label>Tipo Pago: </label>
+                        <select id="tipo_pago" name="tipo_pago" onchange="banderaefectivo()" class="form-control">                      
+                        @foreach ($tipo_pagos as $obj)
+                        <option value="{{ $obj['id']}}">{{ $obj['nombre']}}</option>
+                        @endforeach
+                        </select>
+                    </div>
+                    <div class="col-sm-9">
+                        <p style="font-size:10px;color:black;">De ser necesario agrega diferentes tipos de pago, puesto que por defecto el sistema registra pago en efectivo, sin embargo puede ser con baucher, cheques o transacciones.</p>
+                        <button type="button" class="btn form-control" id="btnSiCaja"  data-toggle="modal" onclick="tomarDatosCartera()" data-target="#myModal">Abrir Pago personalizado</button>
+                        <button type="button" class="btn form-control" id="btnNoCaja" style="color: red;">Pago en credito </button>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>SUB.TOTAL</label>
+                        <p id="subtotalTex">$ 0.00</p>
+                        <input type="hidden" id="subtotal"  class="form-control" disabled="">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>IVA</label>
+                        <p id="ivaTex">$ 0.00</p>
+                        <input type="hidden" id="iva" class="form-control" disabled="">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>DESCUENTO</label>
+                        <br>
+                        <p id="descuentoTex" onclick="config.aparecer('descuento','descuentoTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="descuento" class="form-control" onchange="config.aparecer('descuentoTex','descuento')" onkeyup="recorrerCree()">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>FLETES</label>
+                        <br>
+                        <p id="fletesTex" onclick="config.aparecer('fletes','fletesTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="fletes" onchange="config.aparecer('fletesTex','fletes')" onkeyup="recorrerCree();" class="form-control ">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>RETEFUENTE</label>
+                        <br>
+                        <p id="retefuenteTex" onclick="config.aparecer('retefuente','retefuenteTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="retefuente" onchange="config.aparecer('retefuenteTex','retefuente')" class="form-control" onkeyup="recorrerCree();">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>ICA</label>
+                        <br>
+                        <p id="impoconsumoTex" onclick="config.aparecer('impoconsumo','impoconsumoTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>CREE</label>
+                        <br>
+                        <p id="otro_impuestoTex" onclick="config.aparecer('otro_impuesto','otro_impuestoTex')">$ 0.00</p>
+                        <input type="number" style="display: none" value="0" id="otro_impuesto" onchange="config.aparecer('otro_impuestoTex','otro_impuesto')" class="form-control" onkeyup="recorrerCree();">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>TOTAL</label>
+                        <p id="totalTex" class="numberTex">$ 0.00</p>
+                        <input type="hidden" id="total" class="form-control" disabled="">
+                    </div>
+                    <div class="col-sm-12" style="height: 20px;"></div>
+                    <div class="col-sm-12">
+                        <label>CONDICIONES DE Documento</label>
+                        <input id="observaciones" name="observaciones" class="form-control" onkeyup="documentos.enterObser(event);" value="SIN OBSERVACIONES" >
+                    </div>
+                    <div class="col-sm-12" style="height: 20px;"></div>
+                    <div class="col-sm-12">
+                        <div id="Guardar" class="btn btn-success form-control" onclick="save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
+                        <div id="imprimirPOST" onclick="documentos.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
+                        <div id="imprimirDOC" onclick="documentos.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
+                    </div>
+                    <div class="col-sm-12" style="height: 20px;"></div>
                 </div>
-                <div class="col-sm-3">
-                    <label>SUB.TOTAL</label>
-                    <p id="subtotalTex">$ 0.00</p>
-                    <input type="hidden" id="subtotal"  class="form-control" disabled="">
-                </div>
-                <div class="col-sm-3">
-                    <label>IVA</label>
-                    <p id="ivaTex">$ 0.00</p>
-                    <input type="hidden" id="iva" class="form-control" disabled="">
-                </div>
-                <div class="col-sm-3">
-                    <label>DESCUENTO</label>
-                    <br>
-                    <p id="descuentoTex" onclick="config.aparecer('descuento','descuentoTex')">$ 0.00</p>
-                    <input type="number" style="display: none" value="0" id="descuento" class="form-control" onchange="config.aparecer('descuentoTex','descuento')" onkeyup="recorrerCree()">
-                </div>
-                <div class="col-sm-3">
-                    <label>FLETES</label>
-                    <br>
-                    <p id="fletesTex" onclick="config.aparecer('fletes','fletesTex')">$ 0.00</p>
-                    <input type="number" style="display: none" value="0" id="fletes" onchange="config.aparecer('fletesTex','fletes')" onkeyup="recorrerCree();" class="form-control ">
-                </div>
-                <div class="col-sm-3">
-                    <label>RETEFUENTE</label>
-                    <br>
-                    <p id="retefuenteTex" onclick="config.aparecer('retefuente','retefuenteTex')">$ 0.00</p>
-                    <input type="number" style="display: none" value="0" id="retefuente" onchange="config.aparecer('retefuenteTex','retefuente')" class="form-control" onkeyup="recorrerCree();">
-                </div>
-                <div class="col-sm-3">
-                    <label>IMPOCONSUMO</label>
-                    <br>
-                    <p id="impoconsumoTex" onclick="config.aparecer('impoconsumo','impoconsumoTex')">$ 0.00</p>
-                    <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
-                </div>
-                <div class="col-sm-3">
-                    <label>RETE ICA.</label>
-                    <br>
-                    <p id="reteicaTex" onclick="config.aparecer('reteica','reteicaTex')">$ 0.00</p>
-                    <input type="number" style="display: none" value="0" id="reteica" onchange="config.aparecer('reteicaTex','reteica')" class="form-control" onkeyup="recorrerCree();">
-                </div>
-                <div class="col-sm-3">
-                    <label>CREE</label>
-                    <br>
-                    <p id="creeTex" onclick="config.aparecer('cree','creeTex')">$ 0.00</p>
-                    <input type="number" style="display: none" value="0" id="cree" onchange="config.aparecer('creeTex','cree')" class="form-control" onkeyup="recorrerCree();">
-                </div>
-                <div class="col-sm-3">
-                    <label>TOTAL</label>
-                    <p id="totalTex" class="numberTex">$ 0.00</p>
-                    <input type="hidden" id="total" class="form-control" disabled="">
-                </div>
-                <div class="col-sm-12" style="height: 20px;"></div>
-                <div class="col-sm-12">
-                    <label>CONDICIONES DE Documento</label>
-                    <input id="observaciones" name="observaciones" class="form-control" onkeyup="documentos.enterObser(event);" value="SIN OBSERVACIONES" >
-                </div>
-                <div class="col-sm-12" style="height: 20px;"></div>
-                <div class="col-sm-12">
-                    <div id="Guardar" class="btn btn-success form-control" onclick="save_documento();" style="background-color: #28a745;color:white;">GUARDAR</div>
-                    <div id="imprimirPOST" onclick="documentos.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
-                    <div id="imprimirDOC" onclick="documentos.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
-                </div>
-                <div class="col-sm-12" style="height: 20px;"></div>
-            </div>
+            @endif
+        @endif
         </div>
     </div>
     
@@ -360,6 +657,7 @@ span{
 $(document).ready(function(){
     $('#btnNoCaja').hide();
     $('#cargando').hide();
+    buscarcliente2($('#nombre').val());
 });
 
 function saveCartera(){
@@ -632,6 +930,7 @@ function saveFactura(){
     var parametros = {
         'id_sucursal' : '1',
         'numero' : '0',
+        'id_directorio_tipo_tercero' : $('#id_directorio_tipo_tercero').val(),
         'prefijo' : prefijo,
         'id_cliente' : $('#cedula_tercero').val(), //debe ser el id
         'id_tercero' : $('#cedula_tercero').val(), //debe ser el id
@@ -643,8 +942,8 @@ function saveFactura(){
         'subtotal' :  $('#subtotal').val().replace(",",""),
         'iva' : $('#iva').val().replace(",",""),
         'impoconsumo' : $('#impoconsumo').val().replace(",",""),
-        'cree' : $('#cree').val().replace(",",""),
-        'reteica' : $('#reteica').val().replace(",",""),
+        'otro_impuesto' : $('#otro_impuesto').val().replace(",",""),
+        'otro_impuesto1' : '0',
         'descuento' : $('#descuento').val().replace(",",""),
         'fletes' : $('#fletes').val().replace(",",""),
         'retefuente' : $('#retefuente').val().replace(",",""),
@@ -806,71 +1105,46 @@ function getReferencia(id){
             lote = response.lote;
             linea = response.linea;
 
-            //cargar ultimo precio
-            var urls = '/kardex/ultimoPrecio';
-            var parametros = {
-                "nit" :  $('#cedula_tercero').val(),
-                "id_directorio_tipo_tercero" : 2, 
-                "id_referencia" : referencia.id
-            };
-            var precioUltimo = null;
-            $.ajax({
-                url:   urls,
-                type:  'get',
-                data:  parametros,
-                success:  function (response) {
-                    if(response==""){
-                        precioUltimo = 0;
-                    }
-                    else{
-                        precioUltimo = response.precio;
-                    }
-                    console.log("PRECIO ULTIMO:",precioUltimo);
+            var precioasignado = referencia.precioasignado.toString();
+            precios = "<select class='form-control' onchange='recorrerproductos(this)' id='preciosselect' name='valor_unidad'>";
+            var options = { style: 'currency', currency: 'USD' };
+            var numberFormat = new Intl.NumberFormat('en-US', options);
+            //console.log();
 
-                    var precioasignado = referencia.precioasignado.toString();
-                    precios = "<select class='form-control' onchange='recorrerproductos(this)' id='preciosselect' name='valor_unidad'>";
-                    var options = { style: 'currency', currency: 'USD' };
-                    var numberFormat = new Intl.NumberFormat('en-US', options);
-                    //console.log();
-
-                    precios += "<option value='"+precioUltimo+"'>Ultimo precio "+ numberFormat.format(precioUltimo) +"</option>";
-                    if(precioasignado.includes("1")){  
-                        precios += "<option value='"+referencia.precio1+"'>"+ numberFormat.format(referencia.precio1) +"</option>";
-                    }
-                    if(precioasignado.includes("2")){
-                        precios += "<option value='"+referencia.precio2+"'>"+ numberFormat.format(referencia.precio2) +"</option>";
-                    }
-                    if(precioasignado.includes("3")){
-                        precios += "<option value='"+referencia.precio3+"'>"+ numberFormat.format(referencia.precio3) +"</option>";
-                    }
-                    precios += "<option value=''>Otro valor</option>";
-                    precios += "</select>";
-                    lotes = "<select class='form-control' name='lote'>";
-                    for(i=0;i<lote.length;i++){ 
-                        lotes += "<option value='"+lote[i].id+"'>"+lote[i].numero_lote+" - "+lote[i].fecha_vence_lote+" - "+lote[i].cantidad+"</option>";
-                    }
-                    lotes += "</select>";
-                    var table = document.getElementById("tabla_productos");
-                    var row = table.insertRow(1);
-                    var cell0 = row.insertCell(0);
-                    var cell1 = row.insertCell(1);
-                    var cell2 = row.insertCell(2);
-                    var cell3 = row.insertCell(3);
-                    var cell4 = row.insertCell(4);
-                    var cell5 = row.insertCell(5);
-                    var cell6 = row.insertCell(6);
-                    var cell7 = row.insertCell(7);
-                    cell0.innerHTML = "<button type='button' class='deletebtn btn btn-danger' title='Remove row'>X</button><input type='hidden' value='0' class='' name='check'><input type='hidden' name='id' value='"+referencia.id+"'>";
-                    cell1.innerHTML = "<strong style='color:black'>"+referencia.codigo_interno+"</strong>";
-                    cell2.innerHTML = "<strong style='color:black'>"+referencia.descripcion+"</strong>";
-                    cell3.innerHTML = lotes;
-                    cell4.innerHTML = "<span style='color:black;position:absolute;margin-left: 10px;margin-top: -10px;'>Saldo: "+ new Intl.NumberFormat().format(referencia.saldo) +"</span><input value='0' onchange='recorrerproductos(this)' class='form-control'  name='cantidad'>";
-                    cell5.innerHTML = precios;
-                    cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
-                    cell7.innerHTML = "<input type='hidden' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'><p name='spanTotal' class='numberTex' style='color:black;'>$ 0.00</p>";
-                }
-            });
-            
+            if(precioasignado.includes("1")){  
+                precios += "<option value='"+referencia.precio1+"'>"+ numberFormat.format(referencia.precio1) +"</option>";
+            }
+            if(precioasignado.includes("2")){
+                precios += "<option value='"+referencia.precio2+"'>"+ numberFormat.format(referencia.precio2) +"</option>";
+            }
+            if(precioasignado.includes("3")){
+                precios += "<option value='"+referencia.precio3+"'>"+ numberFormat.format(referencia.precio3) +"</option>";
+            }
+            precios += "<option value=''>Otro valor</option>";
+            precios += "</select>";
+            lotes = "<select class='form-control' name='lote'>";
+            for(i=0;i<lote.length;i++){ 
+                lotes += "<option value='"+lote[i].id+"'>"+lote[i].numero_lote+" - "+lote[i].fecha_vence_lote+" - "+lote[i].cantidad+"</option>";
+            }
+            lotes += "</select>";
+            var table = document.getElementById("tabla_productos");
+            var row = table.insertRow(1);
+            var cell0 = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            var cell2 = row.insertCell(2);
+            var cell3 = row.insertCell(3);
+            var cell4 = row.insertCell(4);
+            var cell5 = row.insertCell(5);
+            var cell6 = row.insertCell(6);
+            var cell7 = row.insertCell(7);
+            cell0.innerHTML = "<button type='button' class='deletebtn btn btn-danger' title='Remove row'>X</button><input type='hidden' value='0' class='' name='check'><input type='hidden' name='id' value='"+referencia.id+"'>";
+            cell1.innerHTML = "<strong style='color:black'>"+referencia.codigo_interno+"</strong>";
+            cell2.innerHTML = "<strong style='color:black'>"+referencia.descripcion+"</strong>";
+            cell3.innerHTML = lotes;
+            cell4.innerHTML = "<input value='0' onchange='recorrerproductos(this)' class='form-control' onkeyup='config.puntuacion(this)' name='cantidad'>";
+            cell5.innerHTML = precios;
+            cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
+            cell7.innerHTML = "<input type='hidden' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'><p name='spanTotal' class='numberTex' style='color:black;'>$ 0.00</p>";
         },
         error: function(){
             swal({
@@ -978,16 +1252,14 @@ function recorrerCree(){
     document.getElementById("descuentoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#descuento').val());
     fletes = parseFloat($('#fletes').val().replace(",",""));
     document.getElementById("fletesTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#fletes').val());
-    cree = parseFloat($('#cree').val().replace(",",""));
-    document.getElementById("creeTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#cree').val());
+    cree = parseFloat($('#otro_impuesto').val().replace(",",""));
+    document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
     retefuente = parseFloat($('#retefuente').val().replace(",",""));
     document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     impoconsumo = parseFloat($('#impoconsumo').val().replace(",",""));
     iva = parseFloat($('#iva').val().replace(",",""));
-    reteica = parseFloat($('#reteica').val().replace(",",""));
-    document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
     document.getElementById("impoconsumoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#impoconsumo').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - reteica - impoconsumo - retefuente + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - impoconsumo - retefuente + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 }
 
@@ -997,8 +1269,7 @@ function recorrerSinImpuestos(){
     subtot = 0;
     descuento = parseFloat($('#descuento').val());
     fletes = parseFloat($('#fletes').val().replace(",",""));
-    cree = $('#cree').val().replace(",","");
-    reteica = $('#reteica').val().replace(",","");
+    cree = $('#otro_impuesto').val().replace(",","");
     retefuente = $('#retefuente').val().replace(",","");
     impoconsumo = $('#impoconsumo').val().replace(",","");
 
@@ -1020,7 +1291,7 @@ function recorrerSinImpuestos(){
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
     document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     directorio_tipo = $('#directorio_tipo').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - reteica - impoconsumo + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - impoconsumo + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 
     /** cartera verificar y recorrer **/
@@ -1039,6 +1310,7 @@ function recorrerTotal(){
     config.createToast("info", "Intersoft esta calculando el Total de la factura");
     subtotales = document.getElementsByName("subtotal");
     subtot = 0;
+    descuento = parseFloat($('#descuento').val());
     fletes = parseFloat($('#fletes').val());
     impoconsumo = $('#impoconsumo').val();
 
@@ -1076,37 +1348,14 @@ function recorrerTotal(){
     directorio_tipo = $('#directorio_tipo').val();
     //VERIFICAR TIPO DE TERCERO (CREE)
     if(directorio_tipo == "JURIDICA"){
-        $('#cree').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
     else{
-        $('#cree').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
+        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
-    //VERIFICAR RETE ICA
-    if($('#directorio_reteica').val() != ""){
-        porcentaje_rete_ica = parseFloat($('#directorio_reteica').val());
-        subtotal = parseFloat($('#subtotal').val());
-        totalica = (porcentaje_rete_ica * subtotal)/1000;
-        console.log("% totalica: ",totalica);
-        $('#reteica').val(totalica);
-        document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
-    }
-    else{
-        $('#reteica').val(0);
-        document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
-    }
-    //VERIFICAR DESCUENTOS
-    if($('#directorio_descuento').val() != "" || $('#directorio_descuento').val() != "0"){
-        porcentaje_descuento = parseFloat($('#directorio_descuento').val());
-        subtotal = parseFloat($('#subtotal').val());
-        totaldescuento = (porcentaje_descuento * subtotal)/100;
-        $('#descuento').val(totaldescuento);
-        document.getElementById("descuentoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#descuento').val());
-    }
-    descuento = parseFloat($('#descuento').val());
-    reteica = $('#reteica').val();
-    cree = $('#cree').val();
-    document.getElementById("creeTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#cree').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - reteica - retefuente - impoconsumo + iva).toFixed(2) );
+    cree = $('#otro_impuesto').val();
+    document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - impoconsumo + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
     
 
@@ -1129,7 +1378,7 @@ function recorrerTotal(){
 
 <script>
 // functiones para el cliente create y buscar
-function guardarCliente(){
+function guardarCliente(id_directorio_tipo_tercero){
     var urls = "/administrador/diretorios/addtercero";
     parametros = {
         "nit" : $('#cedula_tercero').val().trim(),
@@ -1139,7 +1388,7 @@ function guardarCliente(){
         "correo" : $('#correo').val(),
         "telefono" : $('#telefono').val(),
         "zona_venta" : $('#zona').val(),
-        "id_directorio_tipo_tercero" : "2"
+        "id_directorio_tipo_tercero" : id_directorio_tipo_tercero
     };
     if(parametros.razon_social == "" || parametros.direccion == "" || parametros.correo == "" || parametros.telefono == ""   ){
         swal({
@@ -1173,13 +1422,14 @@ function guardarCliente(){
         });
 }
 
-function buscarcliente(texto){
+function buscarcliente(texto,tipo){
     console.log(texto);
     if(texto.length > 3){
         var urls = "/administrador/diretorios/search/search";
         if($('#nombre').val()==""){
             parametros = {
-                "nit" : texto.trim()
+                "nit" : texto.trim(),
+                "tipo" : tipo
             };
         }
         else{
@@ -1207,12 +1457,6 @@ function buscarcliente(texto){
                     $('#zona').val(cliente.zona_venta);
                     $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
                     $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
-                    $('#directorio_reteica').val(cliente.rete_ica);
-                    $('#directorio_porcentaje_rete_iva').val(cliente.porcentaje_rete_iva);
-                    $('#directorio_cupo_financiero').val(cliente.cupo_financiero);
-                    $('#directorio_descuento').val(cliente.descuento);
-                    $('#directorio_financiacion').val(cliente.financiacion);
-                    $('#directorio_calificacion').val(cliente.calificacion);
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -1220,27 +1464,18 @@ function buscarcliente(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').hide();   
-                    $('#btnSiCaja').text("Cupo financiero es de: " + new Intl.NumberFormat().format($('#directorio_cupo_financiero').val()));
                     config.createToast("success", "Cliente existe");
                     $('#resCliente').text("Cliente existe");    
                     //cartera
                     $('#Carterasid_cliente').val(cliente.id);           
                 }  
                 else{
-                    $('#cedula_tercero').val("");
-                    $('#nombre').val("");
                     $('#direccion').val("");
                     $('#telefono').val("");
                     $('#correo').val("");
                     $('#zona').val("");
                     $('#directorio_tipo').val("");
                     $('#id_retefuente').val("");
-                    $('#directorio_reteica').val("");
-                    $('#directorio_porcentaje_rete_iva').val("");
-                    $('#directorio_cupo_financiero').val("");
-                    $('#directorio_descuento').val("");
-                    $('#directorio_financiacion').val("");
-                    $('#directorio_calificacion').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -1248,7 +1483,6 @@ function buscarcliente(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').show();
-                    $('#btnSiCaja').text("Cupo financiero es de: " + new Intl.NumberFormat().format(0));
                     config.createToast("error", "Cliente no existe, si desea crearlo, diligencie los datos restantes");
                     $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
                 }              
@@ -1265,12 +1499,13 @@ function buscarcliente(texto){
     }
 }
 
-function buscarcliente2(texto){
+function buscarcliente2(texto,tipo){
     console.log(texto);
     if(texto.length > 3){
         var urls = "/administrador/diretorios/search/search";
         parametros = {
-            "razon_social" : texto.trim()
+            "razon_social" : texto.trim(),
+            "tipo" : tipo
         };
         $.ajax({
             data:  parametros,
@@ -1296,12 +1531,6 @@ function buscarcliente2(texto){
                     $('#zona').val(cliente.zona_venta);
                     $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
                     $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
-                    $('#directorio_reteica').val(cliente.rete_ica);
-                    $('#directorio_porcentaje_rete_iva').val(cliente.porcentaje_rete_iva);
-                    $('#directorio_cupo_financiero').val(cliente.cupo_financiero);
-                    $('#directorio_descuento').val(cliente.descuento);
-                    $('#directorio_financiacion').val(cliente.financiacion);
-                    $('#directorio_calificacion').val(cliente.calificacion);
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -1309,7 +1538,6 @@ function buscarcliente2(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').hide();   
-                    $('#btnSiCaja').text("Cupo financiero es de: " + new Intl.NumberFormat().format($('#directorio_cupo_financiero').val()));
                     config.createToast("success", "Cliente existe");
                     $('#resCliente').text("Cliente existe");    
                     //cartera
@@ -1317,20 +1545,13 @@ function buscarcliente2(texto){
                 }  
                 else{
                     $('#listaclientes').find('option').remove();
-                    $('#cedula_tercero').val("");
-                    $('#nombre').val("");
+                    
                     $('#direccion').val("");
                     $('#telefono').val("");
                     $('#correo').val("");
                     $('#zona').val("");
                     $('#directorio_tipo').val("");
                     $('#id_retefuente').val("");
-                    $('#directorio_reteica').val("");
-                    $('#directorio_porcentaje_rete_iva').val("");
-                    $('#directorio_cupo_financiero').val("");
-                    $('#directorio_descuento').val("");
-                    $('#directorio_financiacion').val("");
-                    $('#directorio_calificacion').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -1338,7 +1559,6 @@ function buscarcliente2(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').show();
-                    $('#btnSiCaja').text("Cupo financiero es de: " + new Intl.NumberFormat().format(0));
                     config.createToast("error", "Cliente no existe, si desea crearlo, diligencie los datos restantes");
                     $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
                 }              

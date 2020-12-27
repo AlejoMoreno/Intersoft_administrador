@@ -464,12 +464,12 @@ class ContabilidadesController extends Controller
                     if($valor>0){$contabilidad->save();};
                 }
                 //reteiva
-                if($factura->otro_impuesto!=0){
+                if($factura->cree!=0){
                     $cuenta = Pucauxiliar::
                             where('id_empresa','=',Session::get('id_empresa'))
                             ->where('id','=',$obj->v_puc_reteiva)
                             ->first();
-                    $valor = $kar->otro_impuesto;
+                    $valor = $kar->cree;
                     $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
                     $contabilidad->valor_transaccion = $valor;
                     $contabilidad->tipo_transaccion = $cuenta->naturaleza;
@@ -477,12 +477,12 @@ class ContabilidadesController extends Controller
                     if($valor>0){$contabilidad->save();};
                 }
                 //reteica
-                if($factura->otro_impuesto1!=0){
+                if($factura->reteica!=0){
                     $cuenta = Pucauxiliar::
                             where('id_empresa','=',Session::get('id_empresa'))
                             ->where('id','=',$obj->v_puc_reteica)
                             ->first();
-                    $valor = $kar->otro_impuesto1;
+                    $valor = $kar->reteica;
                     $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
                     $contabilidad->valor_transaccion = $valor;
                     $contabilidad->tipo_transaccion = $cuenta->naturaleza;

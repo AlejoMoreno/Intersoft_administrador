@@ -169,6 +169,7 @@ Route::get('/facturacion/pedidos/{id_factura}', 'FacturasController@pedidos');
 Route::get('/facturacion/pedidos', 'FacturasController@pedidosIndex');
 Route::get('/facturacion/venta/{id_documento}', 'FacturasController@venta');
 Route::get('/facturacion/compra/{id_documento}', 'FacturasController@compra');
+Route::get('/facturacion/otrosDocumentos/{id_documento}', 'FacturasController@otrosDocumentos');
 Route::get('/facturacion/facturatech', 'FacturasController@facturatech');
 Route::get('/facturacion/facturatech/{id_documento}/xml', 'FacturasController@facturatechxml');
 Route::post('/facturacion/pedidosUpdate', 'FacturasController@updateEstado');
@@ -518,6 +519,7 @@ Route::get('/cartera/castigarcartera', 'CarterasController@castigarcartera');
 Route::get('/cartera/historial/{idtercero}', 'CarterasController@historial');
 
 Route::get('/cartera/consulta/{tipo}', 'CarterasController@consultaTipo');
+Route::get('/cartera/verificarNumeracion', 'CarterasController@verificarNumeracion');
 
 Route::post('/cartera/FormaPagos','CarterasController@saveFormaPagos');
 
@@ -658,6 +660,7 @@ Route::post('/kardex/saveDocument', 'KardexController@saveDocument');
 Route::post('/factura/saveDocument', 'FacturasController@saveDocument');
 Route::get('/kardex/show/{id}', 'KardexController@showid');
 Route::get('/inventario/kardex', 'KardexController@kardexShow');
+Route::get('/kardex/ultimoPrecio', 'KardexController@ultimoPrecio');
 
 //Factura post
 Route::get('/documentos/facturaPost', 'FacturasController@facturaPost');

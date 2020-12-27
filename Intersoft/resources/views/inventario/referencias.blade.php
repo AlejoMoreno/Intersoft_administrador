@@ -144,6 +144,8 @@
                 </div>
                 <div class="panel-body" >
                     <p style="font-size: 10pt;">Diligencie cada uno de los datos relacionados con la referencia a crear.
+                    Recordar que para el uso de decimales
+                    es necesario delimitarlos con (.)
                     </p>
                 </div>
             
@@ -194,7 +196,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label>peso</label><br>
-                                    <input type="number" class="form-control" value="0" name="peso" id="peso" placeholder="Escribe el peso" required="" onkeyup="config.UperCase('peso');">
+                                    <input type="text" class="form-control" value="0" name="peso" id="peso" placeholder="Escribe el peso" required="" onkeyup="config.UperCase('peso');">
                                 </div>
                                 <label>Marca</label><br>
                                 <select class="form-control" name="id_marca" id="id_marca">
@@ -215,15 +217,15 @@
                             </div>
                             <div class="content">
                                 <label>factor_rendimiento (%)</label><br>
-                                <input type="number" class="form-control" name="factor_rendimiento" id="factor_rendimiento" maxlength="2" placeholder="Escribe el factor_rendimiento" value="0" required="" onkeyup="config.UperCase('factor_rendimiento');">
+                                <input type="text" class="form-control" name="factor_rendimiento" id="factor_rendimiento" maxlength="4" placeholder="Escribe el factor_rendimiento" value="0" required="" onkeyup="config.UperCase('factor_rendimiento');">
                                 
                                 <div class="col-md-6">
                                     <label>stok mínimo</label><br>
-                                    <input type="number"  class="form-control" name="stok_minimo" id="stok_minimo" value="0" placeholder="Escribe el stok_minimo" required="" onkeyup="config.UperCase('stok_minimo');">
+                                    <input type="text"  class="form-control" name="stok_minimo" id="stok_minimo" value="0" placeholder="Escribe el stok_minimo" required="" onkeyup="config.UperCase('stok_minimo');">
                                 </div>
                                 <div class="col-md-6">
                                     <label>stok máximo</label><br>
-                                    <input type="number" class="form-control" name="stok_maximo" id="stok_maximo" value="1" placeholder="Escribe el stok_maximo" required="" onkeyup="config.UperCase('stok_maximo');">
+                                    <input type="text" class="form-control" name="stok_maximo" id="stok_maximo" value="1" placeholder="Escribe el stok_maximo" required="" onkeyup="config.UperCase('stok_maximo');">
                                 </div>
 
                                 <div class="col-md-6">
@@ -231,17 +233,17 @@
                                     <input type="text" name="iva" id="iva"  class="form-control"  value="19">
                                 </div>
                                 <div class="col-md-6">
-                                    <!--<label>impo consumo (%)</label><br>-->
-                                    <input type="hidden" value="0" maxlength="2" class="form-control" name="impo_consumo" id="impo_consumo" placeholder="Escribe el impo_consumo" required="" onkeyup="config.UperCase('impo_consumo');">
+                                    <label>impo consumo (%)</label><br>
+                                    <input type="text" value="0" maxlength="4" class="form-control" name="impo_consumo" id="impo_consumo" placeholder="Escribe el impo_consumo" required="" onkeyup="config.UperCase('impo_consumo');">
                                 </div>
 
                                 <div class="col-md-6">
                                     <label>sobre tasa (%)</label><br>
-                                    <input type="number" maxlength="2" value="0" class="form-control" name="sobre_tasa" id="sobre_tasa" placeholder="Escribe el sobre_tasa" required="" onkeyup="config.UperCase('sobre_tasa');">
+                                    <input type="text" maxlength="4" value="0" class="form-control" name="sobre_tasa" id="sobre_tasa" placeholder="Escribe el sobre_tasa" required="" onkeyup="config.UperCase('sobre_tasa');">
                                 </div>
                                 <div class="col-md-6">
                                     <label>descuento (%)</label><br>
-                                    <input type="number" maxlength="2" value="0" class="form-control" name="descuento" id="descuento" placeholder="Escribe el descuento" required="" onkeyup="config.UperCase('descuento');">
+                                    <input type="number" maxlength="4" value="0" class="form-control" name="descuento" id="descuento" placeholder="Escribe el descuento" required="" onkeyup="config.UperCase('descuento');">
                                 </div>
                                 <div class="col-md-6">
                                     <label>serie</label><br>
@@ -267,19 +269,19 @@
                                 
                                 <div class="col-md-3">
                                     <label>precio1</label><br>
-                                    <input type="number" class="form-control" value="0" name="precio1" id="precio1" placeholder="Escribe el precio1" required="" onkeyup="config.UperCase('precio1');">
+                                    <input type="text" class="form-control" value="0" name="precio1" id="precio1" placeholder="Escribe el precio1" required="" onkeyup="config.UperCase('precio1');">
                                 </div>
                                 <div class="col-md-3">
                                     <label>precio2</label><br>
-                                    <input type="number" class="form-control" value="0" name="precio2" id="precio2" placeholder="Escribe el precio2" required="" onkeyup="config.UperCase('precio2');">
+                                    <input type="text" class="form-control" value="0" name="precio2" id="precio2" placeholder="Escribe el precio2" required="" onkeyup="config.UperCase('precio2');">
                                 </div>
                                 <div class="col-md-3">
                                     <label>precio3</label><br>
-                                    <input type="number" class="form-control" value="0" name="precio3" id="precio3" placeholder="Escribe el precio3" required="" onkeyup="config.UperCase('precio3');">
+                                    <input type="text" class="form-control" value="0" name="precio3" id="precio3" placeholder="Escribe el precio3" required="" onkeyup="config.UperCase('precio3');">
                                 </div>
                                 <div class="col-md-3">
                                     <label>precio4</label><br>
-                                    <input type="number" class="form-control" value="0" name="precio4" id="precio4" placeholder="Escribe el precio4" required="" onkeyup="config.UperCase('precio4');">
+                                    <input type="text" class="form-control" value="0" name="precio4" id="precio4" placeholder="Escribe el precio4" required="" onkeyup="config.UperCase('precio4');">
                                 </div>
 
                                 <label>estado</label><br>
@@ -294,15 +296,15 @@
 
                                 <div class="col-md-4">
                                     <label>costo</label><br>
-                                    <input type="number" class="form-control" value="0" name="costo" id="costo" placeholder="Escribe el costo" required="" onkeyup="config.UperCase('costo');" disabled="">
+                                    <input type="text" class="form-control" value="0" name="costo" id="costo" placeholder="Escribe el costo" required="" onkeyup="config.UperCase('costo');" disabled="">
                                 </div>
                                 <div class="col-md-4">
                                     <label>costo promedio</label><br>
-                                    <input type="number" class="form-control" value="0" name="costo_promedio" id="costo_promedio" placeholder="Escribe el costo_promedio" required="" onkeyup="config.UperCase('costo_promedio');" disabled="">
+                                    <input type="text" class="form-control" value="0" name="costo_promedio" id="costo_promedio" placeholder="Escribe el costo_promedio" required="" onkeyup="config.UperCase('costo_promedio');" disabled="">
                                 </div>
                                 <div class="col-md-4">
                                     <label>saldo</label><br>
-                                    <input type="number" class="form-control" value="0" name="saldo" id="saldo" placeholder="Escribe el saldo" required="" onkeyup="config.UperCase('saldo');" disabled="">
+                                    <input type="text" class="form-control" value="0" name="saldo" id="saldo" placeholder="Escribe el saldo" required="" onkeyup="config.UperCase('saldo');" disabled="">
                                 </div>
 
                                 <label>usuario creador</label><br>

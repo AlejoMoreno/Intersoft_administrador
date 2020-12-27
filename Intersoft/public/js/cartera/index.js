@@ -158,19 +158,42 @@ function Carteras(){
         var cel12 = row.insertCell(11);
         var cel13 = row.insertCell(12);
 
+        var size = lista_seleccionados.length;
 
         cel0.innerHTML = "<input type='hidden' value='"+id+"' id='"+lista_seleccionados.length+"_id_factura'>" + 
         	"<input type='checkbox' id='"+lista_seleccionados.length+"_check' class='form-control' onchange='carteras.seleccion_renglon("+lista_seleccionados.length+");' >";
         cel2.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_prefijo' value='"+prefijo+"'>"+prefijo;
         cel3.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_numero' value='"+numero+"'>"+numero;
         cel4.innerHTML = "<input type='hidden' id='"+lista_seleccionados.length+"_fecha' value='"+fecha+"'>"+fecha;
-        cel5.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_flete' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel6.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_retefuente' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel7.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteiva' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel8.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_reteica' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel9.innerHTML = "<input   style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_interes' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel10.innerHTML = "<input  style='width: 100px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_descuento' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
-        cel11.innerHTML = "<input  style='width: 100px;' class='form-control' value='"+saldo+"' id='"+lista_seleccionados.length+"_efectivo' onchange='carteras.calcular("+lista_seleccionados.length+")'>";
+        var idPcel5 = size+"_fleteTex";
+        var idIcel5 = size+"_flete";
+        var idPcel6 = size+"_retefuenteText";
+        var idIcel6 = size+"_retefuente";
+        var idPcel7 = size+"_reteivaText";
+        var idIcel7 = size+"_reteiva";
+        var idPcel8 = size+"_reteicaText";
+        var idIcel8 = size+"_reteica";
+        var idPcel9 = size+"_interesText";
+        var idIcel9 = size+"_interes";
+        var idPcel10 = size+"_descuentoText";
+        var idIcel10 = size+"_descuento";
+        var idPcel11 = size+"_efectivoText";
+        var idIcel11 = size+"_efectivo";
+        
+        cel5.innerHTML = "<p id='"+idPcel5+"' style='width:150px !important;' onclick=config.aparecer('"+idIcel5+"','"+idPcel5+"')>$ 0.00</p>"+
+                         "<input type='number' style='display: none; width:150px !important;' value='0' id='"+idIcel5+"' onchange=config.aparecerText('"+idPcel5+"','"+idIcel5+"') class='form-control' onkeyup=carteras.calcular("+size+") >";                         
+        cel6.innerHTML = "<p id='"+idPcel6+"' style='width:150px !important;' onclick=config.aparecer('"+idIcel6+"','"+idPcel6+"')>$ 0.00</p>"+
+                         "<input type='number' style='display: none; width:150px !important;' value='0' id='"+idIcel6+"' onchange=config.aparecerText('"+idPcel6+"','"+idIcel6+"') class='form-control' onkeyup=carteras.calcular("+size+") >";
+        cel7.innerHTML = "<p id='"+idPcel7+"' style='width:150px !important;' onclick=config.aparecer('"+idIcel7+"','"+idPcel7+"')>$ 0.00</p>"+
+                         "<input type='number' style='display: none; width:150px !important;' value='0' id='"+idIcel7+"' onchange=config.aparecerText('"+idPcel7+"','"+idIcel7+"') class='form-control' onkeyup=carteras.calcular("+size+") >";
+        cel8.innerHTML = "<p id='"+idPcel8+"' style='width:150px !important;' onclick=config.aparecer('"+idIcel8+"','"+idPcel8+"')>$ 0.00</p>"+
+                         "<input type='number' style='display: none; width:150px !important;' value='0' id='"+idIcel8+"' onchange=config.aparecerText('"+idPcel8+"','"+idIcel8+"') class='form-control' onkeyup=carteras.calcular("+size+") >";
+        cel9.innerHTML = "<p id='"+idPcel9+"' style='width:150px !important;' onclick=config.aparecer('"+idIcel9+"','"+idPcel9+"')>$ 0.00</p>"+
+                         "<input type='number' style='display: none; width:150px !important;' value='0' id='"+idIcel9+"' onchange=config.aparecerText('"+idPcel9+"','"+idIcel9+"') class='form-control' onkeyup=carteras.calcular("+size+") >";
+        cel10.innerHTML = "<p id='"+idPcel10+"' style='width:150px !important;' onclick=config.aparecer('"+idIcel10+"','"+idPcel10+"')>$ 0.00</p>"+
+                          "<input type='number' style='display: none; width:150px !important;' value='0' id='"+idIcel10+"' onchange=config.aparecerText('"+idPcel10+"','"+idIcel10+"') class='form-control' onkeyup=carteras.calcular("+size+") >";
+        cel11.innerHTML = "<p id='"+idPcel11+"' style='width:150px !important;' onclick=config.aparecer('"+idIcel11+"','"+idPcel11+"')>$"+ new Intl.NumberFormat().format(saldo ) +"</p>"+
+                          "<input type='number' style='display: none; width:150px !important;' value='"+saldo+"' id='"+idIcel11+"' onchange=config.aparecerText('"+idPcel11+"','"+idIcel11+"') class='form-control' onkeyup=carteras.calcular("+size+") >";
         cel12.innerHTML = "<input type='hidden' style='width: 80px;' class='form-control' value='0' id='"+lista_seleccionados.length+"_total' disabled><p style='color:black;width: 300px !important;' class='numberTex' id='"+lista_seleccionados.length+"_span'>0</span>";
         cel13.innerHTML = "";
         carteras.calcular(lista_seleccionados.length);
@@ -309,12 +332,21 @@ function Carteras(){
 
     }
 
+    this.eliminarFormaPago = function(element){
+        var node = element.parentNode.parentNode;
+        if(node.parentNode){
+            node.parentNode.removeChild(node);
+        }
+
+        carteras.recorrerFormaPago();
+    }
+
     this.recorrerFormaPago = function(){
         var valor_forma_pagos=0;
-        var tabla = document.getElementById("tabla_forma_pago");
-        for (var i=1;i < tabla.rows.length; i++){  
-            valor_forma_pagos=parseFloat($('#'+i+'_valor_pago').val())+valor_forma_pagos;
-            //console.log(valor_forma_pagos);
+        carteravalor = document.getElementsByName("Carteravalor");
+        for (var i=0;i < carteravalor.length; i++){ 
+            element = carteravalor[i]; 
+            valor_forma_pagos = parseFloat(element.value) + valor_forma_pagos;
         }
         document.getElementById('total_forma_pago').value = valor_forma_pagos;
         document.getElementById('total_forma_pago_tex').innerHTML = "$ " + new Intl.NumberFormat().format(valor_forma_pagos);
@@ -691,6 +723,25 @@ function Carteras(){
     this.getid = function(id, elemento){
         console.log($('#'+id).val());
         $('#'+elemento).html($('#'+id).val());
+    }
+
+    this.verificarNumeracion = function(tipo){
+        var parametros = {
+            'prefijo' : $('#prefijo').val(),
+            'numero' : $('#numero').val(),
+            'tipo' : tipo
+        };
+        $.ajax({
+            data:  parametros,
+            url:   '/cartera/verificarNumeracion',
+            type:  'get',
+            success:  function (response) {
+                console.log(response);
+                respuesta = "";
+                (response == "NODISPONIBLE")? respuesta = "<span style='color:red;'>Numeración no disponible</span>" : respuesta = "<span style='color:green;'>Numeracion disponible</span>";
+                document.getElementById('errorNumeracion').innerHTML = respuesta;
+            }
+        });
     }
 
 }

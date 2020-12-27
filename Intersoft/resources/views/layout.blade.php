@@ -350,16 +350,8 @@
                             <li role="separator" class="divider"></li>
                             @foreach ($documentos as $obj)
                                 <?php 
-                                if($obj["signo"]=='+'){
-                                    $signo = "mas";
-                                }
-                                elseif($obj["signo"]=='-'){
-                                    $signo = "menos";
-                                }
-                                else{
-                                    $signo = "igual";
-                                }
-                                ?> 
+                                if($obj["nombre"]=='Compras'){
+                                    ?>
                                 <li>
                                     <div class="row">
                                         <?php $url = '/facturacion/compra/'.$obj['id']; ?>
@@ -368,6 +360,21 @@
                                         <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
                                     <div>
                                 </li>
+                                    <?php
+                                }
+                                else{
+                                    ?>
+                                <li>
+                                    <div class="row">
+                                        <?php $url = '/facturacion/otrosDocumentos/'.$obj['id']; ?>
+                                        <a class="col-md-7" style="margin-left:6%;" href="{{ $url }}" target="_blank">{{ $obj['nombre'] }}</a>
+                                        <?php $urlconsulta = '/documentos/consultar/'.$obj['id']; ?>
+                                        <a class="col-md-2" href="{{ $urlconsulta }}" class="btn btn-default"><i class="fa fa-search" aria-hidden="true"></i></a>
+                                    <div>
+                                </li>
+                                    <?php
+                                }
+                                ?>
                                 <li role="separator" class="divider"></li>
                             @endforeach
                         </ul>

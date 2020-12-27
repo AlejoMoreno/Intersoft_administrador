@@ -39,6 +39,12 @@ $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first();
 
 <div class="row top-11-w">
     <div class="card" style="margin:3%;">
+        <input type="hidden" id="directorio_reteica">
+        <input type="hidden" id="directorio_porcentaje_rete_iva">
+        <input type="hidden" id="directorio_cupo_financiero">
+        <input type="hidden" id="directorio_descuento">
+        <input type="hidden" id="directorio_financiacion">
+        <input type="hidden" id="directorio_calificacion">
         @if($documento['nombre'] != "Compras")
         
                 <input type="hidden" id="id_retefuente" value="0" placeholder="id_retefuente" class="form-control">
@@ -146,7 +152,7 @@ $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first();
                     <input type="number" style="display: none" value="0" id="fletes" onchange="config.aparecer('fletesTex','fletes')" onkeyup="recorrerCree();" class="form-control ">
                     <input type="number" style="display: none" value="0" id="retefuente" onchange="config.aparecer('retefuenteTex','retefuente')" class="form-control" onkeyup="recorrerCree();">
                     <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
-                    <input type="number" style="display: none" value="0" id="otro_impuesto" onchange="config.aparecer('otro_impuestoTex','otro_impuesto')" class="form-control" onkeyup="recorrerCree();">
+                    <input type="number" style="display: none" value="0" id="cree" onchange="config.aparecer('creeTex','cree')" class="form-control" onkeyup="recorrerCree();">
                     <input type="hidden" id="total" class="form-control" disabled="">
                     <input id="observaciones" name="observaciones" class="form-control" style="width:100%;" onkeyup="documentos.enterObser(event);" value="SIN OBSERVACIONES" >
                 </div>
@@ -198,16 +204,22 @@ $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first();
                     <input type="number" style="display: none" value="0" id="retefuente" onchange="config.aparecer('retefuenteTex','retefuente')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
-                    <label>ICA</label>
+                    <label>IMPOCONSUMO</label>
                     <br>
                     <p id="impoconsumoTex" onclick="config.aparecer('impoconsumo','impoconsumoTex')">$ 0.00</p>
                     <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
+                    <label>RETE ICA.</label>
+                    <br>
+                    <p id="reteicaTex" onclick="config.aparecer('reteica','reteicaTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="reteica" onchange="config.aparecer('reteicaTex','reteica')" class="form-control" onkeyup="recorrerCree();">
+                </div>
+                <div class="col-sm-3">
                     <label>CREE</label>
                     <br>
-                    <p id="otro_impuestoTex" onclick="config.aparecer('otro_impuesto','otro_impuestoTex')">$ 0.00</p>
-                    <input type="number" style="display: none" value="0" id="otro_impuesto" onchange="config.aparecer('otro_impuestoTex','otro_impuesto')" class="form-control" onkeyup="recorrerCree();">
+                    <p id="creeTex" onclick="config.aparecer('cree','creeTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="cree" onchange="config.aparecer('creeTex','cree')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
                     <label>TOTAL</label>
@@ -593,8 +605,8 @@ function saveFactura(){
         'subtotal' :  $('#subtotal').val(),
         'iva' : $('#iva').val(),
         'impoconsumo' : $('#impoconsumo').val(),
-        'otro_impuesto' : $('#otro_impuesto').val(),
-        'otro_impuesto1' : '0',
+        'cree' : $('#cree').val(),
+        'reteica' : $('#reteica').val(),
         'descuento' : $('#descuento').val(),
         'fletes' : $('#fletes').val(),
         'retefuente' : $('#retefuente').val(),
@@ -745,27 +757,53 @@ function getReferencia(id){
             lote = response.lote;
             linea = response.linea;
 
-            var precioasignado = referencia.precioasignado.toString();
-            precios = "<input type='number' class='form-control' onchange='recorrerproductos(this)' value='"+parseFloat(referencia.costo_promedio).toFixed(2)+"' name='valor_unidad'>";
-            lotes = "<input class='form-control' name='lote' value='0'>";
-            var table = document.getElementById("tabla_productos");
-            var row = table.insertRow(1);
-            var cell0 = row.insertCell(0);
-            var cell1 = row.insertCell(1);
-            var cell2 = row.insertCell(2);
-            var cell3 = row.insertCell(3);
-            var cell4 = row.insertCell(4);
-            var cell5 = row.insertCell(5);
-            var cell6 = row.insertCell(6);
-            var cell7 = row.insertCell(7);
-            cell0.innerHTML = "<button type='button' class='deletebtn btn btn-danger' title='Remove row'>X</button><input type='hidden' value='0' class='' name='check'><input type='hidden' name='id' value='"+referencia.id+"'>";
-            cell1.innerHTML = "<strong style='color:black'>"+referencia.codigo_interno+"</strong>";
-            cell2.innerHTML = "<strong style='color:black'>"+referencia.descripcion+"</strong>";
-            cell3.innerHTML = lotes;
-            cell4.innerHTML = "<input type='number' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
-            cell5.innerHTML = precios;
-            cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
-            cell7.innerHTML = "<input type='number' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'>";
+            //cargar ultimo precio
+            var urls = '/kardex/ultimoPrecio';
+            var parametros = {
+                "nit" :  $('#cedula_tercero').val(),
+                "id_directorio_tipo_tercero" : 1, 
+                "id_referencia" : referencia.id
+            };
+            var precioUltimo = null;
+            $.ajax({
+                url:   urls,
+                type:  'get',
+                data:  parametros,
+                success:  function (response) {
+                    if(response==""){
+                        precioUltimo = referencia.costo_promedio;
+                    }
+                    else{
+                        precioUltimo = response.precio;
+                    }
+                    console.log("PRECIO ULTIMO:",precioUltimo);
+
+                    var precioasignado = referencia.precioasignado.toString();
+                    precios = "<input type='text' class='form-control' onchange='recorrerproductos(this)' value='"+parseFloat(precioUltimo).toFixed(2)+"' name='valor_unidad'>";
+                    lotes = "<input class='form-control' name='lote' value='0'>";
+                    var table = document.getElementById("tabla_productos");
+                    var row = table.insertRow(1);
+                    var cell0 = row.insertCell(0);
+                    var cell1 = row.insertCell(1);
+                    var cell2 = row.insertCell(2);
+                    var cell3 = row.insertCell(3);
+                    var cell4 = row.insertCell(4);
+                    var cell5 = row.insertCell(5);
+                    var cell6 = row.insertCell(6);
+                    var cell7 = row.insertCell(7);
+                    cell0.innerHTML = "<button type='button' class='deletebtn btn btn-danger' title='Remove row'>X</button><input type='hidden' value='0' class='' name='check'><input type='hidden' name='id' value='"+referencia.id+"'>";
+                    cell1.innerHTML = "<strong style='color:black'>"+referencia.codigo_interno+"</strong>";
+                    cell2.innerHTML = "<strong style='color:black'>"+referencia.descripcion+"</strong>";
+                    cell3.innerHTML = lotes;
+                    cell4.innerHTML = "<span style='color:black;position:absolute;margin-left: 10px;margin-top: -10px;'>Saldo: "+ new Intl.NumberFormat().format(referencia.saldo) +"</span><input type='text' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
+                    cell5.innerHTML = precios;
+                    cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
+                    cell7.innerHTML = "<input type='hidden' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'><p name='spanTotal' class='numberTex' style='color:black;'>$ 0.00</p>";
+                    console.log("PRECIO ULTIMO RESPUESTA:",response);
+                }
+            });
+
+            
         },
         error: function(){
             swal({
@@ -785,6 +823,7 @@ function recorrerproductos(element){
     
     inputs = tr.getElementsByTagName('input');
     selects = tr.getElementsByTagName('select');
+    span = tr.getElementsByTagName('p');
     
     check = inputs[0].value;
     id = inputs[1].value;
@@ -797,6 +836,7 @@ function recorrerproductos(element){
 
     
     inputs[7].value = parseFloat(cantidad) * parseFloat(valor_unidad);
+    span[0].innerHTML = "$ " + new Intl.NumberFormat().format(inputs[7].value);
 
     //IVA 
     if(iva == 0){
@@ -849,14 +889,16 @@ function recorrerCree(){
     document.getElementById("descuentoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#descuento').val());
     fletes = parseFloat($('#fletes').val().replace(",",""));
     document.getElementById("fletesTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#fletes').val());
-    cree = parseFloat($('#otro_impuesto').val().replace(",",""));
-    document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
+    cree = parseFloat($('#cree').val().replace(",",""));
+    document.getElementById("creeTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#cree').val());
     retefuente = parseFloat($('#retefuente').val().replace(",",""));
     document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     impoconsumo = parseFloat($('#impoconsumo').val().replace(",",""));
+    reteica = parseFloat($('#reteica').val().replace(",",""));
+    document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
     iva = parseFloat($('#iva').val().replace(",",""));
     document.getElementById("impoconsumoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#impoconsumo').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - impoconsumo - retefuente + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - impoconsumo - reteica - retefuente + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 }
 
@@ -866,7 +908,8 @@ function recorrerSinImpuestos(){
     subtot = 0;
     descuento = parseFloat($('#descuento').val());
     fletes = parseFloat($('#fletes').val().replace(",",""));
-    cree = $('#otro_impuesto').val().replace(",","");
+    cree = $('#cree').val().replace(",","");
+    reteica = $('#reteica').val().replace(",","");
     retefuente = $('#retefuente').val().replace(",","");
     impoconsumo = $('#impoconsumo').val().replace(",","");
 
@@ -888,7 +931,7 @@ function recorrerSinImpuestos(){
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
     document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     directorio_tipo = $('#directorio_tipo').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - impoconsumo + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - reteica - impoconsumo + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 
     /** cartera verificar y recorrer **/
@@ -907,9 +950,9 @@ function recorrerTotal(){
     config.createToast("info", "Intersoft esta calculando el Total de la factura");
     subtotales = document.getElementsByName("subtotal");
     subtot = 0;
-    descuento = parseFloat($('#descuento').val());
     fletes = parseFloat($('#fletes').val());
     impoconsumo = $('#impoconsumo').val();
+    
 
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
@@ -945,14 +988,37 @@ function recorrerTotal(){
     directorio_tipo = $('#directorio_tipo').val();
     //VERIFICAR TIPO DE TERCERO (CREE)
     if(directorio_tipo == "JURIDICA"){
-        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
+        $('#cree').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
     else{
-        $('#otro_impuesto').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
+        $('#cree').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
-    cree = $('#otro_impuesto').val();
-    document.getElementById("otro_impuestoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#otro_impuesto').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - impoconsumo + iva).toFixed(2) );
+    //VERIFICAR RETE ICA
+    if($('#directorio_reteica').val() != ""){
+        porcentaje_rete_ica = parseFloat($('#directorio_reteica').val());
+        subtotal = parseFloat($('#subtotal').val());
+        totalica = (porcentaje_rete_ica * subtotal)/1000;
+        console.log("% totalica: ",totalica);
+        $('#reteica').val(totalica);
+        document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
+    }
+    else{
+        $('#reteica').val(0);
+        document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
+    }
+    //VERIFICAR DESCUENTOS
+    if($('#directorio_descuento').val() != "" || $('#directorio_descuento').val() != "0"){
+        porcentaje_descuento = parseFloat($('#directorio_descuento').val());
+        subtotal = parseFloat($('#subtotal').val());
+        totaldescuento = (porcentaje_descuento * subtotal)/100;
+        $('#descuento').val(totaldescuento);
+        document.getElementById("descuentoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#descuento').val());
+    }
+    descuento = parseFloat($('#descuento').val());
+    reteica = $('#reteica').val();
+    cree = $('#cree').val();
+    document.getElementById("creeTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#cree').val());
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - reteica - impoconsumo + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
     
 
@@ -1045,6 +1111,12 @@ function buscarproveedor(texto){
                     $('#zona').val(cliente.zona_venta);
                     $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
                     $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
+                    $('#directorio_reteica').val(cliente.rete_ica);
+                    $('#directorio_porcentaje_rete_iva').val(cliente.porcentaje_rete_iva);
+                    $('#directorio_cupo_financiero').val(cliente.cupo_financiero);
+                    $('#directorio_descuento').val(cliente.descuento);
+                    $('#directorio_financiacion').val(cliente.financiacion);
+                    $('#directorio_calificacion').val(cliente.calificacion);
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
@@ -1052,6 +1124,7 @@ function buscarproveedor(texto){
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
                     //$('#guardarCliente').hide();   
+                    $('#btnSiCaja').text("Cupo financiero es de: " + new Intl.NumberFormat().format($('#directorio_cupo_financiero').val()));
                     $('#resCliente').text("Proveedor existe");    
                     //cartera
                     $('#Carterasid_cliente').val(cliente.id);           
@@ -1064,12 +1137,19 @@ function buscarproveedor(texto){
                     $('#zona').val("");
                     $('#directorio_tipo').val("");
                     $('#id_retefuente').val("");
+                    $('#directorio_reteica').val("");
+                    $('#directorio_porcentaje_rete_iva').val("");
+                    $('#directorio_cupo_financiero').val("");
+                    $('#directorio_descuento').val("");
+                    $('#directorio_financiacion').val("");
+                    $('#directorio_calificacion').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
                     $('#correo').prop( "disabled", false ); 
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
+                    $('#btnSiCaja').text("Cupo financiero es de: " + new Intl.NumberFormat().format(0));
                     //$('#guardarCliente').show();
                     $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
                 }              
@@ -1118,12 +1198,19 @@ function buscarproveedor2(texto){
                     $('#zona').val(cliente.zona_venta);
                     $('#directorio_tipo').val(cliente.id_directorio_tipo.nombre);
                     $('#id_retefuente').val(JSON.stringify(cliente.id_retefuente));
+                    $('#directorio_reteica').val(cliente.rete_ica);
+                    $('#directorio_porcentaje_rete_iva').val(cliente.porcentaje_rete_iva);
+                    $('#directorio_cupo_financiero').val(cliente.cupo_financiero);
+                    $('#directorio_descuento').val(cliente.descuento);
+                    $('#directorio_financiacion').val(cliente.financiacion);
+                    $('#directorio_calificacion').val(cliente.calificacion);
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
                     $('#correo').prop( "disabled", false );    
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
+                    $('#btnSiCaja').text("Cupo financiero es de: " + new Intl.NumberFormat().format($('#directorio_cupo_financiero').val()));
                     //$('#guardarCliente').hide();   
                     $('#resCliente').text("Proveedor existe");    
                     //cartera
@@ -1139,12 +1226,19 @@ function buscarproveedor2(texto){
                     $('#zona').val("");
                     $('#directorio_tipo').val("");
                     $('#id_retefuente').val("");
+                    $('#directorio_reteica').val("");
+                    $('#directorio_porcentaje_rete_iva').val("");
+                    $('#directorio_cupo_financiero').val("");
+                    $('#directorio_descuento').val("");
+                    $('#directorio_financiacion').val("");
+                    $('#directorio_calificacion').val("");
                     $('#nombre').prop( "disabled", false );  
                     $('#direccion').prop( "disabled", false );  
                     $('#telefono').prop( "disabled", false );  
                     $('#correo').prop( "disabled", false ); 
                     $('#id_ciudad').prop("disabled", false);
                     $('#zona').prop("disabled", false);
+                    $('#btnSiCaja').text("Cupo financiero es de: " + new Intl.NumberFormat().format(0));
                     //$('#guardarCliente').show();
                     $('#resCliente').text("Cliente no existe, si desea crearlo, diligencie los datos restantes");               
                 }              

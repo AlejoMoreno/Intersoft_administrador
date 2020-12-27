@@ -81,10 +81,10 @@ class KardexController extends Controller
 		//sacar el reteica
 		$reteica = ($producto->subtotal) * ($linea->reteica_porcentaje/100);
 		$obj->impoconsumo 	= $reteica;
-		$obj->otro_impuesto = $factura->otro_impuesto;
+		$obj->cree = $factura->cree;
 		//sacar el reteiva
 		$reteiva = ($producto->subtotal) * ($linea->reteiva_porcentaje/100);
-		$obj->otro_impuesto1 = $reteiva;
+		$obj->reteiva = $reteiva;
 		//sacar el descuento
 		$descuento = ($producto->subtotal) * ($producto->descuento/100);
 		$obj->descuento 	= $descuento;
@@ -387,8 +387,8 @@ class KardexController extends Controller
 			$obj->subtotal 		= $request->subtotal;
 			$obj->iva 			= $request->iva;
 			$obj->impoconsumo 	= $request->reteica;
-			$obj->otro_impuesto = $factura[0]->otro_impuesto;
-			$obj->otro_impuesto1 = $request->reteiva;
+			$obj->cree = $factura[0]->cree;
+			$obj->reteiva = $request->reteiva;
 			$obj->descuento 	= $request->descuento;
 			$obj->fletes 		= 0;
 			$obj->retefuente 	= $request->retefuente;
@@ -410,6 +410,18 @@ class KardexController extends Controller
                 "body" => $exce
             );
         }
+	}
+	
+	public function ultimoPrecio(Request $request){
+		$tercero = Directorios::where('nit','=',$request->nit)
+				->where('id_directorio_tipo_tercero','=',$request->id_directorio_tipo_tercero)
+				->first();
+		$precio = Kardex::where('id_cliente','=',$tercero->id)
+				->where('id_referencia','=',$request->id_referencia)
+				->where('precio','>',0)
+				->orderBy('fecha','desc')
+				->first();
+		return $precio;
     }
 
 }

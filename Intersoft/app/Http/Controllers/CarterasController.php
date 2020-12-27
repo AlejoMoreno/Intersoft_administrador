@@ -714,6 +714,21 @@ class CarterasController extends Controller
 			);
 		}
 	}
+
+	public function verificarNumeracion(Request $request){
+		$cartera = Carteras::where('id_empresa','=',Session::get('id_empresa'))
+				->where('prefijo','=',$request->prefijo)
+				->where('numero','=',$request->numero)
+				->where('tipoCartera','=',$request->tipo)
+				->first();
+		if($cartera === null){
+			return "DISPONIBLE";	
+		}
+		else{
+			return "NODISPONIBLE";
+		}
+		
+	}
 	
 	public function cierreCartera(){
 		try{

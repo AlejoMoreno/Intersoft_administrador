@@ -34,8 +34,9 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
 
 <div class="enc-article">
   <h4 class="title">Control de ingresos</h4>
-  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo" value="{{ $documento['prefijo'] }}">
-  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 45%;" id="numero" value="{{ $documento['numero'] + 1 }}">
+  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo" onchange="carteras.verificarNumeracion('INGRESO')" value="{{ $documento['prefijo'] }}">
+  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 45%;" id="numero" onchange="carteras.verificarNumeracion('INGRESO')" value="{{ $documento['numero'] + 1 }}">
+  <label id="errorNumeracion" style="color:red;position: absolute;top: 30%;left: 55%;"></label>
 </div>
 
 <div class="row top-11-w">
@@ -108,7 +109,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
             <th>Prefijo</th>
             <th># Factura</th>
             <th>Fecha Factura</th>
-            <th>Flete</th>
+            <th style="width:150px !important">Flete</th>
             <th>ReteF.</th>
             <th>ReteIva.</th>
             <th>ReteIca.</th>

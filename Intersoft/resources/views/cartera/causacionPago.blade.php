@@ -30,8 +30,9 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
 
 <div class="enc-article">
   <h4 class="title">Control de pago a terceros</h4>
-  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo" value="{{ $documento['prefijo'] }}">
-  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 45%;" id="numero" value="{{ $documento['numero'] + 1 }}">
+  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo" onchange="carteras.verificarNumeracion('EGRESO')" value="{{ $documento['prefijo'] }}">
+  <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 45%;" id="numero" onchange="carteras.verificarNumeracion('EGRESO')" value="{{ $documento['numero'] + 1 }}">
+  <label id="errorNumeracion" style="color:red;position: absolute;top: 30%;left: 55%;"></label>
 </div>
 
 <div class="row top-11-w">
@@ -160,14 +161,15 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
       </thead>
     </table>
     <label>Total Forma Pago</label>
-    <input type="text" class="form-control" id="total_forma_pago" value="" disabled="">
+    <p id="total_forma_pago_tex" class="numberTex">$ 0.00</p>
+    <input type="hidden" class="form-control" id="total_forma_pago" value="" disabled="">
   </div>
 </div>
             
 
 <hr>
             
-<div class="row top-11-w">
+<div class="row top-11-w" style="display:none">
   <div class="col-sm-12">
     <div class="row titulo">
       <div class="col-sm-3">
@@ -209,13 +211,16 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
       <div class="col-sm-12">
-        <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('GASTOCAUSADO');" style="background-color: #28a745;color:white;">GUARDAR</div>
         <div id="imprimirPOST" onclick="carteras.imprimirPost();" class="btn btn-warning form-control" style="background-color: white;">Imprimir Pos</div>
         <div id="imprimirDOC" onclick="carteras.imprimir();" class="btn btn-danger form-control" style="background-color: white;">Imprimir Documento</div>
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
     </div>
   </div>
+</div>
+
+<div class="col-sm-12">
+  <div id="Guardar" class="btn btn-success form-control" onclick="carteras.save_documento('EGRESO');" style="background-color: #28a745;color:white;">GUARDAR</div>
 </div>
 
 <script type="text/javascript">

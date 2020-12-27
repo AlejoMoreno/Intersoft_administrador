@@ -47,6 +47,7 @@ $referencia = App\Referencias::where('id','=',$id)->first();
             <tr>
                 @if(isset($saldocierre))
                 <?php 
+                $cont = 0;
                     if($saldocierre->saldo == null){
                         $cont = 0; $total = 0; 
                     }

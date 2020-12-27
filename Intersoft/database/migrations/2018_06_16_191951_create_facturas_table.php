@@ -30,8 +30,8 @@ class CreateFacturasTable extends Migration
             $table->double('subtotal');
             $table->double('iva');
             $table->double('impoconsumo');
-            $table->double('otro_impuesto');
-            $table->double('otro_impuesto1');
+            $table->double('cree');
+            $table->double('cree1');
             $table->double('descuento');
             $table->double('fletes');
             $table->double('retefuente');

@@ -88,8 +88,8 @@ class FacturasController extends Controller
 		$obj->subtotal 			= $request->subtotal;
 		$obj->iva 				= $request->iva;
 		$obj->impoconsumo 		= $request->impoconsumo;
-		$obj->otro_impuesto 	= $request->otro_impuesto;
-		$obj->otro_impuesto1 	= $request->otro_impuesto1;
+		$obj->cree 	= $request->cree;
+		$obj->reteica 	= $request->reteica;
 		$obj->descuento 		= $request->descuento;
 		$obj->fletes 			= $request->fletes;
 		$obj->retefuente 		= $request->retefuente;
@@ -126,16 +126,23 @@ class FacturasController extends Controller
 
     static function Tercero($signo,$request){
         $tercero = null;
-        if($signo == '+'){
+        if(isset($request->id_directorio_tipo_tercero)){
             $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','=','1')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->first();
+                                        where('id_directorio_tipo_tercero','=',$request->id_directorio_tipo_tercero)->
+                                        where('id_empresa','=',Session::get('id_empresa'))->first();
         }
-        //nada con el inventario o Salida de inventario
         else{
-            $tercero = Directorios::where('nit',$request->id_cliente)->
-                                    where('id_directorio_tipo_tercero','=','2')->
-                                    where('id_empresa','=',Session::get('id_empresa'))->first();
+            if($signo == '+'){
+                $tercero = Directorios::where('nit',$request->id_cliente)->
+                                        where('id_directorio_tipo_tercero','=','1')->
+                                        where('id_empresa','=',Session::get('id_empresa'))->first();
+            }
+            //nada con el inventario o Salida de inventario
+            else{
+                $tercero = Directorios::where('nit',$request->id_cliente)->
+                                        where('id_directorio_tipo_tercero','=','2')->
+                                        where('id_empresa','=',Session::get('id_empresa'))->first();
+            }
         }
         return $tercero;
     }
@@ -493,6 +500,23 @@ class FacturasController extends Controller
             "referencias"=>$referencias,
             "documento"=>$documento,
             "ciudades"=>$ciudades
+        ));
+    }
+    public function otrosDocumentos($id_documento){
+        $documento = Documentos::where('id','=',$id_documento)->first();
+        $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
+                                ->where('estado','=','ACTIVO')->get();
+        $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
+        $resoluciones = Resoluciones::where('id_documento','=',$documento->id)->get();
+
+        $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
+
+        return view('facturacion.otrosDocumentos',array(
+            "referencias"=>$referencias,
+            "documento"=>$documento,
+            "ciudades"=>$ciudades,
+            "resoluciones"=>$resoluciones,
+            "usuarios"=>$usuarios
         ));
     }
     /**
@@ -1001,12 +1025,12 @@ class FacturasController extends Controller
             $obj->subtotal 			= $request->subtotal;
             $obj->iva 				= $request->iva;
             $obj->impoconsumo 		= $request->impoconsumo;
-            $obj->otro_impuesto 	= $request->otro_impuesto;
-            $obj->otro_impuesto1 	= $request->otro_impuesto1;
+            $obj->cree 	= $request->cree;
+            $obj->reteica 	= $request->reteica;
             $obj->descuento 		= $request->descuento;
             $obj->fletes 			= $request->fletes;
             $obj->retefuente 		= $request->retefuente;
-            $obj->total 			= ($request->subtotal + $request->iva - $request->impoconsumo - $request->otro_impuesto - $request->otro_impuesto1 - $request->descuento - $request->fletes - $request->retefuente);
+            $obj->total 			= ($request->subtotal + $request->iva - $request->impoconsumo - $request->cree - $request->reteica - $request->descuento - $request->fletes - $request->retefuente);
             $obj->id_modificado 	= Session::get('user_id');
             $obj->observaciones 	= "INTERCON";
             $obj->estado 			= $request->estado;
@@ -1048,8 +1072,8 @@ class FacturasController extends Controller
                 $obj->subtotal 			= $request->subtotal;
                 $obj->iva 				= $request->iva;
                 $obj->impoconsumo 		= $request->impoconsumo;
-                $obj->otro_impuesto 	= $request->otro_impuesto;
-                $obj->otro_impuesto1 	= $request->otro_impuesto1;
+                $obj->cree 	= $request->cree;
+                $obj->reteica 	= $request->reteica;
                 $obj->descuento 		= $request->descuento;
                 $obj->fletes 			= $request->fletes;
                 $obj->retefuente 		= $request->retefuente;

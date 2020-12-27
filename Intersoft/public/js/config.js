@@ -437,6 +437,32 @@ function Config(){
 		document.getElementById(desaparecer).style.display = "none";
 	}
 
+	this.aparecerText = function(aparecer, desaparecer){
+		document.getElementById(aparecer).style.display = "inline";
+		document.getElementById(desaparecer).style.display = "none";
+		//poner texto
+		document.getElementById(aparecer).innerText = "$" + new Intl.NumberFormat().format(document.getElementById(desaparecer).value);
+	}
+
+	this.ultimoPrecio = function(id_cliente,id_referencia){
+		var urls = '/kardex/ultimoPrecio';
+		var parametros = {
+			"id_cliente" : id_cliente,
+			"id_referencia" : id_referencia
+		};
+		$.ajax({
+			url:   urls,
+			type:  'get',
+			data:  parametros,
+			success:  function (response) {
+				return response;
+			},
+			error: function(response){
+				return null;
+			}
+		});
+	}
+
 }
 
 

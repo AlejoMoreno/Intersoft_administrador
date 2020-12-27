@@ -25,8 +25,8 @@ class Kardex extends Model
 	'subtotal',
 	'iva',
 	'impoconsumo',
-	'otro_impuesto',
-	'otro_impuesto1',
+	'cree',
+	'reteica',
 	'descuento',
 	'fletes',
 	'retefuente',
@@ -34,7 +34,8 @@ class Kardex extends Model
 	'observaciones',
 	'id_modificado',
 	'kardex_anterior',
-	'estado'
+	'estado',
+	'reteiva'
 	];
     
 }
