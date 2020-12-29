@@ -26,10 +26,10 @@ function Lineas(){
         $('#v_puc_reteica').val(data.v_puc_reteica.id);
         $('#c_puc_reteica').val(data.c_puc_reteica.id);
         $('#iva_porcentaje').val(data.iva_porcentaje);
-        $('#v_puc_iva').val(data.v_puc_iva).id;
+        $('#v_puc_iva').val(data.v_puc_iva.id);
         $('#c_puc_iva').val(data.c_puc_iva.id);
-        $('#puc_compra').val(data.puc_compra.id);
-        $('#puc_venta').val(data.puc_venta.id);
+        $('#puc_compra').val(data.puc_compra);
+        $('#puc_venta').val(data.puc_venta);
         $('#codigo_interno').val(data.codigo_interno);
 		$('#codigo_alterno').val(data.codigo_alterno);
 		$('input[type="submit"]').attr('disabled','disabled');

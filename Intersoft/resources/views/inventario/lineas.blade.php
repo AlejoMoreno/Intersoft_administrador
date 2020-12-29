@@ -148,7 +148,7 @@
                                             <select name="v_puc_retefuente" class="form-control" id="v_puc_retefuente"> 
                                                 <option>Seleccione Cuenta</option>
                                                 @foreach ( $cuentas as $cuenta )
-                                                @if(strpos($cuenta->codigo, '135515') !== false)
+                                                @if(strpos($cuenta->codigo, '1355') !== false)
                                                 <option value="{{ $cuenta->id }}">{{ $cuenta->codigo }} - {{ $cuenta->descripcion }}</option>
                                                 @endif
                                                 @endforeach
@@ -159,7 +159,7 @@
                                             <select name="c_puc_retefuente" class="form-control" id="c_puc_retefuente"> 
                                                 <option>Seleccione Cuenta</option>
                                                 @foreach ( $cuentas as $cuenta )
-                                                @if(strpos($cuenta->codigo, '236540') !== false)
+                                                @if(strpos($cuenta->codigo, '2365') !== false)
                                                 <option value="{{ $cuenta->id }}">{{ $cuenta->codigo }} - {{ $cuenta->descripcion }}</option>
                                                 @endif
                                                 @endforeach
@@ -196,7 +196,7 @@
                                             <select name="v_puc_reteica" class="form-control" id="v_puc_reteica"> 
                                                 <option>Seleccione Cuenta</option>
                                                 @foreach ( $cuentas as $cuenta )
-                                                @if(strpos($cuenta->codigo, '135518') !== false)
+                                                @if(strpos($cuenta->codigo, '1355') !== false)
                                                 <option value="{{ $cuenta->id }}">{{ $cuenta->codigo }} - {{ $cuenta->descripcion }}</option>
                                                 @endif
                                                 @endforeach
@@ -207,7 +207,7 @@
                                             <select name="c_puc_reteica" class="form-control" id="c_puc_reteica"> 
                                                 <option>Seleccione Cuenta</option>
                                                 @foreach ( $cuentas as $cuenta )
-                                                @if(strpos($cuenta->codigo, '236801') !== false)
+                                                @if(strpos($cuenta->codigo, '2368') !== false)
                                                 <option value="{{ $cuenta->id }}">{{ $cuenta->codigo }} - {{ $cuenta->descripcion }}</option>
                                                 @endif
                                                 @endforeach
@@ -222,7 +222,7 @@
                                             <select name="v_puc_iva" class="form-control" id="v_puc_iva"> 
                                                 <option>Seleccione Cuenta</option>
                                                 @foreach ( $cuentas as $cuenta )
-                                                @if(strpos($cuenta->codigo, '240805') !== false)
+                                                @if(strpos($cuenta->codigo, '2408') !== false)
                                                 <option value="{{ $cuenta->id }}">{{ $cuenta->codigo }} - {{ $cuenta->descripcion }}</option>
                                                 @endif
                                                 @endforeach
@@ -233,7 +233,7 @@
                                             <select name="c_puc_iva" class="form-control" id="c_puc_iva"> 
                                                 <option>Seleccione Cuenta</option>
                                                 @foreach ( $cuentas as $cuenta )
-                                                @if(strpos($cuenta->codigo, '240801') !== false)
+                                                @if(strpos($cuenta->codigo, '2408') !== false)
                                                 <option value="{{ $cuenta->id }}">{{ $cuenta->codigo }} - {{ $cuenta->descripcion }}</option>
                                                 @endif
                                                 @endforeach

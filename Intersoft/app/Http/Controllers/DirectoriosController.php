@@ -281,6 +281,7 @@ class DirectoriosController extends Controller
     public function addTercero(Request $request){
         $directorios = Directorios::where('id_empresa','=',Session::get('id_empresa'))
                         ->where('nit','=',$request->nit)
+                        ->where('id_directorio_tipo_tercero','=',$request->id_directorio_tipo_tercero)
                         ->first();
         if(sizeof($directorios) == 0){
             $directorios = new Directorios();
@@ -307,7 +308,7 @@ class DirectoriosController extends Controller
             $directorios->id_retefuente= "1";
             $directorios->id_regimen= "1";
             $directorios->id_usuario= "1";
-            $directorios->id_directorio_tipo= "1";
+            $directorios->id_directorio_tipo= $request->id_directorio_tipo_tercero;
             $directorios->id_directorio_clase= "1";
         }
         else{
@@ -315,11 +316,11 @@ class DirectoriosController extends Controller
             $directorios->id_ciudad = $request->id_ciudad;
             $directorios->razon_social= $request->razon_social;
             $directorios->direccion = $request->direccion;
-            $directorios->correo    = ($request->correo == "")?"admin@admin.com":$request->correo;
-            $directorios->telefono  = ($request->telefono == "")?"0":$request->telefono;
-            $directorios->telefono1 = ($request->telefono == "")?"0":$request->telefono;
-            $directorios->telefono2 = ($request->telefono == "")?"0":$request->telefono;
-            $directorios->zona_venta= ($request->zona_venta == "")?"NA":$request->zona_venta;
+            $directorios->correo    = $request->correo;
+            $directorios->telefono  = $request->telefono;
+            $directorios->telefono1 = $request->telefono;
+            $directorios->telefono2 = $request->telefono;
+            $directorios->zona_venta= $request->zona_venta;
         }
         
         if(isset($request->id_directorio_tipo_tercero)){

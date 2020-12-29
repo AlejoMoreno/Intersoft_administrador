@@ -210,6 +210,12 @@ $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first();
                     <input type="number" style="display: none" value="0" id="impoconsumo" onchange="config.aparecer('impoconsumoTex','impoconsumo')" class="form-control" onkeyup="recorrerCree();">
                 </div>
                 <div class="col-sm-3">
+                    <label>RETE IVA</label>
+                    <br>
+                    <p id="reteivaTex" onclick="config.aparecer('reteiva','reteivaTex')">$ 0.00</p>
+                    <input type="number" style="display: none" value="0" id="reteiva" onchange="config.aparecer('reteivaTex','reteiva')" class="form-control" onkeyup="recorrerCree();">
+                </div>
+                <div class="col-sm-3">
                     <label>RETE ICA.</label>
                     <br>
                     <p id="reteicaTex" onclick="config.aparecer('reteica','reteicaTex')">$ 0.00</p>
@@ -605,6 +611,7 @@ function saveFactura(){
         'subtotal' :  $('#subtotal').val(),
         'iva' : $('#iva').val(),
         'impoconsumo' : $('#impoconsumo').val(),
+        'reteiva' : $('#reteiva').val(),
         'cree' : $('#cree').val(),
         'reteica' : $('#reteica').val(),
         'descuento' : $('#descuento').val(),
@@ -613,7 +620,7 @@ function saveFactura(){
         'total' : $('#total').val(),
         'id_modificado' : localStorage.getItem('Id_usuario'),
         'observaciones' : $('#observaciones').val(),
-        'estado' : 'ACTIVO',
+        'estado' : 'VG',
         'saldo'  : $('#total').val(),
         'tipo_pago' : $('#tipo_pago').val(),
         'productosArr' : jsonArr
@@ -893,12 +900,14 @@ function recorrerCree(){
     document.getElementById("creeTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#cree').val());
     retefuente = parseFloat($('#retefuente').val().replace(",",""));
     document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
+    reteiva = parseFloat($('#reteiva').val().replace(",",""));
+    document.getElementById("reteivaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteiva').val());
     impoconsumo = parseFloat($('#impoconsumo').val().replace(",",""));
     reteica = parseFloat($('#reteica').val().replace(",",""));
     document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
     iva = parseFloat($('#iva').val().replace(",",""));
     document.getElementById("impoconsumoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#impoconsumo').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - impoconsumo - reteica - retefuente + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - impoconsumo - reteiva - reteica - retefuente + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 }
 
@@ -912,6 +921,7 @@ function recorrerSinImpuestos(){
     reteica = $('#reteica').val().replace(",","");
     retefuente = $('#retefuente').val().replace(",","");
     impoconsumo = $('#impoconsumo').val().replace(",","");
+    reteiva = $('#reteiva').val().replace(",","");
 
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
@@ -931,7 +941,7 @@ function recorrerSinImpuestos(){
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
     document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     directorio_tipo = $('#directorio_tipo').val();
-    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - reteica - impoconsumo + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - reteica - reteiva - impoconsumo + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
 
     /** cartera verificar y recorrer **/
@@ -953,7 +963,7 @@ function recorrerTotal(){
     fletes = parseFloat($('#fletes').val());
     impoconsumo = $('#impoconsumo').val();
     
-
+    
     for(i=0;i<subtotales.length;i++){ 
         element = subtotales[i];
         subtot += parseFloat(element.value);
@@ -983,6 +993,9 @@ function recorrerTotal(){
     document.getElementById("subtotalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#subtotal').val());
     $('#iva').val(parseFloat(iva).toFixed(2));
     document.getElementById("ivaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#iva').val());
+    reteiva = parseFloat(iva / 10);
+    $('#reteiva').val(parseFloat(reteiva).toFixed(2));
+    document.getElementById("reteivaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteiva').val());
     $('#retefuente').val(parseFloat(retefuente).toFixed(2));
     document.getElementById("retefuenteTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#retefuente').val());
     directorio_tipo = $('#directorio_tipo').val();
@@ -1018,7 +1031,7 @@ function recorrerTotal(){
     reteica = $('#reteica').val();
     cree = $('#cree').val();
     document.getElementById("creeTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#cree').val());
-    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - reteica - impoconsumo + iva).toFixed(2) );
+    $('#total').val( parseFloat(subtot - descuento + fletes - retefuente - reteica - reteiva - impoconsumo + iva).toFixed(2) );
     document.getElementById("totalTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#total').val());
     
 
