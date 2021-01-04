@@ -611,11 +611,13 @@ function saveFactura(){
         inputs = tabla.rows[i].getElementsByTagName('input');
         selects = tabla.rows[i].getElementsByTagName('select');
 
+        
         check = inputs[0].value;
         id = inputs[1].value;
         cantidad = inputs[2].value.replace(",","");
         iva = inputs[3].value;
-        subtotal = inputs[4].value;
+        totaliva = inputs[4].value;
+        subtotal = inputs[5].value;
 
         lote = selects[0].value;
         valor_unidad = selects[1].value;
@@ -629,7 +631,7 @@ function saveFactura(){
             'precio' : valor_unidad,
             'costo' : 0,
             'subtotal' : subtotal,
-            'iva' : iva,
+            'iva' : totaliva,
             'descuento' : 0
         };
         jsonArr.push(productos);
@@ -707,9 +709,9 @@ function saveFactura(){
                     .then((willDelete) => {
                     if (willDelete) {
                         window.open("/documentos/imprimir/"+factura.id);
-                        location.reload();
+                        window.location.reload(true);
                     } else {
-                        swal("Guardado exitoso. En otra ocación podrás imprmir.");
+                        window.location.reload(true);
                     }
                     }); 
                  }, 7000);
@@ -1094,19 +1096,6 @@ function recorrerTotal(){
     else{
         $('#cree').val(parseFloat($('#subtotal').val() * 0.0040).toFixed(2)); //CREE
     }
-    //VERIFICAR RETE ICA
-    if($('#directorio_reteica').val() != ""){
-        porcentaje_rete_ica = parseFloat($('#directorio_reteica').val());
-        subtotal = parseFloat($('#subtotal').val());
-        totalica = (porcentaje_rete_ica * subtotal)/1000;
-        console.log("% totalica: ",totalica);
-        $('#reteica').val(totalica);
-        document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
-    }
-    else{
-        $('#reteica').val(0);
-        document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
-    }
     //VERIFICAR DESCUENTOS
     if($('#directorio_descuento').val() != "" || $('#directorio_descuento').val() != "0"){
         porcentaje_descuento = parseFloat($('#directorio_descuento').val());
@@ -1116,6 +1105,19 @@ function recorrerTotal(){
         document.getElementById("descuentoTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#descuento').val());
     }
     descuento = parseFloat($('#descuento').val());
+    //VERIFICAR RETE ICA
+    if($('#directorio_reteica').val() != ""){
+        porcentaje_rete_ica = parseFloat($('#directorio_reteica').val());
+        subtotal = parseFloat($('#subtotal').val()) - parseFloat($('#descuento').val());
+        totalica = (porcentaje_rete_ica * subtotal)/1000;
+        console.log("% totalica: ",totalica);
+        $('#reteica').val(totalica);
+        document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
+    }
+    else{
+        $('#reteica').val(0);
+        document.getElementById("reteicaTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#reteica').val());
+    }
     reteica = $('#reteica').val();
     cree = $('#cree').val();
     document.getElementById("creeTex").innerHTML = "$ " + new Intl.NumberFormat().format($('#cree').val());

@@ -76,7 +76,7 @@ class KardexController extends Controller
 		$obj->signo 		= strval($factura->signo);
 		$obj->subtotal 		= $producto->subtotal;
 		//sacar el iva 
-		$iva = ($producto->subtotal) * ($linea->iva_porcentaje/100);
+		$iva = ($producto->iva);
 		$obj->iva 			= $iva;
 		//sacar el reteica
 		$reteica = ($producto->subtotal) * ($linea->reteica_porcentaje/100);

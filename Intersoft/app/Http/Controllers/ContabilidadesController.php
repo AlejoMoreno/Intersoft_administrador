@@ -565,18 +565,6 @@ class ContabilidadesController extends Controller
                 $contabilidad->id_auxiliar = $cuenta->id;
                 if($valor>0){$contabilidad->save();};
 
-                //ventas generadas con IVA
-                $cuenta = Pucauxiliar::
-                        where('id_empresa','=',Session::get('id_empresa'))
-                        ->where('id','=',$obj->c_puc_iva)
-                        ->first();
-                $valor = floatval($kar->kardexiva) ;
-                $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
-                $contabilidad->valor_transaccion = $valor;
-                $contabilidad->tipo_transaccion = $cuenta->naturaleza;
-                $contabilidad->id_auxiliar = $cuenta->id;
-                if($valor>0){$contabilidad->save();};
-
                 break;
 
             case 4: //compra
@@ -738,6 +726,39 @@ class ContabilidadesController extends Controller
     }
 
     /**
+     * CREE
+     */
+    public static function ContabilizarCree($factura,$tipo_documento_contable) {
+        switch ($tipo_documento_contable){
+            case 3: //venta
+
+                $cree = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','13559504') 
+                        ->first();
+                $valor = ($factura->cree);
+                $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->valor_transaccion = $valor;
+                $contabilidad->tipo_transaccion = "D";
+                $contabilidad->id_auxiliar = $cree->id;
+                $contabilidad->save();
+
+                $cree = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','23657004') 
+                        ->first();
+                $valor = ($factura->cree);
+                $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->valor_transaccion = $valor;
+                $contabilidad->tipo_transaccion = "C";
+                $contabilidad->id_auxiliar = $cree->id;
+                $contabilidad->save();
+
+                break;
+        }
+    }
+
+    /**
      *  CREACION DE COMPROBANTES CONTABLES A PARTIR DE CADA UNO DE LOS DOCUMENTOS.
      */
     public function generarfactura($doc){
@@ -821,15 +842,17 @@ class ContabilidadesController extends Controller
                 /**
                  * RETEIVA
                  */
-                if($referencia->iva!=0){
-                    ContabilidadesController::ContabilizarReteiva($factura, $tipo_documento_contable, $kar, $obj);
-                }
+                if($factura->reteiva != 0){
+                    if($valor_reteiva==0){
+                        ContabilidadesController::ContabilizarReteiva($factura, $tipo_documento_contable, $kar, $obj);
+                    }
+                }                
 
                 /**
                  * RETEICA
                  */
                 if($factura->reteica!=0){
-                    if($valor_reteiva == 0){
+                    if($valor_reteica == 0){
                         $valor_reteica = $factura->reteica;
                         ContabilidadesController::ContabilizarReteica($factura, $tipo_documento_contable, $kar, $obj, $valor_reteica);
                     }
@@ -846,24 +869,52 @@ class ContabilidadesController extends Controller
                 /**
                  * VENTA DE INSUMOS POR TIPO DE CLASIFICACION DEL PRODUCTO PARTIDA Y CONTRAPARTIDA
                  */
-                //partida
-                $cuenta = Pucauxiliar::
+                $valor = floatval( floatval(($kar->precio * $kar->cantidad))) ;
+                //______--------verificar que la referencia tenga iva-----___________
+                if ($referencia->iva == 5){
+                    $cuenta = Pucauxiliar::
                         where('id_empresa','=',Session::get('id_empresa'))
-                        ->where('id','=',$clasificaciones->cuenta_contable)
+                        ->where('codigo','=','41351405')
                         ->first();
-                $valor = floatval( floatval(($kar->costo_promedio * $kar->cantidad))) ;
+                }
+                else if ($referencia->iva == 10){
+                    $cuenta = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','41351410')
+                        ->first();
+                }
+                else if ($referencia->iva == 16){
+                    $cuenta = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','41351416')
+                        ->first();
+                }
+                else if ($referencia->iva == 19){
+                    $cuenta = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','41351419')
+                        ->first();
+                }
+                else{
+                    //partida
+                    $cuenta = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','41351401')
+                        ->first();
+                }
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "C";
                 $contabilidad->id_auxiliar = $cuenta->id;
                 if($valor>0){$contabilidad->save();};
+                
                 //contrapartida
                 $cuenta = Pucauxiliar::
                         where('id_empresa','=',Session::get('id_empresa'))
-                        ->where('id','=',$clasificaciones->cuenta_contrapartida)
+                        ->where('id','=',$obj->puc_compra) //1435...
                         ->first();
                 $cliente_cuenta = $clasificaciones->cuenta_contrapartida;
-                $valor = floatval( floatval(($kar->precio * $kar->cantidad))) ;
+                $valor = floatval( floatval(($kar->costo_promedio * $kar->cantidad))) ;
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "C";
@@ -872,7 +923,7 @@ class ContabilidadesController extends Controller
 
                 $cuenta = Pucauxiliar::
                         where('id_empresa','=',Session::get('id_empresa'))
-                        ->where('codigo','=','61351401')
+                        ->where('id','=',$obj->puc_venta) //613595...
                         ->first();
                 $cliente_cuenta = $clasificaciones->cuenta_contrapartida;
                 $valor = floatval( floatval(($kar->costo_promedio * $kar->cantidad))) ;
@@ -908,8 +959,15 @@ class ContabilidadesController extends Controller
             /**
              * AUTORETENCION
              */
-            if($factura->retefuente != 0){
+            /*if($factura->retefuente != 0){
                 ContabilidadesController::ContabilizarAutoretencion($factura,$tipo_documento_contable);
+            }*/
+
+            /**
+             * RETECREE
+             */
+            if($factura->cree != 0){
+                ContabilidadesController::ContabilizarCree($factura,$tipo_documento_contable);
             }
 
             $respuesta = "Documento contabilizado";
@@ -919,6 +977,7 @@ class ContabilidadesController extends Controller
         else if($tipo_documento->documento_contable == 4){ //FACTURA DE COMPRA
             $nombre = "FACTURAS DE COMPRA";
             $tipo_documento_contable = 4;
+            
             
             /** 
              * REGISTRAR LA PRIMERA CUENTA CONTABLE PREGUNTANDO SI ES CAJA O CREDITO 
@@ -950,15 +1009,17 @@ class ContabilidadesController extends Controller
                 /**
                  * RETEIVA
                  */
-                if($referencia->iva!=0){
-                    ContabilidadesController::ContabilizarReteiva($factura, $tipo_documento_contable, $kar, $obj);
+                if($factura->reteiva != 0){
+                    if($valor_reteiva==0){
+                        ContabilidadesController::ContabilizarReteiva($factura, $tipo_documento_contable, $kar, $obj);
+                    }
                 }
 
                 /**
                  * RETEICA
                  */
                 if($factura->reteica!=0){
-                    if($valor_reteiva == 0){
+                    if($valor_reteica == 0){
                         $valor_reteica = $factura->reteica;
                         ContabilidadesController::ContabilizarReteica($factura, $tipo_documento_contable, $kar, $obj, $valor_reteica);
                     }
@@ -975,15 +1036,39 @@ class ContabilidadesController extends Controller
                 /**
                  * VENTA DE INSUMOS POR TIPO DE CLASIFICACION DEL PRODUCTO PARTIDA Y CONTRAPARTIDA
                  */
-                //partida
-                $cuenta = Pucauxiliar::
+                $valor = floatval( floatval(($kar->precio * $kar->cantidad))) ;
+                //______--------verificar que la referencia tenga iva-----___________
+                if ($referencia->iva == 5){
+                    $cuenta = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','14350505')
+                        ->first();
+                }
+                else if ($referencia->iva == 10){
+                    $cuenta = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','14350510')
+                        ->first();
+                }
+                else if ($referencia->iva == 16){
+                    $cuenta = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','14350516')
+                        ->first();
+                }
+                else if ($referencia->iva == 19){
+                    $cuenta = Pucauxiliar::
+                        where('id_empresa','=',Session::get('id_empresa'))
+                        ->where('codigo','=','14350519')
+                        ->first();
+                }
+                else{
+                    //partida
+                    $cuenta = Pucauxiliar::
                         where('id_empresa','=',Session::get('id_empresa'))
                         ->where('id','=',$clasificaciones->cuenta_contable)
                         ->first();
-                $valor_total = floatval( floatval(($kar->precio * $kar->cantidad))) ;
-                $valor_sin_iva = floatval( floatval(($kar->precio * $kar->cantidad))) ;
-                //______--------verificar que la referencia tenga iva-----___________
-                ($referencia->iva != 0)?$valor = $valor_sin_iva : $valor = $valor_total;
+                }
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = $cuenta->naturaleza;
