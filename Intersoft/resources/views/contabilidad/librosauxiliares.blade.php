@@ -35,21 +35,38 @@ span{
 <div class="row top-11-w">
     <div class="card" style="margin:3%;">
         <form class="header row" style="background:white">
-            <div class="col-md-3">
-                <label>Fecha Corte:</label>
-                
+            <div class="col-md-2">
+                <label>Cuenta desde:</label>
+                <input type="text" name="cuenta_desde" id="cuenta_desde" class="form-control">
             </div>
-            <div class="col-md-3">
-                <label>Tipo Vista:</label>
-                <select name="tipo" class="form-control">
-                    <option value="">Seleccione tipo</option>
-                    <option value="1">Detalle y resumen</option>
-                    <option value="2">Solo resumen</option>
+            <div class="col-md-2">
+                <label>Cuenta hasta:</label>
+                <input type="text" name="cuenta_hasta" id="cuenta_hasta" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label>Fecha desde:</label>
+                <input type="date" name="fecha_desde" id="fecha_desde" class="form-control">
+            </div>
+            <div class="col-md-2">
+                <label>Fecha hasta:</label>
+                <input type="date" name="fecha_hasta" id="fecha_hasta" class="form-control">
+            </div>
+            <div class="col-md-1">
+                <label>Terceros:</label>
+                <select name="con_terceros" id="sin_terceros" class="form-control">
+                    <option value="1">Con</option>
+                    <option value="2">Sin</option>
                 </select>
             </div>
-            <div class="col-md-6"><br></div>
+            <div class="col-md-3">
+                <label>Tipo:</label>
+                <select name="tipo" class="form-control">
+                    <option value="1">Solo Movimiento</option>
+                    <option value="2">Saldos y Movimientos</option>
+                </select>
+            </div>
             <div class="col-md-4"><br>
-                <button onclick="ir()" class="btn btn-success">Consultar</button>
+                <input type="submit" class="btn btn-success" name="consultar" value="consultar">
             </div>
         </form>
         <div style="margin:2%;">

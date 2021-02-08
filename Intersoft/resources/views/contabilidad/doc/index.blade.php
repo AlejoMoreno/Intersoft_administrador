@@ -80,6 +80,7 @@ al tipo de documento seleccionado anteriormente.</p>
             <thead>
                 <tr>
                     <th>Código</th>
+                    <th>Tercero</th>
                     <th>Descripción</th>
                     <th>Debito</th>
                     <th>Credito</th>
@@ -207,15 +208,15 @@ function Obj(){
                     if(response.contabilidades[i].tipo_transaccion == 'D'){
                         valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                         tr = tr + `
-                        <td>`+ valor_trans +`</td>
-                        <td>0</td>
+                        <td style="text-align: right;">`+ valor_trans +`</td>
+                        <td style="text-align: right;">0</td>
                         `;
                     }
                     else{
                         valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                         tr = tr + `
-                        <td>0</td>
-                        <td>`+ valor_trans +`</td>
+                        <td style="text-align: right;">0</td>
+                        <td style="text-align: right;">`+ valor_trans +`</td>
                         `;
                     }
                     
@@ -269,21 +270,22 @@ function Obj(){
             var id = response.contabilidades[i].id;
             var tr = `<tr>
             <td>`+response.contabilidades[i].codigo+`</td>
+            <td>`+response.contabilidades[i].razon_social+`</td>
             <td>`+response.contabilidades[i].descripcion+`</td>`;
             if(response.contabilidades[i].tipo_transaccion == 'D'){
                 debitos = debitos + response.contabilidades[i].valor_transaccion;
                 valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                 tr = tr + `
-                <td>`+valor_trans+`</td>
-                <td>0</td>
+                <td style="text-align: right;">`+valor_trans+`</td>
+                <td style="text-align: right;"></td>
                 `;
             }
             else{
                 creditos = creditos + response.contabilidades[i].valor_transaccion;
                 valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                 tr = tr + `
-                <td>0</td>
-                <td>`+valor_trans+`</td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: right;">`+valor_trans+`</td>
                 `;
             }
             
@@ -297,9 +299,9 @@ function Obj(){
         debitos = new Intl.NumberFormat("de-DE").format(debitos);
         creditos = new Intl.NumberFormat("de-DE").format(creditos);
         $("#cuerpo").append(`<tr>
-            <td colspan=2></td>
-            <td><h5>`+debitos+`</h5></td>
-            <td><h5>`+creditos+`</h5></td>
+            <td colspan=3></td>
+            <td style="text-align: right;"><h5>`+debitos+`</h5></td>
+            <td style="text-align: right;"><h5>`+creditos+`</h5></td>
             <td></td>
             </tr>`);
         $('#tablecont').DataTable({

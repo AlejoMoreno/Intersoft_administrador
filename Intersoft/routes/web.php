@@ -577,6 +577,7 @@ Route::post('/contabilidad/cuentas', 'CuentasController@create');
 Route::post('/contabilidad/cuentas/update', 'CuentasController@update');
 
 Route::post('/contabilidad/buscarCuentas' , 'CuentasController@buscarCuentas');
+Route::post('/contabilidad/buscarCodigo', 'CuentasController@buscarCodigo');
 Route::post('/contabilidad/auxiliars/search/searchcode', 'ContabilidadesController@searchcode');
 
 Route::get('/contabilidad/librosauxiliares', 'ContabilidadesController@librosauxiliaresIndex');
@@ -607,6 +608,10 @@ Route::get('/contabilidad/generarnotadb/{doc}','ContabilidadesController@generar
 Route::get('/contabilidad/generarnotacr/{doc}','ContabilidadesController@generarnotacr');
 Route::get('/contabilidad/generarnotacontable/{doc}','ContabilidadesController@generarnotacontable');
 
+//balances
+Route::get('/contabilidad/balanceprueba', 'ContabilidadesController@balanceprueba');
+
+//cierres contables
 Route::post('/contabilidad/cierrecontable','ContabilidadesController@cierrecontablestore');
 Route::get('/contabilidad/cierrecontable','ContabilidadesController@cierrecontable');
 

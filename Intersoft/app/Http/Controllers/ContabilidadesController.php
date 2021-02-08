@@ -77,19 +77,35 @@ class ContabilidadesController extends Controller
         return $contabilidad;
     }
 
-    public function librosauxiliaresIndex(){
-        $data = Contabilidades::select('contabilidades.numero_documento','contabilidades.prefijo',
-            'pucauxiliars.codigo','pucauxiliars.descripcion','contabilidades.tipo_documento','contabilidades.fecha_documento',
-            'contabilidades.valor_transaccion','contabilidades.tipo_transaccion','directorios.razon_social','directorios.nit')
-            ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
-            ->join('directorios','directorios.id','=','contabilidades.tercero')
-            ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
-            ->orderBy('pucauxiliars.codigo','asc')
-            ->orderBy('directorios.nit','asc')
-            ->get();
-        return view('contabilidad.librosauxiliares', array(
-            "data"=>$data
-        ));
+    public function librosauxiliaresIndex(Request $request){
+        if($request->consultar == "consultar"){
+            $data = Contabilidades::select('contabilidades.numero_documento','contabilidades.prefijo',
+                'pucauxiliars.codigo','pucauxiliars.descripcion','contabilidades.tipo_documento','contabilidades.fecha_documento',
+                'contabilidades.valor_transaccion','contabilidades.tipo_transaccion','directorios.razon_social','directorios.nit')
+                ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
+                ->join('directorios','directorios.id','=','contabilidades.tercero')
+                ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+                ->where(function ($q) use ($request) {
+                    if(isset($request->cuenta_desde)){
+                        $q->whereBetween('pucauxiliars.codigo', [$request->cuenta_desde, $request->cuenta_hasta]);
+                    }
+                    if(isset($request->fecha_desde)){
+                        $q->whereBetween('contabilidades.fecha_documento', [$request->fecha_desde, $request->fecha_hasta]);
+                    }
+                })
+                ->orderBy('pucauxiliars.codigo','asc')
+                ->orderBy('directorios.nit','asc')
+                ->get();
+            return view('contabilidad.librosauxiliares', array(
+                "data"=>$data
+            ));
+        }
+        else{
+            return view('contabilidad.librosauxiliares', array(
+                "data"=>null
+            ));
+        }
+        
     }
     
     public function librosmayoresIndex(Request $request){
@@ -213,13 +229,13 @@ class ContabilidadesController extends Controller
     public function viewComprobantes(Request $request){
         
         $contabilidades = Contabilidades::select('pucauxiliars.id','pucauxiliars.codigo',
-                'pucauxiliars.descripcion','contabilidades.tipo_transaccion',
+                'pucauxiliars.descripcion','contabilidades.tipo_transaccion','directorios.razon_social',
                 DB::raw('SUM(contabilidades.valor_transaccion) as valor_transaccion'))
                         ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
                         ->where('numero_documento','=',$request->numero_documento)
                         ->join('pucauxiliars','pucauxiliars.id','=','contabilidades.id_auxiliar')
                         ->join('directorios','directorios.id','=','contabilidades.tercero')
-                        ->groupBy('pucauxiliars.id','pucauxiliars.codigo','pucauxiliars.descripcion','contabilidades.tipo_transaccion')
+                        ->groupBy('pucauxiliars.id','pucauxiliars.codigo','pucauxiliars.descripcion','contabilidades.tipo_transaccion','directorios.razon_social')
                         ->get();
         return array(
             "contabilidades"=>$contabilidades
@@ -353,16 +369,63 @@ class ContabilidadesController extends Controller
      * GENERAR EL SAVE DE LA CONTABILIDAD
      * */ 
     public static function savefactura($factura,$tipo_documento_contable){
-        $contabilidad = new Contabilidades();
-        $contabilidad->tipo_documento = $tipo_documento_contable;
-        $contabilidad->id_sucursal = Session::get('sucursal');
-        $contabilidad->id_documento = $factura->id_factura;
-        $contabilidad->numero_documento = $factura->numero;
-        $contabilidad->prefijo = $factura->prefijo;
-        $contabilidad->fecha_documento = $factura->fecha;
-        $contabilidad->tercero = $factura->id_cliente;
-        $contabilidad->id_empresa = Session::get('id_empresa');
-        return $contabilidad;
+        $empresa = Empresas::where('id','=',Session::get('id_empresa'))->first();
+        $directorio = Directorios::where('nit','=',$empresa->nit_empresa)->first();
+        if(sizeof($directorio)!=0){
+            $contabilidad = new Contabilidades();
+            $contabilidad->tipo_documento = $tipo_documento_contable;
+            $contabilidad->id_sucursal = Session::get('sucursal');
+            $contabilidad->id_documento = $factura->id_factura;
+            $contabilidad->numero_documento = $factura->numero;
+            $contabilidad->prefijo = $factura->prefijo;
+            $contabilidad->fecha_documento = $factura->fecha;
+            $contabilidad->tercero = $directorio->id;
+            $contabilidad->id_empresa = Session::get('id_empresa');
+            return $contabilidad;
+        }
+        else{
+            $directorios = new Directorios();
+            $directorios->nit       = (string)$empresa->nit_empresa;
+            $directorios->digito    = (string)"0";
+            $directorios->razon_social= (string)$empresa->razon_social;
+            $directorios->direccion = (string)$empresa->direccion;
+            $directorios->correo    = (string)$empresa->correo;
+            $directorios->telefono  = (string)$empresa->telefono;
+            $directorios->telefono1 = (string)$empresa->telefono1;
+            $directorios->telefono2 = (string)$empresa->telefono2;
+            $directorios->financiacion= (double)"0";
+            $directorios->descuento = (double)"0";
+            $directorios->cupo_financiero= (double)"0";
+            $directorios->rete_ica  = (double)"0";
+            $directorios->porcentaje_rete_iva= (double)"0";
+            $directorios->actividad_economica= $empresa->actividad;
+            $directorios->calificacion= "B";
+            $directorios->nivel     = "N";
+            $directorios->zona_venta= "0";
+            $directorios->transporte= "N";
+            $directorios->estado    = "ACTIVO";
+            $directorios->id_retefuente= 0;
+            $directorios->id_ciudad = 182;
+            $directorios->id_regimen= 1;
+            $directorios->id_usuario= 14;
+            $directorios->id_directorio_tipo= 1;
+            $directorios->id_directorio_clase= 31;
+            $directorios->id_directorio_tipo_tercero= 3;
+            $directorios->id_empresa	 	= Session::get('id_empresa');
+            $directorios->save();
+
+            $contabilidad = new Contabilidades();
+            $contabilidad->tipo_documento = $tipo_documento_contable;
+            $contabilidad->id_sucursal = Session::get('sucursal');
+            $contabilidad->id_documento = $factura->id_factura;
+            $contabilidad->numero_documento = $factura->numero;
+            $contabilidad->prefijo = $factura->prefijo;
+            $contabilidad->fecha_documento = $factura->fecha;
+            $contabilidad->tercero = $directorios->id;
+            $contabilidad->id_empresa = Session::get('id_empresa');
+            return $contabilidad;
+        }
+        
     }
 
     /**
@@ -380,6 +443,7 @@ class ContabilidadesController extends Controller
                         ->first(); 
                     $valorCuentaPorCobrarCliente = $factura->total;
                     $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                    $contabilidad->tercero = $factura->id_cliente;
                     $contabilidad->valor_transaccion = $valorCuentaPorCobrarCliente;
                     $contabilidad->tipo_transaccion = "D";
                     $contabilidad->id_auxiliar = $cuentaPorCobrarCliente->id;
@@ -397,6 +461,7 @@ class ContabilidadesController extends Controller
                                 ->first();
                         $valorCuentaPorCobrarCliente = $factura->total;
                         $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                        $contabilidad->tercero = $tipopagos->tercero;
                         $contabilidad->valor_transaccion = $formapago->valor;
                         $contabilidad->tipo_transaccion = $cuentaPorCobrarCliente->naturaleza;
                         $contabilidad->id_auxiliar = $cuentaPorCobrarCliente->id;
@@ -415,6 +480,7 @@ class ContabilidadesController extends Controller
                         ->first(); 
                     $valorCuentaPorCobrarCliente = $factura->total;
                     $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                    $contabilidad->tercero = $factura->id_cliente;
                     $contabilidad->valor_transaccion = $valorCuentaPorCobrarCliente;
                     $contabilidad->tipo_transaccion = "C";
                     $contabilidad->id_auxiliar = $cuentaPorCobrarCliente->id;
@@ -432,6 +498,7 @@ class ContabilidadesController extends Controller
                                 ->first();
                         $valorCuentaPorCobrarCliente = $factura->total;
                         $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                        $contabilidad->tercero = $tipopagos->tercero;
                         $contabilidad->valor_transaccion = $formapago->valor;
                         $contabilidad->tipo_transaccion = "C";
                         $contabilidad->id_auxiliar = $cuentaPorCobrarCliente->id;
@@ -455,6 +522,7 @@ class ContabilidadesController extends Controller
                         ->where('id','=',$obj->v_puc_retefuente)
                         ->first();
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor_retefuente;
                 $contabilidad->tipo_transaccion = $cuenta->naturaleza;
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -468,6 +536,7 @@ class ContabilidadesController extends Controller
                         ->where('id','=',$obj->c_puc_retefuente)
                         ->first();
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor_retefuente;
                 $contabilidad->tipo_transaccion = $cuenta->naturaleza;
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -490,6 +559,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = floatval($kar->kardexiva) / 10 ;
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = $cuenta->naturaleza;
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -504,6 +574,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor =  floatval($kar->kardexiva) / 10 ;
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "C";
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -525,6 +596,7 @@ class ContabilidadesController extends Controller
                         ->where('id','=',$obj->v_puc_reteica)
                         ->first();
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor_reteica;
                 $contabilidad->tipo_transaccion = $cuenta->naturaleza;
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -538,6 +610,7 @@ class ContabilidadesController extends Controller
                         ->where('id','=',$obj->c_puc_reteica)
                         ->first();
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor_reteica;
                 $contabilidad->tipo_transaccion = $cuenta->naturaleza;
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -560,6 +633,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = floatval($kar->kardexiva) ;
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = $cuenta->naturaleza;
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -575,6 +649,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = floatval($kar->kardexiva) ;
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "D";
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -630,6 +705,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = ($factura->impoconsumo);
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "D";
                 $contabilidad->id_auxiliar = $impoconsumo->id;
@@ -644,6 +720,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = ($factura->impoconsumo);
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "C";
                 $contabilidad->id_auxiliar = $impoconsumo->id;
@@ -666,6 +743,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = ($factura->descuento);
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "D";
                 $contabilidad->id_auxiliar = $descuento->id;
@@ -680,6 +758,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = ($factura->descuento);
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "C";
                 $contabilidad->id_auxiliar = $descuento->id;
@@ -702,6 +781,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = ($factura->fletes);
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "C";
                 $contabilidad->id_auxiliar = $flete->id;
@@ -716,6 +796,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 $valor = ($factura->fletes);
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "D";
                 $contabilidad->id_auxiliar = $flete->id;
@@ -844,6 +925,7 @@ class ContabilidadesController extends Controller
                  */
                 if($factura->reteiva != 0){
                     if($valor_reteiva==0){
+                        $valor_reteiva = $factura->reteiva;
                         ContabilidadesController::ContabilizarReteiva($factura, $tipo_documento_contable, $kar, $obj);
                     }
                 }                
@@ -903,6 +985,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 }
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "C";
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -916,6 +999,8 @@ class ContabilidadesController extends Controller
                 $cliente_cuenta = $clasificaciones->cuenta_contrapartida;
                 $valor = floatval( floatval(($kar->costo_promedio * $kar->cantidad))) ;
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $dir = Directorios::where('nit','=','1002')->first(); //costo de ventas
+                $contabilidad->tercero = $dir->id;// costo de ventas
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "C";
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -928,6 +1013,8 @@ class ContabilidadesController extends Controller
                 $cliente_cuenta = $clasificaciones->cuenta_contrapartida;
                 $valor = floatval( floatval(($kar->costo_promedio * $kar->cantidad))) ;
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $dir = Directorios::where('nit','=','1002')->first(); //costo de ventas
+                $contabilidad->tercero = $dir->id;// costo de ventas
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = "D";
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -1070,6 +1157,7 @@ class ContabilidadesController extends Controller
                         ->first();
                 }
                 $contabilidad = ContabilidadesController::savefactura($factura,$tipo_documento_contable);
+                $contabilidad->tercero = $factura->id_cliente;
                 $contabilidad->valor_transaccion = $valor;
                 $contabilidad->tipo_transaccion = $cuenta->naturaleza;
                 $contabilidad->id_auxiliar = $cuenta->id;
@@ -1387,7 +1475,78 @@ class ContabilidadesController extends Controller
 		}
     }
 
-    function cierrecontable(){
+    public function balanceprueba(Request $request){
+        $cierres = Cierrecontables::select('fecha',DB::raw('count(*) as count'))
+				->orderBy('fecha', 'desc')
+				->groupBy('fecha')
+                ->get();
+                
+        //verificar cada una de las opciones
+        //hoja de trabajo
+            //con terceros
+        /*$contabilidades = Contabilidades::select('contabilidades.id_auxiliar','contabilidades.tercero',
+            DB::raw('SUM(contabilidades.valor_transaccion) as movimiento'),'contabilidades.tipo_transaccion')
+            ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+            ->groupBy(['contabilidades.id_auxiliar',
+            'contabilidades.tercero','contabilidades.tipo_transaccion'])
+            ->get();
+        */
+            //sin terceros
+        $contabilidades = Contabilidades::select('contabilidades.id_auxiliar',
+            DB::raw('SUM(contabilidades.valor_transaccion) as movimiento'),'contabilidades.tipo_transaccion')
+            ->where('contabilidades.id_empresa','=',Session::get('id_empresa'))
+            ->groupBy(['contabilidades.id_auxiliar','contabilidades.tipo_transaccion'])
+            ->get();
+        $cierrecontable = Cierrecontables::select('cierrecontables.id_auxiliar',
+            DB::raw('SUM(cierrecontables.saldo) as movimiento'),'cierrecontables.estado as tipo_transaccion')
+            ->where('cierrecontables.id_empresa','=',Session::get('id_empresa'))
+            ->groupBy(['cierrecontables.id_auxiliar','cierrecontables.estado'])
+            ->get();
+
+        
+        //recorrer
+        $balance = [];
+        foreach($contabilidades as $con){
+            $obj['id_auxiliar'] = $con['id_auxiliar'];
+            
+            if($con['tipo_transaccion'] == "D"){
+                $obj['movimientoDebito'] = $con['movimiento'];
+                $obj['movimientoCredito'] = 0;
+            }
+            else{
+                $obj['movimientoCredito'] = $con['movimiento'];
+                $obj['movimientoDebito'] = 0;
+            }
+            //buscar el saldo
+            $cierre = Cierrecontables::select('cierrecontables.id_auxiliar',
+                    DB::raw('SUM(cierrecontables.saldo) as movimiento'),
+                    'cierrecontables.estado as tipo_transaccion')
+                    ->where('estado','=',$con['tipo_transaccion'])
+                    //->where('fecha')
+                    ->groupBy(['cierrecontables.id_auxiliar','cierrecontables.estado'])
+                    ->first();
+            if($cierre['tipo_transaccion'] == "D"){
+                $obj['saldoDebito'] = $cierre['movimiento'];
+                $obj['saldoCredito'] = 0;
+            }
+            else{
+                $obj['saldoCredito'] = $cierre['movimiento'];
+                $obj['saldoDebito'] = 0;
+            }
+            $obj['nuevoSaldoDebito'] = $obj['saldoDebito'] + $obj['movimientoDebito'];
+            $obj['nuevoSaldoCredito'] = $obj['saldoCredito'] + $obj['movimientoCredito'];
+            array_push($balance,$obj);
+        }
+
+
+        dd($balance);
+        return view('contabilidad.balanceprueba',[
+            "cierres"=>$cierres,
+            "contabilidades"=>$balance
+        ]);
+    }
+
+    public function cierrecontable(){
         try{
 			$cierres = Cierrecontables::select('fecha',DB::raw('count(*) as count'))
 				->orderBy('fecha', 'desc')

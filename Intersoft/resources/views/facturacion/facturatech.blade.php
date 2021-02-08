@@ -34,34 +34,33 @@
     <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Envíe las facturas a la DIAN por medio del servicio de Facturatech</p>
     <div style="margin-left: 5%;">
         <form method="GET" class="row">
-            <div class="col-md-2">
+            <div style="margin-bottom:2%;" class="col-md-2">
                 <input type="text" name="nit" placeholder="Nit" value="{{ isset($_GET['nit'])?$_GET['nit']:'' }}" class="form-control">
             </div>
-            <div class="col-md-4">
-                <div class="col-md-12 row">
-                    <div class="col-md-8">
-                        <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
-                    </div>
-                    <div class="col-md-4">
-                        <select class="form-control" name="vendedor" id="vendedor"> 
-                            <option value="">Vendedor</option>
-                            @foreach ($usuarios as $obj)
-                            <option value="{{ $obj['id'] }}">{{ $obj['nombre'] }} {{ $obj['apellido'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
+            <div style="margin-bottom:2%;" class="col-md-5">
+                <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
             </div>
-            
-            <div class="col-md-4 row">
-                <div class="col-md-6">
-                    <input type="date" name="fechainicio" value="{{ isset($_GET['fechainicio'])?$_GET['fechainicio']:date('Y-m-d') }}" class="form-control">
-                </div>
-                <div class="col-md-6">
-                    <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:date('Y-m-d') }}" class="form-control">
-                </div>
+            <div style="margin-bottom:2%;" class="col-md-5">
+                <select class="form-control" name="vendedor" id="vendedor"> 
+                    <option value="">Vendedor</option>
+                    @foreach ($usuarios as $obj)
+                    <option value="{{ $obj['id'] }}">{{ $obj['nombre'] }} {{ $obj['apellido'] }}</option>
+                    @endforeach
+                </select>
             </div>
-            <div class="col-md-2">
+            <div style="margin-bottom:2%;" class="col-md-3">
+                <input type="date" name="fechainicio" value="{{ isset($_GET['fechainicio'])?$_GET['fechainicio']:'' }}" class="form-control">
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-3">
+                <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:'' }}" class="form-control">
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-3">
+                <input type="text" name="prefijo" placeholder="Prefijo" value="{{ isset($_GET['prefijo'])?$_GET['prefijo']:'' }}" class="form-control">
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-3">
+                <input type="number" name="numero" placeholder="Numero" value="{{ isset($_GET['numero'])?$_GET['numero']:'' }}" class="form-control">
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-2">
                 <input type="submit" value="Consultar" class="btn btn-success">
             </div>
         </form><br><br>

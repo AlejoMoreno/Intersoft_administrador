@@ -517,7 +517,7 @@
                             <?php } ?>
                             <?php if(in_array("Extracto y Cuentas de Cobro",$Tesoreria)){ ?>
                                 <li><a href="javascript:;" onclick="config.Redirect('/cartera/extracto');">Extracto</a></li>
-                                <li><a href="javascript:;" onclick="config.Redirect('/cartera/castigarcartera');">Castigar cartera</a></li>
+                                <li><a href="javascript:;" onclick="config.Redirect('/cartera/castigarcartera');">Analizador de Cartera</a></li>
                             <?php } ?>
                             <?php if(in_array("Reportes",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/reporte');">Reportes</a></li><?php } ?>
                             <?php if(in_array("CierreCartera",$Tesoreria)){ ?><li><a href="javascript:;" onclick="config.Redirect('/cartera/cierreCartera');">Cierre Cartera</a></li><?php } ?>
@@ -535,7 +535,7 @@
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/comprobantesdiario');">Comprobantes de Diario</a></li>
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/librosauxiliares');">Libros Auxiliares</a></li>
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/librosmayores');">Libros Mayores</a></li>
-                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/balancecomprobacion');">Balance de Comprobación</a></li>
+                            <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/balanceprueba');">Balance de prueba</a></li>
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/perdidasganancias');">Perdidas y Ganancias</a></li>
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/analisismensual');">Análisis Mensual Gastos</a></li>
                             <li><a href="javascript:;" onclick="config.Redirect('/contabilidad/mediosmagneticos');">Medios Magnéticos</a></li>

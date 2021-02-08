@@ -6,8 +6,8 @@
 <style>
 .title{
     margin-left: 2%;
-    font-weight: bold;
-    font-family: Poppins;
+    font-weight: bold !important;
+    font-family: Poppins !important;
 }
 .top-5-w{
     margin-top:5%;
@@ -18,323 +18,247 @@
     animation: pantallain 100s infinite;
     animation-direction: alternate;
 }
+.header_fijo {
+  width: 750px;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+.header_fijo thead {
+  background-color: #333;
+  color: #FDFDFD;
+}
+.header_fijo thead tr {
+  display: block;
+  position: relative;
+}
+.header_fijo tbody {
+  display: block;
+  overflow: auto;
+  width: 100%;
+  height: 300px;
+}
 </style>
 
 <div class="enc-article">
-    <h4 class="title">Extracto clientes / proveedores</h4>
-</div>
-<br><br>
-<!-- Trigger the modal with a button -->
-<!--<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Gráfica</button>-->
-
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Graficas</h4>
-      </div>
-      <div class="modal-body">
-        <canvas id="myChart" width="400" height="200"></canvas>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-
-  </div>
+    <h4 class="title">Analizador de cartera</h4>
 </div>
 
-<br><br>
 <div class="row top-11-w">
 
-    
-    <div class="panel panel-warning" style="margin-left:5%;margin-right:5%;">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Cartigar cartera clientes</div>
-        <div class="panel-body" >
-
-            <br><br>
-            <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Filtros de busqueda:</p>
-            <div class="col-md-12"> 
-                <form method="GET" class="row">
-                    <div class="col-md-2">
-                        <input type="text" name="nit" placeholder="Nit" value="{{ isset($_GET['nit'])?$_GET['nit']:'' }}" class="form-control">
-                    </div>
-                    <div class="col-md-3">
-                        <div class="col-md-12 row">
-                            <div class="col-md-12">
-                                <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-5 row">
-                        <div class="col-md-6">
-                            <input type="date" name="fechainicio" value="{{ isset($_GET['fechainicio'])?$_GET['fechainicio']:date('Y-m-d') }}" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:date('Y-m-d') }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="submit" value="Consultar" class="btn btn-success">
-                    </div>
-                </form><br><br>
+    <br><br>
+    <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Filtros de busqueda:</p>
+    <div class="col-md-12"> 
+        <form method="GET" class="row">
+            <div style="margin-bottom:2%;" class="col-md-2">
+                <label>Tipo de Informe</label>
+                <select class="form-control" name="tipo_informe" id="tipo_informe"> 
+                    <option value="1">Cartera de Proveedores</option>
+                    <option value="2">Cartera de Clientes</option>
+                    <option value="3">Cartera de Terceros</option>
+                </select>
             </div>
-            
+            <div style="margin-bottom:2%;" class="col-md-3">
+                <label>Fecha de Corte</label>
+                <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:'' }}" class="form-control">
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-2">
+                <label>Sucursal</label>
+                <select class="form-control" name="sucursal" id="sucursal"> 
+                    <option value="0">Todas</option>
+                </select>
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-2">
+                <label>Tipo presentación</label>
+                <select class="form-control" name="tipo_presentacion" id="tipo_presentacion"> 
+                    <option value="1">Detalle y Resumen</option>
+                    <option value="2">Solo Resumen</option>
+                    <option value="3">Por Vencimiento</option>
+                </select>
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-2">
+                <label>Nit</label>
+                <input type="text" name="nit" placeholder="Nit" value="{{ isset($_GET['nit'])?$_GET['nit']:'' }}" class="form-control">
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-5">
+                <label>Nombre / Razón social</label>
+                <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
+            </div>
+            <div style="margin-bottom:2%;" class="col-md-2">
+                <input type="submit" value="Consultar" class="btn btn-success">
+            </div>
+        </form><br><br>
+    </div>
+    <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
+        <h4 class="title" style="text-align: center;">RELACION DE VENCIMIENTOS DE CARTERA A [[ $fechafin ]]</h4>
 
-            <p style="font-size: 10pt;">A continuación se describe el extracto de los clientes, en el cual se detalla
-                el saldo diferente de 0 (cero) de cada uno de las facturas emitidas con corte
-                al presente día. 
-            </p>
-        </div>
-
-        
-        <!-- Table -->
-        <div style="overflow-x:scroll;margin:5%;">
-            <table class="table table-hover" id="tabla_cliente">
-                <thead>
-                    <tr>
-                        <th>NIT</th>
-                        <th>RAZÓN SOCIAL</th>
-                        <th>TELÉFONO</th>
-                        <th>ZONA VENTA</th>
-                        <th>PLAZO DE </th>
-                        <th>DIAS MORA</th>
-                        <th>DOCUMENTO</th>
-                        <th>VENDEDOR</th>
-                        <th>SALDO</th>
-                        <th>EXTRACTO</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($carteracliente as $obj)
-                    <?php $datetime1 = new DateTime($obj->fecha);
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="title" style="font-size: 10pt;padding:1%;" colspan="3">DOCUMENTO</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">FACTURAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;" colspan="6">CONDICIONES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th></th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">NÚMERO</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">EMISIÓN</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">VENCIMIENTO</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">SIN VENCER</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">1 - 30 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">31 - 60 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">61 - 90 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">91 - 120 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">MÁS DE 120 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">DÍAS</th>
+                </tr>
+                <?php $total = 0; $obj_anterior = null; $total1=0; $total2=0; $total3=0; $total4=0; $total5=0; $total6=0; ?>
+                <?php for($i = 0; $i < sizeof($cartera); $i++){ ?>
+                    <?php 
+                    $obj = $cartera[$i];
+                    if($i>0){
+                        $obj_anterior = $cartera[$i-1];
+                    }
+                    else{
+                        $obj_anterior = $cartera[0];
+                    }
+                    $datetime1 = new DateTime($obj->fecha);
                     $datetime2 = new DateTime($obj->fecha_vencimiento); 
                     $interval = $datetime1->diff($datetime2);
-                    $plazo = $interval->format('%R%a días');
-                    
-                    $datetime3 = new DateTime(date("Y-m-d"));
-                    $datetime4 = new DateTime($obj->fecha_vencimiento); 
+                    $plazo = $interval->format('%R%a');
+
+                    $datetime3 = new DateTime($obj->fecha); 
+                    $datetime4 = new DateTime(date("Y-m-d"));
                     $interval = $datetime3->diff($datetime4);
-                    $mora = $interval->format('%R%a días');?>
+                    $mora = $interval->format('%R%a');
+                    
+                    
+                    ?>
+                    
+                    @if($obj->nit != $obj_anterior->nit)
                     <tr>
-                        <td>{{ number_format($obj->nit, 0, ",", ".") }}</td>
-                        <td><a href="/cartera/historial/{{ $obj['idcliente'] }}">{{ $obj->razon_social }}</td>
-                        <td>{{ $obj->telefono }}</td>
-                        <td>{{ $obj->zona_venta }}</td>
-                        <td>{{ $plazo }}</td>
-                        <td>{{ $mora }}</td>
-                        <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj['idfactura'] }}')" >{{ $obj->prefijo }} {{ $obj->numero }}</a></td>
-                        <td>{{ number_format($obj->ncedula, 0, ",", ".") }}</td>
-                        <td>{{ $obj->saldo }}</td>
-                        <td><a href="javascript:;" onclick="irExtracto({{ $obj }});">Extracto</a></td>
+                        <?php $total = $obj->saldo;?>
+                        <td colspan="11"><p style="font-size: 10pt;">{{ $obj->razon_social }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            {{ number_format($obj->nit, 0, ",", ".") }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            {{ $obj->direccion }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            {{ $obj->telefono }}</p></td>
                     </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                    @endif
+                    <tr>
+                        <td style="width: 200px;"></td>
+                        <td style="padding:4%;"><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj['idfactura'] }}')" >{{ $obj->prefijo }} {{ $obj->numero }}</a></td>
+                        <td style="padding:4%;">{{ $obj->fecha }}</td>
+                        <td style="padding:4%;">{{ $obj->fecha_vencimiento }}</td>
+                        @if(($mora - $plazo) <= 0)
+                        <?php $total1=$total1 + $obj->saldo; ?>
+                            <td style="text-align:center">{{ number_format($obj->saldo, 0, ",", ".") }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        @elseif(($mora - $plazo) <= 30)
+                        <?php $total2=$total2 + $obj->saldo; ?>
+                            <td></td>
+                            <td style="text-align:center">{{ number_format($obj->saldo, 0, ",", ".") }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        @elseif(($mora - $plazo) <= 60)
+                        <?php $total3=$total3 + $obj->saldo; ?>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:center">{{ number_format($obj->saldo, 0, ",", ".") }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        @elseif(($mora - $plazo) <= 90)
+                        <?php $total4=$total4 + $obj->saldo; ?>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:center">{{ number_format($obj->saldo, 0, ",", ".") }}</td>
+                            <td></td>
+                            <td></td>
+                        @elseif(($mora - $plazo) <= 120)
+                        <?php $total5=$total5 + $obj->saldo; ?>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:center">{{ number_format($obj->saldo, 0, ",", ".") }}</td>
+                            <td></td>
+                        @else
+                        <?php $total6=$total6 + $obj->saldo; ?>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:center">{{ number_format($obj->saldo, 0, ",", ".") }}</td>
+                        @endif
+                        <td style="text-align:center">{{ number_format(($mora - $plazo), 0, ",", ".") }}</td>
+                    </tr>
+                    @if($obj_anterior->nit != $obj->nit)
+                    <tr>
+                        <td class="title" style="font-size: 10pt;padding:1%;text-align: right">TOTAL: {{ number_format($total, 0, ",", ".") }}</td>
+                        <td colspan="3"></td>
+                        <td class="title" style="font-size: 10pt;padding:1%;text-align: center">{{ ($total1!=0)?number_format($total1, 0, ",", "."):''  }}</td>
+                        <td class="title" style="font-size: 10pt;padding:1%;text-align: center">{{ ($total2!=0)?number_format($total2, 0, ",", "."):''  }}</td>
+                        <td class="title" style="font-size: 10pt;padding:1%;text-align: center">{{ ($total3!=0)?number_format($total3, 0, ",", "."):''  }}</td>
+                        <td class="title" style="font-size: 10pt;padding:1%;text-align: center">{{ ($total4!=0)?number_format($total4, 0, ",", "."):''  }}</td>
+                        <td class="title" style="font-size: 10pt;padding:1%;text-align: center">{{ ($total5!=0)?number_format($total5, 0, ",", "."):''  }}</td>
+                        <td class="title" style="font-size: 10pt;padding:1%;text-align: center">{{ ($total6!=0)?number_format($total6, 0, ",", "."):''  }}</td>
+                        <td></td>
+                    </tr>
+                    @endif
+                    <?php 
+                        
+                        //calculat total
+                        $total = $total + $obj->saldo;
+                    
+                    ?>
+                <?php } ?>
+            </tbody>
+        </table>
+
+    </div>
+    <div class="col-md-11" style="overflow-x:scroll;margin-left:2%">
+        <h4 class="title" style="text-align: center;">RELACION DE VENCIMIENTOS DE CARTERA A [[ $fechafin ]]</h4>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>NOMBRE</th>
+                    <th>CUANTIFICACION TOTAL DEL ATRASO</th>
+                </tr>
+                <tr>
+                    <th>CC / NIT</th>
+                    <th></th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">NÚMERO</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">EMISIÓN</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">VENCIMIENTO</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">SIN VENCER</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">1 - 30 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">31 - 60 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">61 - 90 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">91 - 120 DÍAS</th>
+                    <th class="title" style="font-size: 10pt;padding:1%;">MÁS DE 120 DÍAS</th>
+
+                </tr>
+            </thead>
+        </table>
+
     </div>
 
 
-    <div class="panel panel-warning " style="margin-left:5%;margin-right:5%;">
-        <!-- Default panel contents -->
-        <div class="panel-heading">Castigar cartera proveedores</div>
-        <div class="panel-body" >
-
-            <br><br>
-            <p style="font-size:10pt;font-family:Poppins;margin-left:2%">Filtros de busqueda:</p>
-            <div class="col-md-12"> 
-                <form method="GET" class="row">
-                    <div class="col-md-2">
-                        <input type="text" name="nit" placeholder="Nit" value="{{ isset($_GET['nit'])?$_GET['nit']:'' }}" class="form-control">
-                    </div>
-                    <div class="col-md-3">
-                        <div class="col-md-12 row">
-                            <div class="col-md-12">
-                                <input type="text" name="razonsocial" value="{{ isset($_GET['razonsocial'])?$_GET['razonsocial']:'' }}" placeholder="Razón social" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-5 row">
-                        <div class="col-md-6">
-                            <input type="date" name="fechainicio" value="{{ isset($_GET['fechainicio'])?$_GET['fechainicio']:date('Y-m-d') }}" class="form-control">
-                        </div>
-                        <div class="col-md-6">
-                            <input type="date" name="fechafinal" value="{{ isset($_GET['fechafinal'])?$_GET['fechafinal']:date('Y-m-d') }}" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <input type="submit" value="Consultar" class="btn btn-success">
-                    </div>
-                </form><br><br>
-            </div>
-            
-            <p style="font-size: 10pt;">A continuación se describe el extracto de los proveedores, en el cual se detalla
-                el saldo diferente de 0 (cero) de cada uno de las facturas emitidas con corte
-                al presente día. 
-            </p>
-        </div>
-
-        <!-- Table -->
-        <div style="overflow-x:scroll;margin:5%;">
-            <table class="table table-hover" id="tabla_proveedor">
-                <thead>
-                    <tr>
-                        <th>NIT</th>
-                        <th>RAZÓN SOCIAL</th>
-                        <th>TELÉFONO</th>
-                        <th>ZONA VENTA</th>
-                        <th>PLAZO DE </th>
-                        <th>DIAS MORA</th>
-                        <th>DOCUMENTO</th>
-                        <th>VENDEDOR</th>
-                        <th>SALDO</th>
-                        <th>EXTRACTO</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($carteraproveedor as $obj)
-                    <?php $datetime1 = new DateTime($obj->fecha);
-                    $datetime2 = new DateTime($obj->fecha_vencimiento); 
-                    $interval = $datetime1->diff($datetime2);
-                    $plazo = $interval->format('%R%a días');
-                    
-                    $datetime3 = new DateTime(date("Y-m-d"));
-                    $datetime4 = new DateTime($obj->fecha_vencimiento); 
-                    $interval = $datetime3->diff($datetime4);
-                    $mora = $interval->format('%R%a días');?>
-                    <tr>
-                        <td>{{ number_format($obj->nit, 0, ",", ".") }}</td>
-                        <td>{{ $obj->razon_social }}</td>
-                        <td>{{ $obj->telefono }}</td>
-                        <td>{{ $obj->zona_venta }}</td>
-                        <td>{{ $plazo }}</td>
-                        <td>{{ $mora }}</td>
-                        <td><a href="javascript:envioUrl('/documentos/imprimir/{{ $obj['idfactura'] }}')" >{{ $obj->prefijo }} {{ $obj->numero }}</a></td>
-                        <td>{{ number_format($obj->ncedula, 0, ",", ".") }}</td>
-                        <td>{{ $obj->saldo }}</td>
-                        <td><a href="javascript:;" onclick="irExtracto({{ $obj }});">Extracto</a></td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
 
 </div>
 
 
 
-<script>
-
-function irExtracto(objeto){
-    
-    swal("A que fecha de corte?", {
-        content: {
-            element: "input",
-            attributes: {
-                placeholder: "Inserta la fecha",
-                type: "date",
-            },
-        },
-    })
-    .then((value) => {
-        config.Redirect('/cartera/extracto/'+objeto.id_cliente+'/'+value);
-    });
-}
-
-</script>
-
-<script>
-$(document).ready(function() {
-    var table = $('#tabla_cliente').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            'excel'
-        ]
-    } );
-    var table2 = $('#tabla_proveedor').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            'excel'
-        ]
-    } );
-
-    totalclientes(table);
-    totalproveedor(table2);
-
-    $('input[aria-controls=tabla_cliente]').keypress(function(){
-        totalclientes(table);
-    });
-    
-    $('input[aria-controls=tabla_proveedor]').keypress(function(){
-        totalproveedor(table2);
-    });
-
-} );
-
-
-function totalclientes(table){
-    var total = 0;
-    var data = table.rows().data();
-    data.each(function (value, index){
-        total = total + parseInt(value[8]);
-    });
-    $('#total_cliente').html(new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP"}).format(total));
-    $('#total_cliente1').html(total);
-}
-
-function totalproveedor(table){
-    var total = 0;
-    var data = table.rows().data();
-    data.each(function (value, index){
-        total = total + parseInt(value[8]);
-    });
-    $('#total_proveedor').html(new Intl.NumberFormat("de-DE", {style: "currency", currency: "COP"}).format(total));
-    $('#total_proveedor1').html(total);
-}
-
-function envioUrl (url){
-    window.open(url, "imprimir documento", "width=800, height=700")
-}
-</script>
-
-<script>
-
-    setTimeout(function() {
-        // rest of code here
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var cliente = document.getElementById('total_cliente1').innerHTML;
-        var proveedor = document.getElementById('total_proveedor1').innerHTML;
-        console.log(cliente);
-        console.log(proveedor);
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Clientes', 'Proveedor'],
-                datasets: [{
-                    label: 'Cuentas por cobrar / pagar',
-                    data: [cliente,proveedor],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            }
-        });
-    }, 15000);
-        
-</script>
 
 @endsection()

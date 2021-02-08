@@ -568,14 +568,15 @@ class FacturasController extends Controller
      */
     public function facturatech(Request $request){
         $documento = Documentos::where('id_empresa','=',Session::get('id_empresa'))
-                            ->where('nombre','like','%MAYO%')
+                            ->where('nombre','like','%FACTURA%')
                             ->first();
         $factura = Facturas::select(
             ['documentos.*','facturas.*','sucursales.nombre as sucunombre',
             'directorios.*','ciudades.nombre as ciudadnombre','empresas.*',
             'facturas.created_at as creado','facturas.id as idfactura',
+            'documentos.nombre as nombredocumento',
             'directorios.razon_social as nombrecliente','usuarios.nombre as nombrevendedor',
-            'facturas.estado as estadofactura','facturas.id as idfactura'])
+            'facturas.estado as estadofactura'])
                     ->where('facturas.id_documento','=',$documento->id)
                     ->join('documentos','documentos.id','=','facturas.id_documento')            
                     ->join('sucursales','sucursales.id','=','facturas.id_sucursal')                    
@@ -597,8 +598,14 @@ class FacturasController extends Controller
                         if(isset($request->vendedor)){
                             $q->where('id_vendedor','=',$request->vendedor);
                         }
+                        if(isset($request->prefijo)){
+                            $q->where('facturas.prefijo','=',$request->prefijo);
+                        }
+                        if(isset($request->numero)){
+                            $q->where('facturas.numero','=',$request->numero);
+                        }
                     })
-                    ->orderBy('id_documento','desc')
+                    ->orderBy('facturas.fecha','desc')
                     ->take(100)
                     ->get();
         

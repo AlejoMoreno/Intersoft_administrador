@@ -42,13 +42,23 @@ class EmpresasController extends Controller
     public function search(Request $request){
         $empresa = Empresas::where('nit_empresa','=',$request->nit)->first();
         try{
-            $sucursales = Sucursales::where('id_empresa','=',$empresa->id)->get();
-            $usuarios = Usuarios::where('id_empresa','=',$empresa->id)->where('estado','=','ACTIVO')->get();
-            return  array(
-                "result"=>"Success",
-                "body"=>$empresa,
-                "sucursales"=>$sucursales,
-                "usuarios"=>$usuarios);
+            if(sizeof($empresa)!=0){
+                $sucursales = Sucursales::where('id_empresa','=',$empresa->id)->get();
+                $usuarios = Usuarios::where('id_empresa','=',$empresa->id)->where('estado','=','ACTIVO')->get();
+                return  array(
+                    "result"=>"Success",
+                    "body"=>$empresa,
+                    "sucursales"=>$sucursales,
+                    "usuarios"=>$usuarios);
+            }
+            else{
+                return  array(
+                    "result"=>"fail",
+                    "body"=>"No coincide nit de empresa",
+                    "sucursales"=>null,
+                    "usuarios"=>null);
+            }
+            
         }
         catch (ModelNotFoundException $exception){
             return  array(

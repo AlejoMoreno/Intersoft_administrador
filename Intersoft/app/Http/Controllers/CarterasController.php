@@ -347,71 +347,32 @@ class CarterasController extends Controller
 	function castigarcartera(Request $request){
 		$totalcarteraProveedor=null;
 		$totalcarteracliente=null;
-		if(!isset($request)){
-			$totalcarteraProveedor = Directorios::where('id_directorio_tipo_tercero', '=', '1')
-							->select(DB::raw('SUM(facturas.saldo) as totalfacturas'))
-							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
-							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
-							->where('facturas.id_empresa','=',Session::get('id_empresa'))
-							->where('saldo','>','0')
-							->first();
-			$totalcarteracliente = Directorios::where('id_directorio_tipo_tercero', '=', '2')
-							->select(DB::raw('SUM(facturas.saldo) as totalfacturas'))
-							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
-							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
-							->where('facturas.id_empresa','=',Session::get('id_empresa'))
-							->where('saldo','>','0')
-							->first();
-		}
-		$carteraproveedor = Directorios::where('id_directorio_tipo_tercero', '=', '1')
-							->select('facturas.*','directorios.*','usuarios.*',
-								DB::raw('facturas.id as idfactura'),
-								DB::raw('directorios.id as idcliente'))
-							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
-							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
-							->where('facturas.id_empresa','=',Session::get('id_empresa'))
-							->where('saldo','>','0')
-							->where(function ($q) use ($request) {
-								if(isset($request->nit)){
-									$q->where('directorios.nit','=',$request->nit);
-								}
-								if(isset($request->razonsocial)){
-									$q->where('directorios.razon_social','like','%'.$request->razonsocial.'%');                  
-								}
-								if(isset($request->fechainicio)){
-									$q->whereBetween('facturas.fecha', [$request->fechainicio, $request->fechafinal]);
-								}
-							})
-							->orderBy('facturas.fecha','desc')
-							->take(100)
-							->get();
-		$carteracliente = Directorios::where('id_directorio_tipo_tercero', '=', '2')
-							->select('facturas.*','directorios.*','usuarios.*',
-								DB::raw('facturas.id as idfactura'),
-								DB::raw('directorios.id as idcliente'))
-							->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
-							->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
-							->where('facturas.id_empresa','=',Session::get('id_empresa'))
-							->where('saldo','>','0')
-							->where(function ($q) use ($request) {
-								if(isset($request->nit)){
-									$q->where('directorios.nit','=',$request->nit);
-								}
-								if(isset($request->razonsocial)){
-									$q->where('directorios.razon_social','like','%'.$request->razonsocial.'%');                  
-								}
-								if(isset($request->fechainicio)){
-									$q->whereBetween('facturas.fecha', [$request->fechainicio, $request->fechafinal]);
-								}
-							})
-							->orderBy('facturas.fecha','desc')
-							->take(100)
-							->get();
+		$cartera = Directorios::select('facturas.*','directorios.*','usuarios.*',
+						DB::raw('facturas.id as idfactura'),
+						DB::raw('directorios.id as idcliente'))
+					->join('facturas', 'directorios.id', '=', 'facturas.id_cliente')
+					->join('usuarios', 'facturas.id_vendedor', '=', 'usuarios.id')
+					->where('facturas.id_empresa','=',Session::get('id_empresa'))
+					->where('saldo','!=','0')
+					->where(function ($q) use ($request) {
+						if(isset($request->tipo_informe)){
+							$q->where('directorios.id_directorio_tipo_tercero','=',$request->tipo_informe);
+						}
+						if(isset($request->nit)){
+							$q->where('directorios.nit','=',$request->nit);
+						}
+						if(isset($request->razonsocial)){
+							$q->where('directorios.razon_social','like','%'.$request->razonsocial.'%');                  
+						}
+						if(isset($request->fechafinal)){
+							$q->where('facturas.fecha','<=',$request->fechafinal);
+						}
+					})
+					->orderBy('directorios.razon_social','asc')
+					->get();
+		
 		return view('cartera.castigarcartera', array(
-			"carteraproveedor"=>$carteraproveedor,
-			"carteracliente"=>$carteracliente,
-			"totalcarteraProveedor"=>$totalcarteraProveedor,
-			"totalcarteracliente"=>$totalcarteracliente
+			"cartera"=>$cartera
 		));
 	}
 
