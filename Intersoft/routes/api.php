@@ -21,3 +21,6 @@ Route::post('credenciales', 'Api\Facturatech@crearCredencial');
 Route::get('credenciales', 'Api\Facturatech@selectCredencial');
 
 Route::get('DownloadPDFFileSend', 'Api\Facturatech@DownloadPDFFileSend');
+
+
+Route::post('/login', 'UsuariosController@login');

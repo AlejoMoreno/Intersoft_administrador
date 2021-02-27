@@ -31,10 +31,10 @@
                 <div class="panel-heading row" >
                     <h5 class="col-md-4">Creación directorio </h5>
                     <div class="col-md-8 row">
-                        <button type="submit" id="btnguardar" class="btn btn-success col-md-2 btn-guardar"><i class="fas fa-save"></i> </button>
-                        <div id="actualizar" onclick="directorios.sendUpdate();" class="btn btn-warning col-md-2 btn-actualizar"><i class="fas fa-pen-square"></i> </div>
-                        <div onclick="config.Redirect('/administrador/directorios');" class="btn btn-danger col-md-2 btn-nuevo"><i class="fas fa-plus-circle"></i> </div>
-                        <div onclick="directorios.buscar()" class="btn btn-info col-md-2 btn-buscar" ><i class="fas fa-search"></i> </div>    
+                        <button type="submit" id="btnguardar" class="btn btn-success col-md-2 btn-guardar"><i class="fas fa-save"></i> Guardar</button>
+                        <div id="actualizar" onclick="directorios.sendUpdate();" class="btn btn-warning col-md-2 btn-actualizar"><i class="fas fa-pen-square"></i> Actualizar </div>
+                        <div onclick="config.Redirect('/administrador/directorios');" class="btn btn-danger col-md-2 btn-nuevo"><i class="fas fa-plus-circle"></i> Limpiar</div>
+                        <div onclick="directorios.buscar()" class="btn btn-info col-md-2 btn-buscar" ><i class="fas fa-search"></i> Consultar</div>    
                     </div>                
                 </div>
                 <div class="panel-body" >

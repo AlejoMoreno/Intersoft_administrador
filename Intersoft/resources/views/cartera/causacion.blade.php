@@ -22,6 +22,10 @@
   </style>
 
 <?php
+
+$prefijos = App\Resoluciones::where()->first();
+
+
 if(isset($_GET['prefijo'])){
   $causaciones = App\Causaciones::where('id_empresa','=',Session::get('id_empresa'))
           ->where('prefijo','=',$_GET['prefijo'])
@@ -45,21 +49,25 @@ if(isset($_GET['prefijo'])){
 
   <div class="panel panel-default col-md-12" >
       <!-- Default panel contents -->
-    <form action="/cartera/causacion" method="post" name="formulario1">
+    <!--<form action="/cartera/causacion" method="post" name="formulario1">-->
       <div class="panel-heading row"><h5>Encabezado de la causación</h5></div>
       <div class="panel-body" >
         <div class="row">
-          <div class="col-md-2">
-            <label>prefijo</label>
-            <input type="text" placeholder="Prefijo" class="form-control" id="prefijo" name="prefijo" value="{{ isset($_GET['prefijo'])? $_GET['prefijo'] : '' }}">
+          <div class="col-md-1">
+            <label>Prefijo</label>
+            <input type="text"  placeholder="Prefijo" class="form-control" id="prefijo" name="prefijo" value="{{ isset($_GET['prefijo'])? $_GET['prefijo'] : '' }}">
           </div>
-          <div class="col-md-2">
-            <label>numero</label>
+          <div class="col-md-1">
+            <label>Número</label>
             <input type="text" placeholder="Número" class="form-control" id="numero" name="numero" value="{{ isset($_GET['numero'])? $_GET['numero'] : '' }}">
           </div>
           <div class="col-md-3">
             <label>Fecha</label>
             <input type="date" placeholder="fecha" class="form-control" id="fecha" name="fecha" value="{{ isset($causaciones)? $causaciones[0]->fecha : '' }}" >
+          </div>          
+          <div class="col-md-3">
+            <label>Fecha vencimiento</label>
+            <input type="date"  class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" value="{{ isset($causaciones)? $causaciones[0]->fecha_vencimiento : '' }}">
           </div>
           <div class="col-md-3">
             <label>Centro de costo</label>
@@ -87,16 +95,12 @@ if(isset($_GET['prefijo'])){
             <input type="number" placeholder="neto pagar" onkeyup="config.UperCase('neto_pagar');"  class="form-control" id="neto_pagar" name="neto_pagar" value="{{ isset($causaciones)? $causaciones[0]->neto_pagar : '' }}">
           </div>
           <div class="col-md-3">
-            <label>Fecha vencimiento</label>
-            <input type="date"  class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" value="{{ isset($causaciones)? $causaciones[0]->fecha_vencimiento : '' }}">
-          </div>
-          <div class="col-md-3">
             <label>Detalle</label>
             <input type="text" placeholder="Detalle" onkeyup="config.UperCase('detalle');"  class="form-control" id="detalle" name="detalle" value="{{ isset($causaciones)? $causaciones[0]->detalle : '' }}">
           </div>
           <div class="col-md-2">
             <br>
-            <input type="submit" class="form-control btn btn-success" style="background: #3c763d;color:white;" value="Buscar" name="btnagregar">
+            <div class="form-control btn btn-success" style="background: #3c763d;color:white;" name="btnagregar"> Buscar</div>
           </div>
           <div class="col-md-12"><br><br></div>
           <table class="table table-hover col-md-12" >
@@ -169,6 +173,14 @@ function eliminar(data){
   config.Redirect('/cartera/causacion/delete/'+data.id);
 }
 
+
+
+$('#nombre').on('keydown', function(e) {
+    if (e.key === "Enter") {
+        buscarcliente2($('#nombre').val());
+        return false;
+    }
+});
 
 $('#nit').on('keydown', function(e) {
     if (e.key === "Tab") {

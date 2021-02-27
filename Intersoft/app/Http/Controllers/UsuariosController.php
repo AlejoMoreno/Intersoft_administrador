@@ -124,6 +124,18 @@ class UsuariosController extends Controller
     public function create(Request $request){
         try{
             $usuario = new Usuarios();
+
+            $v = \Validator::make($request->all(), [
+            
+                'ncedula' => 'required',
+                'nombre' => 'required',
+                'correo'    => 'required|email|unique:clients',
+                'apellido' => 'required',
+                'password' => 'required'
+            ]);
+            if ($v->fails()){
+                return redirect()->back()->withInput()->withErrors($v->errors());
+            }
             $usuario->ncedula             = $request->ncedula;
             $usuario->nombre              = $request->nombre;
             $usuario->apellido            = $request->apellido;
