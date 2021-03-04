@@ -97,13 +97,13 @@
                 <input type="hidden" name="id" id="id">
                 <div class="row" style="margin-left:1%;">
                     <div class="col-md-3">
-                        <label>ncedula</label><input placeholder="ej.(1030570356)" type="text" class="form-control" name="ncedula" id="ncedula">
+                        <label>ncedula</label><input placeholder="ej.(1030570356)" type="text" class="form-control" name="ncedula" id="ncedula" required>
                     </div>
                     <div class="col-md-3">
-                        <label>nombres</label><input placeholder="ej.(Alejandro)" type="text" class="form-control" name="nombre" id="nombre">
+                        <label>nombres</label><input placeholder="ej.(Alejandro)" type="text" class="form-control" name="nombre" id="nombre" required>
                     </div>
                     <div class="col-md-3">
-                        <label>apellidos</label><input placeholder="ej.(Moreno)" type="text" class="form-control" name="apellido" id="apellido">
+                        <label>apellidos</label><input placeholder="ej.(Moreno)" type="text" class="form-control" name="apellido" id="apellido" required>
                     </div>
                     <div class="col-md-3">
                         <label>cargo</label><select class="form-control" name="cargo" id="cargo">
@@ -117,13 +117,13 @@
                 <hr>
                 <div class="row" style="margin-left:1%;">
                     <div class="col-md-3">
-                        <label>teléfono</label><input placeholder="ej.(3219045297)" type="text" class="form-control" name="telefono" id="telefono">
+                        <label>teléfono</label><input placeholder="ej.(3219045297)" type="text" class="form-control" name="telefono" id="telefono" required>
                     </div>
                     <div class="col-md-3">
-                        <label>contraseña</label><input placeholder="ej.(adminsitracion1234)" type="text" class="form-control" name="password" id="password">
+                        <label>contraseña</label><input placeholder="ej.(adminsitracion1234)" type="text" class="form-control" name="password" id="password" required>
                     </div>
                     <div class="col-md-3">
-                        <label>correo</label><input type="text" placeholder="ej.(admin@admin.com)" class="form-control" name="correo" id="correo">
+                        <label>correo</label><input type="text" placeholder="ej.(admin@admin.com)" class="form-control" name="correo" id="correo" required>
                     </div>
                     <div class="col-md-3">
                         <label>estado</label><select class="form-control" name="estado" id="estado">
@@ -136,19 +136,19 @@
                 <hr>
                 <div class="row" style="margin-left:1%;">
                     <div class="col-md-12">
-                        <label>Token</label><input type="text" class="form-control" value="NA" name="token" id="token"></td>
+                        <label>Token</label><input type="text" class="form-control" value="NA" name="token" id="token" required></td>
                     </div>
                 </div>
                 <hr>
                 <div class="row" style="margin-left:1%;">
                     <div class="col-md-3">
-                        <label>arl</label><input placeholder="ej.(ARL)" type="text" class="form-control" name="arl" id="arl"></td>
+                        <label>arl</label><input placeholder="ej.(ARL)" type="text" class="form-control" name="arl" id="arl" required></td>
                     </div>
                     <div class="col-md-3">
-                        <label>eps</label><input placeholder="ej.(EPS)" type="text" class="form-control" name="eps" id="eps"></td>
+                        <label>eps</label><input placeholder="ej.(EPS)" type="text" class="form-control" name="eps" id="eps" required></td>
                     </div>
                     <div class="col-md-3">
-                        <label>Cesantias</label><input placeholder="ej.(CESANTIAS)" type="text" class="form-control" name="cesantias" id="cesantias"></td>
+                        <label>Cesantias</label><input placeholder="ej.(CESANTIAS)" type="text" class="form-control" name="cesantias" id="cesantias" required></td>
                     </div>
                     <div class="col-md-3">
                         <label>Lista de Precios</label>
@@ -162,7 +162,7 @@
                 <hr>
                 <div class="row" style="margin-left:1%;">
                     <div class="col-md-3">
-                        <label>Caja compensación</label><input placeholder="ej.(Caja compensación)" type="text" class="form-control" name="caja_compensacion" id="caja_compensacion">
+                        <label>Caja compensación</label><input placeholder="ej.(Caja compensación)" type="text" class="form-control" name="caja_compensacion" id="caja_compensacion" required>
                     </div>
                     <div class="col-md-3">
                         <label>Contrato</label><select class="form-control" name="id_contrato" id="id_contrato">
@@ -172,10 +172,10 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <LABEL>teléfono referencia</LABEL><input type="text" class="form-control" name="telefono_referencia" id="telefono_referencia">
+                        <LABEL>teléfono referencia</LABEL><input type="text" class="form-control" name="telefono_referencia" id="telefono_referencia" required>
                     </div>
                     <div class="col-md-3">
-                        <label>Nombre referencia</label><input type="text" class="form-control" name="referencia_personal" id="referencia_personal">
+                        <label>Nombre referencia</label><input type="text" class="form-control" name="referencia_personal" id="referencia_personal" required>
                     </div>
                 </div>
                 <hr>

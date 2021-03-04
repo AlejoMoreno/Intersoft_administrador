@@ -108,11 +108,24 @@ span{
             </div>
             <div class="col-md-3" style="margin-bottom:2%;">
                 <label>Fecha vencimiento:</label>
-                  <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
+                <div class="row">
+                    <div class="col-md-4">
+                        <select class="form-control" onchange="fecha_cambio()" name="select_fecha_vencimiento" id="select_fecha_vencimiento">
+                            <option value="0">Días</option>
+                            <option value="0">00</option>
+                            <option value="30">30</option>
+                            <option value="60">60</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');" disabled>
+                    </div>
+                </div>
             </div>    
             <div class="col-md-3" style="margin-bottom: 2%;">
                 <label>Vendedor</label>
                 <select name="id_modificado" id="id_modificado" class="form-control" >
+                    <option value="">Seleccione Vendedor</option>
                     @foreach ($usuarios as $usuario )
                     <option value="{{ $usuario->id }}">{{ $usuario->apellido }} {{ $usuario->nombre }}</option>
                     @endforeach
@@ -125,7 +138,7 @@ span{
 </div>
 
 
-<div class="row top-11-w">
+<div class="row top-11-w" id="tabproduct">
     
     <div class="card col-md-11" style="margin:3%;margin-top:0%;color:black;">
         <div class="header row " style="background:white;">
@@ -366,7 +379,22 @@ span{
 $(document).ready(function(){
     $('#btnNoCaja').hide();
     $('#cargando').hide();
+    $('#tabproduct').show();
+    var miVariableJS = <?php echo Session::get('user_id'); ?>;
+    $('#id_modificado option[value="'+miVariableJS+'"]').prop('selected', true);
 });
+
+
+
+function fecha_cambio(){
+    dias = $('#select_fecha_vencimiento').val();
+    var fecha = new Date($('#fecha').val());
+    console.log($('#fecha').val());
+    console.log(fecha);
+    fecha.setDate(fecha.getDate() + parseInt(dias));
+    console.log(fecha);
+    $('#fecha_vencimiento').val(fecha.getFullYear().toString() + "-" + fecha.getMonth().toString().padStart(2, "0") + "-" + fecha.getDate().toString().padStart(2, "0") );
+}
 
 function saveCartera(){
     var parametros = {
@@ -1212,6 +1240,7 @@ function buscarcliente(texto){
             success:  function (response) {
                 console.log(response);
                 if(response.body.length != 0){ // existe
+                    $('#tabProduct').show();
                     cliente = response.body[0];
                     $('#cedula_tercero').val(cliente.nit);
                     $('#nombre').val(cliente.razon_social);
@@ -1242,6 +1271,7 @@ function buscarcliente(texto){
                     $('#Carterasid_cliente').val(cliente.id);           
                 }  
                 else{
+                    $('#tabProduct').hide();
                     $('#cedula_tercero').val("");
                     $('#nombre').val("");
                     $('#direccion').val("");
@@ -1297,6 +1327,7 @@ function buscarcliente2(texto){
             success:  function (response) {
                 console.log(response);
                 if(response.body.length != 0){ // existe
+                    $('#tabProduct').show();
                     cliente = response.body[0];
                     $('#listaclientes').find('option').remove();
                     for(i=0;response.body.length > i;i++){
@@ -1331,6 +1362,7 @@ function buscarcliente2(texto){
                     $('#Carterasid_cliente').val(cliente.id);           
                 }  
                 else{
+                    $('#tabProduct').hide();
                     $('#listaclientes').find('option').remove();
                     $('#cedula_tercero').val("");
                     $('#nombre').val("");

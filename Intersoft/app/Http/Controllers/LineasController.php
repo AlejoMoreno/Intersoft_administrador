@@ -171,6 +171,9 @@ class LineasController extends Controller
                 $obj->v_puc_iva       = Pucauxiliar::where('id','=',$obj->v_puc_iva)->first();
                 $obj->v_puc_compra    = Pucauxiliar::where('id','=',$obj->v_puc_compra)->first();
                 $obj->v_puc_venta     = Pucauxiliar::where('id','=',$obj->v_puc_venta)->first();
+                $obj->puc_compra    = Pucauxiliar::where('id','=',$obj->puc_compra)->first();
+                $obj->puc_venta     = Pucauxiliar::where('id','=',$obj->puc_venta)->first();
+                
             }
             return view('inventario.lineas', [
                 'lineas' => $objs,

@@ -71,11 +71,11 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label>Nombre</label><br>
-                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Escribe el nombre" required="" onkeyup="config.UperCase('nombre');">
+                                    <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Escribe el nombre" required="" onkeyup="config.UperCase('nombre');"  required>
                                 </div>
                                 <div class="col-md-6">
                                     <label>Descripción</label><br>
-                                    <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Escribe el descripcion" onkeyup="config.UperCase('descripcion');">
+                                    <input type="text" class="form-control" name="descripcion" id="descripcion" placeholder="Escribe el descripcion" onkeyup="config.UperCase('descripcion');" >
                                 </div>
                                 <div class="col-md-6">
                                     <label>Link logo</label><br>
