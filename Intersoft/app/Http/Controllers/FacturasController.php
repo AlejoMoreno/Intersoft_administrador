@@ -730,7 +730,7 @@ class FacturasController extends Controller
             $ADQ->addchild('ADQ_2',$factura[0]->nit); //Identificador del adquiriente.
             $ADQ->addchild('ADQ_3',$factura[0]->id_directorio_clase); //Tipo de documento de identificación fiscal de la persona
             $ADQ->addchild('ADQ_4',$factura[0]->cod_reg_facturatech); //Régimen: Régimen al que pertenece. 
-            $ADQ->addchild('ADQ_6',$factura[0]->nombre_cliente); //Razón social de la empresa.  
+            $ADQ->addchild('ADQ_6',$factura[0]->nombre_cliente); //Razón social de la empresa
             $ADQ->addchild('ADQ_10',$factura[0]->direccion_cliente); //Direccion
             $ADQ->addchild('ADQ_11',$factura[0]->depto_codigo); //Código del Departamento.  
             $ADQ->addchild('ADQ_13',$factura[0]->nombre_ciudad); //Nombre de la ciudad. 
