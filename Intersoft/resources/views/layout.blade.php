@@ -259,7 +259,7 @@
         $lista = null;
         if(Session::get('cargo') == "Administrador" || Session::get('cargo') == "admin" || Session::get('cargo') == "Admin"){
             $lista = ["Inicio", "Directorio", "Inventario", "Producción", "Facturación", "Tesorería", "Contabilidad", "Parámetros", "Salida"];
-            $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
+            $Directorio = ['Parámetros','Creación, Consulta, Directorio','agenda','Usuarios'];
             $Inventario = ['Maestro de Referencias','Maestro de Lotes','Catálogo','Tareta Kardex','Costo Promedio Ponderado','Actualización y Lista de Precios','Presupuestos de Reposición','CierredeInventario','Alistamiento'];
             $Produccion = ['Ficha técnica','Inventario Materia Prima','Ordenes de Producción','Liquidación Mano de Obra','Costos Directos','Ingreso por producción'];
             $Facturacion = ['Liquidación Comisiones','Estadistica Ventas','Zonas Asingada','Pasar PEDIDOS a FACTURA','DEVOLUCIONES','Facturatech'];
@@ -279,7 +279,7 @@
         }
         else if(Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos" || Session::get('cargo') == "Recursos Humanos"){
             $lista = ["Inicio", "Directorio", "Facturación", "Tesorería", "Salida"];
-            $Directorio = ['Parámetros','Creación, Consulta, Directorio','Calendario','Usuarios'];
+            $Directorio = ['Parámetros','Creación, Consulta, Directorio','agenda','Usuarios'];
             $Tesoreria = ['Control de Gastos','Otros Ingresos','Pago a Proveedores','Cobro Cartera','Cheques','Pago Importaciones','Retefuente, Iva, Reteica','Extracto y Cuentas de Cobro','Causaciones','Reportes','CierreCartera'];
             $Facturacion = ['Estadistica Ventas','Zonas Asingada','Facturatech'];
         }
@@ -322,7 +322,7 @@
                         <ul class="dropdown-menu">
                             <?php if(in_array("Parámetros",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/index');">Parámetros</a></li><?php } ?>
                             <?php if(in_array("Creación, Consulta, Directorio",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/directorios');">Creación, Consulta, Directorio</a></li><?php } ?>
-                            <?php if(in_array("Calendario",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/calendario');">Calendario</a></li><?php } ?>
+                            <?php if(in_array("agenda",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/agenda');">Agenda</a></li><?php } ?>
                             <?php if(in_array("Usuarios",$Directorio)){ ?><li><a href="javascript:;" onclick="config.Redirect('/administrador/usuarios');">Usuarios</a></li><?php } ?>
                         </ul>
                     </a>
@@ -668,7 +668,7 @@
 
 
 <script>
-    let menu = ["inventario","index","salida","cartera","contabilidad","calendario","administrador"];
+    let menu = ["inventario","index","salida","cartera","contabilidad","agenda","administrador"];
     for(let i = 0; menu.length > i; i++){
         if(menu[i] == window.location.pathname.split('/')[1]){
             document.getElementById(menu[i]).classList.add("active");

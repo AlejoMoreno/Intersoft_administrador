@@ -316,7 +316,7 @@ class ProduccioningresosController extends Controller
         $obj->id_referencia = $referencia->id;
         $obj->lote 			= 0;
         $obj->serial 		= 0;
-        $obj->fecha_vencimiento = $request->fecha;
+        $obj->fecha_vencimiento = $request->fecha_vencimiento;
         $obj->cantidad 		= $request->cantidad;
         $obj->precio 		= 0;
         $obj->costo 		= 0;
@@ -326,7 +326,6 @@ class ProduccioningresosController extends Controller
         $obj->iva 			= 0;
         $obj->impoconsumo 	= 0;
         $obj->cree = 0;
-        $obj->cree1 = 0;
         $obj->descuento 	= 0;
         $obj->fletes 		= 0;
         $obj->retefuente 	= 0;
@@ -355,7 +354,7 @@ class ProduccioningresosController extends Controller
             $obj->id_referencia = $referencia->id;
             $obj->lote 			= 0;
             $obj->serial 		= 0;
-            $obj->fecha_vencimiento = $request->fecha;
+            $obj->fecha_vencimiento = $request->fecha_vencimiento;
             $obj->cantidad 		= $total;
             $obj->precio 		= 0;
             $obj->costo 		= 0;
@@ -365,7 +364,6 @@ class ProduccioningresosController extends Controller
             $obj->iva 			= 0;
             $obj->impoconsumo 	= 0;
             $obj->cree = 0;
-            $obj->cree1 = 0;
             $obj->descuento 	= 0;
             $obj->fletes 		= 0;
             $obj->retefuente 	= 0;

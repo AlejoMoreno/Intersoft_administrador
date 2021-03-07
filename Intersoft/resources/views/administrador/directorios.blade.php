@@ -41,14 +41,24 @@
                     <p style="font-size: 10pt;">Diligencie cada uno de los datos relacionados con el cliente, proveedor o tercero a crear. Recordar que para el uso de decimales
                     es necesario delimitarlos con (.)
                     </p>
+                    @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <p>Corrige los siguientes errores:</p>
+                        <ul>
+                            @foreach ($errors->all() as $message)
+                                <li>{{ $message }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                 </div>
 
                 <div class="row">
                                 
                     <div class="col-md-12" >
                         <div class="row">
-                            <div class="col-md-4">
-                                <label>Directorio tipo tercero</label>
+                            <div class="col-md-3">
+                                <label>Tipo:</label>
                                 <select name="id_directorio_tipo_tercero" class="form-control"  onkeyup="config.UperCase('id_directorio_tipo_tercero');" id="id_directorio_tipo_tercero">
                                     @foreach ( $directorio_tipo_terceros as $value)
                                     <option value="{{ $value['id'] }}">{{ $value['nombre'] }}</option>
@@ -66,25 +76,43 @@
                                 <label>Digito</label>
                                 <input type="text" name="digito" class="form-control"  onkeyup="config.UperCase('digito');" id="digito" placeholder="Ej.(1)">
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <label>Clase</label>
+                                <select name="id_directorio_tipo" class="form-control"  onchange="directorioTipo()" id="id_directorio_tipo">   
+                                    <option value="{{ $directorio_tipos[1]['id'] }}">{{ $directorio_tipos[1]['nombre'] }}</option>
+                                    <option value="{{ $directorio_tipos[0]['id'] }}">{{ $directorio_tipos[0]['nombre'] }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="row" id="razonessociales">
+                                    <div class="col-md-12">
+                                        <label>Razón Social</label>
+                                        <input type="text" name="razon_social" class="form-control"  onkeyup="config.UperCase('razon_social');" id="razon_social" placeholder="Ej.(EMPRESA S.A.S)" required="">
+                                    </div>
+                                </div>
+                                <div class="row" id="nombresApellidos">
+                                    <div class="col-md-6">
+                                        <label>Apellidos:</label>
+                                        <input type="text" name="apellidos" id="apellidos" onchange="ponerApellido()" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>Nombres:</label>
+                                        <input type="text" name="nombres" id="nombres" onchange="ponerNombre()" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <label>Tipo documento</label>
                                 <select name="id_directorio_clase" class="form-control"  onkeyup="config.UperCase('id_directorio_clase');" id="id_directorio_clase">
                                     @foreach ( $directorio_clases as $value)
                                     <option value="{{ $value['id'] }}">{{ $value['nombre'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>razon_social / nombre completo</label>
-                                <input type="text" name="razon_social" class="form-control"  onkeyup="config.UperCase('razon_social');" id="razon_social" placeholder="Ej.(EMPRESA S.A.S)" required="">
-                                <div style="position: absolute;top:22px;right:18px;">
-                                    <button type="button" class="btn btn-info btn-buscar" onclick="directorios.buscar();"><i class="fas fa-search"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <label>dirección comercial</label>
                                 <input type="text" name="direccion" class="form-control"  onkeyup="config.UperCase('direccion');" id="direccion" placeholder="Ej.(CALLE 38 A 50 A 89 sur)">
                                 <div style="position: absolute;top:22px;right:18px;">
@@ -102,7 +130,7 @@
                                 <label>Ciudad</label>
                                 <select name="id_ciudad" class="form-control"  onkeyup="config.UperCase('id_ciudad');" id="id_ciudad">
                                     @foreach ( $ciudades as $ciudad)
-                                    <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
+                                    <option value="{{ $ciudad['id'] }}">{{ $ciudad['codigo'] }} - {{ $ciudad['nombre'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -147,11 +175,11 @@
                                 <input type="text" name="cupo_financiero" value="0" class="form-control"  onkeyup="config.UperCase('cupo_financiero');" id="cupo_financiero" placeholder="Ej.(200000000)">
                             </div>
                             <div class="col-md-3">
-                                <label>Actividad_economica</label>
+                                <label>Actividad Económica:</label>
                                 <input type="text" name="actividad_economica" value="0000" class="form-control"  onkeyup="config.UperCase('actividad_economica');" id="actividad_economica" placeholder="Ej.(1002)">                        
                             </div>
                             <div class="col-md-3">
-                                <label>Calificacion</label>
+                                <label>Calificación:</label>
                                 <select name="calificacion" class="form-control"  onkeyup="config.UperCase('calificacion');" id="calificacion">
                                     <option value="2">2 (BUENO)</option>
                                     <option value="1">1 (REGULAR)</option>
@@ -159,7 +187,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label>Nivel</label>
+                                <label>Nivel:</label>
                                 <select name="nivel" class="form-control"  onkeyup="config.UperCase('nivel');" id="nivel" placeholder="Ej.()">
                                     <option value="NACIONAL">NACIONAL</option>
                                     <option value="INTERNACIONAL">INTERNACIONAL</option>
@@ -172,25 +200,25 @@
 
                         <div class="row">
                             <div class="col-md-3">
-                                <label>Transporte</label>
+                                <label>Transporte:</label>
                                 <select name="transporte" class="form-control"  onkeyup="config.UperCase('transporte');" id="transporte">
                                     <option value="NO">NO</option>
                                     <option value="SI">SI</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label>Zona venta</label>
+                                <label>Zona venta:</label>
                                 <input type="text" name="zona_venta" value="NA" class="form-control"  onkeyup="config.UperCase('zona_venta');" id="zona_venta" placeholder="EJ.(BOGOTA)">
                             </div>
                             <div class="col-md-6">
-                                <label>estado</label>
+                                <label>Estado:</label>
                                 <select name="estado" class="form-control"  onkeyup="config.UperCase('estado');" id="estado">
                                     <option value="ACTIVO">ACTIVO</option>
                                     <option value="INACTIVO">INACTIVO</option>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label>retefuente</label>
+                                <label>Rete Fuente:</label>
                                 <select name="id_retefuente" class="form-control"  onkeyup="config.UperCase('id_retefuente');" id="id_retefuente">
                                     @foreach ( $retefuentes as $retefuente)
                                     <option value="{{ $retefuente['id'] }}">{{ $retefuente['nombre'] }}</option>
@@ -198,7 +226,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label>regimen</label>
+                                <label>Regímen:</label>
                                 <select name="id_regimen" class="form-control"  onkeyup="config.UperCase('id_regimen');" id="id_regimen">
                                     @foreach ( $regimenes as $regimen)
                                     <option value="{{ $regimen['id'] }}">{{ $regimen['nombre'] }}</option>
@@ -206,18 +234,10 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <label>usuario</label>
+                                <label>Vendedor:</label>
                                 <select name="id_usuario" class="form-control"  onkeyup="config.UperCase('id_usuario');" id="id_usuario">
                                     @foreach ( $usuarios as $usuario)
                                     <option value="{{ $usuario['id'] }}">{{ $usuario['nombre'] }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label>directorio tipo</label>
-                                <select name="id_directorio_tipo" class="form-control"  onkeyup="config.UperCase('id_directorio_tipo');" id="id_directorio_tipo">   
-                                    @foreach ( $directorio_tipos as $value)
-                                    <option value="{{ $value['id'] }}">{{ $value['nombre'] }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -242,7 +262,33 @@
 <script>
     $(document).ready(function() {
         directorios.init();
+        $('#razonessociales').show();
+        $('#nombresApellidos').hide();
     });
+</script>
+
+<script>
+    function directorioTipo(){
+        var tipo = $('#id_directorio_tipo').val();
+        if(tipo == "1"){ //natural
+            $('#razonessociales').hide();
+            $('#nombresApellidos').show();
+        }
+        else{ //juridica
+            $('#razonessociales').show();
+            $('#nombresApellidos').hide();
+        }
+    }
+    function ponerNombre(){
+        apellido = $('#apellidos').val();
+        nombres = $('#nombres').val();
+        $('#razon_social').val(apellido + " " + nombres);
+    }
+    function ponerApellido(){
+        apellido = $('#apellidos').val();
+        nombres = $('#nombres').val();
+        $('#razon_social').val(apellido + " " + nombres);
+    }
 </script>
 
 @endsection()

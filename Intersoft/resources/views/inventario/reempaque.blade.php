@@ -61,13 +61,17 @@
                                     <label style="color:white">Cantidad</label>
                                     <input type="number" class="form-control" name="cantidad">
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label style="color:white">Fecha</label>
-                                    <input type="date" class="form-control" name="fecha">
+                                    <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="fecha">
+                                </div>
+                                <div class="col-md-6">
+                                    <label style="color:white">Fecha caducidad / vencimiento:</label>
+                                    <input type="date" value="{{ date('Y-m-d') }}" class="form-control" name="fecha_vencimiento">
                                 </div>
                                 <div class="col-md-12">
                                     <label style="color:white">Fichas técnicas</label>
-                                    <select name="ficha" class="form-control">
+                                    <select name="ficha" id="ficha" class="form-control" onchange="seleccionarProducto()">
                                         @foreach ($fichas as $ref)
                                             <option value="{{ $ref['orden'] }}'">{{ $ref['nombre'] }}</option>
                                         @endforeach
@@ -75,7 +79,7 @@
                                 </div>
                                 <div class="col-md-12">
                                     <label style="color:white">Producto a crear</label>
-                                    <select name="producto" class="form-control">
+                                    <select name="producto" id="producto" class="form-control">
                                         @foreach ($referencias as $ref)
                                             <option value="{{ $ref['id'] }}'">{{ $ref['descripcion'] }}</option>
                                         @endforeach
@@ -111,6 +115,13 @@ function Obj(){
              $('.formulario_').show();
         }
     };
+}
+
+function seleccionarProducto(){
+    ficha = $('#ficha option:selected').text();
+    console.log(ficha);
+    $("#producto").find('option:contains("'+ficha+'")').prop('selected', true);
+
 }
 </script>
 

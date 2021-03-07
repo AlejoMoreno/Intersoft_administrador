@@ -24,8 +24,8 @@
 
 <div class="enc-article">
     <h4 class="title">{{ $documento['nombre'] }}</h4>
-    <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo" value="{{ $documento['prefijo'] }}">
-    <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 45%;" id="numero" value="0">
+    <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 35%;" id="prefijo" value="" placeholder="Prefijo">
+    <input type="text" class="form-control " style="width: 100px;position: absolute;top: 25%;left: 45%;" id="numero" value="0" placeholder="Número">
     <input type="hidden" id="idDocumento" value="{{ $documento['id'] }}">
     <input type="hidden" id="signoDocumento" value="{{ $documento['signo'] }}">
 </div>
@@ -75,14 +75,32 @@ $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first();
             
             <div class="col-md-6" style="margin-bottom:2%;">
                 <label>Fecha:</label>
-                <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                <input type="datetime" name="fecha" id="fecha" value="{{ date('Y-m-d H:i a') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
             </div>
-            <div class="col-md-6" style="margin-bottom:2%;">
+
+            <div class="col-md-2">
+                <label>Tipo de pago:</label>
+                <select name="selTipoPago" id="selTipoPago" class="form-control" onchange="cambioTipoPago()">
+                    <!--<option value="1">Contado</option>-->
+                    <option value="2">Credito</option>
+                </select>
+            </div>
+            
+            <div class="col-md-4" style="margin-bottom:2%;" id="divfecha">
                 <label>Fecha vencimiento:</label>
-                  <input type="date" name="fecha_vencimiento" value="{{ date('Y-m-d') }}" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');">
-            </div>    
+                <div class="row">
+                    <div class="col-md-4">
+                        <input type="number" placeholder="Días" value="0" class="form-control" onchange="fecha_cambio()" name="select_fecha_vencimiento" id="select_fecha_vencimiento">
+                    </div>
+                    <div class="col-md-8">
+                        <input type="datetime" name="fecha_vencimiento" id="fecha_vencimiento" value="{{ date('Y-m-d H:i a') }}" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');" disabled>
+                    </div>
+                </div>
+            </div> 
             <input type="hidden" name="id_modificado" id="id_modificado" class="form-control" value="{{ Session::get('user_id') }}" placeholder="Esciba el nombre del vendedor">        
             
+            
+
         </div>
     </div>
     
@@ -339,10 +357,66 @@ $empresa = App\Empresas::where('id','=',Session::get('id_empresa'))->first();
 <script>
 //funciones script para carteras
 
+
 $(document).ready(function(){
     $('#btnNoCaja').hide();
     $('#cargando').hide();
+    $('#tabproduct').show();
+    //$('#divfecha').hide();
+    var miVariableJS = <?php echo Session::get('user_id'); ?>;
+    $('#id_modificado option[value="'+miVariableJS+'"]').prop('selected', true);
 });
+
+
+function fecha_cambio(){
+    dias = $('#select_fecha_vencimiento').val();
+    var fecha = new Date($('#fecha').val());
+    console.log($('#fecha').val());
+    console.log(fecha);
+    fecha.setDate(fecha.getDate() + parseInt(dias));
+    console.log(formatDate(fecha));
+    $('#fecha_vencimiento').val(formatDate(fecha));
+}
+
+function formatDate(dateVal) {
+    var newDate = new Date(dateVal);
+
+    var sMonth = padValue(newDate.getMonth() + 1);
+    var sDay = padValue(newDate.getDate());
+    var sYear = newDate.getFullYear();
+    var sHour = newDate.getHours();
+    var sMinute = padValue(newDate.getMinutes());
+    var sAMPM = "AM";
+
+    var iHourCheck = parseInt(sHour);
+
+    if (iHourCheck > 12) {
+        sAMPM = "PM";
+        sHour = iHourCheck - 12;
+    }
+    else if (iHourCheck === 0) {
+        sHour = "12";
+    }
+
+    sHour = padValue(sHour);
+
+    return sYear + "-" + sMonth + "-" + sDay + " " + sHour + ":" + sMinute + " " + sAMPM;
+}
+
+function padValue(value) {
+    return (value < 10) ? "0" + value : value;
+}
+
+
+function cambioTipoPago(){
+    var selTipoPago = $('#selTipoPago').val();
+    if(selTipoPago == "1"){
+        $('#divfecha').hide();
+    }
+    else{
+        $('#divfecha').show();
+    }
+}
 
 function saveCartera(){
     var parametros = {
@@ -802,7 +876,7 @@ function getReferencia(id){
                     cell1.innerHTML = "<strong style='color:black'>"+referencia.codigo_interno+"</strong>";
                     cell2.innerHTML = "<strong style='color:black'>"+referencia.descripcion+"</strong>";
                     cell3.innerHTML = lotes;
-                    cell4.innerHTML = "<span style='color:black;position:absolute;margin-left: 10px;margin-top: -10px;'>Saldo: "+ new Intl.NumberFormat().format(referencia.saldo) +"</span><input type='text' value='0' onchange='recorrerproductos(this)' class='form-control' name='cantidad'>";
+                    cell4.innerHTML = "<div class='row'><div class='col-md-12'><span style='color:black;font-size:9'>Saldo: "+ new Intl.NumberFormat().format(referencia.saldo) +"</span></div></div><input value='0' onchange='recorrerproductos(this)' class='form-control'  name='cantidad'>";
                     cell5.innerHTML = precios;
                     cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
                     cell7.innerHTML = "<input type='hidden' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'><p name='spanTotal' class='numberTex' style='color:black;'>$ 0.00</p>";
@@ -831,6 +905,8 @@ function recorrerproductos(element){
     inputs = tr.getElementsByTagName('input');
     selects = tr.getElementsByTagName('select');
     span = tr.getElementsByTagName('p');
+
+    console.log(inputs);
     
     check = inputs[0].value;
     id = inputs[1].value;

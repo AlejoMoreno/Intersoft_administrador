@@ -180,9 +180,8 @@ class ContabilidadesController extends Controller
             DB::raw('(select nombre from sucursales where id = contabilidades.id_sucursal) as id_sucursal'),
             'contabilidades.tipo_documento',
             'contabilidades.numero_documento',
-            'contabilidades.fecha_documento',
-            DB::raw('(select nit from directorios where id = contabilidades.tercero) as id_tercero'),
-            DB::raw('(select razon_social from directorios where id = contabilidades.tercero) as tercero')])
+            'contabilidades.prefijo',
+            'contabilidades.fecha_documento',])
             ->where('tipo_documento','=',$id)
             ->where('id_empresa','=',Session::get('id_empresa'))
             ->where('tipo_documento','=',$id)
@@ -198,7 +197,7 @@ class ContabilidadesController extends Controller
                 }
             })
             ->groupBy(['id_empresa','id_sucursal','tipo_documento','numero_documento',
-            'fecha_documento','id_tercero','tercero'])
+            'fecha_documento','contabilidades.prefijo'])
             ->get();
         
         $documentos = Documentos::select(['id','nombre'])

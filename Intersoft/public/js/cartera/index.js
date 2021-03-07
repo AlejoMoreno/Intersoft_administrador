@@ -348,8 +348,15 @@ function Carteras(){
             element = carteravalor[i]; 
             valor_forma_pagos = parseFloat(element.value) + valor_forma_pagos;
         }
-        document.getElementById('total_forma_pago').value = valor_forma_pagos;
-        document.getElementById('total_forma_pago_tex').innerHTML = "$ " + new Intl.NumberFormat().format(valor_forma_pagos);
+        total = $('#total').val();
+        if(total >= valor_forma_pagos){
+            document.getElementById('total_forma_pago').value = valor_forma_pagos;
+            document.getElementById('total_forma_pago_tex').innerHTML = "$ " + new Intl.NumberFormat().format(valor_forma_pagos);
+        }
+        else{
+            alert("El monto no puede superar el total");
+        }
+        
     }
 
 

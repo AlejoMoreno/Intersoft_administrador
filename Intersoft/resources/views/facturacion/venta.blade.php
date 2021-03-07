@@ -83,12 +83,11 @@ span{
             </div>
             <div class="col-md-2">
                 <label>Ciudad:</label>
-                <input name="id_ciudad" class="form-control"  id="id_ciudad" list="ciudades">
-                <datalist id="ciudades">    
+                <select name="id_ciudad" id="id_ciudad" class="form-control">
                     @foreach ( $ciudades as $ciudad)
-                    <option value="{{ $ciudad['id'] }}">{{ $ciudad['nombre'] }} - {{ $ciudad['codigo'] }}</option>
+                    <option value="{{ $ciudad['id'] }}">{{ $ciudad['codigo'] }} - {{ $ciudad['nombre'] }}</option>
                     @endforeach
-                </datalist>
+                </select>
             </div>
             <div class="col-md-4">
                 <label>Nombre Zona:</label>
@@ -104,24 +103,27 @@ span{
             </div>
             <div class="col-md-6" style="margin-bottom:2%;">
                 <label>Fecha:</label>
-                <input type="date" name="fecha" id="fecha" value="{{ date('Y-m-d') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                <input type="datetime" name="fecha" id="fecha" value="{{ date('Y-m-d H:i a') }}" class="form-control" onkeyup="documentos.fechaActual(event)" >
             </div>
-            <div class="col-md-3" style="margin-bottom:2%;">
+            <div class="col-md-2">
+                <label>Tipo de pago:</label>
+                <select name="selTipoPago" id="selTipoPago" class="form-control" onchange="cambioTipoPago()">
+                    <option value="1">Contado</option>
+                    <option value="2">Credito</option>
+                </select>
+            </div>
+            
+            <div class="col-md-4" style="margin-bottom:2%;" id="divfecha">
                 <label>Fecha vencimiento:</label>
                 <div class="row">
                     <div class="col-md-4">
-                        <select class="form-control" onchange="fecha_cambio()" name="select_fecha_vencimiento" id="select_fecha_vencimiento">
-                            <option value="0">Días</option>
-                            <option value="0">00</option>
-                            <option value="30">30</option>
-                            <option value="60">60</option>
-                        </select>
+                        <input type="number" placeholder="Días" value="0" class="form-control" onchange="fecha_cambio()" name="select_fecha_vencimiento" id="select_fecha_vencimiento">
                     </div>
                     <div class="col-md-8">
-                        <input type="date" name="fecha_vencimiento" id="fecha_vencimiento" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');" disabled>
+                        <input type="datetime" name="fecha_vencimiento" id="fecha_vencimiento" value="{{ date('Y-m-d H:i a') }}" class="form-control" onkeyup="documentos.siguiente(event,'id_modificado');" disabled>
                     </div>
                 </div>
-            </div>    
+            </div> 
             <div class="col-md-3" style="margin-bottom: 2%;">
                 <label>Vendedor</label>
                 <select name="id_modificado" id="id_modificado" class="form-control" >
@@ -380,10 +382,10 @@ $(document).ready(function(){
     $('#btnNoCaja').hide();
     $('#cargando').hide();
     $('#tabproduct').show();
+    $('#divfecha').hide();
     var miVariableJS = <?php echo Session::get('user_id'); ?>;
     $('#id_modificado option[value="'+miVariableJS+'"]').prop('selected', true);
 });
-
 
 
 function fecha_cambio(){
@@ -392,8 +394,47 @@ function fecha_cambio(){
     console.log($('#fecha').val());
     console.log(fecha);
     fecha.setDate(fecha.getDate() + parseInt(dias));
-    console.log(fecha);
-    $('#fecha_vencimiento').val(fecha.getFullYear().toString() + "-" + fecha.getMonth().toString().padStart(2, "0") + "-" + fecha.getDate().toString().padStart(2, "0") );
+    console.log(formatDate(fecha));
+    $('#fecha_vencimiento').val(formatDate(fecha));
+}
+
+function formatDate(dateVal) {
+    var newDate = new Date(dateVal);
+
+    var sMonth = padValue(newDate.getMonth() + 1);
+    var sDay = padValue(newDate.getDate());
+    var sYear = newDate.getFullYear();
+    var sHour = newDate.getHours();
+    var sMinute = padValue(newDate.getMinutes());
+    var sAMPM = "AM";
+
+    var iHourCheck = parseInt(sHour);
+
+    if (iHourCheck > 12) {
+        sAMPM = "PM";
+        sHour = iHourCheck - 12;
+    }
+    else if (iHourCheck === 0) {
+        sHour = "12";
+    }
+
+    sHour = padValue(sHour);
+
+    return sYear + "-" + sMonth + "-" + sDay + " " + sHour + ":" + sMinute + " " + sAMPM;
+}
+
+function padValue(value) {
+    return (value < 10) ? "0" + value : value;
+}
+
+function cambioTipoPago(){
+    var selTipoPago = $('#selTipoPago').val();
+    if(selTipoPago == "1"){
+        $('#divfecha').hide();
+    }
+    else{
+        $('#divfecha').show();
+    }
 }
 
 function saveCartera(){
@@ -901,7 +942,7 @@ function getReferencia(id){
                     cell1.innerHTML = "<strong style='color:black'>"+referencia.codigo_interno+"</strong>";
                     cell2.innerHTML = "<strong style='color:black'>"+referencia.descripcion+"</strong>";
                     cell3.innerHTML = lotes;
-                    cell4.innerHTML = "<span style='color:black;position:absolute;margin-left: 10px;margin-top: -10px;'>Saldo: "+ new Intl.NumberFormat().format(referencia.saldo) +"</span><input value='0' onchange='recorrerproductos(this)' class='form-control'  name='cantidad'>";
+                    cell4.innerHTML = "<div class='row'><div class='col-md-12'><span style='color:black;font-size:9'>Saldo: "+ new Intl.NumberFormat().format(referencia.saldo) +"</span></div></div><input value='0' onchange='recorrerproductos(this)' class='form-control'  name='cantidad'>";
                     cell5.innerHTML = precios;
                     cell6.innerHTML = "<input type='text' value='"+referencia.iva+"' class='form-control' name='iva' disabled><input type='hidden' name='totaliva'>";
                     cell7.innerHTML = "<input type='hidden' value='0' class='form-control' name='subtotal' disabled><input type='hidden' value='0' class='form-control' name='totalretefuente'><p name='spanTotal' class='numberTex' style='color:black;'>$ 0.00</p>";

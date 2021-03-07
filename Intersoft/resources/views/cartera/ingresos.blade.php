@@ -78,7 +78,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           
           <div class="col-md-6" style="margin-bottom:2%;">
               <label>Fecha:</label>
-                <input type="date" name="fecha" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                <input type="datetime" value="{{ date('Y-m-d H:i a') }}" name="fecha" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)" >
           </div>
           <input type="hidden" name="id_modificado" id="id_modificado" class="form-control" value="{{ Session::get('user_id') }}" placeholder="Esciba el nombre del vendedor">        
           
@@ -115,7 +115,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
             <th>ReteIca.</th>
             <th>Interes</th>
             <th>Desc</th>
-            <th>Efectivo</th>
+            <th>Valor</th>
             <th>Total</th>
             <th></th>
           </tr>

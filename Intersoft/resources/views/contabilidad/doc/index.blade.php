@@ -44,8 +44,8 @@ al tipo de documento seleccionado anteriormente.</p>
                     <th>Tipo Documento</th>
                     <th>Sucursal</th>
                     <th>Numero Documento</th>
-                    <th>Nit</th>
-                    <th>Razón social</th>
+                    <th></th>
+                    <th></th>
                     <th>Fecha documento</th>
                     <th>Entrar al comprobante</th>
                 </tr>
@@ -57,7 +57,7 @@ al tipo de documento seleccionado anteriormente.</p>
                 <tr>
                     <td><?php echo $nombre_tipo_documento ?></td>
                     <td><?php echo $dat['id_sucursal'] ?></td>
-                    <td><?php echo "Doc#".$dat['numero_documento'] ?></td>
+                    <td><?php echo $dat['prefijo']." # ".$dat['numero_documento'] ?></td>
                     <td><?php echo $dat['id_tercero'] ?></td>
                     <td><?php echo $dat['tercero'] ?></td>
                     <td><?php echo $dat['fecha_documento'] ?></td>
@@ -103,59 +103,57 @@ al tipo de documento seleccionado anteriormente.</p>
                     <div class="content" style="overflow-x: scroll">
                         
                         <h4>Adicionar Movimiento Contable</h4>
-                        <table class="table table-hover table-striped" > 
-                           
-                            <tbody>
-                                    <tr>
-                                        <td style="width: 150px"> 
-                                            <label>Tipo Documento</label>
-                                                <select name="tipo_documento" id="tipo_documento" class="form-control">
-                                                <option value="1">EGRESO</option>
-                                                <option value="2">RECIBOS DE CAJA</option>
-                                                <option value="3">FACTURAS DE VENTA</option>
-                                                <option value="4">FACTURAS DE COMPRA</option>
-                                                <option value="5">CAUSACIONES</option>
-                                                <option value="6">DEPRECIACION</option>
-                                                <option value="7">NOTA DB</option>
-                                                <option value="8">CONSIGNACION</option>
-                                                <option value="9">NOTA CR</option>
-                                                <option value="10">NOTA CONTABLE</option>
-                                                <option value="11">COMPROBANTE CIERRE CONTABLE</option>
-                                                <option value="12">INGRESO X CONSIGNACION</option>
-                                                <option value="13">SALIDA X CONSIGNACION</option>
-                                                <option value="14">INGRESO Y SALIDA DE PRODUCCION</option>
-                                                <option value="15">NOTA NITF</option>
-                                            </select>
-                                        </td>
-                                        <td style="width: 150px"> 
-                                            <label>Id documento</label>
-                                            <input type="text" placeholder="id_documento1" list="listadocumento" class="form-control" id="id_documento1">
-                                            <datalist id="listadocumento">
-                                                @foreach ($documentos as $obj)
-                                                <option value="{{ $obj['id'] }}">{{ $obj['id'] }}-{{ $obj['nombre'] }}</option>
-                                                @endforeach
-                                            </datalist> 
-                                        </td>
-                                        <td style="width: 150px"> <label>Número</label><input placeholder="numero_documento1" class="form-control" id="numero_documento1"></td>
-                                        <td style="width: 150px"> <label>Prefijo</label><input placeholder="prefijo" class="form-control" id="prefijo1"></td>
-                                        <td style="width: 150px"> <label>Fecha </label><input type="date" placeholder="fecha_documento" class="form-control" id="fecha_documento1"></td>         
-                                        <td style="width: 150px"> <label>Valor</label><input placeholder="valor_transaccion" class="form-control" id="valor_transaccion1"></td>
-                                        <td style="width: 150px"> 
-                                            <label>Auxiliar</label>
-                                            <input type="text" placeholder="id_axiliar" list="listaauxiliar" class="form-control" id="id_axiliar">
-                                        </td>
-                                        <td style="width: 150px"> 
-                                            <label>Tipo</label>
-                                            <select class="form-control" id="tipo_transaccion" name="tipo_transaccion1">
-                                                <option value="C">C</option>
-                                                <option value="D">D</option>
-                                            </select>
-                                        </td>
-                                        <td style="width: 150px"> <label>Tercero</label> <input id="id_cliente" type="hidden"> <input placeholder="tercero" class="form-control" id="tercero" onkeyup="buscarcliente(this.value)"><p style="font-size:10px;color:black;" id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p></td> 
-                                        <td style="width: 150px"><label><br></label><div class="btn btn-success" onclick="obj.createComprobantes()" id="botonguardar"><i class="fas fa-plus-circle"></i></div></td>
-                                    </tr>
-                                </tbody>
-                        </table>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Tipo Documento</label>
+                                        <input type="text" value="{{ $data[0]['tipo_documento'] }}" name="tipo_documento" id="tipo_documento" class="form-control">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Id documento</label>
+                                        <select placeholder="id_documento1" list="listadocumento" class="form-control" id="id_documento1">
+                                            @foreach ($documentos as $doc)
+                                                <option value="{{ $doc['id'] }}">{{ $doc['nombre'] }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Número</label><input value="{{ $data[0]['numero_documento'] }}" placeholder="numero_documento1" class="form-control" id="numero_documento1">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Prefijo</label><input value="{{ $data[0]['prefijo'] }}" placeholder="prefijo" class="form-control" id="prefijo1">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Fecha </label><input type="datetime" value="{{ $data[0]['fecha_documento'] }}" placeholder="fecha_documento" class="form-control" id="fecha_documento1">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Valor</label><input placeholder="valor_transaccion" class="form-control" id="valor_transaccion1">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Auxiliar</label>
+                                        <input type="text" placeholder="id_axiliar" list="listaauxiliar" class="form-control" id="id_axiliar">
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Tipo</label>
+                                        <select class="form-control" id="tipo_transaccion" name="tipo_transaccion1">
+                                            <option value="C">C</option>
+                                            <option value="D">D</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Tercero</label> <input id="id_cliente" type="hidden"> <input placeholder="tercero" class="form-control" id="tercero" onkeyup="buscarcliente(this.value)"><p style="font-size:10px;color:black;" id="resCliente">Para buscar el cliente debe tener un minimo de 3 caracteres</p>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="btn btn-success" onclick="obj.createComprobantes()" id="botonguardar"><i class="fas fa-plus-circle"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         
                     </div>
                 </div>
@@ -273,7 +271,7 @@ function Obj(){
             <td>`+response.contabilidades[i].razon_social+`</td>
             <td>`+response.contabilidades[i].descripcion+`</td>`;
             if(response.contabilidades[i].tipo_transaccion == 'D'){
-                debitos = debitos + response.contabilidades[i].valor_transaccion;
+                debitos = parseFloat(debitos) + parseFloat(response.contabilidades[i].valor_transaccion);
                 valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                 tr = tr + `
                 <td style="text-align: right;">`+valor_trans+`</td>
@@ -281,7 +279,7 @@ function Obj(){
                 `;
             }
             else{
-                creditos = creditos + response.contabilidades[i].valor_transaccion;
+                creditos = parseFloat(creditos) + parseFloat(response.contabilidades[i].valor_transaccion);
                 valor_trans = new Intl.NumberFormat("de-DE").format(response.contabilidades[i].valor_transaccion);
                 tr = tr + `
                 <td style="text-align: right;"></td>
@@ -296,12 +294,12 @@ function Obj(){
             </tr>`;
             $("#cuerpo").append(tr)
         }
-        debitos = new Intl.NumberFormat("de-DE").format(debitos);
-        creditos = new Intl.NumberFormat("de-DE").format(creditos);
+        debitos = parseInt(debitos);
+        creditos = parseInt(creditos);
         $("#cuerpo").append(`<tr>
             <td colspan=3></td>
-            <td style="text-align: right;"><h5>`+debitos+`</h5></td>
-            <td style="text-align: right;"><h5>`+creditos+`</h5></td>
+            <td style="text-align: right;"><h5>`+new Intl.NumberFormat("de-DE").format(debitos)+`</h5></td>
+            <td style="text-align: right;"><h5>`+new Intl.NumberFormat("de-DE").format(creditos)+`</h5></td>
             <td></td>
             </tr>`);
         $('#tablecont').DataTable({

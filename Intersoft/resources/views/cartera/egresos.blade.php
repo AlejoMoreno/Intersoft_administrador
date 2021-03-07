@@ -48,7 +48,8 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           </div>
           <div class="col-md-4">
               <label>Razón Social:</label>
-              <input type="text" name="nombre"  id="nombre" placeholder="Razón Social" class="form-control" >
+              <input type="text" name="nombre" list="listaclientes" id="nombre" placeholder="Razón Social" class="form-control" >
+              <datalist id="listaclientes"></datalist>
           </div>
           <div class="col-md-4">
               <label>Dirección:</label>
@@ -73,7 +74,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           
           <div class="col-md-6" style="margin-bottom:2%;">
               <label>Fecha:</label>
-                <input type="date" name="fecha" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)" >
+                <input type="datetime" name="fecha" value="{{ date('Y-m-d H:i a') }}" id="fecha" class="form-control" onkeyup="documentos.fechaActual(event)" >
           </div>
           <input type="hidden" name="id_modificado" id="id_modificado" class="form-control" value="{{ Session::get('user_id') }}" placeholder="Esciba el nombre del vendedor">        
           
@@ -110,7 +111,7 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
             <th>ReteIca.</th>
             <th>Interes</th>
             <th>Desc</th>
-            <th>Efectivo</th>
+            <th>Valor</th>
             <th>Total</th>
             <th></th>
           </tr>
@@ -262,6 +263,22 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
 
 <script type="text/javascript">
   //document.getElementById('prefijo').focus();
+
+
+  $('#cedula_tercero').on('keydown', function(e) {
+      if (e.key === "Enter") {
+        buscarcliente($('#cedula_tercero').val());
+          return false;
+      }
+  });
+
+  $('#nombre').on('keydown', function(e) {
+      if (e.key === "Enter") {
+        buscarcliente2($('#nombre').val());
+          return false;
+      }
+  });
+
 </script>
 
 
@@ -370,13 +387,72 @@ $ciudades = App\Ciudades::where('id','>','0')->orderBy('nombre','asc')->get();
           });
       }
   }
-
-$('#cedula_tercero').on('keydown', function(e) {
-  if (e.key === "Enter") {
-      buscarcliente($('#cedula_tercero').val());
-      return false;
+  function buscarcliente2(texto){
+      console.log(texto);
+      if(texto.length > 3){
+          var urls = "/administrador/diretorios/search/search";
+          parametros = {
+              "razon_social" : texto,
+              "tipo": "PROVEEDOR"
+          };
+          $.ajax({
+              data:  parametros,
+              url:   urls,
+              type:  'post',
+              beforeSend: function () {
+                  $('#resultado').html('<p>Espere porfavor</p>');
+              },
+              success:  function (response) {
+                  console.log(response);
+                  if(response.body.length != 0){ // existe
+                      cliente = response.body[0];
+                      $('#listaclientes').find('option').remove();
+                      for(i=0;response.body.length > i;i++){
+                          $('#listaclientes').append('<option value="'+response.body[i].razon_social+'">"'+response.body[i].razon_social+'"</option>');
+                      }
+                      $('#cedula_tercero').val(cliente.nit);
+                      $('#nombre').val(cliente.razon_social);
+                      $('#direccion').val(cliente.direccion);
+                      $('#telefono').val(cliente.telefono);
+                      $('#correo').val(cliente.correo); 
+                      $('#id_ciudad').val(cliente.id_ciudad);
+                      $('#direccion').prop( "disabled", true );  
+                      $('#telefono').prop( "disabled", true );  
+                      $('#correo').prop( "disabled", true );    
+                      $('#id_ciudad').prop("disabled", true);
+                      $('#guardarCliente').hide();   
+                      $('#resCliente').text("Proveedor existe");    
+                      //cartera
+                      $('#Carterasid_cliente').val(cliente.id);     
+                      carteras.allDocumentos();      
+                  }  
+                  else{
+                      $('#nit').val("");
+                      $('#nombre').val("");
+                      $('#direccion').val("");
+                      $('#telefono').val("");
+                      $('#correo').val("");
+                      $('#nombre').prop( "disabled", false );  
+                      $('#direccion').prop( "disabled", false );  
+                      $('#telefono').prop( "disabled", false );  
+                      $('#correo').prop( "disabled", false ); 
+                      $('#id_ciudad').prop("disabled", false);
+                      $('#guardarCliente').show();
+                      $('#resCliente').text("Proveedor no existe, si desea crearlo, diligencie los datos restantes");               
+                  }              
+              },
+              error: function(){
+                  swal({
+                    title: "Algo anda mal",
+                    text: "Verifique conexión a internet y/o diligencie completamente los campos del encabezado",
+                    icon: "error",
+                    button: "Aceptar",
+                  });
+              }
+          });
+      }
   }
-});
+
   </script>
 
 @endsection()

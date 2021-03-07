@@ -155,6 +155,10 @@
 			padding-top:5%;
 			text-align:justify;
 		}
+		.label{
+			font-size: 12px;
+			color: black;
+		}
 	</style>
 	
 
@@ -183,7 +187,6 @@
 					<div class="navbar-header"><a class="navbar-brand" href="#" style="color:white">Modulos</a></div>
 					<div class="navbar-header"><a class="navbar-brand" href="#" style="color:white">Contactos</a></div>
 					<ul class="nav navbar-nav navbar-right">
-					<li><a class="btn-danger" href="#" style="color:white"> Demo</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -225,7 +228,8 @@
 			<div class="panel panel-success" id="empresa" style="width: 300px;">
 				<div class="panel-heading" style="text-aling:center"><img class="logo" src="/assets/img/logo_intersoft1.png"></div>
 				<div class="panel-body">
-					<input type="text" id="nit_empresa" class="form-control" onkeypress="pulsar(event)" autocomplete="off" placeholder="nit empresa" >
+					<label class="label">Nit Empresa:</label>
+					<input type="text" id="nit_empresa" class="form-control" onkeypress="pulsar(event)" autocomplete="off" placeholder="Escribe el nit de la empresa" >
 					<p style="color:black;font-size:8pt">Escriba el nit sin puntos junto al digito de verificación</p>
 					<div class="form-control btn btn-success" id="validar_empresa">Validar Empresa</div>
 				</div>
@@ -241,11 +245,13 @@
 						<div class="panel-body">
 							<p id="empresaConfig"></p>
 							<p style="color:black;font-size:8pt">Elija es usuario con el cual desea ingresar correspondiente al nit</p>
+							<label class="label">Usuario:</label>
 							<div class="input-group">
 								<div id="usuarios"></div>
 							</div>
+							<label class="label">Contraseña</label>
 							<div class="input-group">
-								<input id="password" type="password" class="form-control" name="password" placeholder="Password" >
+								<input id="password" type="password" class="form-control" name="password" placeholder="Escribe la contraseña" >
 							</div>
 							<p style="color:black;font-size:8pt">A que Sucursal</p>
 							<div class="input-group">

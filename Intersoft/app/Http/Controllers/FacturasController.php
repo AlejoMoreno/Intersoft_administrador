@@ -475,7 +475,7 @@ class FacturasController extends Controller
         $documento = Documentos::where('id','=',$id_documento)->first();
         $referencias = Referencias::where('id_empresa','=',Session::get('id_empresa'))
                                 ->where('estado','=','ACTIVO')->get();
-        $ciudades = Ciudades::where('id','>',0)->orderBy('nombre','asc')->get();
+        $ciudades = Ciudades::where('id','>',0)->orderBy('codigo','asc')->get();
         $resoluciones = Resoluciones::where('id_documento','=',$documento->id)->get();
 
         $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();

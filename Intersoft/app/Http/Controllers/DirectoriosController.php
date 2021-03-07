@@ -53,8 +53,14 @@ class DirectoriosController extends Controller
             $directorios->id_directorio_clase= $request->id_directorio_clase;
             $directorios->id_directorio_tipo_tercero= $request->id_directorio_tipo_tercero;
             $directorios->id_empresa	 	= Session::get('id_empresa');
-            $directorios->save();
-            return redirect('/administrador/directorios');
+            $direc = Directorios::where('id_empresa','=',Session::get('id_empresa'))
+                                    ->where('nit','=',$request->nit)
+                                    ->where('id_directorio_tipo_tercero','=',$request->id_directorio_tipo_tercero)
+                                    ->get();
+            if(sizeof($direc) == 0 ){
+                $directorios->save();
+            }
+            return back()->with('status','Tercero ya estaba creado, por favor busquelo y actualicelo');
         }
         catch (ModelNotFoundException $exception){
             return  array(
@@ -166,7 +172,7 @@ class DirectoriosController extends Controller
             $regimenes = Regimenes::all();
             $usuarios = Usuarios::where('id_empresa','=',Session::get('id_empresa'))->get();
             $directorio_tipos = Directorio_tipos::all();
-            $directorio_clases = Directorio_clases::all();
+            $directorio_clases = Directorio_clases::where('id','>',0)->orderBy('nombre', 'asc')->get();
             $directorio_tipo_terceros = Directorio_tipo_terceros::all();
             return view('administrador.directorios', [
                 //'directorios' => $directorios,
