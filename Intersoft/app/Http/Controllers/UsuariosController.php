@@ -124,39 +124,32 @@ class UsuariosController extends Controller
     public function create(Request $request){
         try{
             $usuario = new Usuarios();
-
-            $v = \Validator::make($request->all(), [
-            
-                'ncedula' => 'required',
-                'nombre' => 'required',
-                'correo'    => 'required|email|unique:clients',
-                'apellido' => 'required',
-                'password' => 'required'
-            ]);
-            if ($v->fails()){
-                return redirect()->back()->withInput()->withErrors($v->errors());
+            if($request->ncedula == '' || $request->nombre == '' || $request->apellido == '' || $request->cargo == '' || $request->telefono == '' || $request->password == '' || $request->correo == ''  ){
+                return view('registro');
             }
-            $usuario->ncedula             = $request->ncedula;
-            $usuario->nombre              = $request->nombre;
-            $usuario->apellido            = $request->apellido;
-            $usuario->cargo               = $request->cargo;
-            $usuario->telefono            = $request->telefono;
-            $usuario->password            = $request->password;
-            $usuario->correo              = $request->correo;
-            $usuario->estado              = $request->estado;
-            $usuario->token               = $request->token;
-            $usuario->arl                 = $request->arl;
-            $usuario->eps                 = $request->eps;
-            $usuario->cesantias           = $request->cesantias;
-            $usuario->pension             = implode(',',$request->pension);
-            $usuario->caja_compensacion   = $request->caja_compensacion;
-            $usuario->id_contrato         = $request->id_contrato;
-            $usuario->referencia_personal = $request->referencia_personal;
-            $usuario->telefono_referencia = $request->telefono_referencia;
-            $usuario->id_empresa  = Session::get('id_empresa');
-            $usuario->save();
-            //envio mail
-            //Mail::to($usuario->correo)->send(new Welcome($usuario));
+            else{
+                $usuario->ncedula             = $request->ncedula;
+                $usuario->nombre              = $request->nombre;
+                $usuario->apellido            = $request->apellido;
+                $usuario->cargo               = $request->cargo;
+                $usuario->telefono            = $request->telefono;
+                $usuario->password            = $request->password;
+                $usuario->correo              = $request->correo;
+                $usuario->estado              = $request->estado;
+                $usuario->token               = $request->token;
+                $usuario->arl                 = $request->arl;
+                $usuario->eps                 = $request->eps;
+                $usuario->cesantias           = $request->cesantias;
+                $usuario->pension             = implode(',',$request->pension);
+                $usuario->caja_compensacion   = $request->caja_compensacion;
+                $usuario->id_contrato         = $request->id_contrato;
+                $usuario->referencia_personal = $request->referencia_personal;
+                $usuario->telefono_referencia = $request->telefono_referencia;
+                $usuario->id_empresa  = Session::get('id_empresa');
+                $usuario->save();
+                //envio mail
+                //Mail::to($usuario->correo)->send(new Welcome($usuario));
+            }
             return redirect('/administrador/usuarios');
         }
         catch (ModelNotFoundException $exception){
