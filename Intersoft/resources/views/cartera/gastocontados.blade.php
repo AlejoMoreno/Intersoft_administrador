@@ -22,13 +22,14 @@
   </style>
 
 <?php
+$total = 0;
 if(isset($_GET['prefijo'])){
   $gastos = App\Gastocontados::where('id_empresa','=',Session::get('id_empresa'))
           ->where('prefijo','=',$_GET['prefijo'])
           ->where('numero','=',$_GET['numero'])
           ->get();
           
-  $total = 0;
+  
   if(sizeof($gastos)!=0){
     foreach ($gastos as $key => $value) {
       $value->id_tercero = App\Directorios::where('id','=',$value->id_tercero)->first();
