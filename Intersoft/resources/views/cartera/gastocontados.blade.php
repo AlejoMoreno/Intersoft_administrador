@@ -28,10 +28,12 @@ if(isset($_GET['prefijo'])){
           ->where('numero','=',$_GET['numero'])
           ->get();
           
+  $total = 0;
   if(sizeof($gastos)!=0){
     foreach ($gastos as $key => $value) {
       $value->id_tercero = App\Directorios::where('id','=',$value->id_tercero)->first();
       $value->id_auxiliar = App\Pucauxiliar::where('id','=',$value->id_auxiliar)->first();
+      $total = $total + $value->valor;
     }
     $_GET['buscar'] = 'false';
   }
@@ -210,7 +212,7 @@ if(isset($_GET['prefijo'])){
         <input type="hidden" value="0" id="valor_reteica" class="form-control" >
         <input value="0" type="hidden" id="valor_reteiva" class="form-control" >
         <input type="hidden" id="valor_flete" value="0" class="form-control" >
-        <input type="number" name="total" id="total" class="form-control" value="{{ isset($_GET['valor'])? $_GET['valor'] : isset($ingresos)? $ingresos[0]->valor : '' }}">
+        <input type="number" name="total" id="total" class="form-control" value="{{ $total }}">
       </div>
       <div class="col-sm-12" style="height: 20px;"></div>
       <div class="col-sm-12">
